@@ -9,13 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: OdeOperationsLogRepository::class)]
 class OdeOperationsLog extends BaseEntity
 {
-    #[ORM\Column(name: 'ode_id', type: 'string', length: 20, nullable: false, options: ['fixed' => true])]
+    #[ORM\Column(name: 'ode_id', type: 'string', length: 32, nullable: false, options: ['fixed' => true])]
     protected string $odeId;
 
     #[ORM\Column(name: 'ode_version_id', type: 'string', length: 20, nullable: false, options: ['fixed' => true])]
     protected string $odeVersionId;
 
-    #[ORM\Column(name: 'ode_session_id', type: 'string', length: 20, nullable: false, options: ['fixed' => true])]
+    #[ORM\Column(name: 'ode_session_id', type: 'string', length: 32, nullable: false, options: ['fixed' => true])]
     protected string $odeSessionId;
 
     #[ORM\Column(name: 'operation', type: 'string', length: 16, nullable: false)]

@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\net\exelearning\Entity\CurrentOdeUsers;
 
 class WorkareaController extends DefaultWorkareaController
 {
@@ -63,8 +64,8 @@ class WorkareaController extends DefaultWorkareaController
     public function workareaAction(Request $request)
     {
         // die("hola");
-        // Get odeSessionId
-        $odeSessionId = $request->get('shareCode');
+        // Get shareCode - can be either odeId (primary) or odeSessionId (backward compatibility)
+        $shareCode = $request->get('shareCode');
 
         // Get elpFileName
         $odePlatformNew = $request->get('newOde');
@@ -111,7 +112,6 @@ class WorkareaController extends DefaultWorkareaController
         }
 
         if (empty($userLogged) && !$isOfflineInstallation) {
-            $shareCode = $request->query->get('shareCode');
             if ($shareCode) {
                 return $this->redirectToRoute('app_login', ['shareCode' => $shareCode]);
             }
@@ -152,7 +152,26 @@ class WorkareaController extends DefaultWorkareaController
 
         $request->setLocale($localeUserPreferences);
         $request->setDefaultLocale($localeUserPreferences);
-        $this->translator->setLocale($request->getLocale());
+
+        // Determine if shareCode is an odeId or odeSessionId
+        $isOdeId = false;
+        if ($shareCode) {
+            // Check if this looks like an odeId (20 characters) or odeSessionId (20 characters)
+            // Both are 20 characters, so we'll need to check the database to determine
+            $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
+            
+            // First try to find by odeId
+            $odeIdUsers = $currentOdeUsersRepository->getCurrentUsers($shareCode, null, null);
+            if (!empty($odeIdUsers)) {
+                $isOdeId = true;
+            } else {
+                // If not found by odeId, try by odeSessionId
+                $odeSessionIdUsers = $currentOdeUsersRepository->getCurrentUsers(null, null, $shareCode);
+                if (!empty($odeSessionIdUsers)) {
+                    $isOdeId = false;
+                }
+            }
+        }
 
         // Themes
         $themeTypeBase = Constants::THEME_TYPE_BASE;

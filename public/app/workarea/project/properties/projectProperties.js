@@ -116,8 +116,8 @@ export default class ProjectProperties {
      *
      */
     async apiLoadProperties() {
-        let odeSession = this.project.odeSession;
-        let properties = await eXeLearning.app.api.getOdeProperties(odeSession);
+        const odeId = this.project.odeId;
+        const properties = await eXeLearning.app.api.getOdeProperties(odeId);
 
         if (properties) {
             this.setProperties(properties.odeProperties);

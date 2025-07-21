@@ -64,6 +64,53 @@ class Util
     }
 
     /**
+     * Generates a UUID v4 for enhanced security and reduced collision risks.
+     * This is the preferred method for generating ode_id values.
+     *
+     * @return string
+     */
+    public static function generateUuid()
+    {
+        if (function_exists('random_bytes')) {
+            $data = random_bytes(16);
+        } elseif (function_exists('openssl_random_pseudo_bytes')) {
+            $data = openssl_random_pseudo_bytes(16);
+        } else {
+            // Fallback to mt_rand if crypto functions are not available
+            $data = '';
+            for ($i = 0; $i < 16; ++$i) {
+                $data .= chr(mt_rand(0, 255));
+            }
+        }
+
+        // Set version (4) and variant bits
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+
+        // Convert to hex and format as UUID
+        $hex = bin2hex($data);
+        return sprintf(
+            '%s-%s-%s-%s-%s',
+            substr($hex, 0, 8),
+            substr($hex, 8, 4),
+            substr($hex, 12, 4),
+            substr($hex, 16, 4),
+            substr($hex, 20, 12)
+        );
+    }
+
+    /**
+     * Generates a secure ID for ode_id using UUID format.
+     * This method generates a UUID and removes hyphens to create a 32-character string.
+     *
+     * @return string
+     */
+    public static function generateSecureId()
+    {
+        return str_replace('-', '', self::generateUuid());
+    }
+
+    /**
      * Generates an id and checks that it's not repeated in the array passed as param.
      *
      * @param array $generatedIds

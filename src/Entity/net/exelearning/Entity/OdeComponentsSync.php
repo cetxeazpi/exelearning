@@ -15,8 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: OdeComponentsSyncRepository::class)]
 class OdeComponentsSync extends BaseEntity
 {
-    #[ORM\Column(name: 'ode_session_id', type: 'string', length: 20, nullable: false, options: ['fixed' => true])]
-    protected string $odeSessionId;
+    #[ORM\Column(name: 'ode_id', type: 'string', length: 32, nullable: false, options: ['fixed' => true])]
+    protected string $odeId;
 
     #[ORM\Column(name: 'ode_page_id', type: 'string', length: 20, nullable: false, options: ['fixed' => true])]
     protected string $odePageId;
@@ -51,14 +51,14 @@ class OdeComponentsSync extends BaseEntity
         $this->odeComponentsSyncProperties = new ArrayCollection();
     }
 
-    public function getOdeSessionId(): ?string
+    public function getOdeId(): ?string
     {
-        return $this->odeSessionId;
+        return $this->odeId;
     }
 
-    public function setOdeSessionId(string $odeSessionId): self
+    public function setOdeId(string $odeId): self
     {
-        $this->odeSessionId = $odeSessionId;
+        $this->odeId = $odeId;
 
         return $this;
     }

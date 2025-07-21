@@ -274,7 +274,7 @@ interface OdeServiceInterface
      * @return array
      */
     public function getOdePropertiesFromDatabase(
-        $odeSessionId,
+        $odeId,
         $user = false,
     );
 
@@ -293,7 +293,7 @@ interface OdeServiceInterface
     public function saveOdeProperty(
         &$entityManager,
         $request,
-        $odeSessionId,
+        $odeId,
         $databaseOdePropertiesData,
         $odePropertiesConfigValues,
         $odePropertiesConfigKey,

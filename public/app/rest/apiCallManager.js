@@ -482,12 +482,12 @@ export default class ApiCallManager {
 
     /**
      *
-     * @param {*} odeSessionId
+     * @param {*} odeId
      * @returns
      */
-    async getOdeProperties(odeSessionId) {
+    async getOdeProperties(odeId) {
         let url = this.endpoints.api_odes_properties_get.path;
-        url = url.replace('{odeSessionId}', odeSessionId);
+        url = url.replace('{odeId}', odeId);
         return await this.func.get(url);
     }
 

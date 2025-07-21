@@ -21,6 +21,18 @@ interface CurrentOdeUsersServiceInterface
     public function createCurrentOdeUsers($odeId, $odeVersionId, $odeSessionId, $user, $clientIp);
 
     /**
+     * Creates CurrentOdeUsers with secure ode_id generation.
+     *
+     * @param string $odeVersionId
+     * @param string $odeSessionId
+     * @param User   $user
+     * @param string $clientIp
+     *
+     * @return \App\Entity\net\exelearning\Entity\CurrentOdeUsers
+     */
+    public function createCurrentOdeUsersWithSecureId($odeVersionId, $odeSessionId, $user, $clientIp);
+
+    /**
      * Inserts or updates CurrentOdeUsers from OdeNavStructureSync data.
      *
      * @param OdeNavStructureSync $odeNavStructureSync
@@ -135,6 +147,17 @@ interface CurrentOdeUsersServiceInterface
      * @return bool
      */
     public function checkOdeSessionIdCurrentUsers($odeSessionId, $user);
+
+    /**
+     * Check and join session using either odeId or odeSessionId as primary identifier.
+     *
+     * @param string $identifier
+     * @param string $identifierType ('odeId' or 'odeSessionId')
+     * @param User   $user
+     *
+     * @return array|false Returns session data on success, false on failure
+     */
+    public function checkAndJoinSession($identifier, $identifierType, $user);
 
     /**
      * Examines number of current users on page.

@@ -55,6 +55,24 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
     }
 
     /**
+     * Creates CurrentOdeUsers with secure ode_id generation.
+     *
+     * @param string $odeVersionId
+     * @param string $odeSessionId
+     * @param User   $user
+     * @param string $clientIp
+     *
+     * @return CurrentOdeUsers
+     */
+    public function createCurrentOdeUsersWithSecureId($odeVersionId, $odeSessionId, $user, $clientIp)
+    {
+        // Use secure ID generation for ode_id
+        $odeId = Util::generateSecureId();
+        
+        return $this->createCurrentOdeUsers($odeId, $odeVersionId, $odeSessionId, $user, $clientIp);
+    }
+
+    /**
      * Inserts or updates CurrentOdeUsers from OdeNavStructureSync data.
      *
      * @param OdeNavStructureSync $odeNavStructureSync
@@ -426,6 +444,53 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
         } else {
             return false;
         }
+    }
+
+    /**
+     * Check and join session using either odeId or odeSessionId as primary identifier.
+     *
+     * @param string $identifier
+     * @param string $identifierType ('odeId' or 'odeSessionId')
+     * @param User   $user
+     *
+     * @return array|false Returns session data on success, false on failure
+     */
+    public function checkAndJoinSession($identifier, $identifierType, $user)
+    {
+        $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
+        
+        // Use the new repository method for better performance
+        $currentUsers = $currentOdeUsersRepository->findSessionsByIdentifier($identifier, $identifierType);
+
+        if (empty($currentUsers)) {
+            return false;
+        }
+
+        // Get the first user's session data to establish the session
+        $firstUser = $currentUsers[0];
+        $sessionOdeId = $firstUser->getOdeId();
+        $sessionOdeSessionId = $firstUser->getOdeSessionId();
+
+        // Get current user's session
+        $currentUser = $currentOdeUsersRepository->getCurrentSessionForUser($user->getUsername());
+        
+        if (!$currentUser) {
+            return false;
+        }
+
+        // Update current user to join the session
+        $currentUser->setOdeId($sessionOdeId);
+        $currentUser->setOdeSessionId($sessionOdeSessionId);
+        $currentUser->setOdeVersionId($firstUser->getOdeVersionId());
+
+        $this->entityManager->persist($currentUser);
+        $this->entityManager->flush();
+
+        return [
+            'odeId' => $sessionOdeId,
+            'odeSessionId' => $sessionOdeSessionId,
+            'odeVersionId' => $firstUser->getOdeVersionId()
+        ];
     }
 
     /**

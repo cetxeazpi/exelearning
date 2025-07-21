@@ -112,6 +112,56 @@ class CurrentOdeUsersRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find sessions by identifier (odeId or odeSessionId).
+     *
+     * @param string $identifier
+     * @param string $identifierType ('odeId' or 'odeSessionId')
+     *
+     * @return CurrentOdeUsers[]
+     */
+    public function findSessionsByIdentifier($identifier, $identifierType)
+    {
+        $queryBuilder = $this->createQueryBuilder('c');
+
+        if ($identifierType === 'odeId') {
+            $queryBuilder
+                ->andWhere('c.odeId = :identifier')
+                ->setParameter('identifier', $identifier);
+        } else {
+            $queryBuilder
+                ->andWhere('c.odeSessionId = :identifier')
+                ->setParameter('identifier', $identifier);
+        }
+
+        $queryBuilder->orderBy('c.lastAction', 'DESC');
+
+        return $queryBuilder
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * Find active sessions by odeId.
+     *
+     * @param string $odeId
+     *
+     * @return CurrentOdeUsers[]
+     */
+    public function findActiveSessionsByOdeId($odeId)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.odeId = :odeId')
+            ->andWhere('c.isActive = :isActive')
+            ->setParameter('odeId', $odeId)
+            ->setParameter('isActive', true)
+            ->orderBy('c.lastAction', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
      * Removes CurrentOdeUser by odeSessionId and user.
      *
      * @param string $odeSessionId

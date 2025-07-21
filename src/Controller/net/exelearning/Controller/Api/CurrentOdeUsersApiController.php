@@ -74,7 +74,8 @@ class CurrentOdeUsersApiController extends DefaultApiController
 
         // If there isn't currentOdeUser for user create a new session
         if (empty($currentOdeUserForUser)) {
-            $odeId = Util::generateId();
+            // Use secure ID generation for ode_id
+            $odeId = Util::generateSecureId();
             $odeVersionId = Util::generateId();
             $odeSessionId = Util::generateId();
 
@@ -333,7 +334,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
     }
 
     #[Route('/get/ode/session/id/current/ode/user', methods: ['GET'], name: 'get_ode_session_id_current_ode_user')]
-    public function getOdeSessionIdCurrentOdeUser(Request $request)
+    public function getOdeSessionIdCurrentOdeUserAction(Request $request)
     {
         $response = [];
 
@@ -342,7 +343,9 @@ class CurrentOdeUsersApiController extends DefaultApiController
 
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
         $currentOdeSessionForUser = $currentOdeUsersRepository->getCurrentSessionForUser($user->getUserIdentifier());
-        // Get the user odeSessionId
+        
+        // Get the user odeId (primary identifier) and odeSessionId (for backward compatibility)
+        $currentOdeId = $currentOdeSessionForUser->getOdeId();
         $currentOdeSessionId = $currentOdeSessionForUser->getOdeSessionId();
 
         // Base URL
@@ -350,7 +353,12 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $symfonyBasePath = $request->getBaseURL();
         $symfonyFullUrl = $symfonyBaseUrl.$symfonyBasePath;
 
-        $response['shareSessionUrl'] = $symfonyFullUrl.Constants::SLASH.self::URL_WORKAREA_ROUTE.self::SESSION_ID_URL_PARAMETER.$currentOdeSessionId;
+        // Generate share URL using odeSessionId (for backward compatibility) but include both parameters
+        $response['shareSessionUrl'] = $symfonyFullUrl.Constants::SLASH.self::URL_WORKAREA_ROUTE.self::SESSION_ID_URL_PARAMETER.$currentOdeSessionId.'&odeId='.$currentOdeId;
+        
+        // Include both identifiers for the system to use
+        $response['odeId'] = $currentOdeId;
+        $response['odeSessionId'] = $currentOdeSessionId;
 
         $jsonData = $this->getJsonSerialized($response);
 
@@ -362,20 +370,32 @@ class CurrentOdeUsersApiController extends DefaultApiController
     {
         $response = [];
 
-        // Get parameters
+        // Get parameters - support both odeId and odeSessionId for backward compatibility
+        $odeId = $request->get('odeId');
         $odeSessionId = $request->get('odeSessionId');
+        
+        // Determine the primary identifier to use
+        $primaryIdentifier = $odeId ?: $odeSessionId;
+        $identifierType = $odeId ? 'odeId' : 'odeSessionId';
 
         // Get user
         $user = $this->getUser();
 
-        // Check odeSessionId
-        if (!empty($odeSessionId)) {
-            $result = $this->currentOdeUsersService->checkOdeSessionIdCurrentUsers($odeSessionId, $user);
+        // Check if the identifier exists and join the session
+        if (!empty($primaryIdentifier)) {
+            $result = $this->currentOdeUsersService->checkAndJoinSession($primaryIdentifier, $identifierType, $user);
             if (!$result) {
                 $response['responseMessage'] = 'Problem with session';
             } else {
                 $response['responseMessage'] = 'OK';
-                $this->currentOdeUsersService->updateSyncCurrentUserOdeId($odeSessionId, $user);
+                $response['odeId'] = $result['odeId'];
+                $response['odeSessionId'] = $result['odeSessionId'];
+                
+                // Generate redirect URL using odeId as primary identifier
+                $symfonyBaseUrl = $request->getSchemeAndHttpHost();
+                $symfonyBasePath = $request->getBaseURL();
+                $symfonyFullUrl = $symfonyBaseUrl.$symfonyBasePath;
+                $response['redirectUrl'] = $symfonyFullUrl.Constants::SLASH.self::URL_WORKAREA_ROUTE.self::SESSION_ID_URL_PARAMETER.$result['odeId'];
             }
         }
 

@@ -218,12 +218,20 @@ export default class projectManager {
 
             // Case join the shared session
             if (eXeLearning.symfony.odeSessionId) {
-                // Check odeSessionId and set on bbdd
-                let params = { odeSessionId: eXeLearning.symfony.odeSessionId };
-                let response =
-                    await this.app.api.postJoinCurrentOdeSessionId(params);
+                // Check if the shared identifier is an odeId or odeSessionId
+                let params = { 
+                    odeId: eXeLearning.symfony.odeSessionId,
+                    odeSessionId: eXeLearning.symfony.odeSessionId 
+                };
+                let response = await this.app.api.postJoinCurrentOdeSessionId(params);
                 if (response.responseMessage == 'OK') {
-                    this.odeSession = eXeLearning.symfony.odeSessionId;
+                    // Update local identifiers with the session data
+                    if (response.odeId) {
+                        this.odeId = response.odeId;
+                    }
+                    if (response.odeSessionId) {
+                        this.odeSession = response.odeSessionId;
+                    }
                     window.location.replace('workarea');
                 }
             } else if (eXeLearning.user.odePlatformId) {

@@ -13,14 +13,14 @@ class GameRepository
         $this->connection = $connection;
     }
 
-    public function getIdevicesBySessionId(string $odeSessionId): array
+    public function getIdevicesBySessionId(string $odeId): array
     {
         $qb = $this->connection->createQueryBuilder();
 
         $qb->select(
             'p.id AS navId',
             'p.ode_nav_structure_sync_id',
-            'p.ode_session_id',
+            'p.ode_id',
             'p.ode_page_id AS odePageId',
             'p.ode_parent_page_id AS odeParentPageId',
             'p.page_name AS pageName',
@@ -30,7 +30,7 @@ class GameRepository
             'c.ode_pag_structure_sync_id',
             'c.html_view AS htmlViewer',
             'c.json_properties AS jsonProperties',
-            'c.ode_session_id AS componentSessionId',
+            'c.ode_id AS componentId',
             'c.ode_page_id AS componentPageId',
             'c.ode_block_id',
             'c.ode_idevice_id',
@@ -42,8 +42,8 @@ class GameRepository
             ->from('ode_nav_structure_sync', 'p')
             ->innerJoin('p', 'ode_components_sync', 'c', 'p.ode_page_id = c.ode_page_id')
             ->innerJoin('c', 'ode_pag_structure_sync', 'ps', 'c.ode_block_id = ps.ode_block_id')
-            ->where('p.ode_session_id = :odeSessionId')
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->where('p.ode_id = :odeId')
+            ->setParameter('odeId', $odeId)
             ->addOrderBy('p.ode_nav_structure_sync_order', 'ASC')
             ->addOrderBy('c.ode_pag_structure_sync_id', 'ASC');
 

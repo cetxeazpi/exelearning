@@ -6,12 +6,12 @@ use App\Repository\net\exelearning\Repository\OdePropertiesSyncRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'ode_properties_sync')]
-#[ORM\Index(name: 'fk_ode_properties_1_idx', columns: ['ode_session_id'])]
+#[ORM\Index(name: 'fk_ode_properties_1_idx', columns: ['ode_id'])]
 #[ORM\Entity(repositoryClass: OdePropertiesSyncRepository::class)]
 class OdePropertiesSync extends BaseEntity
 {
-    #[ORM\Column(name: 'ode_session_id', type: 'string', length: 20, nullable: false, options: ['fixed' => true])]
-    protected string $odeSessionId;
+    #[ORM\Column(name: 'ode_id', type: 'string', length: 32, nullable: false, options: ['fixed' => true])]
+    protected string $odeId;
 
     #[ORM\Column(name: 'ode_properties_key', type: 'string', length: 255, nullable: false)]
     protected string $key;
@@ -30,14 +30,14 @@ class OdePropertiesSync extends BaseEntity
 
     protected ?int $multipleIndex = null;
 
-    public function getOdeSessionId(): ?string
+    public function getOdeId(): ?string
     {
-        return $this->odeSessionId;
+        return $this->odeId;
     }
 
-    public function setOdeSessionId(string $odeSessionId): self
+    public function setOdeId(string $odeId): self
     {
-        $this->odeSessionId = $odeSessionId;
+        $this->odeId = $odeId;
 
         return $this;
     }
@@ -132,11 +132,11 @@ class OdePropertiesSync extends BaseEntity
      * @return self
      */
     public function loadFromPropertiesConfig(
-        string $odeSessionId,
+        string $odeId,
         string $configKey,
         array $configValues,
     ) {
-        $this->setOdeSessionId($odeSessionId);
+        $this->setOdeId($odeId);
         $this->setKey($configKey);
 
         $value = isset($configValues['value']) ? $configValues['value'] : '';

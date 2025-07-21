@@ -13,7 +13,7 @@ class OdeFiles extends BaseEntity
     public const ODE_FILES_FILES_DIR = '{{files_dir}}';
 
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ORM\Column(name: 'ode_id', type: 'string', length: 20, nullable: false, options: ['fixed' => true])]
+    #[ORM\Column(name: 'ode_id', type: 'string', length: 32, nullable: false, options: ['fixed' => true])]
     protected $odeId;
 
     #[ORM\Column(name: 'ode_version_id', type: 'string', length: 20, nullable: false, options: ['fixed' => true])]

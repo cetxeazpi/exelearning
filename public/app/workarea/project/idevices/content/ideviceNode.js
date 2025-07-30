@@ -54,6 +54,7 @@ export default class IdeviceNode {
                 eXeLearning.mercure.jwtSecretKey
             );
         }
+        this.nodeContainer = document.querySelector('#node-content-container');
     }
 
     /**
@@ -173,7 +174,7 @@ export default class IdeviceNode {
             this.ideviceContent.appendChild(this.makeIdeviceBodyElement());
         }
         // - Action buttons
-        this.ideviceContent.appendChild(this.makeIdeviceButtonsElement());
+        this.ideviceContent.prepend(this.makeIdeviceButtonsElement());
         // Properties attributes/classes
         this.setPropertiesClassesToElement();
 
@@ -264,7 +265,6 @@ export default class IdeviceNode {
         if (!isNaN(iH)) {
             if (iH < 200) dropdownColumns = ' dropdown-menu-with-cols';
         }
-
         switch (this.mode) {
             case 'edition':
                 blockButtonsHTML = `
@@ -2147,6 +2147,7 @@ export default class IdeviceNode {
                         confirmButtonText: _('Yes'),
                         confirmExec: () => {
                             this.block.remove(true);
+                            eXeLearning.app.menus.menuStructure.menuStructureBehaviour.checkIfEmptyNode();
                         },
                     });
                 }, 300);
@@ -2537,7 +2538,7 @@ export default class IdeviceNode {
      *
      */
     resetWindowHash() {
-        window.location.hash = 'node-content';
+        this.nodeContainer.scrollTop = this.nodeContainer.offsetTop;
     }
 
     /**
@@ -2556,8 +2557,9 @@ export default class IdeviceNode {
         } else {
             hashId = this.odeIdeviceId;
         }
+        let element = document.getElementById(hashId);
         setTimeout(() => {
-            window.location.hash = hashId;
+            this.nodeContainer.scrollTop = element.offsetTop;
         }, time);
     }
 

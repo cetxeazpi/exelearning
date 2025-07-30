@@ -56,6 +56,7 @@ export default class IdevicesEngine {
         // Menu idevices events
         this.addEventDragStartToMenuIdevices();
         this.addEventClickIdevice();
+        eXeLearning.app.menus.menuStructure.menuStructureBehaviour.checkIfEmptyNode();
     }
 
     /**
@@ -942,6 +943,14 @@ export default class IdevicesEngine {
                         this.clickIdeviceMenuEnabled = true;
                     }, this.intervalTime);
                 }
+                let categoriesIdevices = document.querySelectorAll(
+                    '#menu_idevices .idevice_category'
+                );
+                categoriesIdevices.forEach((element) => {
+                    element.classList.remove('last-open');
+                    element.classList.remove('on');
+                    element.classList.add('off');
+                });
             });
         });
     }
@@ -1042,6 +1051,7 @@ export default class IdevicesEngine {
         if (ideviceNode) {
             // Add and initialize the idevice
             this.addIdeviceNodeToContainer(ideviceNode, container);
+            eXeLearning.app.menus.menuStructure.menuStructureBehaviour.checkIfEmptyNode();
             await ideviceNode.loadInitScriptIdevice(ideviceNode.mode);
             // If the idevice is in edit mode, the engine is changed to edit mode
             if (ideviceNode.mode == 'edition') {
@@ -1062,7 +1072,7 @@ export default class IdevicesEngine {
         // In case the idevice already exists
         if (ideviceNode.ideviceContent) {
             // Regenerate the idevice buttons
-            ideviceNode.ideviceContent.append(
+            ideviceNode.ideviceContent.prepend(
                 ideviceNode.makeIdeviceButtonsElement()
             );
             ideviceNodeContent = ideviceNode.ideviceContent;
@@ -1132,6 +1142,7 @@ export default class IdevicesEngine {
         this.addEventDragOverToContainer(ideviceBlockContent);
         // Add block to components list
         if (addToComponents) this.components.blocks.push(ideviceBlockNode);
+
         return ideviceBlockNode;
     }
 

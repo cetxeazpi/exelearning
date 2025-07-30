@@ -1,3 +1,4 @@
+// TODO delete this file when finish navbarStyles.js.
 import Modal from '../modal.js';
 
 export default class ModalStyleManager extends Modal {

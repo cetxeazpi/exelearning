@@ -1,0 +1,91 @@
+
+.btn.button-navbar {
+    &.no-text {
+        width: 36px;
+        height: 36px;
+        padding: 0 !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background-color: var(--gray-10) !important;
+        }
+
+        &.narrow {
+            width: 28px;
+        }
+    }
+
+    &.regular {
+        height: 36px;
+        padding: 0 4px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+
+        &:hover {
+            background-color: var(--gray-10);
+        }
+    }
+
+    &.dropdown {
+        padding: 0 24px 0 4px !important;
+
+        > .dropdown-toggle::after {
+            content: "";
+            margin-left: 0;
+            vertical-align: 0;
+            border: 0;
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url("images/icons/exe-chevron-icon-green.svg");
+            position: absolute;
+            top: 8px;
+            right: 8px;
+        }
+
+    }
+}
+
+.button-display {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: 24px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 12px;
+    background-color: var(--gray-10);
+
+    &:hover,
+    &:active {
+        background-color: var(--gray-20) !important;
+    }
+}
+
+
+.btn.button-sidebar {
+    &.no-text {
+        width: 36px;
+        height: 36px;
+        padding: 0 !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background-color: hsl(225 20% 91% / 1) !important;
+        }
+
+        &.narrow {
+            width: 28px;
+        }
+    }
+}

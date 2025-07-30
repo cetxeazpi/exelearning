@@ -1,0 +1,133 @@
+.general-icon {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    &.styles {
+        background-image: url("images/icons/exe-styles-icon.svg");
+    }
+
+    &.settings {
+        background-image: url("images/icons/exe-settings-icon.svg");
+    }
+
+    &.save {
+        background-image: url("images/icons/exe-save-icon.svg");
+    }
+
+    &.settings-green {
+        background-image: url("images/icons/exe-settings-icon-green.svg");
+    }
+}
+
+.medium-icon {
+    width: 18px;
+    height: 18px;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+
+}
+
+.small-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    &.preview-green {
+        background-image: url("images/icons/exe-preview-icon-green.svg");
+    }
+
+    &.new {
+        background-image: url("images/icons/exe-new-icon.svg");
+    }
+
+    &.open {
+        background-image: url("images/icons/exe-open-icon.svg");
+    }
+
+    &.share {
+        background-image: url("images/icons/exe-share-icon.svg");
+    }
+
+    &.recent {
+        background-image: url("images/icons/exe-recent-icon.svg");
+    }
+
+    &.download {
+        background-image: url("images/icons/exe-download-icon.svg");
+    }    
+    
+    &.report {
+        background-image: url("images/icons/exe-report-icon.svg");
+    }
+
+    &.link {
+        background-image: url("images/icons/exe-link-icon.svg");
+    }
+
+    &.image {
+        background-image: url("images/icons/exe-image-icon.svg");
+    }
+
+        &.delete-green {
+        background-image: url("images/icons/exe-delete-icon-green.svg");
+    }
+
+    &.duplicate-green {
+        background-image: url("images/icons/exe-duplicate-icon-green.svg");
+    }    
+
+    &.import-green {
+        background-image: url("images/icons/exe-import-icon-green.svg");
+    }
+
+    &.settings-green {
+        background-image: url("images/icons/exe-settings-icon-green.svg");
+    }
+
+    &.chevron-up {
+        background-image: url("images/icons/exe-chevron-icon.svg");
+        transform: rotate(180deg);
+    }
+
+    &.chevron-down {
+        background-image: url("images/icons/exe-chevron-icon.svg");
+    }
+
+    &.chevron-left {
+        background-image: url("images/icons/exe-chevron-icon.svg");
+        transform: rotate(90deg);
+    }
+
+    &.chevron-right {
+        background-image: url("images/icons/exe-chevron-icon.svg");
+        transform: rotate(-90deg);
+    }
+    
+    &.delete {
+        background-image: url("images/icons/exe-delete-icon.svg");
+    }
+
+    &.duplicate {
+        background-image: url("images/icons/exe-duplicate-icon.svg");
+    }    
+
+    &.import {
+        background-image: url("images/icons/exe-import-icon.svg");
+    }
+}
+
+.big-icon {
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    &.menu {
+        background-image: url("images/icons/exe-menu-icon.svg");
+    }
+}

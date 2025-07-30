@@ -36,7 +36,16 @@ services:
     # depends_on:
     #   - chrome
 
-  # The Zenika Alpine Chrome image includes a browser configured to work with Chromedriver  
+  # Watches SCSS changes and compiles main.scss to main.css using sass
+  scss-watcher:
+    image: node:20-alpine
+    container_name: scss-watcher
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "npm install sass && npx sass --watch assets/styles/main.scss:public/style/workarea/main.css"
+
+  # The Zenika Alpine Chrome image includes a browser configured to work with Chromedriver
   chrome:
     image: ghcr.io/zenika/alpine-chrome:with-chromedriver
     container_name: chrome

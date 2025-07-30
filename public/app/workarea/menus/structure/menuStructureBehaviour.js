@@ -38,6 +38,7 @@ export default class MenuStructureBehaviour {
         this.addEventNavElementOnclick();
         this.addEventNavElementOnDbclick();
         this.addEventNavElementIconOnclick();
+        this.addEventNavElementOnMenuIconClic();
         this.addDragAndDropFunctionalityToNavElements();
     }
 
@@ -84,6 +85,22 @@ export default class MenuStructureBehaviour {
         });
     }
 
+    addEventNavElementOnMenuIconClic() {
+        var navLabelMenuElements = this.menuNav.querySelectorAll(
+            `.nav-element:not([nav-id="root"]) > .nav-element-text .node-menu-button`
+        );
+        navLabelMenuElements.forEach((element) => {
+            element.addEventListener('click', (event) => {
+                event.stopPropagation();
+                let node = this.structureEngine.getNode(
+                    element.getAttribute('data-menunavid')
+                );
+                node.showModalProperties();
+                this.mutationForModalProperties();
+            });
+        });
+    }
+
     /**
      *
      */
@@ -102,12 +119,12 @@ export default class MenuStructureBehaviour {
                 if (navElement.classList.contains('toggle-on')) {
                     navElement.classList.remove('toggle-on');
                     navElement.classList.add('toggle-off');
-                    element.innerHTML = 'add';
+                    element.innerHTML = 'keyboard_arrow_right';
                     node.open = false;
                 } else {
                     navElement.classList.remove('toggle-off');
                     navElement.classList.add('toggle-on');
-                    element.innerHTML = 'remove';
+                    element.innerHTML = 'keyboard_arrow_down';
                     node.open = true;
                 }
             });
@@ -419,7 +436,10 @@ export default class MenuStructureBehaviour {
             this.nodeSelected.getAttribute('nav-id')
         );
         node.showModalProperties();
+        this.mutationForModalProperties();
+    }
 
+    mutationForModalProperties() {
         const observer = new MutationObserver((mutations, obs) => {
             const checkbox = document.querySelector(
                 '.property-value[property="editableInPage"]'
@@ -431,7 +451,7 @@ export default class MenuStructureBehaviour {
                 '.property-value[property="titleNode"]'
             );
             const titlePageWrapper = document.querySelector('#titlePage');
-
+            console.log(checkbox, input, titleInput, titlePageWrapper);
             if (checkbox && input && titleInput && titlePageWrapper) {
                 const syncInputState = () => {
                     const isChecked = checkbox.checked;
@@ -681,6 +701,8 @@ export default class MenuStructureBehaviour {
                     time = 100;
                     response = element;
                 }
+                this.checkIfEmptyNode();
+                //eXeLearning.app.menus.menuStructure.menuStructureBehaviour.checkIfEmptyNode();
             }
             setTimeout(() => {
                 // Add the Properties tooltip
@@ -689,6 +711,65 @@ export default class MenuStructureBehaviour {
             }, time);
         });
     }
+
+    checkIfEmptyNode() {
+        this.nodeContent = document.getElementById('node-content');
+        const validArticles = this.nodeContent.querySelectorAll('article:not(#empty_articles)');
+        const emptyArticles = this.nodeContent.querySelector('#empty_articles');
+        if (validArticles.length === 0) {
+            if (!emptyArticles) {
+                const emptyContainer = document.createElement('article');
+                emptyContainer.id = 'empty_articles';
+                emptyContainer.classList.add('empty-node-message');
+                emptyContainer.classList.add('box');
+
+                const messageBox = document.createElement('div');
+                messageBox.classList.add('empty-block-message-box');
+
+                const icon = document.createElement('div');
+                icon.classList.add('empty-block-message-icon');
+                icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="39" viewBox="0 0 40 39" fill="none">
+  <g clip-path="url(#clip0_2090_10905)">
+    <path d="M24.6923 37.4744C27.4724 37.4744 30.1384 36.3567 32.104 34.3674L35.81 30.8172C38.1829 28.4161 39.1386 25.1594 39.1386 21.7634C39.1386 18.3675 37.8054 15.1108 35.4326 12.7097L32.2663 9.50544L25.0066 1.95903C23.5593 0.494532 21.2129 0.494532 19.7656 1.95903C18.3184 3.42353 18.047 5.54142 19.4942 7.00592L19.9995 7.51769L17.1451 4.6109C15.6979 3.1464 13.3515 3.1464 11.9042 4.6109C10.4569 6.07539 10.4569 8.44975 11.9042 9.91425L14.1748 12.5102L10.3318 8.32305C8.88448 6.85855 6.53807 6.85855 5.09079 8.32305C3.64352 9.78755 3.64352 12.1623 5.09079 13.6268L9.18189 17.5031L7.18725 15.7485C5.73998 14.284 3.39357 14.284 1.94629 15.7485C0.499022 17.213 0.499022 19.5877 1.94629 21.0522L10.014 29.1529L5.85328 24.9921V29.1529C5.85328 33.8392 9.72773 37.4741 14.3589 37.4741H24.6916L24.6923 37.4744Z" stroke="#333333" stroke-width="1.72249" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <defs>
+    <clipPath id="clip0_2090_10905">
+      <rect width="40" height="38.3357" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>`;
+
+                const title = document.createElement('h2');
+                title.classList.add('empty-block-message-title');
+                title.textContent = _('Drag an iDevice in and start building');
+
+                const description = document.createElement('p');
+                description.classList.add('empty-block-message-text');
+                description.innerHTML = _('Just drag an iDevice onto this page to start designing your content.');
+
+                messageBox.appendChild(icon);
+                messageBox.appendChild(title);
+                messageBox.appendChild(description);
+
+                const arrow = document.createElement('div');
+                arrow.classList.add('empty-block-arrow-icon');
+                arrow.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="86" height="122" viewBox="0 0 86 122" fill="none">
+  <path d="M70.3061 102.996C75.9909 101.837 78.889 95.0305 86 97.213C85.0265 98.5016 84.5587 99.4256 83.832 100.036C75.8142 106.771 67.8041 113.517 59.6611 120.096C58.3274 121.173 56.0909 122.332 54.7452 121.912C52.2702 121.138 52.7247 118.611 53.2375 116.398C54.8303 109.523 56.3374 102.627 57.8882 95.6935C60.4315 96.8999 61.3962 101.474 60.7825 109.416C75.834 93.5762 73.4304 69.6162 55.4042 58.2551C54.3846 60.1229 53.4286 62.0111 52.3498 63.8247C49.173 69.1647 44.8572 73.0994 38.8351 74.9702C34.3992 76.3482 30.2971 75.8814 27.0434 72.4251C23.6946 68.8678 24.0177 64.6271 25.6583 60.3581C29.2123 51.1102 37.319 46.6195 47.0685 48.4533C48.2714 48.6795 49.5096 48.7149 51.1614 48.8822C52.1111 36.3589 49.6987 24.9638 42.2643 15.2091C30.8018 0.168879 14.9272 3.72427 4.37721 11.6965C3.07291 12.6821 1.95115 13.9135 1.66183e-06 15.7208C0.415293 11.5425 2.5421 9.4654 4.61421 7.46681C12.7967 -0.424933 26.6817 -2.31837 36.7267 3.02276C43.1553 6.441 47.963 11.4952 51.1404 18.0579C55.8143 27.712 58.0252 37.8684 56.8856 48.6514C56.7736 49.7119 56.7288 50.7795 56.6281 52.1922C64.5894 57.9884 71.613 64.6448 74.3685 74.7866C77.059 84.6894 73.2303 93.6543 70.3061 102.996ZM50.0348 55.1578C40.8202 50.9038 32.5625 53.8968 29.9971 62.2881C29.3922 64.267 29.621 67.124 30.6578 68.8471C32.1344 71.301 34.9845 70.9511 37.5423 69.9437C44.1741 67.3322 47.8501 62.2249 50.0348 55.1578Z" fill="#333333"/>
+</svg>`;
+
+                emptyContainer.appendChild(messageBox);
+                emptyContainer.appendChild(arrow);
+
+                this.nodeContent.appendChild(emptyContainer);
+            }
+        } else {
+            // Si hay artículos válidos, quitar el mensaje vacío si existe
+            if (emptyArticles) {
+                emptyArticles.remove();
+            }
+        }
+    }
+
 
     /**
      * Set node selected

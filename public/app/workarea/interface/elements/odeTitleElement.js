@@ -60,7 +60,9 @@ export default class OdeTitleMenu {
                             icon: 'downloading',
                         };
                         let toast =
-                            window.eXeLearning.app.toasts.createToast(toastData);
+                            window.eXeLearning.app.toasts.createToast(
+                                toastData
+                            );
                         setTimeout(() => {
                             toast.remove();
                         }, 1000);
@@ -81,15 +83,19 @@ export default class OdeTitleMenu {
     async saveTitle(title) {
         const properties = await this.getProjectProperties();
         const output = Object.keys(properties).reduce((acc, key) => {
-            acc[key] = (typeof properties[key] === 'object' && 'value' in properties[key])
-                ? properties[key].value
-                : properties[key];
+            acc[key] =
+                typeof properties[key] === 'object' &&
+                'value' in properties[key]
+                    ? properties[key].value
+                    : properties[key];
             return acc;
         }, {});
         output.pp_title = title;
-        return eXeLearning.app.project.properties.apiSaveProperties(output, false);
+        return eXeLearning.app.project.properties.apiSaveProperties(
+            output,
+            false
+        );
     }
-
 
     async getProjectProperties() {
         return eXeLearning.app.project.properties.load().then(() => {

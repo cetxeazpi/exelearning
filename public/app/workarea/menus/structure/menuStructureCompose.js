@@ -17,33 +17,33 @@ export default class MenuStructureCompose {
         this.levelItemCounters = {};
     }
 
-compose() {
-    this.data = this.structureEngine.data ? this.structureEngine.data : {};
-    this.menuNavList.innerHTML = '';
+    compose() {
+        this.data = this.structureEngine.data ? this.structureEngine.data : {};
+        this.menuNavList.innerHTML = '';
 
-    this.levelItemCounters = {};
-    this.levelStructure = {};
-    this.onlyChildMap = {};
-    const childCount = {}; 
-    for (let [id, element] of Object.entries(this.data)) {
-        if (element.parent) {
-            if (!childCount[element.parent]) {
-                childCount[element.parent] = 0;
+        this.levelItemCounters = {};
+        this.levelStructure = {};
+        this.onlyChildMap = {};
+        const childCount = {};
+        for (let [id, element] of Object.entries(this.data)) {
+            if (element.parent) {
+                if (!childCount[element.parent]) {
+                    childCount[element.parent] = 0;
+                }
+                childCount[element.parent]++;
             }
-            childCount[element.parent]++;
+        }
+        for (let [id, element] of Object.entries(this.data)) {
+            if (element.parent && childCount[element.parent] === 1) {
+                this.onlyChildMap[element.id] = true;
+            }
+        }
+        for (let [id, element] of Object.entries(this.data)) {
+            if (!element.parent) {
+                this.buildTreeRecursive(element, this.menuNavList, 0);
+            }
         }
     }
-    for (let [id, element] of Object.entries(this.data)) {
-        if (element.parent && childCount[element.parent] === 1) {
-            this.onlyChildMap[element.id] = true;
-        }
-    }
-    for (let [id, element] of Object.entries(this.data)) {
-        if (!element.parent) {
-            this.buildTreeRecursive(element, this.menuNavList, 0);
-        }
-    }
-}
 
     /**
      *
@@ -67,7 +67,13 @@ compose() {
      * @param {Element} parent
      * @param {Object} node
      */
-    makeNodeStructureContentNode(parent, node, level = 0, itemIndex = 1, isOnlyItem = false) {
+    makeNodeStructureContentNode(
+        parent,
+        node,
+        level = 0,
+        itemIndex = 1,
+        isOnlyItem = false
+    ) {
         let nodeDivElementNav = document.createElement('div');
         nodeDivElementNav.classList.add('nav-element');
         nodeDivElementNav.classList.add(`level${level}`);
@@ -101,8 +107,9 @@ compose() {
         nodeDivElementNav.appendChild(childrenElement);
 
         parent.appendChild(nodeDivElementNav);
-        console.log(`Node ${node.id} -> level${level} item${itemIndex} ${isOnlyItem ? '(onlyitem)' : ''}`);
-
+        console.log(
+            `Node ${node.id} -> level${level} item${itemIndex} ${isOnlyItem ? '(onlyitem)' : ''}`
+        );
     }
 
     /**
@@ -193,10 +200,12 @@ compose() {
         const updateNodeLevel = (element, level) => {
             element.classList.add(`level${level}`);
 
-            const childrenContainer = element.querySelector('.nav-element-children-container');
+            const childrenContainer = element.querySelector(
+                '.nav-element-children-container'
+            );
             if (childrenContainer) {
-                const children = [...childrenContainer.children].filter(child =>
-                    child.classList.contains('nav-element')
+                const children = [...childrenContainer.children].filter(
+                    (child) => child.classList.contains('nav-element')
                 );
                 for (let child of children) {
                     updateNodeLevel(child, level + 1);
@@ -204,7 +213,7 @@ compose() {
             }
         };
 
-        const rootNodes = [...this.menuNavList.children].filter(child =>
+        const rootNodes = [...this.menuNavList.children].filter((child) =>
             child.classList.contains('nav-element')
         );
         for (let rootNode of rootNodes) {
@@ -219,17 +228,31 @@ compose() {
         const itemIndex = this.levelItemCounters[level];
         const isOnlyItem = this.onlyChildMap[node.id] === true;
 
-        this.makeNodeStructureContentNode(parentElement, node, level, itemIndex, isOnlyItem);
+        this.makeNodeStructureContentNode(
+            parentElement,
+            node,
+            level,
+            itemIndex,
+            isOnlyItem
+        );
 
         this.levelItemCounters[level]++;
 
-        const thisNodeElement = parentElement.querySelector(`.nav-element[nav-id="${node.id}"]`);
-        const childrenContainer = thisNodeElement.querySelector('.nav-element-children-container');
+        const thisNodeElement = parentElement.querySelector(
+            `.nav-element[nav-id="${node.id}"]`
+        );
+        const childrenContainer = thisNodeElement.querySelector(
+            '.nav-element-children-container'
+        );
 
         for (let [id, childNode] of Object.entries(this.data)) {
             if (childNode.parent === node.id) {
                 thisNodeElement.setAttribute('is-parent', true);
-                this.buildTreeRecursive(childNode, childrenContainer, level + 1);
+                this.buildTreeRecursive(
+                    childNode,
+                    childrenContainer,
+                    level + 1
+                );
             }
         }
     }

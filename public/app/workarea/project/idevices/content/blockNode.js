@@ -210,7 +210,8 @@ export default class IdeviceBlockNode {
         this.headElement.setAttribute('drag', 'box');
         this.headElement.setAttribute('block-id', this.blockId);
         const btn = document.createElement('button');
-        btn.className = 'btn-action-menu btn btn-light btn-toggle box-toggler box-toggle-on btn-expandblock';
+        btn.className =
+            'btn-action-menu btn btn-light btn-toggle box-toggler box-toggle-on btn-expandblock';
         btn.type = 'button';
         btn.id = `toggleBox${idBlock}`;
         btn.title = _('Hide');
@@ -325,42 +326,55 @@ export default class IdeviceBlockNode {
         btnEdit.addEventListener('click', () => {
             if (eXeLearning.app.project.checkOpenIdevice()) return;
             eXeLearning.app.project
-            .isAvalaibleOdeComponent(this.blockId, null)
-            .then((response) => {
-                if (response.responseMessage !== 'OK') {
-                    eXeLearning.app.modals.alert.show({
-                        title: _('iDevice error'),
-                        body: _(response.responseMessage),
-                        contentId: 'error',
-                    });
-                } else {
-                    this.blockNameElementText.setAttribute('contenteditable', 'true');
-                    this.blockNameElementText.focus();
-                    const range = document.createRange();
-                    range.selectNodeContents(this.blockNameElementText);
-                    range.collapse(false);
-                    const selection = window.getSelection();
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-                    btnEdit.style.display = 'none';
-                    let finished = false;
-                    const finishEditing = () => {
-                        if (finished) return;
-                        finished = true;
-                        this.blockNameElementText.removeAttribute('contenteditable');
-                        btnEdit.style.display = '';
-                        this.apiUpdateTitle(this.blockNameElementText.textContent.trim());
+                .isAvalaibleOdeComponent(this.blockId, null)
+                .then((response) => {
+                    if (response.responseMessage !== 'OK') {
+                        eXeLearning.app.modals.alert.show({
+                            title: _('iDevice error'),
+                            body: _(response.responseMessage),
+                            contentId: 'error',
+                        });
+                    } else {
+                        this.blockNameElementText.setAttribute(
+                            'contenteditable',
+                            'true'
+                        );
+                        this.blockNameElementText.focus();
+                        const range = document.createRange();
+                        range.selectNodeContents(this.blockNameElementText);
+                        range.collapse(false);
+                        const selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                        btnEdit.style.display = 'none';
+                        let finished = false;
+                        const finishEditing = () => {
+                            if (finished) return;
+                            finished = true;
+                            this.blockNameElementText.removeAttribute(
+                                'contenteditable'
+                            );
+                            btnEdit.style.display = '';
+                            this.apiUpdateTitle(
+                                this.blockNameElementText.textContent.trim()
+                            );
+                        };
+                        const onKeydown = (e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                finishEditing();
+                            }
+                        };
+                        this.blockNameElementText.addEventListener(
+                            'blur',
+                            finishEditing
+                        );
+                        this.blockNameElementText.addEventListener(
+                            'keydown',
+                            onKeydown
+                        );
                     }
-                    const onKeydown = (e) => {
-                        if (e.key === 'Enter') {
-                            e.preventDefault();
-                            finishEditing();
-                        }
-                    };
-                    this.blockNameElementText.addEventListener('blur', finishEditing);
-                    this.blockNameElementText.addEventListener('keydown', onKeydown);
-                }
-            });
+                });
         });
         container.appendChild(this.blockNameElementText);
         container.appendChild(btnEdit);
@@ -938,7 +952,8 @@ export default class IdeviceBlockNode {
         this.toggleElement.classList.add('box-toggle-off');
         this.toggleElement.classList.remove('box-toggle-on');
         this.toggleElement.setAttribute('title', _('Show'));
-        this.toggleElement.querySelector('span').innerHTML = 'keyboard_arrow_up';
+        this.toggleElement.querySelector('span').innerHTML =
+            'keyboard_arrow_up';
     }
 
     /**
@@ -950,7 +965,8 @@ export default class IdeviceBlockNode {
         this.toggleElement.classList.remove('box-toggle-off');
         this.toggleElement.classList.add('box-toggle-on');
         this.toggleElement.setAttribute('title', _('Hide'));
-        this.toggleElement.querySelector('span').innerHTML = 'keyboard_arrow_down';
+        this.toggleElement.querySelector('span').innerHTML =
+            'keyboard_arrow_down';
     }
 
     /*********************************
@@ -1124,7 +1140,6 @@ export default class IdeviceBlockNode {
             });
         });
     }
-
 
     /*******************************************************************************
      * GET

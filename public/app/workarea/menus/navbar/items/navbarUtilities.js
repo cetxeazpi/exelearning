@@ -131,7 +131,8 @@ export default class NavbarFile {
 
     setProjectPreferencesEvent() {
         this.projectPreferencesButton.addEventListener('click', () => {
-            document.querySelector('[nav-id="root"]')
+            document
+                .querySelector('[nav-id="root"]')
                 ?.querySelectorAll('.nav-element-text')[0]
                 ?.click();
         });

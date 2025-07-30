@@ -7,15 +7,21 @@ export default class NavbarFile {
             JSON.stringify(eXeLearning.app.api.parameters.themeInfoFieldsConfig)
         );
         this.paramsEdit = JSON.parse(
-            JSON.stringify(eXeLearning.app.api.parameters.themeEditionFieldsConfig)
+            JSON.stringify(
+                eXeLearning.app.api.parameters.themeEditionFieldsConfig
+            )
         );
         this.updateThemes();
-        document.querySelector('#exestylescontent-tab').addEventListener('click', () => {
-            this.buildBaseListThemes();
-        });
-        document.querySelector('#importedstylescontent-tab').addEventListener('click', () => {
-            this.buildUserListThemes();
-        });
+        document
+            .querySelector('#exestylescontent-tab')
+            .addEventListener('click', () => {
+                this.buildBaseListThemes();
+            });
+        document
+            .querySelector('#importedstylescontent-tab')
+            .addEventListener('click', () => {
+                this.buildUserListThemes();
+            });
     }
 
     updateThemes() {
@@ -53,13 +59,19 @@ export default class NavbarFile {
         this.buildUserListThemes();
 
         this.toggleSidenav();
-        document.getElementById('sidenav-overlay').addEventListener('click', this.toggleSidenav);
-        document.getElementById('stylessidenavclose').addEventListener('click', this.toggleSidenav);
+        document
+            .getElementById('sidenav-overlay')
+            .addEventListener('click', this.toggleSidenav);
+        document
+            .getElementById('stylessidenavclose')
+            .addEventListener('click', this.toggleSidenav);
         //eXeLearning.app.modals.stylemanager.show(eXeLearning.app.themes.list);
     }
 
     buildBaseListThemes() {
-        let contentBaseThemes = document.querySelector('#styleslistContent #exestylescontent');
+        let contentBaseThemes = document.querySelector(
+            '#styleslistContent #exestylescontent'
+        );
         contentBaseThemes.innerHTML = '';
         for (const key in this.baseThemes) {
             const theme = this.baseThemes[key];
@@ -85,7 +97,9 @@ export default class NavbarFile {
             iconDownload.classList.add('menu-icon', 'exe-icon', 'notranslate');
             iconDownload.textContent = 'download';
             liDownload.appendChild(iconDownload);
-            liDownload.appendChild(document.createTextNode(` ${_('Download')}`));
+            liDownload.appendChild(
+                document.createTextNode(` ${_('Download')}`)
+            );
             const liInfo = document.createElement('li');
             liInfo.classList.add('theme-action-info');
             const iconInfo = document.createElement('span');
@@ -98,9 +112,7 @@ export default class NavbarFile {
                 e.stopPropagation();
                 let leftBody = document.getElementById('exestylescontent');
                 leftBody.innerHTML = '';
-                leftBody.append(
-                    this.makeElementInfoTheme(theme, 'base')
-                );
+                leftBody.append(this.makeElementInfoTheme(theme, 'base'));
             });
 
             ul.appendChild(liDownload);
@@ -122,7 +134,7 @@ export default class NavbarFile {
             themeCard.appendChild(description);
             button.addEventListener('click', (e) => {
                 e.stopPropagation();
-                document.querySelectorAll('.theme-menu').forEach(m => {
+                document.querySelectorAll('.theme-menu').forEach((m) => {
                     if (m !== menu) m.classList.add('hidden');
                 });
                 menu.classList.toggle('hidden');
@@ -131,21 +143,29 @@ export default class NavbarFile {
             contentBaseThemes.appendChild(themeCard);
 
             themeCard.addEventListener('click', () => {
-                eXeLearning.app.themes.selectTheme(theme.id, true, false).then(() => {
-                    document.querySelectorAll('.theme-card.selected').forEach(t => {
-                        if (t !== menu) t.classList.remove('selected');
+                eXeLearning.app.themes
+                    .selectTheme(theme.id, true, false)
+                    .then(() => {
+                        document
+                            .querySelectorAll('.theme-card.selected')
+                            .forEach((t) => {
+                                if (t !== menu) t.classList.remove('selected');
+                            });
+                        themeCard.classList.add('selected');
                     });
-                    themeCard.classList.add('selected');
-                });
             });
         }
         document.addEventListener('click', () => {
-            document.querySelectorAll('.theme-menu').forEach(m => m.classList.add('hidden'));
+            document
+                .querySelectorAll('.theme-menu')
+                .forEach((m) => m.classList.add('hidden'));
         });
     }
 
     buildUserListThemes() {
-        const contentUserThemes = document.querySelector('#styleslistContent #importedstylescontent');
+        const contentUserThemes = document.querySelector(
+            '#styleslistContent #importedstylescontent'
+        );
         contentUserThemes.innerHTML = '';
         const infoText = document.createElement('div');
         infoText.classList.add('user-theme-empty-info');
@@ -202,7 +222,7 @@ export default class NavbarFile {
 
             button.addEventListener('click', (e) => {
                 e.stopPropagation();
-                document.querySelectorAll('.theme-menu').forEach(m => {
+                document.querySelectorAll('.theme-menu').forEach((m) => {
                     if (m !== menu) m.classList.add('hidden');
                 });
                 menu.classList.toggle('hidden');
@@ -214,12 +234,16 @@ export default class NavbarFile {
             item.appendChild(menu);
 
             item.addEventListener('click', () => {
-                eXeLearning.app.themes.selectTheme(theme.id, true, false).then(() => {
-                    document.querySelectorAll('.user-theme-item.selected').forEach(t => {
-                        if (t !== menu) t.classList.remove('selected');
+                eXeLearning.app.themes
+                    .selectTheme(theme.id, true, false)
+                    .then(() => {
+                        document
+                            .querySelectorAll('.user-theme-item.selected')
+                            .forEach((t) => {
+                                if (t !== menu) t.classList.remove('selected');
+                            });
+                        item.classList.add('selected');
                     });
-                    item.classList.add('selected');
-                });
             });
 
             contentUserThemes.appendChild(item);
@@ -228,7 +252,9 @@ export default class NavbarFile {
         contentUserThemes.appendChild(this.createEmptyBox());
 
         document.addEventListener('click', () => {
-            document.querySelectorAll('.theme-menu').forEach(m => m.classList.add('hidden'));
+            document
+                .querySelectorAll('.theme-menu')
+                .forEach((m) => m.classList.add('hidden'));
         });
     }
 
@@ -280,7 +306,7 @@ export default class NavbarFile {
             e.preventDefault();
             emptyBox.classList.remove('dragover');
             const files = e.dataTransfer.files;
-            Array.from(files).forEach(file => this.addNewReader(file));
+            Array.from(files).forEach((file) => this.addNewReader(file));
         });
 
         return emptyBox;
@@ -290,7 +316,13 @@ export default class NavbarFile {
         const li = document.createElement('li');
 
         const icon = document.createElement('span');
-        icon.classList.add('theme-action', 'theme-action-edit', 'menu-icon', 'exe-icon', 'notranslate');
+        icon.classList.add(
+            'theme-action',
+            'theme-action-edit',
+            'menu-icon',
+            'exe-icon',
+            'notranslate'
+        );
         icon.textContent = 'edit';
 
         li.appendChild(icon);
@@ -299,7 +331,7 @@ export default class NavbarFile {
             e.preventDefault();
             e.stopPropagation();
             // TODO add edition.
-        })
+        });
         return li;
     }
 
@@ -307,7 +339,13 @@ export default class NavbarFile {
         const li = document.createElement('li');
 
         const icon = document.createElement('span');
-        icon.classList.add('theme-action', 'theme-action-export', 'menu-icon', 'exe-icon', 'notranslate');
+        icon.classList.add(
+            'theme-action',
+            'theme-action-export',
+            'menu-icon',
+            'exe-icon',
+            'notranslate'
+        );
         icon.textContent = 'download';
 
         li.appendChild(icon);
@@ -317,7 +355,7 @@ export default class NavbarFile {
             e.preventDefault();
             e.stopPropagation();
             this.downloadThemeZip(theme);
-        })
+        });
         return li;
     }
 
@@ -325,7 +363,13 @@ export default class NavbarFile {
         const li = document.createElement('li');
 
         const icon = document.createElement('span');
-        icon.classList.add('theme-action', 'theme-action-info', 'menu-icon', 'exe-icon', 'notranslate');
+        icon.classList.add(
+            'theme-action',
+            'theme-action-info',
+            'menu-icon',
+            'exe-icon',
+            'notranslate'
+        );
         icon.textContent = 'info';
 
         li.appendChild(icon);
@@ -336,9 +380,7 @@ export default class NavbarFile {
             e.stopPropagation();
             let leftBody = document.getElementById('importedstylescontent');
             leftBody.innerHTML = '';
-            leftBody.append(
-                this.makeElementInfoTheme(theme, 'users')
-            );
+            leftBody.append(this.makeElementInfoTheme(theme, 'users'));
         });
 
         return li;
@@ -348,7 +390,13 @@ export default class NavbarFile {
         const li = document.createElement('li');
 
         const icon = document.createElement('span');
-        icon.classList.add('theme-action', 'theme-action-remove', 'menu-icon', 'exe-icon', 'notranslate');
+        icon.classList.add(
+            'theme-action',
+            'theme-action-remove',
+            'menu-icon',
+            'exe-icon',
+            'notranslate'
+        );
         icon.textContent = 'delete';
 
         li.appendChild(icon);
@@ -379,7 +427,9 @@ export default class NavbarFile {
             response.deleted &&
             response.deleted.name
         ) {
-            await eXeLearning.app.themes.list.removeTheme(response.deleted.name);
+            await eXeLearning.app.themes.list.removeTheme(
+                response.deleted.name
+            );
             this.updateThemes();
             this.buildUserListThemes();
         } else {
@@ -489,7 +539,6 @@ export default class NavbarFile {
                 }
             });
     }
-
 
     toggleSidenav() {
         const sidenav = document.getElementById('stylessidenav');

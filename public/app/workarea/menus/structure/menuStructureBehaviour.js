@@ -714,7 +714,9 @@ export default class MenuStructureBehaviour {
 
     checkIfEmptyNode() {
         this.nodeContent = document.getElementById('node-content');
-        const validArticles = this.nodeContent.querySelectorAll('article:not(#empty_articles)');
+        const validArticles = this.nodeContent.querySelectorAll(
+            'article:not(#empty_articles)'
+        );
         const emptyArticles = this.nodeContent.querySelector('#empty_articles');
         if (validArticles.length === 0) {
             if (!emptyArticles) {
@@ -745,7 +747,9 @@ export default class MenuStructureBehaviour {
 
                 const description = document.createElement('p');
                 description.classList.add('empty-block-message-text');
-                description.innerHTML = _('Just drag an iDevice onto this page to start designing your content.');
+                description.innerHTML = _(
+                    'Just drag an iDevice onto this page to start designing your content.'
+                );
 
                 messageBox.appendChild(icon);
                 messageBox.appendChild(title);
@@ -769,7 +773,6 @@ export default class MenuStructureBehaviour {
             }
         }
     }
-
 
     /**
      * Set node selected

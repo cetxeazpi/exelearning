@@ -53,19 +53,34 @@ export default class MenuIdevicesBehaviour {
             });
         });
 
-        ['click', 'dragstart', 'drag', 'dragend', 'dragenter', 'dragover', 'dragleave', 'drop'].forEach((closeEvent) => {
-            document.addEventListener(closeEvent, (event) => {
-                const menu = document.getElementById('menu_idevices_content');
-                if (!menu.contains(event.target)) {
-                    this.parent.categoriesIdevices.forEach((element) => {
-                        element.classList.remove('last-open');
-                        element.classList.remove('on');
-                        element.classList.add('off');
-                    });
-                }
-                eXeLearning.app.menus.menuStructure.menuStructureBehaviour.checkIfEmptyNode();
-            }, true);
-        })
+        [
+            'click',
+            'dragstart',
+            'drag',
+            'dragend',
+            'dragenter',
+            'dragover',
+            'dragleave',
+            'drop',
+        ].forEach((closeEvent) => {
+            document.addEventListener(
+                closeEvent,
+                (event) => {
+                    const menu = document.getElementById(
+                        'menu_idevices_content'
+                    );
+                    if (!menu.contains(event.target)) {
+                        this.parent.categoriesIdevices.forEach((element) => {
+                            element.classList.remove('last-open');
+                            element.classList.remove('on');
+                            element.classList.add('off');
+                        });
+                    }
+                    eXeLearning.app.menus.menuStructure.menuStructureBehaviour.checkIfEmptyNode();
+                },
+                true
+            );
+        });
     }
 
     /**

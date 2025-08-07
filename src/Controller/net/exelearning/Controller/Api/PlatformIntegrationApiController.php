@@ -88,7 +88,7 @@ class PlatformIntegrationApiController extends DefaultApiController
         // collect parameters
         $odeId = $request->get('odeId');
         $jwtToken = $request->get('jwt_token');
-        $integrationParams = $this->integrationUtil->getParamsMoodleIntegration($jwtToken, 'set');
+        $integrationParams = $this->integrationUtil->getPlatformIntegrationParams($jwtToken, 'set');
 
         // if $odeSessionId is set load data from database
         if (!empty($odeId)) {

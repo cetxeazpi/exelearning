@@ -60,11 +60,11 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
      *
      * @return OdeNavStructureSync[]
      */
-    public function getNavStructure($odeSessionId)
+    public function getNavStructure($odeId)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.odeSessionId = :odeSessionId')
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->andWhere('c.odeId = :odeId')
+            ->setParameter('odeId', $odeId)
             ->addOrderBy('CASE WHEN c.odeNavStructureSync IS NULL THEN 1 ELSE 0 END', 'DESC')
             ->addOrderBy('c.odeNavStructureSync', 'ASC')
             ->addOrderBy('c.odeNavStructureSyncOrder', 'ASC')
@@ -79,11 +79,11 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
      *
      * @return OdeNavStructureSync[]
      */
-    public function findByOdeSessionId($odeSessionId)
+    public function findByOdeSessionId($odeId)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.odeSessionId = :odeSessionId')
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->andWhere('c.odeId = :odeId')
+            ->setParameter('odeId', $odeId)
             ->getQuery()
             ->getResult();
     }
@@ -110,14 +110,14 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
      *
      * @return number
      */
-    public function removeByOdeSessionId($odeSessionId)
+    public function removeByOdeSessionId($odeId)
     {
         // Get odeComponentsSync Ids
         $odeComponentsSyncIds = $this->getEntityManager()->createQueryBuilder()
             ->select('c.id as id')
             ->from(OdeComponentsSync::class, 'c')
-            ->where('c.odeSessionId = :odeSessionId')
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->where('c.odeId = :odeId')
+            ->setParameter('odeId', $odeId)
             ->getQuery()
             ->getResult();
 
@@ -133,8 +133,8 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
         // Delete odeComponentsSync
         $queryDeleteOdeComponentsSync = $this->getEntityManager()->createQueryBuilder()
             ->delete(OdeComponentsSync::class, 'c')
-            ->where('c.odeSessionId = :odeSessionId')
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->where('c.odeId = :odeId')
+            ->setParameter('odeId', $odeId)
             ->getQuery();
 
         $odeComponentsSyncsDeleted = $queryDeleteOdeComponentsSync->execute();
@@ -143,8 +143,8 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
         $odePagStructureSyncIds = $this->getEntityManager()->createQueryBuilder()
             ->select('p.id as id')
             ->from(OdePagStructureSync::class, 'p')
-            ->where('p.odeSessionId = :odeSessionId')
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->where('p.odeId = :odeId')
+            ->setParameter('odeId', $odeId)
             ->getQuery()
             ->getResult();
 
@@ -160,8 +160,8 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
         // Delete OdePagStructureSync
         $queryDeleteOdePagStructureSync = $this->getEntityManager()->createQueryBuilder()
             ->delete(OdePagStructureSync::class, 'p')
-            ->where('p.odeSessionId = :odeSessionId')
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->where('p.odeId = :odeId')
+            ->setParameter('odeId', $odeId)
             ->getQuery();
 
         $odePagStructureSyncsDeleted = $queryDeleteOdePagStructureSync->execute();
@@ -169,8 +169,8 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
         // Get odeNavStructureSync Ids
         $odeNavStructureSyncIds = $this->createQueryBuilder('n')
             ->select('n.id as id')
-            ->where('n.odeSessionId = :odeSessionId')
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->where('n.odeId = :odeId')
+            ->setParameter('odeId', $odeId)
             ->getQuery()
             ->getResult();
 
@@ -188,8 +188,8 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
             ->update()
             ->set('n.odeNavStructureSync', ':odeNavStructureSyncId')
             ->setParameter('odeNavStructureSyncId', null)
-            ->where('n.odeSessionId = :odeSessionId')
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->where('n.odeId = :odeId')
+            ->setParameter('odeId', $odeId)
             ->getQuery();
 
         $queryUpdateOdeNavStructureSync->execute();
@@ -197,9 +197,9 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
         // Delete OdeNavStructureSync
         $queryDeleteOdeNavStructureSync = $this->createQueryBuilder('n')
             ->delete()
-            ->where('n.odeSessionId = :odeSessionId')
+            ->where('n.odeId = :odeId')
             // ->setParameter(':ids', array(array(1,2,3,4)), Connection::PARAM_INT_ARRAY);
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->setParameter('odeId', $odeId)
             ->getQuery();
 
         $odeNavStructureSyncsDeleted = $queryDeleteOdeNavStructureSync->execute();
@@ -215,15 +215,15 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
      *
      * @return number
      */
-    public function updateOdeSessionByLastOdeSessionId($odeSessionId, $newOdeSessionId)
+    public function updateOdeSessionByLastOdeSessionId($odeId, $newOdeId)
     {
         // Update odeComponentsSync
         $queryUpdateOdeComponentsSync = $this->getEntityManager()->createQueryBuilder()
             ->update(OdeComponentsSync::class, 'c')
-            ->set('c.odeSessionId', ':newOdeSessionId')
-            ->setParameter('newOdeSessionId', $newOdeSessionId)
-            ->where('c.odeSessionId = :odeSessionId')
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->set('c.odeId', ':newOdeId')
+            ->setParameter('newOdeId', $newOdeId)
+            ->where('c.odeId = :odeId')
+            ->setParameter('odeId', $odeId)
             ->getQuery();
 
         $odeComponentsSyncsUpdated = $queryUpdateOdeComponentsSync->execute();
@@ -231,10 +231,10 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
         // Update OdePagStructureSync
         $queryUpdateOdePagStructureSync = $this->getEntityManager()->createQueryBuilder()
             ->update(OdePagStructureSync::class, 'p')
-            ->set('p.odeSessionId', ':newOdeSessionId')
-            ->setParameter('newOdeSessionId', $newOdeSessionId)
-            ->where('p.odeSessionId = :odeSessionId')
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->set('p.odeId', ':newOdeId')
+            ->setParameter('newOdeId', $newOdeId)
+            ->where('p.odeId = :odeId')
+            ->setParameter('odeId', $odeId)
             ->getQuery();
 
         $odePagStructureSyncsUpdated = $queryUpdateOdePagStructureSync->execute();
@@ -242,10 +242,10 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
         // Delete OdeNavStructureSync
         $queryUpdateOdeNavStructureSync = $this->createQueryBuilder('n')
             ->update()
-            ->set('n.odeSessionId', ':newOdeSessionId')
-            ->setParameter('newOdeSessionId', $newOdeSessionId)
-            ->where('n.odeSessionId = :odeSessionId')
-            ->setParameter('odeSessionId', $odeSessionId)
+            ->set('n.odeId', ':newOdeId')
+            ->setParameter('newOdeId', $newOdeId)
+            ->where('n.odeId = :odeId')
+            ->setParameter('odeId', $odeId)
             ->getQuery();
 
         $odeNavStructureSyncsUpdated = $queryUpdateOdeNavStructureSync->execute();

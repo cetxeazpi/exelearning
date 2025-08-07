@@ -214,13 +214,13 @@ export default class projectManager {
             this.odeId = response.currentOdeUsers.odeId;
             this.odeVersion = response.currentOdeUsers.odeVersionId;
             // Get odeSession for open elp platform
-            let odeSessionId = response.currentOdeUsers.odeSessionId;
+            let odeId = response.currentOdeUsers.odeId;
 
             // Case join the shared session
-            if (eXeLearning.symfony.odeSessionId) {
+            if (eXeLearning.symfony.odeId) {
                 // Check if the shared identifier is an odeId or odeSessionId
                 let params = { 
-                    odeId: eXeLearning.symfony.odeSessionId,
+                    odeId: eXeLearning.symfony.odeId,
                     odeSessionId: eXeLearning.symfony.odeSessionId 
                 };
                 let response = await this.app.api.postJoinCurrentOdeSessionId(params);
@@ -235,7 +235,7 @@ export default class projectManager {
                     window.location.replace('workarea');
                 }
             } else if (eXeLearning.user.odePlatformId) {
-                this.loadPlatformProject(odeSessionId);
+                this.loadPlatformProject(odeId);
             } else if (eXeLearning.user.newOde) {
                 this.newSession(odeSessionId);
                 const urlParams = new URLSearchParams(window.location.search);
@@ -254,7 +254,7 @@ export default class projectManager {
      *
      * @param {*} odeSessionId
      */
-    async loadPlatformProject(odeSessionId) {
+    async loadPlatformProject(odeId) {
         // Check odeSessionId and set on bbdd
         let odePlatformId = eXeLearning.user.odePlatformId;
 
@@ -262,7 +262,7 @@ export default class projectManager {
         let jwtToken = urlParams.get('jwt_token');
         let params = {
             odePlatformId,
-            odeSessionId: odeSessionId,
+            odeId: odeId,
             platformUrlGet: eXeLearning.config.platformUrlGet,
             jwt_token: jwtToken,
         };
@@ -1538,7 +1538,7 @@ export default class projectManager {
         isIdeviceRemove = false
     ) {
         let params = {
-            odeSessionId: this.odeSession,
+            odeId: this.odeId,
             odeIdeviceId: odeIdeviceId,
             blockId: blockId,
             odeNavStructureSyncId: odeNavStructureSyncId,

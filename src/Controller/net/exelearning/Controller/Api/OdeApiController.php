@@ -124,12 +124,13 @@ class OdeApiController extends DefaultApiController
         $responseData = [];
 
         // collect parameters
+        $odeId = $request->get('odeId');
         $odeSessionId = $request->get('odeSessionId');
 
         // In case version control is active do the save
         if (Settings::VERSION_CONTROL) {
             // if $odeSessionId is set load data from database
-            if (!empty($odeSessionId)) {
+            if (!empty($odeId)) {
                 $user = $this->getUser();
                 $databaseUser = $this->userHelper->getDatabaseUser($user);
 
@@ -144,7 +145,8 @@ class OdeApiController extends DefaultApiController
                 $currentSessionForUser = $currentOdeUsersRepository->getCurrentSessionForUser($user->getUsername());
 
                 // Obtain odeId and odeVersionId from currentOdeUsers
-                $odeId = $this->currentOdeUsersService->getOdeIdByOdeSessionId($user, $odeSessionId);
+                // odeId already exists
+                // $odeId = $this->currentOdeUsersService->getOdeIdByOdeSessionId($user, $odeId);
                 $odeVersion = $this->currentOdeUsersService->getOdeVersionIdByOdeSessionId($user, $odeSessionId);
 
                 // Get the last version_name from ode_files
@@ -154,7 +156,8 @@ class OdeApiController extends DefaultApiController
                 $isManualSave = true;
 
                 // Get save flag
-                $isConcurrentUserSave = $this->currentOdeUsersService->checkSyncSaveFlag($odeId, $odeSessionId);
+                // FIXME: Check user concurrency
+                // $isConcurrentUserSave = $this->currentOdeUsersService->checkSyncSaveFlag($odeId, $odeSessionId);
 
                 // Get odeComponentFlag
                 $isEditingIdevice = $currentSessionForUser->getSyncComponentsFlag();
@@ -174,7 +177,7 @@ class OdeApiController extends DefaultApiController
 
                     try {
                         // Get ode properties
-                        $odeProperties = $this->odeService->getOdePropertiesFromDatabase($odeSessionId, $user);
+                        $odeProperties = $this->odeService->getOdePropertiesFromDatabase($odeId, $user);
 
                         // Get user preferences
                         $databaseUserPreferences = $this->userHelper->getUserPreferencesFromDatabase($user);
@@ -186,7 +189,7 @@ class OdeApiController extends DefaultApiController
                         }
 
                         $saveOdeResult = $this->odeService->saveOde(
-                            $odeSessionId,
+                            $odeId,
                             $databaseUser,
                             $isManualSave,
                             $odeProperties,
@@ -221,12 +224,12 @@ class OdeApiController extends DefaultApiController
                     $this->currentOdeUsersService->removeActiveSyncSaveFlag($user);
                 }
             } else {
-                $this->logger->error('invalid data', ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]);
+                $this->logger->error('invalid data', ['odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]);
 
                 $responseData['responseMessage'] = 'error: invalid data';
             }
         } else {
-            $this->logger->error('version control desactivated', ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]);
+            $this->logger->error('version control desactivated', ['odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]);
 
             $responseData['responseMessage'] = 'error: version control desactivated';
         }
@@ -1121,15 +1124,15 @@ class OdeApiController extends DefaultApiController
         }
     }
 
-    #[Route('/properties/{odeSessionId}/get', methods: ['GET'], name: 'api_odes_properties_get')]
-    public function getOdePropertiesAction(Request $request, $odeSessionId)
+    #[Route('/properties/{odeId}/get', methods: ['GET'], name: 'api_odes_properties_get')]
+    public function getOdePropertiesAction(Request $request, $odeId)
     {
         $responseData = [];
 
         $user = $this->getUser();
 
         // Load odeProperties from database
-        $databaseOdePropertiesData = $this->odeService->getOdePropertiesFromDatabase($odeSessionId, $user);
+        $databaseOdePropertiesData = $this->odeService->getOdePropertiesFromDatabase($odeId, $user);
 
         $odePropertiesDtos = [];
         foreach ($databaseOdePropertiesData as $odeProperties) {
@@ -1188,8 +1191,8 @@ class OdeApiController extends DefaultApiController
 
         $user = $this->getUser();
 
-        $odeSessionId = $request->get('odeSessionId');
-        $databaseOdePropertiesData = $this->odeService->getOdePropertiesFromDatabase($odeSessionId, $user);
+        $odeId = $request->get('odeId');
+        $databaseOdePropertiesData = $this->odeService->getOdePropertiesFromDatabase($odeId, $user);
 
         // Get current database properties values
         $databaseOdePropertiesOldValues = [];
@@ -1204,7 +1207,7 @@ class OdeApiController extends DefaultApiController
                     $propertiesDataProperties = $this->odeService->saveOdeProperty(
                         $this->entityManager,
                         $request,
-                        $odeSessionId,
+                        $odeId,
                         $databaseOdePropertiesData,
                         $odePropertiesConfigValues,
                         $odePropertiesConfigKey
@@ -1221,7 +1224,7 @@ class OdeApiController extends DefaultApiController
                     $propertiesDataCataloguing = $this->odeService->saveOdeProperty(
                         $this->entityManager,
                         $request,
-                        $odeSessionId,
+                        $odeId,
                         $databaseOdePropertiesData,
                         $odePropertiesConfigValues,
                         $odePropertiesConfigKey

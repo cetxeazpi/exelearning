@@ -1495,7 +1495,7 @@ export default class IdeviceBlockNode {
         return {
             odePagStructureSyncId: this.id,
             odeVersionId: defaultVersion,
-            odeSessionId: defaultSession,
+            odeId: eXeLearning.app.project.odeId, // Get new odeId
             odeNavStructureSyncId: this.odeNavStructureSyncId
                 ? this.odeNavStructureSyncId
                 : defaultOdeNavStructureSyncId,

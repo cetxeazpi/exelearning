@@ -22,7 +22,7 @@ class OdePagStructureSyncDto extends BaseDto
     /**
      * @var string
      */
-    protected $odeSessionId;
+    protected $odeId;
 
     /**
      * @var string
@@ -105,17 +105,17 @@ class OdePagStructureSyncDto extends BaseDto
     /**
      * @return string
      */
-    public function getOdeSessionId()
+    public function getOdeId()
     {
-        return $this->odeSessionId;
+        return $this->odeId;
     }
 
     /**
      * @param string $odeSessionId
      */
-    public function setOdeSessionId($odeSessionId)
+    public function setOdeId($odeId)
     {
-        $this->odeSessionId = $odeSessionId;
+        $this->odeId = $odeId;
     }
 
     /**
@@ -274,7 +274,7 @@ class OdePagStructureSyncDto extends BaseDto
     {
         $this->setId($odePagStructureSync->getId());
         $this->setOdeNavStructureSyncId($odePagStructureSync->getOdeNavStructureSync()->getId());
-        $this->setOdeSessionId($odePagStructureSync->getOdeSessionId());
+        $this->setOdeId($odePagStructureSync->getOdeId());
         $this->setPageId($odePagStructureSync->getOdePageId());
         $this->setBlockId($odePagStructureSync->getOdeBlockId());
         $this->setBlockName($odePagStructureSync->getBlockName());

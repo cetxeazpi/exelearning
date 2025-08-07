@@ -22,7 +22,7 @@ class OdeComponentsSyncDto extends BaseDto
     /**
      * @var string
      */
-    protected $odeSessionId;
+    protected $odeId;
 
     /**
      * @var string
@@ -116,17 +116,17 @@ class OdeComponentsSyncDto extends BaseDto
     /**
      * @return string
      */
-    public function getOdeSessionId()
+    public function getOdeId()
     {
-        return $this->odeSessionId;
+        return $this->odeId;
     }
 
     /**
      * @param string $odeSessionId
      */
-    public function setOdeSessionId($odeSessionId)
+    public function setOdeId($odeId)
     {
-        $this->odeSessionId = $odeSessionId;
+        $this->odeId = $odeId;
     }
 
     /**
@@ -323,7 +323,7 @@ class OdeComponentsSyncDto extends BaseDto
     {
         $this->setId($odeComponentsSync->getId());
         $this->setOdePagStructureSyncId($odeComponentsSync->getOdePagStructureSync()->getId());
-        $this->setOdeSessionId($odeComponentsSync->getOdeSessionId());
+        $this->setOdeId($odeComponentsSync->getOdeId());
         $this->setPageId($odeComponentsSync->getOdePageId());
         $this->setBlockId($odeComponentsSync->getOdeBlockId());
         $this->setOdeIdeviceId($odeComponentsSync->getOdeIdeviceId());

@@ -86,18 +86,18 @@ class PlatformIntegrationApiController extends DefaultApiController
         $responseData = [];
 
         // collect parameters
-        $odeSessionId = $request->get('odeSessionId');
+        $odeId = $request->get('odeId');
         $jwtToken = $request->get('jwt_token');
         $integrationParams = $this->integrationUtil->getParamsMoodleIntegration($jwtToken, 'set');
 
         // if $odeSessionId is set load data from database
-        if (!empty($odeSessionId)) {
+        if (!empty($odeId)) {
             $user = $this->getUser();
             $databaseUser = $this->userHelper->getDatabaseUser($user);
 
             // Obtain odeId and odeVersionId from currentOdeUsers
-            $odeId = $this->currentOdeUsersService->getOdeIdByOdeSessionId($user, $odeSessionId);
-            $odeVersion = $this->currentOdeUsersService->getOdeVersionIdByOdeSessionId($user, $odeSessionId);
+            $odeId = $this->currentOdeUsersService->getOdeIdByOdeSessionId($user, $odeId);
+            $odeVersion = $this->currentOdeUsersService->getOdeVersionIdByOdeSessionId($user, $odeId);
 
             // Get the last version_name from ode_files
             $lastOdeVersionName = $this->odeService->getLastVersionNameOdeFiles($odeId);
@@ -107,12 +107,12 @@ class PlatformIntegrationApiController extends DefaultApiController
 
             try {
                 // Get user preferences
-                $odeProperties = $this->odeService->getOdePropertiesFromDatabase($odeSessionId, $user);
+                $odeProperties = $this->odeService->getOdePropertiesFromDatabase($odeId, $user);
 
                 $odeExportResult = $this->odeExportService->export(
                     $user,
                     $databaseUser,
-                    $odeSessionId,
+                    $odeId,
                     false,
                     $integrationParams['exportType'],
                     false,
@@ -128,7 +128,7 @@ class PlatformIntegrationApiController extends DefaultApiController
                     $odeResultParameters = [
                         'odeId' => $odeId,
                         'odeVersionId' => $odeVersion,
-                        'odeSessionId' => $odeSessionId,
+                        'odeId' => $odeId,
                         'elpFileName' => $odeExportResult['zipFileName'],
                         'odePropertiesName' => $odePropertiesName,
                         'odeVersionName' => $odeVersionName,
@@ -158,7 +158,7 @@ class PlatformIntegrationApiController extends DefaultApiController
                 $responseData['responseMessage'] = 'error: '.$e->getMessage();
             }
         } else {
-            $this->logger->error('invalid data', ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]);
+            $this->logger->error('invalid data', ['odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]);
 
             $responseData['responseMessage'] = 'error: invalid data';
         }
@@ -214,7 +214,7 @@ class PlatformIntegrationApiController extends DefaultApiController
         // odeId from platform
         $odePlatformId = $integrationParams['cmid'];
 
-        $odeSessionId = $request->get('odeSessionId');
+        $odeId = $request->get('odeId');
 
         // Get user
         $user = $integrationParams['userid'];
@@ -231,7 +231,7 @@ class PlatformIntegrationApiController extends DefaultApiController
         }
 
         // Save file and open to load in BBDD and set folders
-        $elpFilePath = $this->fileHelper->getOdeSessionDistDirForUser($odeSessionId, $databaseUser);
+        $elpFilePath = $this->fileHelper->getOdeSessionDistDirForUser($odeId, $databaseUser);
         $elpFileName = $elpFilePath.$platformJsonResponse['ode_filename'];
         $elpName = $platformJsonResponse['ode_filename'];
 
@@ -248,7 +248,7 @@ class PlatformIntegrationApiController extends DefaultApiController
 
         $jsonData = [
             'responseMessage' => 'OK',
-            'odeSessionId' => $odeSessionId,
+            'odeId' => $odeId,
             'elpFileName' => $elpName,
             'elpFilePath' => $elpFileName,
             'forceCloseOdeUserPreviousSession' => $forceCloseOdeUserPreviousSession,

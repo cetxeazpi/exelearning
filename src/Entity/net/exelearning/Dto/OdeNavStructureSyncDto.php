@@ -17,7 +17,7 @@ class OdeNavStructureSyncDto extends BaseDto
     /**
      * @var string
      */
-    protected $odeSessionId;
+    protected $odeId;
 
     /**
      * @var string
@@ -74,17 +74,17 @@ class OdeNavStructureSyncDto extends BaseDto
     /**
      * @return string
      */
-    public function getOdeSessionId()
+    public function getOdeId()
     {
-        return $this->odeSessionId;
+        return $this->odeId;
     }
 
     /**
      * @param string $odeSessionId
      */
-    public function setOdeSessionId($odeSessionId)
+    public function setOdeId($odeId)
     {
-        $this->odeSessionId = $odeSessionId;
+        $this->odeId = $odeId;
     }
 
     /**
@@ -212,7 +212,7 @@ class OdeNavStructureSyncDto extends BaseDto
     public function loadFromEntity($odeNavStructureSync, $loadOdePagStructureSyncs, $loadOdeComponentsSync, $loadOdeNavStructureSyncProperties, $loadOdePagStructureSyncProperties, $loadOdeComponentsSyncProperties)
     {
         $this->setId($odeNavStructureSync->getId());
-        $this->setOdeSessionId($odeNavStructureSync->getOdeSessionId());
+        $this->setOdeId($odeNavStructureSync->getOdeId());
         $this->setPageId($odeNavStructureSync->getOdePageId());
         $this->setPageName($odeNavStructureSync->getPageName());
         if (!empty($odeNavStructureSync->getOdeNavStructureSync())) {

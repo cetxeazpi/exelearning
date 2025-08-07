@@ -44,14 +44,14 @@ class NavStructureApiController extends DefaultApiController
         parent::__construct($entityManager, $logger, $hub);
     }
 
-    #[Route('/{odeVersionId}/{odeSessionId}/nav/structure/get', methods: ['GET'], name: 'api_nav_structures_nav_structure_get')]
-    public function getOdeNavStructureSyncAction(Request $request, $odeVersionId, $odeSessionId)
+    #[Route('/{odeVersionId}/{odeId}/nav/structure/get', methods: ['GET'], name: 'api_nav_structures_nav_structure_get')]
+    public function getOdeNavStructureSyncAction(Request $request, $odeVersionId, $odeId)
     {
         $responseData = null;
 
         $repo = $this->entityManager->getRepository(OdeNavStructureSync::class);
 
-        $navStructure = $repo->getNavStructure($odeSessionId);
+        $navStructure = $repo->getNavStructure($odeId);
 
         if (!empty($navStructure)) {
             // Get user
@@ -70,7 +70,7 @@ class NavStructureApiController extends DefaultApiController
             $loadOdeComponentsSyncProperties = false;
 
             $responseData = new OdeNavStructureSyncListDto();
-            $responseData->setOdeSessionId($odeSessionId);
+            $responseData->setOdeId($odeId);
 
             foreach ($navStructure as $navStructureElem) {
                 $structure = new OdeNavStructureSyncDto();
@@ -83,7 +83,7 @@ class NavStructureApiController extends DefaultApiController
             $navStructure = $this->saveOdeNavStructureSyncDataAction($request);
 
             $responseData = new OdeNavStructureSyncListDto();
-            $responseData->setOdeSessionId($odeSessionId);
+            $responseData->setOdeId($odeId);
 
             $loadOdePagStructureSyncs = false;
             $loadOdeComponentsSync = false;
@@ -111,7 +111,7 @@ class NavStructureApiController extends DefaultApiController
 
         // required if $odeNavStructureSyncId is not received
         $odeVersionId = $request->get('odeVersionId');
-        $odeSessionId = $request->get('odeSessionId');
+        $odeId = $request->get('odeId');
         $odePageId = $request->get('odePageId');
 
         $odeNavStructureSyncIdParent = $request->get('odeNavStructureSyncIdParent');
@@ -159,7 +159,7 @@ class NavStructureApiController extends DefaultApiController
             (empty($odeNavStructureSyncId))
                 && (
                     (empty($odeVersionId))
-                    || (empty($odeSessionId))
+                    || (empty($odeId))
                     || (empty($odePageId))
                     || (empty($pageName)))
         ) {
@@ -201,7 +201,7 @@ class NavStructureApiController extends DefaultApiController
                 $odeNavStructureSync->setOdeParentPageId($odeParentPageId);
             }
 
-            $odeNavStructureSync->setOdeSessionId($odeSessionId);
+            $odeNavStructureSync->setOdeId($odeId);
             $odeNavStructureSync->setOdePageId($odePageId);
 
             $odeNavStructureSync->setPageName($pageName);
@@ -348,7 +348,7 @@ class NavStructureApiController extends DefaultApiController
         $responseData->setResponseMessage('OK');
 
         $jsonData = $this->getJsonSerialized($responseData);
-        $this->publish($odeNavStructureSync->getOdeSessionId(), 'structure-changed');
+        $this->publish($odeNavStructureSync->getOdeId(), 'structure-changed');
 
         return new JsonResponse($jsonData, $this->status, [], true);
     }
@@ -405,7 +405,7 @@ class NavStructureApiController extends DefaultApiController
                 $responseData['responseMessage'] = 'OK';
                 $responseData['odeNavStructureSyncs'] = $modifiedOdeNavStructureSyncDtos;
 
-                $this->publish($odeNavStructureSync->getOdeSessionId(), 'structure-changed');
+                $this->publish($odeNavStructureSync->getOdeId(), 'structure-changed');
             } else {
                 $this->logger->error('data not found', ['odeNavStructureSyncId' => $odeNavStructureSyncId, 'file:' => $this, 'line' => __LINE__]);
 
@@ -502,7 +502,7 @@ class NavStructureApiController extends DefaultApiController
                     foreach ($odeNavStructureSync->getOdePagStructureSyncs() as $odePagStructureSync) {
                         foreach ($odePagStructureSync->getOdeComponentsSyncs() as $odeComponentsSync) {
                             // Get iDevice dir
-                            $odeComponentsSyncDir = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeSessionId(), $odeComponentsSync->getOdeIdeviceId());
+                            $odeComponentsSyncDir = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeId(), $odeComponentsSync->getOdeIdeviceId());
 
                             $dirRemoved = FileUtil::removeDir($odeComponentsSyncDir);
 
@@ -554,7 +554,7 @@ class NavStructureApiController extends DefaultApiController
 
                     $responseData['responseMessage'] = 'OK';
                     $responseData['odeNavStructureSyncs'] = $modifiedOdeNavStructureSyncDtos;
-                    $this->publish($odeNavStructureSync->getOdeSessionId(), 'structure-changed');
+                    $this->publish($odeNavStructureSync->getOdeId(), 'structure-changed');
                 } else {
                     $this->logger->error('some dir cannot be removed', ['odeNavStructureSyncId' => $odeNavStructureSyncId, 'file:' => $this, 'line' => __LINE__]);
 
@@ -789,9 +789,9 @@ class NavStructureApiController extends DefaultApiController
                         $this->entityManager->persist($newOdeComponentsSync);
 
                         // Duplicate dir
-                        $sourcePath = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeSessionId(), $odeComponentsSync->getOdeIdeviceId());
+                        $sourcePath = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeId(), $odeComponentsSync->getOdeIdeviceId());
 
-                        $destinationPath = $this->fileHelper->getOdeComponentsSyncDir($newOdeComponentsSync->getOdeSessionId(), $newOdeComponentsSync->getOdeIdeviceId());
+                        $destinationPath = $this->fileHelper->getOdeComponentsSyncDir($newOdeComponentsSync->getOdeId(), $newOdeComponentsSync->getOdeIdeviceId());
 
                         $dirCopied = FileUtil::copyDir($sourcePath, $destinationPath);
 
@@ -899,7 +899,7 @@ class NavStructureApiController extends DefaultApiController
             $odeNavStructureSyncRepo = $this->entityManager->getRepository(OdeNavStructureSync::class);
             $odeNavStructureSyncSiblings = $odeNavStructureSyncRepo->findBy(
                 [
-                    'odeSessionId' => $odeNavStructureSync->getOdeSessionId(),
+                    'odeId' => $odeNavStructureSync->getOdeId(),
                     'odeNavStructureSync' => null,
                 ]
             );

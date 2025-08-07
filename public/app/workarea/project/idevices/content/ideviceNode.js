@@ -1289,7 +1289,7 @@ export default class IdeviceNode {
     async apiSaveIdevice() {
         let params = [
             'odeVersionId',
-            'odeSessionId',
+            'odeId',
             'odeNavStructureSyncId',
             'odePagStructureSyncId',
             'odePageId',
@@ -1836,7 +1836,7 @@ export default class IdeviceNode {
         return {
             odeComponentsSyncId: this.id,
             odeVersionId: defaultVersion,
-            odeSessionId: defaultSession,
+            odeId: eXeLearning.app.project.odeId, // Get new odeId
             odeNavStructureSyncId: this.odeNavStructureSyncId
                 ? this.odeNavStructureSyncId
                 : defaultOdeNavStructureSyncId,

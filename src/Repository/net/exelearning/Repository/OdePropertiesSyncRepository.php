@@ -55,12 +55,12 @@ class OdePropertiesSyncRepository extends ServiceEntityRepository
      *
      * @return number
      */
-    public function removeByOdeSessionId($odeSessionId)
+    public function removeByOdeSessionId($odeId)
     {
         $queryDeleteOdeProperties = $this->createQueryBuilder('p')
         ->delete()
-        ->where('p.odeSessionId = :odeSessionId')
-        ->setParameter('odeSessionId', $odeSessionId)
+        ->where('p.odeId = :odeId')
+        ->setParameter('odeId', $odeId)
         ->getQuery();
 
         $odePropertiesDeleted = $queryDeleteOdeProperties->execute();
@@ -76,14 +76,14 @@ class OdePropertiesSyncRepository extends ServiceEntityRepository
      *
      * @return number
      */
-    public function updateByOdeSessionId($odeSessionId, $newOdeSessionId)
+    public function updateByOdeSessionId($odeId, $newOdeId)
     {
         $queryUpdateOdeProperties = $this->createQueryBuilder('p')
         ->update()
-        ->set('p.odeSessionId', ':newOdeSessionId')
-        ->setParameter('newOdeSessionId', $newOdeSessionId)
-        ->where('p.odeSessionId = :odeSessionId')
-        ->setParameter('odeSessionId', $odeSessionId)
+        ->set('p.odeId', ':newOdeId')
+        ->setParameter('newOdeId', $newOdeId)
+        ->where('p.odeId = :odeId')
+        ->setParameter('odeId', $odeId)
         ->getQuery();
 
         $odePropertiesUpdated = $queryUpdateOdeProperties->execute();

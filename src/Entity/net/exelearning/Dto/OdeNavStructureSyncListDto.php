@@ -10,7 +10,7 @@ class OdeNavStructureSyncListDto extends BaseDto
     /**
      * @var string
      */
-    protected $odeSessionId;
+    protected $odeId;
 
     /**
      * @var OdeNavStructureSyncDto[]
@@ -25,17 +25,17 @@ class OdeNavStructureSyncListDto extends BaseDto
     /**
      * @return string
      */
-    public function getOdeSessionId()
+    public function getOdeId()
     {
-        return $this->odeSessionId;
+        return $this->odeId;
     }
 
     /**
      * @param string $odeSessionId
      */
-    public function setOdeSessionId($odeSessionId)
+    public function setOdeId($odeId)
     {
-        $this->odeSessionId = $odeSessionId;
+        $this->odeId = $odeId;
     }
 
     /**

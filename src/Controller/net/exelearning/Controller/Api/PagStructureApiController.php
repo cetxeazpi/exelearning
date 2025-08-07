@@ -63,7 +63,7 @@ class PagStructureApiController extends DefaultApiController
         // required if $odePagStructureSyncId is not received
         $odeVersionId = $request->get('odeVersionId');
         // $isDefinedOdeVersionId = $request->request->has('odeVersionId');
-        $odeSessionId = $request->get('odeSessionId');
+        $odeId = $request->get('odeId');
         // $isDefinedOdeSessionId = $request->request->has('odeSessionId');
         $odePageId = $request->get('odePageId');
         $isDefinedOdePageId = $request->request->has('odePageId');
@@ -105,7 +105,7 @@ class PagStructureApiController extends DefaultApiController
 
         // Validate received data
         if (
-            ((empty($odePagStructureSyncId)) || (Constants::GENERATE_NEW_ITEM_KEY == $odePagStructureSyncId)) && ((empty($odeVersionId)) || (empty($odeSessionId)) || (empty($odePageId)) || (empty($odeBlockId)))
+            ((empty($odePagStructureSyncId)) || (Constants::GENERATE_NEW_ITEM_KEY == $odePagStructureSyncId)) && ((empty($odeVersionId)) || (empty($odeId)) || (empty($odePageId)) || (empty($odeBlockId)))
         ) {
             $this->logger->error('invalid data', ['odePagStructureSyncId' => $odePagStructureSyncId, 'file:' => $this, 'line' => __LINE__]);
 
@@ -145,7 +145,7 @@ class PagStructureApiController extends DefaultApiController
             // create new OdePagStructureSync
             $odePagStructureSync = new OdePagStructureSync();
             $odePagStructureSync->setOdeNavStructureSync($odeNavStructureSync);
-            $odePagStructureSync->setOdeSessionId($odeSessionId);
+            $odePagStructureSync->setOdeId($odeId);
             $odePagStructureSync->setOdePageId($odePageId);
             $odePagStructureSync->setOdeBlockId($odeBlockId);
             $odePagStructureSync->setBlockName($blockName);
@@ -250,7 +250,7 @@ class PagStructureApiController extends DefaultApiController
             $odePagStructureSyncDto->loadFromEntity($odePagStructureSync, $loadOdeComponentsSync, $loadOdePagStructureSyncProperties, $loadOdeComponentsSyncProperties);
 
             $responseData->setOdePagStructureSync($odePagStructureSyncDto);
-            $this->publish($odePagStructureSync->getOdeSessionId(), 'new-content-published');
+            $this->publish($odePagStructureSync->getOdeId(), 'new-content-published');
         }
 
         $responseData->setIsNewOdePagStructureSync($isNewOdePagStructureSync);
@@ -349,7 +349,7 @@ class PagStructureApiController extends DefaultApiController
                     $odePagStructureSyncDto->loadFromEntity($modifiedOdePagStructureSync, $loadOdeComponentsSync, $loadOdePagStructureSyncProperties, $loadOdeComponentsSyncProperties);
                     $modifiedOdePagStructureSyncDtos[$modifiedOdePagStructureSync->getId()] = $odePagStructureSyncDto;
                 }
-                $this->publish($odePagStructureSync->getOdeSessionId(), 'new-content-published');
+                $this->publish($odePagStructureSync->getOdeId(), 'new-content-published');
                 $responseData['responseMessage'] = 'OK';
                 $responseData['odePagStructureSyncs'] = $modifiedOdePagStructureSyncDtos;
             } else {
@@ -390,7 +390,7 @@ class PagStructureApiController extends DefaultApiController
 
                 foreach ($odePagStructureSync->getOdeComponentsSyncs() as $odeComponentsSync) {
                     // Get iDevice dir
-                    $odeComponentsSyncDir = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeSessionId(), $odeComponentsSync->getOdeIdeviceId());
+                    $odeComponentsSyncDir = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeId(), $odeComponentsSync->getOdeIdeviceId());
 
                     $dirRemoved = FileUtil::removeDir($odeComponentsSyncDir);
 
@@ -424,7 +424,7 @@ class PagStructureApiController extends DefaultApiController
                     }
 
                     $this->entityManager->flush();
-                    $this->publish($odePagStructureSync->getOdeSessionId(), 'new-content-published');
+                    $this->publish($odePagStructureSync->getOdeId(), 'new-content-published');
                     $responseData['responseMessage'] = 'OK';
                     $responseData['odePagStructureSyncs'] = $modifiedOdePagStructureSyncDtos;
                 } else {
@@ -533,7 +533,7 @@ class PagStructureApiController extends DefaultApiController
 
                 $odePagStructureSyncDto = new OdePagStructureSyncDto();
                 $odePagStructureSyncDto->loadFromEntity($odePagStructureSync, $loadOdeComponentsSync, $loadOdePagStructureSyncProperties, $loadOdeComponentsSyncProperties);
-                $this->publish($odePagStructureSync->getOdeSessionId(), 'new-content-published');
+                $this->publish($odePagStructureSync->getOdeId(), 'new-content-published');
                 $responseData['odePagStructureSync'] = $odePagStructureSyncDto;
             } else {
                 $this->logger->error('data not found', ['odePagStructureSyncId' => $odePagStructureSyncId, 'file:' => $this, 'line' => __LINE__]);
@@ -620,9 +620,9 @@ class PagStructureApiController extends DefaultApiController
                     $this->entityManager->persist($newOdeComponentsSync);
 
                     // Duplicate dir
-                    $sourcePath = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeSessionId(), $odeComponentsSync->getOdeIdeviceId());
+                    $sourcePath = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeId(), $odeComponentsSync->getOdeIdeviceId());
 
-                    $destinationPath = $this->fileHelper->getOdeComponentsSyncDir($newOdeComponentsSync->getOdeSessionId(), $newOdeComponentsSync->getOdeIdeviceId());
+                    $destinationPath = $this->fileHelper->getOdeComponentsSyncDir($newOdeComponentsSync->getOdeId(), $newOdeComponentsSync->getOdeIdeviceId());
 
                     $dirCopied = FileUtil::copyDir($sourcePath, $destinationPath);
 
@@ -657,7 +657,7 @@ class PagStructureApiController extends DefaultApiController
                             $odePagStructureSyncDto->loadFromEntity($modifiedOdePagStructureSync, $loadOdeComponentsSync, $loadOdePagStructureSyncProperties, $loadOdeComponentsSyncProperties);
                             $modifiedOdePagStructureSyncDtos[$modifiedOdePagStructureSync->getId()] = $odePagStructureSyncDto;
                         }
-                        $this->publish($odePagStructureSync->getOdeSessionId(), 'new-content-published');
+                        $this->publish($odePagStructureSync->getOdeId(), 'new-content-published');
                         $responseData['odePagStructureSyncs'] = $modifiedOdePagStructureSyncDtos;
                     }
                 } else {

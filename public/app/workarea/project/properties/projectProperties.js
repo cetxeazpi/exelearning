@@ -139,7 +139,8 @@ export default class ProjectProperties {
         // Generate params array
         let params = {};
         // - Session Id
-        params.odeSessionId = this.project.odeSession;
+        // params.odeSessionId = this.project.odeSession;
+        params.odeId = this.project.odeId;
         // - Properties dict
         for (let [key, value] of Object.entries(properties)) {
             params[key] = value;

@@ -205,8 +205,8 @@ class IdeviceApiController extends DefaultApiController
         return new JsonResponse($jsonData, $this->status, [], true);
     }
 
-    #[Route('/{odeSessionId}/{ideviceDirName}/download', methods: ['GET'], name: 'api_idevices_installed_download')]
-    public function downloadIdeviceInstalledAction(Request $request, $odeSessionId, $ideviceDirName)
+    #[Route('/{odeId}/{ideviceDirName}/download', methods: ['GET'], name: 'api_idevices_installed_download')]
+    public function downloadIdeviceInstalledAction(Request $request, $odeId, $ideviceDirName)
     {
         $user = $this->getUser();
         $dbUser = $this->userHelper->getDatabaseUser($user);
@@ -240,7 +240,7 @@ class IdeviceApiController extends DefaultApiController
         }
 
         // Session user directory
-        $sessionTmpUserDir = $this->fileHelper->getOdeSessionUserTmpDir($odeSessionId, $dbUser);
+        $sessionTmpUserDir = $this->fileHelper->getOdeSessionUserTmpDir($odeId, $dbUser);
         $tmpIdeviceZipPath = $sessionTmpUserDir.$ideviceDirName.'.zip';
 
         // Generate zip
@@ -505,7 +505,7 @@ class IdeviceApiController extends DefaultApiController
         // required if $odeComponentsSyncId is not received
         $odeVersionId = $request->get('odeVersionId');
         // $isDefinedOdeVersionId = $request->request->has('odeVersionId');
-        $odeSessionId = $request->get('odeSessionId');
+        $odeId = $request->get('odeId');
         // $isDefinedOdeSessionId = $request->request->has('odeSessionId');
         $odePageId = $request->get('odePageId');
         $isDefinedOdePageId = $request->request->has('odePageId');
@@ -591,8 +591,8 @@ class IdeviceApiController extends DefaultApiController
         // Validate received data
         if (
             ('saveHtmlView' == $method && !$isDefinedHtmlView)
-            || ((empty($odeComponentsSyncId)) && ((empty($odeVersionId)) || (empty($odeSessionId)) || (empty($odePageId)) || (empty($odeBlockId)) || (empty($odeIdeviceId)) || (empty($odeIdeviceTypeName))))
-            || ((Constants::GENERATE_NEW_ITEM_KEY == $odePagStructureSyncId) && ((empty($odeVersionId)) || (empty($odeSessionId)) || (empty($odePageId)) || (empty($odeBlockId))))
+            || ((empty($odeComponentsSyncId)) && ((empty($odeVersionId)) || (empty($odeId)) || (empty($odePageId)) || (empty($odeBlockId)) || (empty($odeIdeviceId)) || (empty($odeIdeviceTypeName))))
+            || ((Constants::GENERATE_NEW_ITEM_KEY == $odePagStructureSyncId) && ((empty($odeVersionId)) || (empty($odeId)) || (empty($odePageId)) || (empty($odeBlockId))))
         ) {
             $this->logger->error('invalid data', ['file:' => $this, 'line' => __LINE__]);
 
@@ -613,7 +613,7 @@ class IdeviceApiController extends DefaultApiController
             if ((empty($odeNavStructureSync)) || (Constants::GENERATE_NEW_ITEM_KEY == $odeNavStructureSyncId)) {
                 // create new OdeNavStructureSync
                 $odeNavStructureSync = new OdeNavStructureSync();
-                $odeNavStructureSync->setOdeSessionId($odeSessionId);
+                $odeNavStructureSync->setOdeId($odeId);
                 $odeNavStructureSync->setOdePageId($odePageId);
                 $odeNavStructureSync->setPageName($pageName);
 
@@ -667,7 +667,7 @@ class IdeviceApiController extends DefaultApiController
                 // create new OdePagStructureSync
                 $odePagStructureSync = new OdePagStructureSync();
                 $odePagStructureSync->setOdeNavStructureSync($odeNavStructureSync);
-                $odePagStructureSync->setOdeSessionId($odeSessionId);
+                $odePagStructureSync->setOdeId($odeId);
                 $odePagStructureSync->setOdePageId($odePageId);
                 $odePagStructureSync->setOdeBlockId($odeBlockId);
                 $odePagStructureSync->setBlockName($blockName);
@@ -706,7 +706,7 @@ class IdeviceApiController extends DefaultApiController
         // if there isn't odeComponentsSyncId or data was not found on database
         if (empty($odeComponentsSync)) {
             // Validate data
-            if ((empty($odeVersionId)) || (empty($odeSessionId)) || (empty($odePageId)) || (empty($odeBlockId)) || (empty($odeIdeviceId)) || (empty($odeIdeviceTypeName))) {
+            if ((empty($odeVersionId)) || (empty($odeId)) || (empty($odePageId)) || (empty($odeBlockId)) || (empty($odeIdeviceId)) || (empty($odeIdeviceTypeName))) {
                 $this->logger->error('invalid data', ['file:' => $this, 'line' => __LINE__]);
 
                 $responseData->setResponseMessage('error: invalid data');
@@ -720,7 +720,7 @@ class IdeviceApiController extends DefaultApiController
                 if (empty($odeNavStructureSync)) {
                     // create new OdeNavStructureSync
                     $odeNavStructureSync = new OdeNavStructureSync();
-                    $odeNavStructureSync->setOdeSessionId($odeSessionId);
+                    $odeNavStructureSync->setOdeId($odeId);
                     $odeNavStructureSync->setOdePageId($odePageId);
                     $odeNavStructureSync->setPageName($pageName);
 
@@ -757,7 +757,7 @@ class IdeviceApiController extends DefaultApiController
                     return $responseData;
                 }
 
-                $odePagStructureSync->setOdeSessionId($odeSessionId);
+                $odePagStructureSync->setOdeId($odeId);
                 $odePagStructureSync->setOdePageId($odePageId);
                 $odePagStructureSync->setOdeBlockId($odeBlockId);
                 $odePagStructureSync->setBlockName($blockName);
@@ -798,7 +798,7 @@ class IdeviceApiController extends DefaultApiController
                 return $responseData;
             }
 
-            $odeComponentsSync->setOdeSessionId($odeSessionId);
+            $odeComponentsSync->setOdeId($odeId);
             $odeComponentsSync->setOdePageId($odePageId);
             $odeComponentsSync->setOdeBlockId($odeBlockId);
             $odeComponentsSync->setOdeIdeviceId($odeIdeviceId);
@@ -821,7 +821,7 @@ class IdeviceApiController extends DefaultApiController
             $isNewOdeComponentsSync = true;
 
             // Create iDevice dir
-            $odeComponentsSyncDir = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeSessionId(), $odeComponentsSync->getOdeIdeviceId());
+            $odeComponentsSyncDir = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeId(), $odeComponentsSync->getOdeIdeviceId());
 
             if (false !== $odeComponentsSyncDir) {
                 $iDeviceDirCreated = true;
@@ -1013,7 +1013,7 @@ class IdeviceApiController extends DefaultApiController
             $odePagStructureSyncDto = new OdePagStructureSyncDto();
             $odePagStructureSyncDto->loadFromEntity($odePagStructureSync, $loadOdeComponentsSync, $loadOdePagStructureSyncProperties, $loadOdeComponentsSyncProperties);
             $this->logger->info('publishing in saveOdeComponentsSync');
-            $this->publish($odePagStructureSync->getOdeSessionId(), 'new-content-published');
+            $this->publish($odePagStructureSync->getOdeId(), 'new-content-published');
             $responseData->setOdePagStructureSync($odePagStructureSyncDto);
         }
 
@@ -1106,7 +1106,7 @@ class IdeviceApiController extends DefaultApiController
                     $odeComponentsSyncDto->loadFromEntity($modifiedOdeComponentsSync, $loadOdeComponentsSyncProperties);
                     $modifiedOdeComponentsSyncDtos[$modifiedOdeComponentsSync->getId()] = $odeComponentsSyncDto;
                 }
-                $this->publish($odeComponentsSync->getOdeSessionId(), 'new-content-published');
+                $this->publish($odeComponentsSync->getOdeId(), 'new-content-published');
                 $responseData['responseMessage'] = 'OK';
                 $responseData['odeComponentsSyncs'] = $modifiedOdeComponentsSyncDtos;
             } else {
@@ -1207,10 +1207,10 @@ class IdeviceApiController extends DefaultApiController
 
             if (!empty($odeComponentsSync)) {
                 // Get iDevice dir
-                $odeComponentsSyncDir = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeSessionId(), $odeComponentsSync->getOdeIdeviceId());
+                $odeComponentsSyncDir = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeId(), $odeComponentsSync->getOdeIdeviceId());
 
                 if (!$odeComponentsSyncDir) {
-                    $this->logger->error('iDevice dir doesn\'t exist', ['odeSessionId' => $odeComponentsSync->getOdeSessionId(), 'odeIdeviceId' => $odeComponentsSync->getOdeIdeviceId(), 'file:' => $this, 'line' => __LINE__]);
+                    $this->logger->error('iDevice dir doesn\'t exist', ['odeId' => $odeComponentsSync->getOdeId(), 'odeIdeviceId' => $odeComponentsSync->getOdeIdeviceId(), 'file:' => $this, 'line' => __LINE__]);
                 }
 
                 $dirRemoved = FileUtil::removeDir($odeComponentsSyncDir);
@@ -1236,7 +1236,7 @@ class IdeviceApiController extends DefaultApiController
                     }
 
                     $this->entityManager->flush();
-                    $this->publish($odeComponentsSync->getOdeSessionId(), 'structure-changed');
+                    $this->publish($odeComponentsSync->getOdeId(), 'structure-changed');
                     $responseData['responseMessage'] = 'OK';
                     $responseData['odeComponentsSyncs'] = $modifiedOdeComponentsSyncDtos;
                 } else {
@@ -1261,7 +1261,7 @@ class IdeviceApiController extends DefaultApiController
     public function uploadFileToResourcesAction(Request $request)
     {
         // collect parameters
-        $odeSessionId = $request->get('odeSessionId');
+        $odeId = $request->get('odeId');
         $odeIdeviceId = $request->get('odeIdeviceId');
         $base64String = $request->get('file');
         $filename = $request->get('filename');
@@ -1283,18 +1283,18 @@ class IdeviceApiController extends DefaultApiController
         }
 
         // if odeSessionId is empty load it from database
-        if ((empty($odeSessionId)) && (!empty($odeIdeviceId))) {
+        if ((empty($odeId)) && (!empty($odeIdeviceId))) {
             $odeComponentsSyncRepo = $this->entityManager->getRepository(OdeComponentsSync::class);
 
             $odeComponentsSync = $odeComponentsSyncRepo->findOneBy(['odeIdeviceId' => $odeIdeviceId]);
 
             if (!empty($odeComponentsSync)) {
-                $odeSessionId = $odeComponentsSync->getOdeSessionId();
+                $odeId = $odeComponentsSync->getOdeId();
             }
         }
 
         // Validate received data
-        if (empty($odeSessionId)) {
+        if (empty($odeId)) {
             $this->logger->error('invalid data', ['odeIdeviceId' => $odeIdeviceId, 'file:' => $this, 'line' => __LINE__]);
 
             $responseData = ['code' => 'error: invalid data'];
@@ -1312,12 +1312,12 @@ class IdeviceApiController extends DefaultApiController
 
         $responseData = [];
 
-        $iDeviceDir = $this->fileHelper->getOdeComponentsSyncDir($odeSessionId, $odeIdeviceId);
+        $iDeviceDir = $this->fileHelper->getOdeComponentsSyncDir($odeId, $odeIdeviceId);
 
         $savedFilename = $this->fileHelper->addFilenameSuffix($savedFilename, $iDeviceDir);
 
         if (!$iDeviceDir) {
-            $this->logger->error('iDevice dir doesn\'t exist', ['odeSessionId' => $odeSessionId, 'odeIdeviceId' => $odeIdeviceId, 'file:' => $this, 'line' => __LINE__]);
+            $this->logger->error('iDevice dir doesn\'t exist', ['odeId' => $odeId, 'odeIdeviceId' => $odeIdeviceId, 'file:' => $this, 'line' => __LINE__]);
 
             $responseData = ['code' => 'error: iDevice dir doesn\'t exist'];
 
@@ -1386,10 +1386,10 @@ class IdeviceApiController extends DefaultApiController
             }
         }
 
-        $responseData['odeSessionId'] = $odeSessionId;
+        $responseData['odeId'] = $odeId;
         $responseData['odeIdeviceId'] = $odeIdeviceId;
         $responseData['originalFilename'] = $filename;
-        $responseData['savedPath'] = UrlUtil::getOdeComponentsSyncUrl($odeSessionId, $odeIdeviceId);
+        $responseData['savedPath'] = UrlUtil::getOdeComponentsSyncUrl($odeId, $odeIdeviceId);
         $responseData['savedFilename'] = $savedFilename;
         $responseData['savedFileSize'] = $fileSizeFormatted;
 
@@ -1402,7 +1402,7 @@ class IdeviceApiController extends DefaultApiController
     public function uploadLargeFileToResourcesAction(Request $request)
     {
         // collect parameters
-        $odeSessionId = $request->get('odeSessionId');
+        $odeId = $request->get('odeId');
         $odeIdeviceId = $request->get('odeIdeviceId');
         $filename = $request->get('filename');
         $createThumbnail = $request->get('createThumbnail');
@@ -1438,18 +1438,18 @@ class IdeviceApiController extends DefaultApiController
         }
 
         // if odeSessionId is empty load it from database
-        if ((empty($odeSessionId)) && (!empty($odeIdeviceId))) {
+        if ((empty($odeId)) && (!empty($odeIdeviceId))) {
             $odeComponentsSyncRepo = $this->entityManager->getRepository(OdeComponentsSync::class);
 
             $odeComponentsSync = $odeComponentsSyncRepo->findOneBy(['odeIdeviceId' => $odeIdeviceId]);
 
             if (!empty($odeComponentsSync)) {
-                $odeSessionId = $odeComponentsSync->getOdeSessionId();
+                $odeId = $odeComponentsSync->getOdeId();
             }
         }
 
         // Validate received data
-        if (empty($odeSessionId)) {
+        if (empty($odeId)) {
             $this->logger->error('invalid data', ['odeIdeviceId' => $odeIdeviceId, 'file:' => $this, 'line' => __LINE__]);
 
             $responseData = ['code' => 'error: invalid data'];
@@ -1467,12 +1467,12 @@ class IdeviceApiController extends DefaultApiController
 
         $responseData = [];
 
-        $iDeviceDir = $this->fileHelper->getOdeComponentsSyncDir($odeSessionId, $odeIdeviceId);
+        $iDeviceDir = $this->fileHelper->getOdeComponentsSyncDir($odeId, $odeIdeviceId);
 
         $savedFilename = $this->fileHelper->addFilenameSuffix($savedFilename, $iDeviceDir);
 
         if (!$iDeviceDir) {
-            $this->logger->error('iDevice dir doesn\'t exist', ['odeSessionId' => $odeSessionId, 'odeIdeviceId' => $odeIdeviceId, 'file:' => $this, 'line' => __LINE__]);
+            $this->logger->error('iDevice dir doesn\'t exist', ['odeId' => $odeId, 'odeIdeviceId' => $odeIdeviceId, 'file:' => $this, 'line' => __LINE__]);
 
             $responseData = ['code' => 'error: iDevice dir doesn\'t exist'];
 
@@ -1530,10 +1530,10 @@ class IdeviceApiController extends DefaultApiController
             }
         }
 
-        $responseData['odeSessionId'] = $odeSessionId;
+        $responseData['odeId'] = $odeId;
         $responseData['odeIdeviceId'] = $odeIdeviceId;
         $responseData['originalFilename'] = $filename;
-        $responseData['savedPath'] = UrlUtil::getOdeComponentsSyncUrl($odeSessionId, $odeIdeviceId);
+        $responseData['savedPath'] = UrlUtil::getOdeComponentsSyncUrl($odeId, $odeIdeviceId);
         $responseData['savedFilename'] = $savedFilename;
         $responseData['savedFileSize'] = $fileSizeFormatted;
 
@@ -1542,8 +1542,8 @@ class IdeviceApiController extends DefaultApiController
         return new JsonResponse($jsonData, $this->status, [], true);
     }
 
-    #[Route('/download/ode/components/{odeSessionId}/{odeBlockId}/{odeIdeviceId}', methods: ['GET'], name: 'api_idevices_download_ode_components')]
-    public function downloadOdeComponentsAction(Request $request, $odeSessionId, $odeBlockId, $odeIdeviceId)
+    #[Route('/download/ode/components/{odeId}/{odeBlockId}/{odeIdeviceId}', methods: ['GET'], name: 'api_idevices_download_ode_components')]
+    public function downloadOdeComponentsAction(Request $request, $odeId, $odeBlockId, $odeIdeviceId)
     {
         $responseData = [];
 
@@ -1551,12 +1551,12 @@ class IdeviceApiController extends DefaultApiController
         $user = $this->getUser();
         $databaseUser = $this->userHelper->getDatabaseUser($user);
 
-        $saveOdeResult = $this->odeService->saveOdeComponent($odeSessionId, $databaseUser, $odeIdeviceId, $odeBlockId);
+        $saveOdeResult = $this->odeService->saveOdeComponent($odeId, $databaseUser, $odeIdeviceId, $odeBlockId);
         if ('OK' == $saveOdeResult['responseMessage']) {
             // Remove save flag active
             $this->currentOdeUsersService->removeActiveSyncSaveFlag($user);
 
-            $path = $this->fileHelper->getOdeSessionDistDirForUser($odeSessionId, $databaseUser);
+            $path = $this->fileHelper->getOdeSessionDistDirForUser($odeId, $databaseUser);
 
             $filePathName = $path.$saveOdeResult['elpFileName'];
 
@@ -1795,7 +1795,7 @@ class IdeviceApiController extends DefaultApiController
 
                 $odeComponentsSyncDto = new OdeComponentsSyncDto();
                 $odeComponentsSyncDto->loadFromEntity($odeComponentsSync, $loadOdeComponentsSyncProperties);
-                $this->publish($odeComponentsSync->getOdeSessionId(), 'new-content-published');
+                $this->publish($odeComponentsSync->getOdeId(), 'new-content-published');
                 $responseData['odeComponentsSync'] = $odeComponentsSyncDto;
             } else {
                 $this->logger->error('data not found', ['odeComponentsSyncId' => $odeComponentsSyncId, 'file:' => $this, 'line' => __LINE__]);
@@ -1860,9 +1860,9 @@ class IdeviceApiController extends DefaultApiController
 
                 $this->entityManager->persist($newOdeComponentsSync);
 
-                $sourcePath = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeSessionId(), $odeComponentsSync->getOdeIdeviceId());
+                $sourcePath = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeId(), $odeComponentsSync->getOdeIdeviceId());
 
-                $destinationPath = $this->fileHelper->getOdeComponentsSyncDir($newOdeComponentsSync->getOdeSessionId(), $newOdeComponentsSync->getOdeIdeviceId());
+                $destinationPath = $this->fileHelper->getOdeComponentsSyncDir($newOdeComponentsSync->getOdeId(), $newOdeComponentsSync->getOdeIdeviceId());
 
                 $dirCopied = FileUtil::copyDir($sourcePath, $destinationPath);
 
@@ -1889,7 +1889,7 @@ class IdeviceApiController extends DefaultApiController
                             $odeComponentsSyncDto->loadFromEntity($modifiedOdeComponentsSync, $loadOdeComponentsSyncProperties);
                             $modifiedOdeComponentsSyncDtos[$modifiedOdeComponentsSync->getId()] = $odeComponentsSyncDto;
                         }
-                        $this->publish($odeComponentsSync->getOdeSessionId(), 'new-content-published');
+                        $this->publish($odeComponentsSync->getOdeId(), 'new-content-published');
                         $responseData['odeComponentsSyncs'] = $modifiedOdeComponentsSyncDtos;
                     }
                 } else {
@@ -1920,7 +1920,7 @@ class IdeviceApiController extends DefaultApiController
      */
     private function cleanUnusedFilesOdeComponentsSync($odeComponentsSync)
     {
-        $odeComponentsSyncDir = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeSessionId(), $odeComponentsSync->getOdeIdeviceId());
+        $odeComponentsSyncDir = $this->fileHelper->getOdeComponentsSyncDir($odeComponentsSync->getOdeId(), $odeComponentsSync->getOdeIdeviceId());
 
         if (false !== $odeComponentsSyncDir) {
             $htmlView = $odeComponentsSync->getHtmlView();

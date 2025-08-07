@@ -123,7 +123,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $responseData = [];
 
         // Get parameters
-        $odeSessionId = $request->get('odeSessionId');
+        $odeId = $request->get('odeId');
         $odeNavStructureSyncId = $request->get('odeNavStructureSyncId');
         $odeBlockId = $request->get('blockId');
         $odeIdeviceId = $request->get('odeIdeviceId');
@@ -148,7 +148,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $odeNavStructureSync = $odeNavStructureSyncRepo->find($odeNavStructureSyncId);
 
         // Check current_idevice of concurrent users
-        $isIdeviceFree = $this->currentOdeUsersService->checkIdeviceCurrentOdeUsers($odeSessionId, $odeIdeviceId, $odeBlockId, $user);
+        $isIdeviceFree = $this->currentOdeUsersService->checkIdeviceCurrentOdeUsers($odeId, $odeIdeviceId, $odeBlockId, $user);
 
         if ($isIdeviceFree) {
             // Update CurrentOdeUsers

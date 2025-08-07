@@ -483,7 +483,7 @@ class OdeXmlUtil
 
             // OdeComponentsSync fields
             // $xmlOdeComponent->addChild(self::ODE_XML_TAG_FIELD_ODE_VERSION_ID, $newOdeVersionId);
-            $xmlOdeComponent->addChild(self::ODE_XML_TAG_FIELD_ODE_SESSION_ID, $odeComponentsSync->getOdeSessionId());
+            $xmlOdeComponent->addChild(self::ODE_XML_TAG_FIELD_ODE_SESSION_ID, $odeComponentsSync->getOdeId());
             $xmlOdeComponent->addChild(self::ODE_XML_TAG_FIELD_ODE_PAGE_ID, $odePagStructureSync->getOdePageId());
             $xmlOdeComponent->addChild(self::ODE_XML_TAG_FIELD_ODE_BLOCK_ID, $odeComponentsSync->getOdeBlockId());
             $xmlOdeComponent->addChild(self::ODE_XML_TAG_FIELD_ODE_IDEVICE_ID, $odeComponentsSync->getOdeIdeviceId());

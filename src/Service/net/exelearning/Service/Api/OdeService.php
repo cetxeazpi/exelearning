@@ -94,7 +94,7 @@ class OdeService implements OdeServiceInterface
     {
         // Dist dir path where elp is located
         $elpSource = $this->fileHelper->getOdeSessionDistDirForUser(
-            $odeResultParameters['odeSessionId'],
+            $odeResultParameters['odeId'],
             $user
         );
         $elpSourceFilePath = $elpSource.$odeResultParameters['elpFileName'];
@@ -254,7 +254,7 @@ class OdeService implements OdeServiceInterface
         $odeSessionId,
         $user,
     ) {
-        $path = $this->fileHelper->getOdeSessionDistDirForUser($odeSessionId, $user);
+        $path = $this->fileHelper->getOdeSessionDistDirForUser($odeId, $user);
         $name = self::generateElpName($odeId, $odeVersionId);
         $pathname = $path.$name;
 
@@ -266,7 +266,7 @@ class OdeService implements OdeServiceInterface
     /**
      * Generate id for version, ode and session, then rename path with the new session.
      *
-     * @param string $odeSessionId
+     * @param string $odeId
      * @param User   $user
      *
      * @return bool|array
@@ -475,7 +475,7 @@ class OdeService implements OdeServiceInterface
      * @return array
      */
     public function saveOde(
-        $odeSessionId,
+        $odeId,
         $user,
         $isManualSave,
         $odeProperties,
@@ -486,15 +486,15 @@ class OdeService implements OdeServiceInterface
         $result = [];
 
         $odeNavStructureSyncRepo = $this->entityManager->getRepository(OdeNavStructureSync::class);
-        $odeNavStructureSyncs = $odeNavStructureSyncRepo->findByOdeSessionId($odeSessionId);
+        $odeNavStructureSyncs = $odeNavStructureSyncRepo->findByOdeSessionId($odeId);
 
-        $distDirPath = $this->fileHelper->getOdeSessionDistDirForUser($odeSessionId, $user);
+        $distDirPath = $this->fileHelper->getOdeSessionDistDirForUser($odeId, $user);
 
         // Get odeVersionId from currentOdeUsers in case of save as or generate a new id
         if (!$isSaveAs) {
             $odeVersionId = Util::generateId();
         } else {
-            $odeVersionId = $this->currentOdeUsersService->getOdeVersionIdByOdeSessionId($user, $odeSessionId);
+            $odeVersionId = $this->currentOdeUsersService->getOdeVersionIdByOdeSessionId($user, $odeId);
         }
         $result['odeVersionId'] = $odeVersionId;
 
@@ -508,14 +508,16 @@ class OdeService implements OdeServiceInterface
             $currentOdeSessionForUser->setOdeVersionId($odeVersionId);
         }
 
-        $odeId = $this->currentOdeUsersService->getOdeIdByOdeSessionId($user, $odeSessionId);
+        // odeId already exists 
+        // $odeId = $this->currentOdeUsersService->getOdeIdByOdeSessionId($user, $odeId);
+
         $result['odeId'] = $odeId;
 
         // Check version id
         if (empty($odeVersionId)) {
             $this->logger->error(
                 'odeVersionId not found',
-                ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]
+                ['odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]
             );
             $result['responseMessage'] = 'error: odeVersionId not found';
 
@@ -526,7 +528,7 @@ class OdeService implements OdeServiceInterface
         if (!$distDirPath || !FilePermissionsUtil::isWritable($distDirPath)) {
             $this->logger->error(
                 'dir could not be created',
-                ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]
+                ['odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]
             );
             $result['responseMessage'] = 'error: dir could not be created';
 
@@ -557,7 +559,7 @@ class OdeService implements OdeServiceInterface
 
         // Ode XML structure
         $odeSaveDto = OdeXmlUtil::createOdeXml(
-            $odeSessionId,
+            $odeId,
             $odeNavStructureSyncs,
             $odeProperties,
             $odeData,
@@ -572,7 +574,7 @@ class OdeService implements OdeServiceInterface
         if (!$fileWritten) {
             $this->logger->error(
                 'xml could not be generated',
-                ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]
+                ['odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]
             );
             $result['responseMessage'] = 'error: xml could not be generated';
 
@@ -581,7 +583,7 @@ class OdeService implements OdeServiceInterface
 
         // Copy files
         $this->copyOdeFilesToDist(
-            $odeSessionId,
+            $odeId,
             $odeSaveDto->getOdeComponentsMapping(),
             $user
         );
@@ -594,7 +596,7 @@ class OdeService implements OdeServiceInterface
                 $e->getDescription(),
                 [
                     'className' => $e->getClassName(), 'phpZipExtensionInstalled' => $e->getZipExtensionInstalled(),
-                    'odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__,
+                    'odeId' => $odeId, 'file:' => $this, 'line' => __LINE__,
                 ]
             );
             $result['responseMessage'] = 'error: '.$e->getDescription();
@@ -613,7 +615,7 @@ class OdeService implements OdeServiceInterface
         $result['responseMessage'] = 'OK';
 
         // Remove Ode files from dist dir after generating elp
-        $this->cleanOdeFilesFromDist($odeSessionId, $user);
+        $this->cleanOdeFilesFromDist($odeId, $user);
 
         return $result;
     }
@@ -2522,7 +2524,7 @@ class OdeService implements OdeServiceInterface
      *
      * @return array
      */
-    public function getConfigOdeProperties($odeSessionId)
+    public function getConfigOdeProperties($odeId)
     {
         $odePropertiesList = [];
 
@@ -2531,7 +2533,7 @@ class OdeService implements OdeServiceInterface
             foreach ($properties as $odePropertiesConfigKey => $odePropertiesConfigValues) {
                 $odeProperties = new OdePropertiesSync();
                 $odeProperties->loadFromPropertiesConfig(
-                    $odeSessionId,
+                    $odeId,
                     $odePropertiesConfigKey,
                     $odePropertiesConfigValues
                 );
@@ -2544,7 +2546,7 @@ class OdeService implements OdeServiceInterface
             foreach ($properties as $odePropertiesConfigKey => $odePropertiesConfigValues) {
                 $odeProperties = new OdePropertiesSync();
                 $odeProperties->loadFromPropertiesConfig(
-                    $odeSessionId,
+                    $odeId,
                     $odePropertiesConfigKey,
                     $odePropertiesConfigValues
                 );
@@ -2563,7 +2565,7 @@ class OdeService implements OdeServiceInterface
      *
      * @return array
      */
-    public function getOdePropertiesFromDatabase($odeSessionId, $user = false)
+    public function getOdePropertiesFromDatabase($odeId, $user = false)
     {
         // User preferences
         $databaseUserPreferences = $this->userHelper->getUserPreferencesFromDatabase($user);
@@ -2576,14 +2578,14 @@ class OdeService implements OdeServiceInterface
 
         // Database properties
         $repository = $this->entityManager->getRepository(OdePropertiesSync::class);
-        $databaseOdePropertiesList = $repository->findBy(['odeSessionId' => $odeSessionId]);
+        $databaseOdePropertiesList = $repository->findBy(['odeId' => $odeId]);
         $databaseOdePropertiesData = [];
         foreach ($databaseOdePropertiesList as $property) {
             $databaseOdePropertiesData[$property->getKey()] = $property;
         }
 
         // Config properties
-        $configOdePropertiesData = $this->getConfigOdeProperties($odeSessionId);
+        $configOdePropertiesData = $this->getConfigOdeProperties($odeId);
 
         // Merge metadata properties
         $odePropertiesData = [];
@@ -2677,7 +2679,7 @@ class OdeService implements OdeServiceInterface
                 // In some properties the value is generated
                 if (isset($odePropertiesConfigValues['generated']) && $odePropertiesConfigValues['generated']) {
                     $value = $odePropertiesData[$odePropertiesConfigKey]->getValue();
-                    $value = str_replace('{odeSessionId}', $odeSessionId, $value);
+                    $value = str_replace('{odeId}', $odeId, $value);
                     $odePropertiesData[$odePropertiesConfigKey]->setValue($value);
                 }
 

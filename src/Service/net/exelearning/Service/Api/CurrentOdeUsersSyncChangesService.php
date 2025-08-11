@@ -34,10 +34,10 @@ class CurrentOdeUsersSyncChangesService implements CurrentOdeUsersSyncChangesSer
      * @param string $actionType
      * @param string $userThemeValue
      */
-    public function activatePageSyncUpdateFlag($odeSessionId, $odePageId, $user, $actionType, $userThemeValue)
+    public function activatePageSyncUpdateFlag($odeId, $odePageId, $user, $actionType, $userThemeValue)
     {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
-        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers(null, null, $odeSessionId);
+        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers($odeId, null, null);
         $user = $user->getUsername();
         $actualCurrentOdeUser = $currentOdeUsersRepository->getCurrentSessionForUser($user);
         foreach ($currentOdeUsers as $currentOdeUser) {
@@ -82,7 +82,7 @@ class CurrentOdeUsersSyncChangesService implements CurrentOdeUsersSyncChangesSer
         $destinationPageId,
     ) {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
-        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers(null, null, $odeSessionId);
+        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers($odeId, null, $odeSessionId);
         $user = $user->getUsername();
         $actualCurrentOdeUser = $currentOdeUsersRepository->getCurrentSessionForUser($user);
         $actualCurrentOdeUserPageId = $actualCurrentOdeUser->getCurrentPageId();
@@ -240,7 +240,7 @@ class CurrentOdeUsersSyncChangesService implements CurrentOdeUsersSyncChangesSer
     public function getAnotherUserSyncSession($user, $odeSessionId)
     {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
-        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers(null, null, $odeSessionId);
+        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers($odeId, null, $odeSessionId);
         $userRepository = $this->entityManager->getRepository(User::class);
         $username = $user->getUsername();
 

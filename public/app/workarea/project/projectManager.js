@@ -1509,7 +1509,7 @@ export default class projectManager {
         destPageId
     ) {
         let params = {
-            odeSessionId: this.odeSession,
+            odeId: this.odeId,
             odePageId: odePageId,
             blockId: blockId,
             odeIdeviceId: odeIdeviceId,
@@ -1587,7 +1587,7 @@ export default class projectManager {
      */
     async isAvalaibleOdeComponent(blockId, odeIdeviceId) {
         let params = {
-            odeSessionId: this.odeSession,
+            odeId: this.odeId,
             odeIdeviceId: odeIdeviceId,
             blockId: blockId,
         };

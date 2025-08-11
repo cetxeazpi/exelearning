@@ -15,7 +15,7 @@ interface CurrentOdeUsersSyncChangesServiceInterface
      * @param string $actionType
      * @param string $userThemeValue
      */
-    public function activatePageSyncUpdateFlag($odeSessionId, $odePageId, $user, $actionType, $userThemeValue);
+    public function activatePageSyncUpdateFlag($odeId, $odePageId, $user, $actionType, $userThemeValue);
 
     /**
      * Activate the user syncUpdateFlag.
@@ -27,7 +27,7 @@ interface CurrentOdeUsersSyncChangesServiceInterface
      * @param User   $user
      * @param string $actionType
      */
-    public function activateSyncUpdateFlag($odeSessionId, $odeIdeviceId, $odeBlockId, $odePageId, $user, $actionType, $destinationPageId);
+    public function activateSyncUpdateFlag($odeId, $odeIdeviceId, $odeBlockId, $odePageId, $user, $actionType, $destinationPageId);
 
     /**
      * Desactivates update flag and odeComponentIdUpdate from user.

@@ -332,7 +332,11 @@ export default class NavbarFile {
      * @param {*} odeSessionId
      */
     async newSession(odeSessionId) {
-        let params = { odeSessionId: odeSessionId };
+        let odeId = eXeLearning.app.project.odeId;
+        let params = { 
+            odeSessionId: odeSessionId,
+            odeId: odeId
+         };
         let data = {
             title: _('New file'),
             forceOpen: _('Create new file without saving'),

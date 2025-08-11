@@ -144,7 +144,7 @@ export default class MenuStructureBehaviour {
      *
      */
     addEventNavRemoveNodeOnclick() {
-        let params = { odeSessionId: eXeLearning.app.project.odeSession };
+        let params = { odeId: eXeLearning.app.project.odeId };
         this.menuNav
             .querySelector('.button_nav_action.action_delete')
             .addEventListener('click', (e) => {

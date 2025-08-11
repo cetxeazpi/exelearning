@@ -170,7 +170,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $responseData = [];
 
         // Get parameters
-        $odeSessionId = $request->get('odeSessionId');
+        $odeId = $request->get('odeId');
         $odeNavStructureSyncId = $request->get('odeNavStructureSyncId');
         $odeBlockId = $request->get('blockId');
         $odeIdeviceId = $request->get('odeIdeviceId');
@@ -179,7 +179,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $databaseUser = $this->userHelper->getDatabaseUser($user);
 
         // Check current_idevice of concurrent users
-        $isIdeviceFree = $this->currentOdeUsersService->checkIdeviceCurrentOdeUsers($odeSessionId, $odeIdeviceId, $odeBlockId, $user);
+        $isIdeviceFree = $this->currentOdeUsersService->checkIdeviceCurrentOdeUsers($odeId, $odeIdeviceId, $odeBlockId, $user);
 
         if ($isIdeviceFree) {
             $responseData['responseMessage'] = 'OK';
@@ -196,13 +196,13 @@ class CurrentOdeUsersApiController extends DefaultApiController
     public function currentOdeUsersOnPageIdAction(Request $request)
     {
         // Get parameters
-        $odeSessionId = $request->get('odeSessionId');
+        $odeId = $request->get('odeId');
 
         // Get user
         $user = $this->getUser();
 
         // Check if any user is on the same page
-        $response = $this->currentOdeUsersService->checkCurrentUsersOnSamePage($odeSessionId, $user);
+        $response = $this->currentOdeUsersService->checkCurrentUsersOnSamePage($odeId, $user);
 
         $responseData = $response;
         $jsonData = $this->getJsonSerialized($responseData);
@@ -214,7 +214,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
     public function currentOdeUsersUpdateFlagAction(Request $request)
     {
         // Get parameters
-        $odeSessionId = $request->get('odeSessionId');
+        $odeId = $request->get('odeId');
         $odeIdeviceId = $request->get('odeIdeviceId');
         $odeBlockId = $request->get('blockId');
         $odePagId = $request->get('odePageId');
@@ -228,9 +228,9 @@ class CurrentOdeUsersApiController extends DefaultApiController
         if (!empty($odePagId)) {
             // Cases: reloadNav, theme or properties
             $userThemeValue = $this->userHelper->getUserPreferencesFromDatabase($user)['theme']->getValue();
-            $this->currentOdeUsersSyncChangesService->activatePageSyncUpdateFlag($odeSessionId, $odePagId, $user, $actionType, $userThemeValue);
+            $this->currentOdeUsersSyncChangesService->activatePageSyncUpdateFlag($odeId, $odePagId, $user, $actionType, $userThemeValue);
         } else {
-            $this->currentOdeUsersSyncChangesService->activateSyncUpdateFlag($odeSessionId, $odeIdeviceId, $odeBlockId, $odePagId, $user, $actionType, $destinationPageId);
+            $this->currentOdeUsersSyncChangesService->activateSyncUpdateFlag($odeId, $odeIdeviceId, $odeBlockId, $odePagId, $user, $actionType, $destinationPageId);
         }
         $responseData['responseMessage'] = 'OK';
         $jsonData = $this->getJsonSerialized($responseData);

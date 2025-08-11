@@ -1445,7 +1445,7 @@ export default class IdeviceNode {
      */
     async apiUpdateBlock() {
         let params2 = {
-            odeSessionId: eXeLearning.app.project.odeSession,
+            odeId: eXeLearning.app.project.odeId,
             odeIdeviceId: this.odeIdeviceId,
             odeNavStructureSyncId: this.odeNavStructureSyncId,
             actionType: 'MOVE_ON_PAGE',
@@ -1459,7 +1459,7 @@ export default class IdeviceNode {
         ) {
             params = params.concat([
                 'odeVersionId',
-                'odeSessionId',
+                'odeId',
                 'odeNavStructureSyncId',
                 'odePagStructureSyncOrder',
                 'odePageId',
@@ -2579,7 +2579,7 @@ export default class IdeviceNode {
 
     activateUpdateFlag() {
         let params2 = {
-            odeSessionId: eXeLearning.app.project.odeSession,
+            odeId: eXeLearning.app.project.odeId,
             odeIdeviceId: this.odeIdeviceId,
         };
 

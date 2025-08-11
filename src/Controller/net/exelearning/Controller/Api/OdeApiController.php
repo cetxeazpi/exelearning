@@ -103,7 +103,7 @@ class OdeApiController extends DefaultApiController
 
         $repo = $this->entityManager->getRepository(CurrentOdeUsers::class);
 
-        $currentOdeUsers = $repo->getCurrentUsers(null, null, $odeSessionId);
+        $currentOdeUsers = $repo->getCurrentUsers($odeId, null, $odeSessionId);
 
         if (!empty($currentOdeUsers)) {
             foreach ($currentOdeUsers as $currentOdeUser) {
@@ -610,7 +610,7 @@ class OdeApiController extends DefaultApiController
         $totalCurrentOdeUsers = count((array) $currentOdeUsers);
 
         $odeComponentsSyncRepo = $this->entityManager->getRepository(OdeComponentsSync::class);
-        $odeComponentsSync = $odeComponentsSyncRepo->findBy(['odeSessionId' => $odeSessionId]);
+        $odeComponentsSync = $odeComponentsSyncRepo->findBy(['odeId' => $odeId]);
 
         // Check if ode components are empty and number of current users
         if (1 == $totalCurrentOdeUsers && !empty($odeComponentsSync)) {

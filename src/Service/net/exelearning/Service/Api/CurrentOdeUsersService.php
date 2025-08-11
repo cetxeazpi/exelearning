@@ -230,7 +230,7 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
     {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
 
-        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers(null, null, $odeSessionId);
+        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers($odeId, null, $odeSessionId);
 
         $userIsEditing = false;
         foreach ($currentOdeUsers as $currentOdeUser) {
@@ -245,7 +245,7 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
                     $isLastUser = false;
                 }
             } else {
-                $this->logger->error('User is not editing', ['user' => $user->getUsername(), 'odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]);
+                $this->logger->error('User is not editing', ['user' => $user->getUsername(), 'odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]);
             }
         }
 
@@ -294,7 +294,7 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
     {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
 
-        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers(null, null, $odeSessionId);
+        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers($odeId, null, $odeSessionId);
 
         $userIsEditing = false;
         foreach ($currentOdeUsers as $currentOdeUser) {
@@ -305,7 +305,7 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
         }
 
         if (!$userIsEditing) {
-            $this->logger->error('User is not editing', ['user' => $user->getUsername(), 'odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]);
+            $this->logger->error('User is not editing', ['user' => $user->getUsername(), 'odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]);
         }
 
         if ($userIsEditing && (1 == count($currentOdeUsers))) {
@@ -394,10 +394,10 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
      *
      * @return bool
      */
-    public function checkIdeviceCurrentOdeUsers($odeSessionId, $odeIdeviceId, $odeBlockId, $user)
+    public function checkIdeviceCurrentOdeUsers($odeId, $odeIdeviceId, $odeBlockId, $user)
     {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
-        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers(null, null, $odeSessionId);
+        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers($odeId, null, null);
         $user = $user->getUsername();
         foreach ($currentOdeUsers as $currentOdeUser) {
             $concurrentUser = $currentOdeUser->getUser();
@@ -425,16 +425,16 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
      *
      * @return bool
      */
-    public function checkOdeSessionIdCurrentUsers($odeSessionId, $user)
+    public function checkOdeSessionIdCurrentUsers($odeId, $user)
     {
         // Check current users with the sessionId
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
-        $currentUsers = $currentOdeUsersRepository->getCurrentUsers(null, null, $odeSessionId);
+        $currentUsers = $currentOdeUsersRepository->getCurrentUsers($odeId, null, null);
 
         // Set odeSessionId to the user
         if (!empty($currentUsers)) {
             $currentUser = $currentOdeUsersRepository->getCurrentSessionForUser($user->getUsername());
-            $currentUser->setOdeSessionId($odeSessionId);
+            $currentUser->setOdeId($odeId);
 
             $this->entityManager->persist($currentUser);
 
@@ -552,7 +552,7 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
      * @param string $odeSessionId
      * @param User   $user
      */
-    public function checkCurrentUsersOnSamePage($odeSessionId, $user)
+    public function checkCurrentUsersOnSamePage($odeId, $user)
     {
         $response = [];
         // Get currentOdeUser
@@ -562,7 +562,7 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
         $currentPageId = $currentSessionForUser->getCurrentPageId();
 
         // Check if any user is on the same page
-        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers(null, null, $odeSessionId);
+        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers($odeId, null, null);
 
         foreach ($currentOdeUsers as $currentOdeUser) {
             $concurrentUser = $currentOdeUser->getUser();

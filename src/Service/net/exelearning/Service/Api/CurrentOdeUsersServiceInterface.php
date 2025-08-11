@@ -136,7 +136,7 @@ interface CurrentOdeUsersServiceInterface
      *
      * @return bool
      */
-    public function checkIdeviceCurrentOdeUsers($odeSessionId, $odeIdeviceId, $odeBlockId, $user);
+    public function checkIdeviceCurrentOdeUsers($odeId, $odeIdeviceId, $odeBlockId, $user);
 
     /**
      * Check if any current user has the session id and set to the respective user.
@@ -167,7 +167,7 @@ interface CurrentOdeUsersServiceInterface
      *
      * @return bool
      */
-    public function checkCurrentUsersOnSamePage($odeSessionId, $user);
+    public function checkCurrentUsersOnSamePage($odeId, $user);
 
     /**
      * Removes the user syncSaveFlag activated value.

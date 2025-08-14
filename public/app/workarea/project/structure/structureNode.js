@@ -372,6 +372,7 @@ export default class StructureNode {
             odePageId: this.pageId,
             odeVersionId: eXeLearning.app.project.odeVersion,
             odeSessionId: eXeLearning.app.project.odeSession,
+            odeId: eXeLearning.app.project.odeId,
         };
     }
 

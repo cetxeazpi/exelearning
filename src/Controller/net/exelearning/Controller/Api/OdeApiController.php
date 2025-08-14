@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Mercure\HubInterface;
 
 #[Route('/api/ode-management/odes')]
 class OdeApiController extends DefaultApiController
@@ -53,6 +54,7 @@ class OdeApiController extends DefaultApiController
         CurrentOdeUsersServiceInterface $currentOdeUsersService,
         CurrentOdeUsersSyncChangesServiceInterface $currentOdeUsersSyncChangesService,
         TranslatorInterface $translator,
+        HubInterface $hub,
     ) {
         $this->fileHelper = $fileHelper;
         $this->odeService = $odeService;
@@ -62,7 +64,7 @@ class OdeApiController extends DefaultApiController
         $this->currentOdeUsersSyncChangesService = $currentOdeUsersSyncChangesService;
         $this->translator = $translator;
 
-        parent::__construct($entityManager, $logger);
+        parent::__construct($entityManager, $logger, $hub);
     }
 
     #[Route('/{odeId}/last-updated', methods: ['GET'], name: 'api_odes_last_updated')]
@@ -156,8 +158,8 @@ class OdeApiController extends DefaultApiController
                 $isManualSave = true;
 
                 // Get save flag
-                // FIXME: Check user concurrency
-                // $isConcurrentUserSave = $this->currentOdeUsersService->checkSyncSaveFlag($odeId, $odeSessionId);
+                // Check user concurrency
+                $isConcurrentUserSave = $this->currentOdeUsersService->checkSyncSaveFlag($odeId, $odeSessionId);
 
                 // Get odeComponentFlag
                 $isEditingIdevice = $currentSessionForUser->getSyncComponentsFlag();
@@ -1235,6 +1237,7 @@ class OdeApiController extends DefaultApiController
         }
 
         $this->entityManager->flush();
+        $this->publish($odeId, 'new-content-published'); // 'structure-changed'
 
         $odePropertiesDtos = [];
         foreach ($propertiesData as $odeProperties) {

@@ -1833,6 +1833,7 @@ export default class IdeviceNode {
             eXeLearning.app.project.structure.getSelectNodeNavId();
         let defaultOdePageId =
             eXeLearning.app.project.structure.getSelectNodePageId();
+        let odeId = eXeLearning.app.project.odeId;
         return {
             odeComponentsSyncId: this.id,
             odeVersionId: defaultVersion,
@@ -1854,6 +1855,7 @@ export default class IdeviceNode {
             jsonProperties: this.getJsonProperties(true),
             htmlView: this.getViewHTML(),
             order: this.order,
+            odeId: odeId,
         };
     }
 

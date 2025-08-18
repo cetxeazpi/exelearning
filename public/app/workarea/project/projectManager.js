@@ -139,9 +139,10 @@ export default class projectManager {
     }
 
     getTimeIdeviceEditing() {
-        return this.idevices.getTimeIdeviceEditing();
+        if (this.idevices?.getTimeIdeviceEditing) {
+            return this.idevices.getTimeIdeviceEditing();
+        }
     }
-
     /**
      * Handles the editing overlay for blocks with countdown
      * @param {string} messageContent - Raw message content from server
@@ -214,8 +215,17 @@ export default class projectManager {
             
             description.textContent = 'This resource is being edited by:';
             emailElement.textContent = userEmail;
-            lockTime.textContent = `at ${new Date(parseInt(timeIdeviceEditing)).toLocaleTimeString()}`;
-            null,
+
+            const dateMilis = new Date(timeIdeviceEditing * 1000);
+
+            timeIdeviceEditing
+            console.log(`dateMilis ${dateMilis}`);
+
+            const hours = String(dateMilis.getHours()).padStart(2, '0');
+            const minutes = String(dateMilis.getMinutes()).padStart(2, '0');
+            const seconds = String(dateMilis.getSeconds()).padStart(2, '0');
+
+            lockTime.textContent = `at ${hours}:${minutes}:${seconds}`;
 
             messageBox.appendChild(description);
             messageBox.appendChild(emailElement);

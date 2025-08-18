@@ -190,7 +190,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
                         ',odeComponentFlag:' . $odeComponentFlag .
                         ',userEmail:' . $databaseUser->getUserIdentifier() .
                         ',editing:true' .
-                        ',lockTimestamp:' . time()
+                        ',timeIdeviceEditing:' . time()
                     );
                 } else {
                     $this->publish(
@@ -468,7 +468,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
             ',actionType:' . $actionType .
             ',userEmail:' . $userEmail .
             ',odeComponentFlag:' . $odeComponentFlag .
-            ',lockTimestamp:' . time()
+            ',timeIdeviceEditing:' . time()
         );
     }
 }

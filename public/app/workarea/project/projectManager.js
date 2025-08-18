@@ -15,7 +15,7 @@ export default class projectManager {
         if (!this.offlineInstallation) {
             this.realTimeEventNotifier = new RealTimeEventNotifier(
                 this.app.eXeLearning.mercure.url,
-                this.app.eXeLearning.mercure.jwtSecretKey,
+                this.app.eXeLearning.mercure.jwtSecretKey
             );
             this.eventSource;
         }
@@ -31,7 +31,7 @@ export default class projectManager {
         // Load project properties
         await this.loadProjectProperties();
         this.app.locale.loadContentTranslationsStrings(
-            this.properties.properties.pp_lang.value,
+            this.properties.properties.pp_lang.value
         );
         // Compose and initialized interface
         await this.loadInterface();
@@ -114,7 +114,7 @@ export default class projectManager {
             scrollPos = document.querySelector('.template-page').scrollTop;
         } else {
             scrollPos = document.querySelector(
-                '#node-content-container',
+                '#node-content-container'
             ).scrollTop;
         }
         // Load structure data
@@ -206,13 +206,13 @@ export default class projectManager {
             const description = document.createElement('div');
             const emailElement = document.createElement('div');
             const lockTime = document.createElement('div');
-            
+
             overlay.className = 'user-editing-overlay';
             messageBox.className = 'user-editing-message';
             description.className = 'user-editing-description';
             emailElement.className = 'user-editing-email';
             lockTime.className = 'user-editing-time';
-            
+
             description.textContent = 'This resource is being edited by:';
             emailElement.textContent = userEmail;
 
@@ -242,7 +242,7 @@ export default class projectManager {
                 unlockBtn.style.display = 'block';
 
                 messageBox.appendChild(unlockBtn);
-                
+
                 unlockBtn.onclick = () => this.unlockResource(blockId, odeIdeviceId);
             }
         }
@@ -283,7 +283,7 @@ export default class projectManager {
         // Here it checks any message receive and send a local event in order to be
         // managed by whatever file it need to respond to.
         this.eventSource = this.realTimeEventNotifier.getSubscription(
-            this.odeSession,
+            this.odeSession
         );
 
         this.eventSource.onmessage = (event) => {
@@ -349,7 +349,7 @@ export default class projectManager {
         // whether it comes from the Modole integration,.... This happens between this method
         // and loadPlatformProject
         console.log(
-            'public/app/workarea/project/projectManager.js:loadCurrentProject',
+            'public/app/workarea/project/projectManager.js:loadCurrentProject'
         );
         let response = await this.app.api.getCurrentProject();
         if (response && response.responseMessage == 'OK') {
@@ -583,11 +583,11 @@ export default class projectManager {
         if (response && response.responseMessage == 'OK') {
             let pageIdElement = response.currentOdeUsers.currentPageId;
             element = this.app.menus.menuEngine.menuNav.querySelector(
-                `[page-id='${pageIdElement}']`,
+                `[page-id='${pageIdElement}']`
             );
             if (element) {
                 await this.app.menus.menuStructure.menuStructureBehaviour.selectNode(
-                    element,
+                    element
                 );
             } else {
                 await this.app.selectFirstNodeStructure();
@@ -666,7 +666,7 @@ export default class projectManager {
             } else {
                 this.showModalSaveError(response);
                 toast.toastBody.innerHTML = _(
-                    'An error occurred while saving the project.',
+                    'An error occurred while saving the project.'
                 );
                 toast.toastBody.classList.add('error');
             }
@@ -701,7 +701,7 @@ export default class projectManager {
             } else {
                 this.showModalSaveError(response);
                 toast.toastBody.innerHTML = _(
-                    'An error occurred while saving the project.',
+                    'An error occurred while saving the project.'
                 );
                 toast.toastBody.classList.add('error');
             }
@@ -730,11 +730,11 @@ export default class projectManager {
      */
     showModalSaveError(data) {
         let errorTextMessage = _(
-            'Error while saving: ${response.responseMessage}',
+            'Error while saving: ${response.responseMessage}'
         );
         errorTextMessage = errorTextMessage.replace(
             '${response.responseMessage}',
-            data.responseMessage,
+            data.responseMessage
         );
         this.app.modals.alert.show({
             title: _('Error'),
@@ -796,7 +796,7 @@ export default class projectManager {
                 let odeSession = this.odeSession;
                 let isCheckUpdate = true;
                 let elementsPage = document.querySelectorAll(
-                    '.idevice-element-in-content',
+                    '.idevice-element-in-content'
                 );
                 let elementsDragging = document.querySelectorAll('.dragging');
                 let pageId = this.structure.getSelectNodeNavId();
@@ -805,17 +805,17 @@ export default class projectManager {
                     odeId,
                     odeVersion,
                     odeSession,
-                    isCheckUpdate,
+                    isCheckUpdate
                 );
                 // Check if any element is in mode edition
                 isCheckUpdate = this.checkModeEdition(
                     elementsPage,
-                    isCheckUpdate,
+                    isCheckUpdate
                 );
                 // Check if any element is dragging
                 isCheckUpdate = this.checkDraggingElement(
                     elementsDragging,
-                    isCheckUpdate,
+                    isCheckUpdate
                 );
                 if (isCheckUpdate) {
                     // Check if the user has an update and action type
@@ -833,16 +833,16 @@ export default class projectManager {
         let cloneIdeviceNode, blockContent, oldOdeComponentSibling;
         let workareaElement = document.querySelector('#main #workarea');
         let nodeContainerElement = workareaElement.querySelector(
-            '#node-content-container',
+            '#node-content-container'
         );
         let nodeContentElement =
             nodeContainerElement.querySelector('#node-content');
         let elementOnModeEdition = nodeContentElement.querySelector(
-            ".idevice_node[mode='edition']",
+            ".idevice_node[mode='edition']"
         );
         // Delete old idevice
         let oldOdeComponent = document.getElementById(
-            newOdeComponentSync.odeIdeviceId,
+            newOdeComponentSync.odeIdeviceId
         );
         if (oldOdeComponent) {
             oldOdeComponentSibling = oldOdeComponent.nextElementSibling;
@@ -858,7 +858,7 @@ export default class projectManager {
             cloneIdeviceNode = await this.idevices.createIdeviceInContent(
                 newOdeComponentSync,
                 blockContent,
-                elementOnModeEdition,
+                elementOnModeEdition
             );
         } else {
             let odeNavStructureSyncId = document
@@ -866,7 +866,7 @@ export default class projectManager {
                 .getAttribute('nav-id');
             let workareaElement = document.querySelector('#main #workarea');
             let nodeContainerElement = workareaElement.querySelector(
-                '#node-content-container',
+                '#node-content-container'
             );
             let nodeContentElement =
                 nodeContainerElement.querySelector('#node-content');
@@ -877,7 +877,7 @@ export default class projectManager {
             let newIdevice = await this.idevices.createIdeviceInContent(
                 newOdeComponentSync,
                 nodeContentElement,
-                elementOnModeEdition,
+                elementOnModeEdition
             );
             newIdevice.odeNavStructureSyncId = odeNavStructureSyncId;
         }
@@ -886,12 +886,12 @@ export default class projectManager {
             if (isUndoMoveTo) {
                 blockContent.insertBefore(
                     cloneIdeviceNode.ideviceContent,
-                    blockContent.children[cloneIdeviceNode.order],
+                    blockContent.children[cloneIdeviceNode.order]
                 );
             } else {
                 blockContent.insertBefore(
                     cloneIdeviceNode.ideviceContent,
-                    oldOdeComponentSibling,
+                    oldOdeComponentSibling
                 );
             }
         }
@@ -901,7 +901,7 @@ export default class projectManager {
             // Check edition mode or view mode
             let selectedOdePageId =
                 eXeLearning.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                    'page-id',
+                    'page-id'
                 );
             let selectedNodeMode = document
                 .querySelector('[node-selected="' + selectedOdePageId + '"]')
@@ -973,7 +973,7 @@ export default class projectManager {
             // Check edition mode or view mode
             let selectedOdePageId =
                 eXeLearning.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                    'page-id',
+                    'page-id'
                 );
             let selectedNodeMode = document
                 .querySelector('[node-selected="' + selectedOdePageId + '"]')
@@ -988,7 +988,7 @@ export default class projectManager {
             // Check edition mode or view mode
             let selectedOdePageId =
                 eXeLearning.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                    'page-id',
+                    'page-id'
                 );
             let selectedNodeMode = document
                 .querySelector('[node-selected="' + selectedOdePageId + '"]')
@@ -1002,11 +1002,11 @@ export default class projectManager {
             // Apply page title from properties if same page
             let selectedOdePageId =
                 eXeLearning.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                    'page-id',
+                    'page-id'
                 );
             if (selectedOdePageId == response.odePageSync.pageId) {
                 eXeLearning.app.project.idevices.setNodeContentPageTitle(
-                    response.odePageSync.odeNavStructureSyncProperties,
+                    response.odePageSync.odeNavStructureSyncProperties
                 );
             }
         }
@@ -1054,10 +1054,10 @@ export default class projectManager {
     async updateOrderNavMap(syncChange) {
         let navId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'nav-id',
+                'nav-id'
             );
         this.app.menus.menuStructure.menuStructureCompose.structureEngine.resetDataAndStructureData(
-            navId,
+            navId
         );
 
         // Sync theme if neccesary
@@ -1067,13 +1067,13 @@ export default class projectManager {
             this.app.modals.confirm.show({
                 title: _('Style changed'),
                 body: _(
-                    'Your style has changed. Reload the page to apply changes?',
+                    'Your style has changed. Reload the page to apply changes?'
                 ),
                 confirmButtonText: _('Yes'),
                 confirmExec: () => {
                     eXeLearning.app.themes.selectTheme(
                         syncChange.styleThemeValueId,
-                        true,
+                        true
                     );
                 },
             });
@@ -1098,7 +1098,7 @@ export default class projectManager {
             // Check edition mode or view mode
             let selectedOdePageId =
                 eXeLearning.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                    'page-id',
+                    'page-id'
                 );
             let selectedNodeMode = document
                 .querySelector('[node-selected="' + selectedOdePageId + '"]')
@@ -1128,7 +1128,7 @@ export default class projectManager {
             // Check edition mode or view mode
             let selectedOdePageId =
                 eXeLearning.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                    'page-id',
+                    'page-id'
                 );
             let selectedNodeMode = document
                 .querySelector('[node-selected="' + selectedOdePageId + '"]')
@@ -1187,12 +1187,12 @@ export default class projectManager {
         let oldOdeComponentSibling;
         let workareaElement = document.querySelector('#main #workarea');
         let nodeContainerElement = workareaElement.querySelector(
-            '#node-content-container',
+            '#node-content-container'
         );
         let nodeContentElement =
             nodeContainerElement.querySelector('#node-content');
         let elementOnModeEdition = nodeContentElement.querySelector(
-            ".idevice_node[mode='edition']",
+            ".idevice_node[mode='edition']"
         );
         // Delete old idevice
         let oldOdeComponent = document.getElementById(newOdeBlockSync.blockId);
@@ -1205,11 +1205,11 @@ export default class projectManager {
         newOdeBlockSync.mode = 'export';
         let cloneBlockNode = await this.idevices.newBlockNode(
             newOdeBlockSync,
-            true,
+            true
         );
         nodeContentElement.insertBefore(
             cloneBlockNode.blockContent,
-            nodeContentElement.children[cloneBlockNode.order],
+            nodeContentElement.children[cloneBlockNode.order]
         );
         // Load Idevices in block
         newOdeBlockSync.odeComponentsSyncs.forEach(async (idevice) => {
@@ -1217,7 +1217,7 @@ export default class projectManager {
             await this.idevices.createIdeviceInContent(
                 idevice,
                 cloneBlockNode.blockContent,
-                elementOnModeEdition,
+                elementOnModeEdition
             );
         });
     }
@@ -1235,23 +1235,23 @@ export default class projectManager {
 
         let workareaElement = document.querySelector('#main #workarea');
         let nodeContainerElement = workareaElement.querySelector(
-            '#node-content-container',
+            '#node-content-container'
         );
         let nodeContentElement =
             nodeContainerElement.querySelector('#node-content');
         let elementOnModeEdition = nodeContentElement.querySelector(
-            ".idevice_node[mode='edition']",
+            ".idevice_node[mode='edition']"
         );
         let cloneBlockNode = await this.idevices.newBlockNode(
             odeBlockSync,
-            true,
+            true
         );
         // Fix the order of blocks when creating a new content block
         let blockPosition = nodeContentElement.children.length - 1;
 
         nodeContentElement.insertBefore(
             cloneBlockNode.blockContent,
-            nodeContentElement.children[blockPosition], //nodeContentElement.children[cloneBlockNode.order],
+            nodeContentElement.children[blockPosition] //nodeContentElement.children[cloneBlockNode.order],
         );
 
         // Load Idevices in block if node-content is on mode "view"
@@ -1264,7 +1264,7 @@ export default class projectManager {
                         await this.idevices.createIdeviceInContent(
                             idevice,
                             cloneBlockNode.blockContent,
-                            elementOnModeEdition,
+                            elementOnModeEdition
                         );
                     }
                 });
@@ -1281,16 +1281,16 @@ export default class projectManager {
         let cloneIdeviceNode, blockContent, oldOdeComponentSibling;
         let workareaElement = document.querySelector('#main #workarea');
         let nodeContainerElement = workareaElement.querySelector(
-            '#node-content-container',
+            '#node-content-container'
         );
         let nodeContentElement =
             nodeContainerElement.querySelector('#node-content');
         let elementOnModeEdition = nodeContentElement.querySelector(
-            ".idevice_node[mode='edition']",
+            ".idevice_node[mode='edition']"
         );
         // Delete old idevice
         let oldOdeComponent = document.getElementById(
-            odeIdeviceSync.odeIdeviceId,
+            odeIdeviceSync.odeIdeviceId
         );
         if (oldOdeComponent) {
             oldOdeComponentSibling = oldOdeComponent.nextElementSibling;
@@ -1305,7 +1305,7 @@ export default class projectManager {
             cloneIdeviceNode = await this.idevices.createIdeviceInContent(
                 odeIdeviceSync,
                 blockContent,
-                elementOnModeEdition,
+                elementOnModeEdition
             );
         } else {
             odeIdeviceSync.mode = 'export';
@@ -1316,25 +1316,25 @@ export default class projectManager {
             odeIdeviceSync.mode = 'export';
             let cloneBlockNode = await this.idevices.newBlockNode(
                 newOdeBlockSync,
-                true,
+                true
             );
             blockContent = cloneBlockNode.blockContent;
             cloneIdeviceNode = await this.idevices.createIdeviceInContent(
                 odeIdeviceSync,
                 blockContent,
-                elementOnModeEdition,
+                elementOnModeEdition
             );
             // Move
             nodeContentElement.insertBefore(
                 blockContent,
-                nodeContentElement.children[cloneBlockNode.order],
+                nodeContentElement.children[cloneBlockNode.order]
             );
         }
         if (blockNode) {
             // Move
             blockContent.insertBefore(
                 cloneIdeviceNode.ideviceContent,
-                blockContent.children[cloneIdeviceNode.order],
+                blockContent.children[cloneIdeviceNode.order]
             );
         }
     }
@@ -1349,7 +1349,7 @@ export default class projectManager {
     async replaceOdePage(newOdePage) {
         let navId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'nav-id',
+                'nav-id'
             );
         // Check if the ode page is empty (only case "root")
         if (!newOdePage) {
@@ -1359,11 +1359,11 @@ export default class projectManager {
             this.structure.data = this.structure.data.filter(
                 (node, index, arr) => {
                     return node.id != newOdePage.id;
-                },
+                }
             );
             //
             await this.app.menus.menuStructure.menuStructureCompose.structureEngine.cloneNodeNav(
-                newOdePage,
+                newOdePage
             );
 
             // Set title in node page
@@ -1377,11 +1377,11 @@ export default class projectManager {
         await this.app.project.properties.formProperties.reloadValues();
 
         this.app.menus.menuStructure.menuStructureCompose.structureEngine.resetDataAndStructureData(
-            navId,
+            navId
         );
 
         let odeTitleMenuHeadElement = document.querySelector(
-            '#exe-title > .exe-title.content',
+            '#exe-title > .exe-title.content'
         );
         odeTitleMenuHeadElement.innerHTML =
             this.app.project.properties.properties.pp_title.value;
@@ -1415,11 +1415,11 @@ export default class projectManager {
         // Delete page
         let selectedNavId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'nav-id',
+                'nav-id'
             );
         let selectedPageId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'page-id',
+                'page-id'
             );
         // Remove node in structure list
         this.structure.data = this.structure.data.filter((node, index, arr) => {
@@ -1428,11 +1428,11 @@ export default class projectManager {
 
         if (odePageId == selectedPageId) {
             await this.app.menus.menuStructure.menuStructureCompose.structureEngine.resetStructureData(
-                false,
+                false
             );
         } else {
             await this.app.menus.menuStructure.menuStructureCompose.structureEngine.resetStructureData(
-                selectedNavId,
+                selectedNavId
             );
         }
     }
@@ -1444,12 +1444,12 @@ export default class projectManager {
     async addOdeComponent(newOdeComponentSync) {
         let workareaElement = document.querySelector('#main #workarea');
         let nodeContainerElement = workareaElement.querySelector(
-            '#node-content-container',
+            '#node-content-container'
         );
         let nodeContentElement =
             nodeContainerElement.querySelector('#node-content');
         let elementOnModeEdition = nodeContentElement.querySelector(
-            ".idevice_node[mode='edition']",
+            ".idevice_node[mode='edition']"
         );
         // Get new idevice and place in the respective container
         let blockNode = this.idevices.getBlockById(newOdeComponentSync.blockId);
@@ -1458,12 +1458,12 @@ export default class projectManager {
         let cloneIdeviceNode = await this.idevices.createIdeviceInContent(
             newOdeComponentSync,
             blockContent,
-            elementOnModeEdition,
+            elementOnModeEdition
         );
         // Move
         blockContent.insertBefore(
             cloneIdeviceNode.ideviceContent,
-            blockContent.children[cloneIdeviceNode.order],
+            blockContent.children[cloneIdeviceNode.order]
         );
     }
 
@@ -1478,27 +1478,27 @@ export default class projectManager {
             .getAttribute('nav-id');
         let workareaElement = document.querySelector('#main #workarea');
         let nodeContainerElement = workareaElement.querySelector(
-            '#node-content-container',
+            '#node-content-container'
         );
         let nodeContentElement =
             nodeContainerElement.querySelector('#node-content');
         let elementOnModeEdition = nodeContentElement.querySelector(
-            ".idevice_node[mode='edition']",
+            ".idevice_node[mode='edition']"
         );
         newOdeBlockSync.mode = 'export';
         let cloneBlockNode = await this.idevices.newBlockNode(
             newOdeBlockSync,
-            true,
+            true
         );
         if (isUndoMoveTo) {
             nodeContentElement.insertBefore(
                 cloneBlockNode.blockContent,
-                nodeContentElement.children[cloneBlockNode.order],
+                nodeContentElement.children[cloneBlockNode.order]
             );
         } else {
             nodeContentElement.insertBefore(
                 cloneBlockNode.blockContent,
-                nodeContentElement.children[cloneBlockNode.order],
+                nodeContentElement.children[cloneBlockNode.order]
             );
         }
 
@@ -1508,7 +1508,7 @@ export default class projectManager {
             let ideviceNode = await this.idevices.createIdeviceInContent(
                 idevice,
                 cloneBlockNode.blockContent,
-                elementOnModeEdition,
+                elementOnModeEdition
             );
         });
 
@@ -1517,7 +1517,7 @@ export default class projectManager {
             // Check edition mode or view mode
             let selectedOdePageId =
                 eXeLearning.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                    'page-id',
+                    'page-id'
                 );
             let selectedNodeMode = document
                 .querySelector('[node-selected="' + selectedOdePageId + '"]')
@@ -1535,27 +1535,27 @@ export default class projectManager {
      */
     async addOdePage(newOdePageSync) {
         await this.app.menus.menuStructure.menuStructureCompose.structureEngine.cloneNodeNav(
-            newOdePageSync,
+            newOdePageSync
         );
         let navId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'nav-id',
+                'nav-id'
             );
 
         // In case of first page reset structure must be the new navId
         let lengthNavElements =
             eXeLearning.app.menus.menuStructure.menuStructureBehaviour.menuNavList.getElementsByClassName(
-                'nav-element',
+                'nav-element'
             ).length;
         if (navId == 'root' && lengthNavElements <= 1) {
             await this.app.menus.menuStructure.menuStructureCompose.structureEngine.resetStructureData(
-                newOdePageSync.id,
+                newOdePageSync.id
             );
         }
 
         // Reset structure and stay on selected nav
         await this.app.menus.menuStructure.menuStructureCompose.structureEngine.resetStructureData(
-            navId,
+            navId
         );
     }
 
@@ -1565,7 +1565,7 @@ export default class projectManager {
      */
     async moveOdeBlock(OdeBlockSync, isUndoMoveTo = false) {
         let elementsPage = document.querySelectorAll(
-            '.idevice-element-in-content',
+            '.idevice-element-in-content'
         );
         let isAddElement = false;
         if (elementsPage.length <= 0) {
@@ -1592,7 +1592,7 @@ export default class projectManager {
      */
     async moveOdeComponent(odeComponentSync, isUndoMoveTo = false) {
         let elementsPage = document.querySelectorAll(
-            '.idevice_node .idevice-element-in-content',
+            '.idevice_node .idevice-element-in-content'
         );
         let isAddElement = false;
         if (elementsPage.length <= 0) {
@@ -1695,7 +1695,7 @@ export default class projectManager {
                 odeId,
                 odeVersion,
                 odeSession,
-                isMultipleSession,
+                isMultipleSession
             );
 
             if (isMultipleSession && isIdeviceRemove == false) {
@@ -1751,7 +1751,7 @@ export default class projectManager {
         odeSourceId,
         odeDestinationId,
         actionType,
-        additionalData,
+        additionalData
     ) {
         if (additionalData !== null) {
             additionalData = JSON.stringify(additionalData);
@@ -1813,7 +1813,7 @@ export default class projectManager {
                 response.deleteBlockId,
                 null,
                 'DELETE',
-                null,
+                null
             );
         } else if (response.isMoveTo && response.isMoveTo == true) {
             this.undoBlockLastMoveTo(
@@ -1821,7 +1821,7 @@ export default class projectManager {
                 response.moveTo,
                 response.previousOrder,
                 response.previousPageId,
-                response.blockDto,
+                response.blockDto
             );
             this.updateCurrentOdeUsersUpdateFlag(
                 false,
@@ -1829,7 +1829,7 @@ export default class projectManager {
                 response.blockDto.blockId,
                 null,
                 'MOVE_TO_PAGE',
-                response.moveFrom,
+                response.moveFrom
             );
         } else if (
             response.isMoveIdeviceTo &&
@@ -1841,7 +1841,7 @@ export default class projectManager {
                 response.previousOrder,
                 response.previousPageId,
                 response.odeBlockDto,
-                response.odeIdeviceDto,
+                response.odeIdeviceDto
             );
             this.updateCurrentOdeUsersUpdateFlag(
                 false,
@@ -1849,12 +1849,12 @@ export default class projectManager {
                 null,
                 response.odeIdeviceDto.odeIdeviceId,
                 'MOVE_TO_PAGE',
-                response.moveFrom,
+                response.moveFrom
             );
         } else if (response.isMoveBlockOn && response.isMoveBlockOn == true) {
             this.undoLastMoveBlockOrder(
                 response.previousOrder,
-                response.odeBlockDto,
+                response.odeBlockDto
             );
             this.updateCurrentOdeUsersUpdateFlag(
                 false,
@@ -1862,7 +1862,7 @@ export default class projectManager {
                 response.odeBlockDto.blockId,
                 null,
                 'MOVE_ON_PAGE',
-                null,
+                null
             );
         } else if (
             response.isMoveIdeviceOn &&
@@ -1871,7 +1871,7 @@ export default class projectManager {
             this.undoLastMoveIdeviceOrder(
                 response.previousOrder,
                 response.odeBlockDto,
-                response.odeIdeviceDto,
+                response.odeIdeviceDto
             );
             this.updateCurrentOdeUsersUpdateFlag(
                 false,
@@ -1879,7 +1879,7 @@ export default class projectManager {
                 null,
                 response.odeIdeviceDto.odeIdeviceId,
                 'MOVE_ON_PAGE',
-                null,
+                null
             );
         } else if (
             response.isCloneIdeviceDelete &&
@@ -1910,7 +1910,7 @@ export default class projectManager {
                 response.isUndoMove,
                 response.previousNodeBaseParent,
                 response.previousNodeMovParent,
-                response.previousNodeMovOrder,
+                response.previousNodeMovOrder
             );
         }
     }
@@ -1931,7 +1931,7 @@ export default class projectManager {
                     // Update the order of other blocks
                     this.idevices.updateComponentsBlocks(
                         response.odePagStructureSyncs,
-                        ['order'],
+                        ['order']
                     );
                     odeBlock.remove();
                     this.idevices.removeBlockOfComponentList(id);
@@ -1950,7 +1950,7 @@ export default class projectManager {
         let ideviceNode = document.getElementById(odeIdeviceDto.odeIdeviceId);
         let selectedPageId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'page-id',
+                'page-id'
             );
         this.app.api.deleteIdevice(odeIdeviceDto.id).then((response) => {
             if (response.responseMessage && response.responseMessage == 'OK') {
@@ -1959,7 +1959,7 @@ export default class projectManager {
                     // update the order of other idevices
                     this.idevices.updateComponentsIdevices(
                         response.odeComponentsSyncs,
-                        ['order'],
+                        ['order']
                     );
                     if (ideviceNode && selectedPageId == moveFrom) {
                         ideviceNode.remove();
@@ -1978,7 +1978,7 @@ export default class projectManager {
         let blockNode = document.getElementById(previousOdeBlockDto.blockId);
         let selectedPageId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'page-id',
+                'page-id'
             );
         this.app.api.deleteBlock(previousOdeBlockDto.id).then((response) => {
             if (response.responseMessage && response.responseMessage == 'OK') {
@@ -1987,7 +1987,7 @@ export default class projectManager {
                     // Update the order of other blocks
                     this.idevices.updateComponentsBlocks(
                         response.odePagStructureSyncs,
-                        ['order'],
+                        ['order']
                     );
                     if (
                         blockNode &&
@@ -2009,7 +2009,7 @@ export default class projectManager {
         // Delete page
         let selectedNavId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'nav-id',
+                'nav-id'
             );
         this.app.api.deletePage(navId).then((response) => {
             if (response.responseMessage && response.responseMessage == 'OK') {
@@ -2017,15 +2017,15 @@ export default class projectManager {
                 this.structure.data = this.structure.data.filter(
                     (node, index, arr) => {
                         return node.id != navId;
-                    },
+                    }
                 );
                 if (navId == selectedNavId) {
                     this.app.menus.menuStructure.menuStructureCompose.structureEngine.resetStructureData(
-                        false,
+                        false
                     );
                 } else {
                     this.app.menus.menuStructure.menuStructureCompose.structureEngine.resetStructureData(
-                        selectedNavId,
+                        selectedNavId
                     );
                 }
                 // update current ode users update flag
@@ -2034,7 +2034,7 @@ export default class projectManager {
                     pageId,
                     null,
                     null,
-                    'DELETE',
+                    'DELETE'
                 );
             }
         });
@@ -2049,7 +2049,7 @@ export default class projectManager {
         // Delete page
         let selectedNavId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'nav-id',
+                'nav-id'
             );
         this.app.api.deletePage(navId).then((response) => {
             if (response.responseMessage && response.responseMessage == 'OK') {
@@ -2057,15 +2057,15 @@ export default class projectManager {
                 this.structure.data = this.structure.data.filter(
                     (node, index, arr) => {
                         return node.id != navId;
-                    },
+                    }
                 );
                 if (navId == selectedNavId) {
                     this.app.menus.menuStructure.menuStructureCompose.structureEngine.resetStructureData(
-                        false,
+                        false
                     );
                 } else {
                     this.app.menus.menuStructure.menuStructureCompose.structureEngine.resetStructureData(
-                        selectedNavId,
+                        selectedNavId
                     );
                 }
 
@@ -2075,7 +2075,7 @@ export default class projectManager {
                     pageId,
                     null,
                     null,
-                    'DELETE',
+                    'DELETE'
                 );
             }
         });
@@ -2101,12 +2101,12 @@ export default class projectManager {
         isUndoMove,
         previousNodeBaseParentId,
         previousNodeMovParentId,
-        previousNodeMovOrder,
+        previousNodeMovOrder
     ) {
         let actualmov;
         let selectedNavId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'nav-id',
+                'nav-id'
             );
         // Get the actual mov if the page was moved with buttons
         if (isMovePageButton && isMovePageButton == true) {
@@ -2120,22 +2120,22 @@ export default class projectManager {
             // Undo last move
             await this.structure.moveNode(navId, actualmov, isUndoMove);
             this.app.menus.menuStructure.menuStructureCompose.structureEngine.resetStructureData(
-                selectedNavId,
+                selectedNavId
             );
         } else {
             // Get nodes
             let nodeNav = this.structure.getNode(navId);
             let nodeBaseNav = this.structure.getNode(baseNavId);
             let previousNodeMovParent = this.structure.getNode(
-                previousNodeMovParentId,
+                previousNodeMovParentId
             );
             let previousNodeBaseParent = this.structure.getNode(
-                previousNodeBaseParentId,
+                previousNodeBaseParentId
             );
 
             // Get the parent of the parent to obtain order
             let previousNodeBaseSecondParent = this.structure.getNode(
-                previousNodeBaseParent.parent,
+                previousNodeBaseParent.parent
             );
 
             // Check if previously was parent and do the update
@@ -2149,7 +2149,7 @@ export default class projectManager {
                 } else {
                     await nodeNav.apiUpdateParent(
                         previousNodeBaseParent.parent,
-                        previousNodeBaseSecondParent.order + 1,
+                        previousNodeBaseSecondParent.order + 1
                     );
                 }
             } else {
@@ -2157,18 +2157,18 @@ export default class projectManager {
                 if (nodeNav.parent == nodeBaseNav.parent) {
                     await nodeNav.apiUpdateParent(
                         nodeBaseNav.id,
-                        nodeBaseNav.order + 1,
+                        nodeBaseNav.order + 1
                     );
                 } else {
                     await nodeNav.apiUpdateParent(
                         previousNodeMovParentId,
-                        previousNodeMovParent.order + 1,
+                        previousNodeMovParent.order + 1
                     );
                 }
             }
 
             this.app.menus.menuStructure.menuStructureCompose.structureEngine.resetStructureData(
-                selectedNavId,
+                selectedNavId
             );
             this.updateUserPage(selectedNavId);
         }
@@ -2188,24 +2188,24 @@ export default class projectManager {
         moveTo,
         previousOrder,
         previousPageId,
-        previousOdeBlockDto,
+        previousOdeBlockDto
     ) {
         // Required parameters
         let isUndoMoveTo = true;
         let selectedPageId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'page-id',
+                'page-id'
             );
         // Update page in database
         let data = this.generateBlockDataObject(
             moveFrom,
             previousOrder,
             previousPageId,
-            previousOdeBlockDto,
+            previousOdeBlockDto
         );
         let response = await this.app.api['putSaveBlock'].call(
             this.app.api,
-            data,
+            data
         );
         if (response && response.responseMessage == 'OK') {
             // All blocks that have been modified
@@ -2213,20 +2213,20 @@ export default class projectManager {
                 // Update the order of other components if necessary
                 this.idevices.updateComponentsBlocks(
                     response.odePagStructureSyncs,
-                    ['order'],
+                    ['order']
                 );
                 previousOdeBlockDto.order = previousOrder;
                 previousOdeBlockDto.odePageId = moveFrom;
                 previousOdeBlockDto.odeNavStructureSyncId = previousPageId;
                 if (selectedPageId == moveFrom || selectedPageId == moveTo) {
                     this.updateUserPage(
-                        previousOdeBlockDto.odeNavStructureSyncId,
+                        previousOdeBlockDto.odeNavStructureSyncId
                     );
                 }
             }
         } else {
             let defaultModalMessage = _(
-                'An error occurred while saving the component.',
+                'An error occurred while saving the component.'
             );
             this.showModalMessageErrorDatabase(response, defaultModalMessage);
         }
@@ -2249,13 +2249,13 @@ export default class projectManager {
         previousOrder,
         previousPageId,
         previousOdeBlockDto,
-        odeIdeviceDto,
+        odeIdeviceDto
     ) {
         // Required parameters
         let isUndoMoveTo = true;
         let selectedPageId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'page-id',
+                'page-id'
             );
         // Update page in database
         let data = this.generateIdeviceDataObject(
@@ -2264,11 +2264,11 @@ export default class projectManager {
             previousOrder,
             previousPageId,
             previousOdeBlockDto,
-            odeIdeviceDto,
+            odeIdeviceDto
         );
         let response = await this.app.api['putSaveIdevice'].call(
             this.app.api,
-            data,
+            data
         );
         if (response && response.responseMessage == 'OK') {
             // All Idevices that have been modified
@@ -2276,7 +2276,7 @@ export default class projectManager {
                 // update the order of other idevices
                 this.idevices.updateComponentsIdevices(
                     response.odeComponentsSyncs,
-                    ['order'],
+                    ['order']
                 );
             }
             // All Blocks that have been modified
@@ -2284,7 +2284,7 @@ export default class projectManager {
                 // Update the order of other idevices
                 this.idevices.updateComponentsBlocks(
                     response.odeComponentsSyncs,
-                    ['order'],
+                    ['order']
                 );
             }
             // Delete block in destination page
@@ -2300,7 +2300,7 @@ export default class projectManager {
                             // Update the order of other blocks
                             this.idevices.updateComponentsBlocks(
                                 response.odePagStructureSyncs,
-                                ['order'],
+                                ['order']
                             );
                         }
                     }
@@ -2315,7 +2315,7 @@ export default class projectManager {
             }
         } else {
             let defaultModalMessage = _(
-                'An error occurred while saving the component.',
+                'An error occurred while saving the component.'
             );
             this.showModalMessageErrorDatabase(response, defaultModalMessage);
         }
@@ -2332,18 +2332,18 @@ export default class projectManager {
         let isUndoMoveTo = true;
         let selectedPageId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'page-id',
+                'page-id'
             );
         // Update page in database
         let data = this.generateBlockDataObject(
             null,
             previousOrder,
             null,
-            previousOdeBlockDto,
+            previousOdeBlockDto
         );
         let response = await this.app.api['putSaveBlock'].call(
             this.app.api,
-            data,
+            data
         );
         if (response && response.responseMessage == 'OK') {
             // All blocks that have been modified
@@ -2351,19 +2351,19 @@ export default class projectManager {
                 // Update the order of other components if necessary
                 this.idevices.updateComponentsBlocks(
                     response.odePagStructureSyncs,
-                    ['order'],
+                    ['order']
                 );
                 previousOdeBlockDto.order = previousOrder;
                 await this.app.api['putReorderBlock'].call(this.app.api, data);
                 if (selectedPageId == previousOdeBlockDto.pageId) {
                     this.updateUserPage(
-                        previousOdeBlockDto.odeNavStructureSyncId,
+                        previousOdeBlockDto.odeNavStructureSyncId
                     );
                 }
             }
         } else {
             let defaultModalMessage = _(
-                'An error occurred while saving the component.',
+                'An error occurred while saving the component.'
             );
             this.showModalMessageErrorDatabase(response, defaultModalMessage);
         }
@@ -2379,22 +2379,22 @@ export default class projectManager {
     async undoLastMoveIdeviceOrder(
         previousOrder,
         previousOdeBlockDto,
-        odeIdeviceDto,
+        odeIdeviceDto
     ) {
         // Required parameters
         let selectedPageId =
             this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected.getAttribute(
-                'page-id',
+                'page-id'
             );
         let odeBlockIdBeforeUndo = odeIdeviceDto.blockId;
         let workareaElement = document.querySelector('#main #workarea');
         let nodeContainerElement = workareaElement.querySelector(
-            '#node-content-container',
+            '#node-content-container'
         );
         let nodeContentElement =
             nodeContainerElement.querySelector('#node-content');
         let elementBlockRemove = nodeContentElement.querySelector(
-            `[id="${odeBlockIdBeforeUndo}"]`,
+            `[id="${odeBlockIdBeforeUndo}"]`
         );
         // Update page in database
         let data = this.generateIdeviceDataObject(
@@ -2403,11 +2403,11 @@ export default class projectManager {
             previousOrder,
             null,
             previousOdeBlockDto,
-            odeIdeviceDto,
+            odeIdeviceDto
         );
         let response = await this.app.api['putSaveIdevice'].call(
             this.app.api,
-            data,
+            data
         );
         if (response && response.responseMessage == 'OK') {
             // All blocks that have been modified
@@ -2415,17 +2415,17 @@ export default class projectManager {
                 // Update the order of other components if necessary
                 this.idevices.updateComponentsBlocks(
                     response.odePagStructureSyncs,
-                    ['order'],
+                    ['order']
                 );
                 odeIdeviceDto.order = previousOrder;
                 odeIdeviceDto.blockId = previousOdeBlockDto.blockId;
                 await this.app.api['putReorderIdevice'].call(
                     this.app.api,
-                    data,
+                    data
                 );
                 if (selectedPageId == previousOdeBlockDto.pageId) {
                     this.updateUserPage(
-                        previousOdeBlockDto.odeNavStructureSyncId,
+                        previousOdeBlockDto.odeNavStructureSyncId
                     );
                     // Delete block in destination page
                     if (elementBlockRemove.childElementCount <= 1) {
@@ -2441,7 +2441,7 @@ export default class projectManager {
                                         // Update the order of other blocks
                                         this.idevices.updateComponentsBlocks(
                                             response.odePagStructureSyncs,
-                                            ['order'],
+                                            ['order']
                                         );
                                         elementBlockRemove.remove();
                                     }
@@ -2452,7 +2452,7 @@ export default class projectManager {
             }
         } else {
             let defaultModalMessage = _(
-                'An error occurred while saving the component.',
+                'An error occurred while saving the component.'
             );
             this.showModalMessageErrorDatabase(response, defaultModalMessage);
         }
@@ -2471,7 +2471,7 @@ export default class projectManager {
         moveFrom,
         previousOrder,
         previousPageId,
-        previousOdeBlockDto,
+        previousOdeBlockDto
     ) {
         let defaultVersion = this.odeVersion;
         let defaultSession = this.odeSession;
@@ -2509,7 +2509,7 @@ export default class projectManager {
         previousOrder,
         previousPageId,
         previousOdeBlockDto,
-        odeIdeviceDto,
+        odeIdeviceDto
     ) {
         let defaultVersion = this.odeVersion;
         let defaultSession = this.odeSession;
@@ -2539,13 +2539,13 @@ export default class projectManager {
             return false;
         }
         const element = container.querySelector(
-            'div.idevice_node[mode="edition"]',
+            'div.idevice_node[mode="edition"]'
         );
         if (element !== null) {
             eXeLearning.app.modals.alert.show({
                 title: _('Info'),
                 body: _(
-                    'You are editing an iDevice. Please close it before continuing',
+                    'You are editing an iDevice. Please close it before continuing'
                 ),
             });
             return true;
@@ -2562,7 +2562,7 @@ export default class projectManager {
         // Get the main container elements
         let workareaElement = document.querySelector('#main #workarea');
         let nodeContainerElement = workareaElement.querySelector(
-            '#node-content-container',
+            '#node-content-container'
         );
         let nodeContentElement =
             nodeContainerElement.querySelector('#node-content');

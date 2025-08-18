@@ -17,7 +17,7 @@ export default class IdeviceNode {
             : '';
         // Idevice type data class
         this.idevice = eXeLearning.app.idevices.getIdeviceInstalled(
-            this.odeIdeviceTypeName,
+            this.odeIdeviceTypeName
         );
         // Set api params
         this.setParams(data);
@@ -41,7 +41,7 @@ export default class IdeviceNode {
         this.interval = 100;
         // Number of loops
         this.checkDeviceLoadNumMax = Math.round(
-            this.engine.clientCallWaitingTime / this.interval,
+            this.engine.clientCallWaitingTime / this.interval
         );
         // Check if is valid
         this.checkIsValid();
@@ -51,7 +51,7 @@ export default class IdeviceNode {
         if (!this.offlineInstallation) {
             this.realTimeEventNotifier = new RealTimeEventNotifier(
                 eXeLearning.mercure.url,
-                eXeLearning.mercure.jwtSecretKey,
+                eXeLearning.mercure.jwtSecretKey
             );
         }
 
@@ -68,8 +68,8 @@ export default class IdeviceNode {
      */
     properties = JSON.parse(
         JSON.stringify(
-            eXeLearning.app.api.parameters.odeComponentsSyncPropertiesConfig,
-        ),
+            eXeLearning.app.api.parameters.odeComponentsSyncPropertiesConfig
+        )
     );
 
     /**
@@ -153,12 +153,12 @@ export default class IdeviceNode {
         } else {
             // Remove classes
             this.ideviceContent.classList.remove(
-                ...this.ideviceContent.classList,
+                ...this.ideviceContent.classList
             );
             // Remove attributes
             while (this.ideviceContent.attributes.length > 0) {
                 this.ideviceContent.removeAttribute(
-                    this.ideviceContent.attributes[0].name,
+                    this.ideviceContent.attributes[0].name
                 );
             }
         }
@@ -196,14 +196,14 @@ export default class IdeviceNode {
         if (this.properties.identifier.value != '') {
             this.ideviceContent.setAttribute(
                 'identifier',
-                this.properties.identifier.value,
+                this.properties.identifier.value
             );
         }
         // visibility
         if (this.properties.visibility.value != '') {
             this.ideviceContent.setAttribute(
                 'export-view',
-                this.properties.visibility.value,
+                this.properties.visibility.value
             );
         }
         // css class
@@ -288,6 +288,7 @@ export default class IdeviceNode {
                 this.addBehaviourSaveIdeviceButton();
                 this.addBehaviourUndoIdeviceButton();
                 this.addBehaviourDeleteIdeviceButton();
+                this.addNoTranslateForGoogle();
                 // Check links (disabled) this.addBehaviouCheckBrokenLinksIdeviceButton();
                 break;
             case 'export':
@@ -324,6 +325,7 @@ export default class IdeviceNode {
                 this.addBehaviouCloneIdeviceButton();
                 this.addBehaviourMoveToPageIdeviceButton();
                 this.addBehaviourExportIdeviceButton();
+                this.addNoTranslateForGoogle();
                 // Check links (disabled) this.addBehaviouCheckBrokenLinksIdeviceButton();
                 break;
         }
@@ -379,7 +381,7 @@ export default class IdeviceNode {
         }
 
         const element = document.getElementById(elementId);
-    
+
         if (!element) {
             console.log(`Element with ID ${elementId} not found`);
             return () => {};
@@ -429,7 +431,7 @@ export default class IdeviceNode {
      * Updates the resource lock status with the specified parameters
      * @param {Object} params - Configuration object
      * @param {boolean} [params.odeSessionId=false] - Session ID (default: false)
-     * @param {string|null} [params.odeNavStructureSyncId=null] - Navigation sync ID (default: null) 
+     * @param {string|null} [params.odeNavStructureSyncId=null] - Navigation sync ID (default: null)
      * @param {string} params.ideviceId - The ID of the iDevice element
      * @param {string} params.blockId - The ID of the containing block
      * @param {string} params.actionType - Action type ('EDIT_BLOCK', 'FORCE_UNLOCK', etc.)
@@ -438,10 +440,10 @@ export default class IdeviceNode {
      * // Minimal usage
      * updateResourceLockStatus({
      *   ideviceId: 'idevice123',
-     *   blockId: 'block456', 
+     *   blockId: 'block456',
      *   actionType: 'FORCE_UNLOCK'
      * });
-     * 
+     *
      * // Full usage
      * updateResourceLockStatus({
      *   odeSessionId: true,
@@ -453,11 +455,11 @@ export default class IdeviceNode {
      * });
      */
     updateResourceLockStatus({
-        odeSessionId = false, 
-        odeNavStructureSyncId = null, 
-        ideviceId, 
-        blockId, 
-        actionType, 
+        odeSessionId = false,
+        odeNavStructureSyncId = null,
+        ideviceId,
+        blockId,
+        actionType,
         destinationPageId = ''
     } = {}) {
         eXeLearning.app.project.updateCurrentOdeUsersUpdateFlag(
@@ -476,11 +478,11 @@ export default class IdeviceNode {
      */
     addBehaviourSaveIdeviceButton() {
         const element = document.getElementById(this.odeIdeviceId);
-        
+
         const handleTimeout = () => {
             this.updateResourceLockStatus({
                 ideviceId: this.odeIdeviceId,
-                blockId: this.blockId, 
+                blockId: this.blockId,
                 actionType: 'FORCE_UNLOCK'
             });
         };
@@ -490,7 +492,7 @@ export default class IdeviceNode {
             if (this.inactivityCleanup) {
                 this.inactivityCleanup();
             }
-            
+
             // Setup new tracker
             this.inactivityCleanup = this.inactivityInElement(
                 this.odeIdeviceId,
@@ -521,17 +523,17 @@ export default class IdeviceNode {
         this.ideviceButtons.querySelector('#saveIdevice' + this.odeIdeviceId)
             .addEventListener('click', (e) => {
                 if (e.target.disabled) return;
-                
+
                 this.toogleIdeviceButtonsState(true);
                 this.save(true);
                 this.createAddTextBtn();
-                
+
                 this.updateResourceLockStatus({
                     ideviceId: this.odeIdeviceId,
                     blockId: this.blockId,
                     actionType: 'EDIT_BLOCK'
                 });
-                
+
                 // Reset inactivity timer on save
                 setupInactivityTracker(900000); // Reuse current timeout or fallback
             });
@@ -566,7 +568,7 @@ export default class IdeviceNode {
     checkIdeviceIsEditing() {
         this.updateResourceLockStatus({
             ideviceId: this.odeIdeviceId,
-            blockId: this.blockId, 
+            blockId: this.blockId,
             actionType: 'LOADING'
         });
     }
@@ -644,7 +646,7 @@ export default class IdeviceNode {
                                 this.block.pageId,
                                 this.block.pageId,
                                 'EDIT_IDEVICE',
-                                additionalData,
+                                additionalData
                             );
                             this.edition();
                         }
@@ -685,7 +687,7 @@ export default class IdeviceNode {
                                 this.block.pageId,
                                 this.block.pageId,
                                 'EDIT_IDEVICE',
-                                additionalData,
+                                additionalData
                             );
                             this.edition();
                             this.clearSelection();
@@ -715,6 +717,7 @@ export default class IdeviceNode {
                         this.odeNavStructureSyncId,
                         this.blockId,
                         this.odeIdeviceId,
+                        true
                         true,
                         null
                     )
@@ -729,7 +732,7 @@ export default class IdeviceNode {
                             eXeLearning.app.modals.confirm.show({
                                 title: _('Delete iDevice'),
                                 body: _(
-                                    'Delete iDevice? This cannot be undone.',
+                                    'Delete iDevice? This cannot be undone.'
                                 ),
                                 confirmButtonText: _('Yes'),
                                 confirmExec: () => {
@@ -740,7 +743,7 @@ export default class IdeviceNode {
                                             this.blockId,
                                             this.odeIdeviceId,
                                             'DELETE',
-                                            null,
+                                            null
                                         )
                                         .then((response) => {
                                             // Send operation log action to bbdd
@@ -752,7 +755,7 @@ export default class IdeviceNode {
                                                 this.block.pageId,
                                                 this.block.pageId,
                                                 'REMOVE_IDEVICE',
-                                                additionalData,
+                                                additionalData
                                             );
                                             this.remove(true);
                                         });
@@ -784,7 +787,7 @@ export default class IdeviceNode {
                             false,
                             this.odeNavStructureSyncId,
                             this.blockId,
-                            this.odeIdeviceId,
+                            this.odeIdeviceId
                         );
                         let idevicesExceptionsList = [];
                         this.engine.components.idevices.forEach((idevice) => {
@@ -845,7 +848,7 @@ export default class IdeviceNode {
                             // Not move the idevice if it is already moving
                             if (
                                 !this.ideviceContent.classList.contains(
-                                    'moving',
+                                    'moving'
                                 )
                             ) {
                                 // Check if there is an idevice in the previous position
@@ -862,7 +865,7 @@ export default class IdeviceNode {
                                             // Move element
                                             this.block.blockContent.insertBefore(
                                                 this.ideviceContent,
-                                                previousIdevice,
+                                                previousIdevice
                                             );
                                             // Send operation log action to bbdd
                                             let additionalData = {
@@ -875,7 +878,7 @@ export default class IdeviceNode {
                                                 this.block.pageId,
                                                 this.block.pageId,
                                                 'MOVE_IDEVICE_ON',
-                                                additionalData,
+                                                additionalData
                                             );
                                         }
                                     });
@@ -910,7 +913,7 @@ export default class IdeviceNode {
                             // Not move the idevice if it is already moving
                             if (
                                 !this.ideviceContent.classList.contains(
-                                    'moving',
+                                    'moving'
                                 )
                             ) {
                                 // Check if there is an idevice in the previous position
@@ -926,7 +929,7 @@ export default class IdeviceNode {
                                             // Move element
                                             this.block.blockContent.insertBefore(
                                                 this.ideviceContent,
-                                                nextIdevice.nextSibling,
+                                                nextIdevice.nextSibling
                                             );
                                             // Send operation log action to bbdd
                                             let additionalData = {
@@ -939,7 +942,7 @@ export default class IdeviceNode {
                                                 this.block.pageId,
                                                 this.block.pageId,
                                                 'MOVE_IDEVICE_ON',
-                                                additionalData,
+                                                additionalData
                                             );
                                         }
                                     });
@@ -982,24 +985,24 @@ export default class IdeviceNode {
                                 confirmExec: () => {
                                     let select =
                                         eXeLearning.app.modals.confirm.modalElementBody.querySelector(
-                                            '.select-move-to-page',
+                                            '.select-move-to-page'
                                         );
                                     let selectPage = select.item(
-                                        select.selectedIndex,
+                                        select.selectedIndex
                                     );
                                     let newPageId =
                                         selectPage.getAttribute('value');
                                     // Get odePageId
                                     let workareaElement =
                                         document.querySelector(
-                                            '#main #workarea',
+                                            '#main #workarea'
                                         );
                                     let menuNav =
                                         workareaElement.querySelector(
-                                            '#menu_nav_content',
+                                            '#menu_nav_content'
                                         );
                                     let pageElement = menuNav.querySelector(
-                                        `[nav-id="${newPageId}"]`,
+                                        `[nav-id="${newPageId}"]`
                                     );
                                     let odePageId =
                                         pageElement.getAttribute('page-id');
@@ -1022,7 +1025,7 @@ export default class IdeviceNode {
                                             null,
                                             this.odeIdeviceId,
                                             'MOVE_TO_PAGE',
-                                            odePageId,
+                                            odePageId
                                         );
                                         // Send operation log action to bbdd
                                         let additionalData = {
@@ -1036,7 +1039,7 @@ export default class IdeviceNode {
                                             previousOdePageId,
                                             odePageId,
                                             'MOVE_IDEVICE_TO',
-                                            additionalData,
+                                            additionalData
                                         );
                                     }
                                 },
@@ -1067,7 +1070,7 @@ export default class IdeviceNode {
                         } else {
                             this.downloadIdeviceSelected(
                                 this.blockId,
-                                this.odeIdeviceId,
+                                this.odeIdeviceId
                             );
                         }
                     });
@@ -1077,9 +1080,16 @@ export default class IdeviceNode {
     /**
      *
      */
+    addNoTranslateForGoogle() {
+        $('.auto-icon', this.ideviceButtons).addClass('notranslate');
+    }
+
+    /**
+     *
+     */
     addTooltips() {
         $('button.btn-action-menu', this.ideviceButtons).addClass(
-            'exe-app-tooltip',
+            'exe-app-tooltip'
         );
         eXeLearning.app.common.initTooltips(this.ideviceButtons);
     }
@@ -2341,7 +2351,7 @@ export default class IdeviceNode {
                     eXeLearning.app.modals.confirm.show({
                         title: _('Remove Block'),
                         body: _(
-                            'When deleting the idevice the block has been left empty. Do you want to delete it too?',
+                            'iDevice deleted. Now the box is empty. Delete the box too?'
                         ),
                         confirmButtonText: _('Yes'),
                         confirmExec: () => {

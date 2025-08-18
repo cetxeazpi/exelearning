@@ -717,7 +717,6 @@ export default class IdeviceNode {
                         this.odeNavStructureSyncId,
                         this.blockId,
                         this.odeIdeviceId,
-                        true
                         true,
                         null
                     )

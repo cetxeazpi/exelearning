@@ -134,6 +134,154 @@ export default class projectManager {
         }
     }
 
+    cleanupCurrentIdeviceTimer() {
+        if (this.idevices?.cleanupCurrentIdeviceTimer) {
+            return this.idevices.cleanupCurrentIdeviceTimer();
+        }
+    }
+
+    getTimeIdeviceEditing() {
+        if (this.idevices?.getTimeIdeviceEditing) {
+            return this.idevices.getTimeIdeviceEditing();
+        }
+    }
+
+    getEditUnlockDevice() {
+        if (this.idevices?.getEditUnlockDevice) {
+            return this.idevices.getEditUnlockDevice();
+        }
+    }
+
+    /**
+     * Handles the editing overlay for blocks with countdown
+     * @param {string} messageContent - Raw message content from server
+     * @param {string} currentUserEmail - Email of the current user
+     */
+    handleBlockEditingOverlay(messageContent, currentUserEmail) {
+        // Parse all message parameters
+        const params = {};
+        messageContent.split(',').forEach(pair => {
+            const [key, value] = pair.split(':');
+            params[key] = value;
+        });
+
+        const blockId = params['blockId'];
+        const targetBlock = document.getElementById(blockId);
+        const userEmail = params['userEmail'];
+
+        if (!blockId || blockId === 'none' || !targetBlock || userEmail === currentUserEmail) return;
+
+        const odeIdeviceId = params['odeIdeviceId'];
+        const actionType = params['actionType'];
+        const shouldUnlock = actionType?.includes('FORCE_UNLOCK');
+        const isOdeComponentFlag = params['odeComponentFlag'] === 'true';
+        const isEditingOrInactive = actionType?.includes('EDIT') || shouldUnlock || isOdeComponentFlag;
+        const timeIdeviceEditing = params['timeIdeviceEditing'] ?? 0;
+        const isNotSameEmail = userEmail && userEmail !== currentUserEmail;
+
+        const existingOverlay = targetBlock.querySelector('.user-editing-overlay');
+        const odeElementSave = document.getElementById('saveIdevice' + odeIdeviceId)
+
+        if (existingOverlay) existingOverlay.remove(); // Delete if existing overlay
+
+        if (actionType === 'UNLOCK_RESOURCE' && isNotSameEmail) {
+            this.cleanupCurrentIdeviceTimer();
+            odeElementSave.click();
+        }
+
+        if (actionType === 'LOADING' && isNotSameEmail && odeElementSave) {
+            const timeIdevice = this.idevices?.ideviceActive?.timeIdeviceEditing;
+            const getTimeIdeviceEditing = timeIdevice ?? this.getTimeIdeviceEditing();
+
+            const editUnlock = this.idevices?.ideviceActive?.editUnlockDevice;
+            const editUnlockDevice =  editUnlock ?? 'EDIT';
+
+            setTimeout(() => {
+                this.app.api.postEditIdevice({
+                    odeSessionId: this.odeSession,
+                    odeNavStructureSyncId: this.app.project.structure.nodeSelected.getAttribute('nav-id'),
+                    blockId: blockId,
+                    odeIdeviceId: odeIdeviceId,
+                    actionType: editUnlockDevice,
+                    odeComponentFlag: true,
+                    timeIdeviceEditing: getTimeIdeviceEditing
+                });
+            }, 1000);
+        }
+
+        if (isEditingOrInactive && isNotSameEmail) {
+            if (getComputedStyle(targetBlock).position === 'static') {
+                targetBlock.style.position = 'relative';
+            }
+
+            const overlay = document.createElement('div');
+            const messageBox = document.createElement('div');
+            const description = document.createElement('div');
+            const emailElement = document.createElement('div');
+            const lockTime = document.createElement('div');
+            
+            overlay.className = 'user-editing-overlay';
+            messageBox.className = 'user-editing-message';
+            description.className = 'user-editing-description';
+            emailElement.className = 'user-editing-email';
+            lockTime.className = 'user-editing-time';
+            
+            description.textContent = 'This resource is being edited by:';
+            emailElement.textContent = userEmail;
+
+            const dateMilis = new Date(timeIdeviceEditing * 1000);
+
+            const hours = String(dateMilis.getHours()).padStart(2, '0');
+            const minutes = String(dateMilis.getMinutes()).padStart(2, '0');
+            const seconds = String(dateMilis.getSeconds()).padStart(2, '0');
+
+            lockTime.textContent = `at ${hours}:${minutes}:${seconds}`;
+
+            messageBox.appendChild(description);
+            messageBox.appendChild(emailElement);
+            messageBox.appendChild(lockTime);
+
+            overlay.appendChild(messageBox);
+            targetBlock.appendChild(overlay);
+
+            if (shouldUnlock) {
+                const unlockBtn = document.createElement('button');
+
+                unlockBtn.className = 'user-editing-unlock-btn';
+                unlockBtn.textContent = 'Force Unlock';
+                unlockBtn.style.display = 'block';
+
+                messageBox.appendChild(unlockBtn);
+                
+                unlockBtn.onclick = () => this.unlockResource(blockId, odeIdeviceId);
+            }
+        }
+    }
+
+    /**
+     * Unlocks the resource
+     */
+    unlockResource(blockId, odeIdeviceId) {
+        this.app.api.postEditIdevice({
+            odeSessionId: this.odeSession,
+            odeNavStructureSyncId: this.app.project.structure.nodeSelected.getAttribute('nav-id'),
+            blockId: blockId,
+            odeIdeviceId: odeIdeviceId,
+            actionType: 'UNLOCK_RESOURCE',
+            odeComponentFlag: false,
+            timeIdeviceEditing: null
+
+        }).then(response => {
+            if (response.responseMessage === 'OK') {
+                this.showUnlockSuccess();
+            }
+        }).catch(error => {
+            if (error.status === 423 && error.data.forceUnlockAvailable) {
+                this.showForceUnlockOption();
+            }
+        });
+    }
+
     async subscribeToSessionAndNotify() {
         // It's very important to close if the connection is not longer needed.
         // Opened connections have a continuous buffer that will drain your application resources.
@@ -164,6 +312,9 @@ export default class projectManager {
             if (event.lastEventId !== undefined) {
                 this.realTimeEventNotifier.setLastEventID(event.lastEventId);
             }
+
+            // Manage user editing
+            this.handleBlockEditingOverlay(message.name, this.app.user.name);
 
             // Server-Sent Event is translated to a local event. This way the SSE subscription is
             // made in one only place when app starts.
@@ -1498,7 +1649,8 @@ export default class projectManager {
         blockId,
         odeIdeviceId,
         actionType,
-        destPageId
+        destPageId,
+        timeIdeviceEditing = null
     ) {
         let params = {
             odeSessionId: this.odeSession,
@@ -1508,6 +1660,7 @@ export default class projectManager {
             odeComponentFlag: odeComponentFlag,
             actionType: actionType,
             destinationPageId: destPageId,
+            timeIdeviceEditing: timeIdeviceEditing
         };
         let response =
             await this.app.api.postActivateCurrentOdeUsersUpdateFlag(params);
@@ -1527,7 +1680,8 @@ export default class projectManager {
         odeNavStructureSyncId,
         blockId,
         odeIdeviceId,
-        isIdeviceRemove = false
+        isIdeviceRemove = false,
+        timeIdeviceEditing = null
     ) {
         let params = {
             odeSessionId: this.odeSession,
@@ -1535,6 +1689,7 @@ export default class projectManager {
             blockId: blockId,
             odeNavStructureSyncId: odeNavStructureSyncId,
             odeComponentFlag: odeComponentFlag,
+            timeIdeviceEditing: timeIdeviceEditing
         };
 
         // In case of multiple session and odeComponentFlag set to false wait for the clientIntervalUpdate

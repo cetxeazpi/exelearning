@@ -219,6 +219,7 @@ class PlatformIntegrationApiController extends DefaultApiController
         // Get user
         $user = $integrationParams['userid'];
         $databaseUser = $this->userHelper->getDatabaseUser($this->getUser());
+        //$user = $integrationParams['userid'] ?? $this->userHelper->getDatabaseUser($this->getUser())->getUserId();
 
         // Get ode base 64 and name from petition
         $platformJsonResponse = $this->platformIntegrationService->platformPetitionGet($user, $odePlatformId, $integrationParams['platformIntegrationUrl'], $jwtToken);

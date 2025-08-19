@@ -1237,7 +1237,7 @@ class OdeApiController extends DefaultApiController
         }
 
         $this->entityManager->flush();
-        $this->publish($odeId, 'new-content-published'); // 'structure-changed'
+        $this->publish($odeId, 'structure-changed');
 
         $odePropertiesDtos = [];
         foreach ($propertiesData as $odeProperties) {

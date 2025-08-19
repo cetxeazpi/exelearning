@@ -583,6 +583,8 @@ class NavStructureApiController extends DefaultApiController
         $responseData['odeNavStructureSync'] = null;
 
         // collect parameters
+        $odeId = $request->get('odeId');
+
         $odeNavStructureSyncId = $request->get('odeNavStructureSyncId');
         $isDefinedOdeNavStructureSyncId = $request->request->has('odeNavStructureSyncId');
 
@@ -674,6 +676,7 @@ class NavStructureApiController extends DefaultApiController
                 }
 
                 $this->entityManager->flush();
+                $this->publish($odeId, 'structure-changed');
 
                 $responseData['responseMessage'] = 'OK';
 

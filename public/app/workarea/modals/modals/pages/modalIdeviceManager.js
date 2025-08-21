@@ -162,7 +162,7 @@ export default class ModalIdeviceManager extends Modal {
             this.showButtonsConfirmCancel();
             this.addBehaviourExeTabs();
             this.setConfirmExec(() => {
-                this.saveIdevicesVisibility();
+                //this.saveIdevicesVisibility();
             });
             if (idevices) this.modalElementAlert.classList.remove('show');
             this.modal.show();
@@ -282,27 +282,31 @@ export default class ModalIdeviceManager extends Modal {
     makeBodyElement() {
         let bodyContainer = document.createElement('div');
         bodyContainer.classList.add('body-idevices-container');
-        // Head buttons
-        bodyContainer.append(this.makeElementToButtons());
         // Filter
-        let filterTable = this.makeFilterTable(
+        let filterTable = this.makeFilterTableIdevices(
             bodyContainer,
             '.idevice-title',
             _('Search iDevices')
         );
         bodyContainer.append(filterTable);
+        // Search icon
+        const icon = document.createElement('span');
+        icon.classList.add('small-icon', 'search-icon');
+        bodyContainer.append(icon);
+        // Head buttons
+        bodyContainer.append(this.makeElementToButtons());
         // Idevices list
         let idevicesListContainer = document.createElement('div');
         idevicesListContainer.classList.add('idevices-list-container');
         bodyContainer.append(idevicesListContainer);
-        // Tables
+        const header = this.makeRowTableTheadElements();
+        if (header) bodyContainer.prepend(header);
         let defaultIdevicesTabData = {
             title: _('Default iDevices'),
             id: 'base-idevices-tab',
             active: true,
         };
         if (Object.keys(this.idevicesUser).length > 0) {
-            // Generate tabs
             let userIdevicesTabData = {
                 title: _('My iDevices'),
                 id: 'user-idevices-tab',
@@ -332,6 +336,30 @@ export default class ModalIdeviceManager extends Modal {
             idevicesListContainer.classList.add('no-tabs');
         }
         return bodyContainer;
+    }
+
+    makeFilterTableIdevices(container, filterTdClass, placeholder) {
+        let inputFilter = document.createElement('input');
+        inputFilter.classList.add('table-filter');
+        inputFilter.classList.add('form-control');
+        inputFilter.setAttribute('type', 'text');
+        inputFilter.setAttribute('placeholder', placeholder);
+        inputFilter.addEventListener('keyup', () => {
+            let filter = inputFilter.value.toUpperCase();
+            container.querySelectorAll('.toggle-item').forEach((tr) => {
+                let td = tr.querySelector(filterTdClass);
+                if (td) {
+                    let txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr.style.display = '';
+                    } else {
+                        tr.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        return inputFilter;
     }
 
     /**
@@ -380,10 +408,19 @@ export default class ModalIdeviceManager extends Modal {
      */
     makeElementButtonImportIdevice() {
         let buttonImportIdevice = document.createElement('button');
-        buttonImportIdevice.classList.add('idevices-button-import');
-        buttonImportIdevice.classList.add('btn');
-        buttonImportIdevice.classList.add('btn-secondary');
+        buttonImportIdevice.classList.add(
+            'idevices-button-import',
+            'btn',
+            'button-secondary',
+            'd-flex',
+            'align-items-center',
+            'justify-content-start'
+        );
         buttonImportIdevice.innerHTML = _('Import iDevice');
+
+        const icon = document.createElement('span');
+        icon.classList.add('small-icon', 'import-icon');
+        buttonImportIdevice.prepend(icon);
         // Add event
         buttonImportIdevice.addEventListener('click', (event) => {
             this.modalElementBody
@@ -424,34 +461,65 @@ export default class ModalIdeviceManager extends Modal {
      * @returns {Element}
      */
     makeElementTableIdevices(idevices, dataTab) {
-        // Table rows container
-        let tableContainer = document.createElement('div');
-        tableContainer.classList.add('idevices-table-rows-container');
-        tableContainer.classList.add('exe-form-content');
-        if (dataTab.active)
-            tableContainer.classList.add('exe-form-active-content');
-        if (dataTab.id) tableContainer.id = dataTab.id;
-        // Table rows element
-        let table = document.createElement('table');
-        tableContainer.append(table);
-        table.classList.add('table');
-        table.classList.add('idevices-table');
-        table.classList.add('table-striped');
-        // Thead
-        let tableThead = this.makeRowTableTheadElements(table, dataTab.id);
-        table.append(tableThead);
-        // Rows
-        let tableBody = document.createElement('tbody');
-        table.append(tableBody);
-        for (let [id, idevice] of Object.entries(idevices)) {
-            let row = this.makeRowTableIdevicesElement(idevice);
-            tableBody.append(row);
-        }
+        const container = document.createElement('div');
+        container.classList.add(
+            'idevices-toggle-container',
+            'exe-form-content'
+        );
+        if (dataTab?.active) container.classList.add('exe-form-active-content');
+        if (dataTab?.id) container.id = dataTab.id;
+        const grid = document.createElement('div');
+        grid.className = 'toggle-grid';
+        container.append(grid);
+        this.getUserIdevices().then((userPreferencesIdevices) => {
+            for (const [, idevice] of Object.entries(idevices)) {
+                const row = this.makeRowTableIdevicesElement(
+                    idevice,
+                    userPreferencesIdevices
+                );
+                grid.append(row);
+            }
+        });
 
-        // Sort by default
-        tableThead.querySelector('th[th-id="title"]').click();
+        return container;
+    }
 
-        return tableContainer;
+    async getUserIdevices() {
+        const db = await this.openDB();
+        const tx = db.transaction('idevicesSettings', 'readonly');
+        const store = tx.objectStore('idevicesSettings');
+        return new Promise((resolve) => {
+            const request = store.get('idevices');
+            request.onsuccess = () => {
+                resolve(request.result ? request.result.value : null);
+            };
+        });
+    }
+
+    openDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open('exelearning', 1);
+            request.onupgradeneeded = function (event) {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains('idevicesSettings')) {
+                    db.createObjectStore('idevicesSettings', { keyPath: 'id' });
+                }
+            };
+            request.onsuccess = function (event) {
+                resolve(event.target.result);
+            };
+            request.onerror = function (event) {
+                reject(event.target.error);
+            };
+        });
+    }
+
+    async saveIdevices(array) {
+        const db = await this.openDB();
+        const tx = db.transaction('idevicesSettings', 'readwrite');
+        const store = tx.objectStore('idevicesSettings');
+        store.put({ id: 'idevices', value: array });
+        await tx.complete;
     }
 
     /**
@@ -459,68 +527,103 @@ export default class ModalIdeviceManager extends Modal {
      *
      */
     makeRowTableTheadElements(table, id) {
-        let actions = id == 'base-idevices-tab' ? 2 : 3;
-        let tableThead = document.createElement('thead');
-        let tableTheadRow = document.createElement('tr');
-        tableThead.append(tableTheadRow);
-        // Th columns data
-        let thDataList = [
-            { id: 'visibility', title: _('Visibility'), type: 'checkbox' },
-            { id: 'title', title: _('Title'), type: 'string' },
-            { id: 'category', title: _('Category'), type: 'string' },
-            {
-                id: 'actions',
-                title: _('Actions'),
-                type: null,
-                colspan: actions,
-            },
-        ];
-        // Make columns
-        for (let i = 0; i < thDataList.length; i++) {
-            let data = thDataList[i];
-            let th = document.createElement('th');
-            th.setAttribute('scope', 'col');
-            if (data.id) th.setAttribute('th-id', data.id);
-            if (data.colspan) th.setAttribute('colspan', data.colspan);
-            if (data.type) th.classList.add('sortable');
-            th.innerText = data.title;
-            th.addEventListener('click', () => {
-                this.sorTable(table, i, data.type);
-            });
-            tableTheadRow.append(th);
-        }
-
-        return tableThead;
+        this.alertFiveIdevices = document.createElement('div');
+        this.alertFiveIdevices.className =
+            'alert alert-info align-items-start fade';
+        this.alertFiveIdevices.setAttribute('role', 'alert');
+        return this.alertFiveIdevices;
     }
 
     /**
      *
      * @param {*} idevice
+     * @param userPreferencesIdevices
      * @returns {Node}
      */
-    makeRowTableIdevicesElement(idevice) {
-        // Row element
-        let row = document.createElement('tr');
-        // Attributes
+    makeRowTableIdevicesElement(idevice, userPreferencesIdevices) {
+        const row = document.createElement('div');
+        row.classList.add('toggle-item');
         row.setAttribute('idevice-id', idevice.id);
-        // Classes
-        row.classList.add('idevice-row');
-        if (eXeLearning.app.idevices.selected) {
-            if (idevice.id == eXeLearning.app.idevices.selected.id) {
-                row.classList.add('selected');
+
+        const label = document.createElement('label');
+        label.classList.add('toggle-label', 'idevice-title');
+        label.setAttribute('for', `tgl-${idevice.id}`);
+        label.textContent = idevice.title || idevice.id;
+
+        const control = document.createElement('div');
+        control.className = 'toggle-control';
+
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.id = `tgl-${idevice.id}`;
+        input.className = 'toggle-input';
+        input.checked = userPreferencesIdevices.includes(idevice.name);
+        input.setAttribute(
+            'aria-label',
+            `${_('Activar')} ${idevice.title || idevice.id}`
+        );
+
+        const visual = document.createElement('span');
+        visual.className = 'toggle-visual';
+        visual.addEventListener('click', () => {
+            input.checked = !input.checked;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+        const showLimitMessage = () => {
+            if (this.alertFiveIdevices) {
+                this.alertFiveIdevices.textContent = _(
+                    'You can only select 5 iDevices as favourites. Please remove an iDevice so you can add another one.'
+                );
+                this.alertFiveIdevices.classList.add('show');
             }
-        }
-        // Visible checkbox
-        row.append(this.makeCheckboxVisibleIdeviceTd(idevice));
-        // Title
-        row.append(this.makeTitleIdeviceTd(idevice));
-        // Category
-        row.append(this.makeCategoryIdeviceTd(idevice));
-        // Actions
-        if (idevice.type == 'user')
-            row.append(this.makeActionRemoveIdeviceTd(idevice));
-        row.append(this.makeActionExportIdeviceTd(idevice));
-        row.append(this.makeActionInfoIdeviceTd(idevice));
+        };
+        const hideLimitMessage = () => {
+            if (this.alertFiveIdevices) {
+                this.alertFiveIdevices.classList.remove('show');
+            }
+        };
+        const countChecked = () => {
+            const listContainer = row.parentElement || document;
+            return listContainer.querySelectorAll('.toggle-input:checked')
+                .length;
+        };
+
+        input.addEventListener('change', () => {
+            if (input.checked) {
+                const checkedNow = countChecked();
+                if (checkedNow > 5) {
+                    input.checked = false;
+                    showLimitMessage();
+                    return;
+                } else {
+                    hideLimitMessage();
+                }
+            } else {
+                hideLimitMessage();
+            }
+            idevice.visible = input.checked;
+            this.getUserIdevices()
+                .then((idevicesArray) => {
+                    if (!Array.isArray(idevicesArray)) idevicesArray = [];
+                    const index = idevicesArray.indexOf(idevice.name);
+                    if (input.checked) {
+                        if (index === -1) idevicesArray.push(idevice.name);
+                    } else {
+                        if (index !== -1) idevicesArray.splice(index, 1);
+                    }
+                    this.saveIdevices(idevicesArray).then(() => {
+                        eXeLearning.app.menus.menuIdevices.menuIdevicesBottomContent.innerHTML =
+                            '';
+                        eXeLearning.app.menus.menuIdevices.menuIdevicesBottom.init();
+                    });
+                })
+                .catch((err) => {
+                    console.error('Error updating idevices:', err);
+                });
+        });
+
+        control.append(input, visual);
+        row.append(control, label);
 
         return row;
     }

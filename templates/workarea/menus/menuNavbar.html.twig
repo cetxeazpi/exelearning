@@ -1,30 +1,29 @@
 <nav class="navbar navbar-expand-md navbar-light">
-    <div class="collapse navbar-collapse" id="eXeLearningNavbar">
+    <div class="collapse navbar-collapse">
         <button id="exe-panels-toggler" class="btn me-2 nav-link" title="{{ "Toggle panels" | trans }}" aria-hidden="true">
-            <span class="auto-icon">menu</span>
-            <span class="visually-hidden">{{ "Toggle panels" | trans }}</span>
+            <div class="medium-icon menu-icon"></div>
         </button>
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item dropdown">
+            <li class="nav-item btn button-tertiary button-dropdown dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdownFile" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{ "File" | trans }}
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownFile">
-                    <li><a class="dropdown-item" id="navbar-button-new" href="#">{{ "New" | trans }}</a></li>
-                    <li><a class="dropdown-item" id="navbar-button-openuserodefiles" href="#">{{ "Open" | trans }}</a></li>
+                    <li><a class="dropdown-item" id="navbar-button-new" href="#"><span class="small-icon new-icon"></span> {{ "New" | trans }}</a></li>
+                    <li><a class="dropdown-item" id="navbar-button-openuserodefiles" href="#"><span class="small-icon open-icon"></span> {{ "Open" | trans }}</a></li>
                     <li class="dropdown dropend">
                         <a class="dropdown-item dropdown-toggle" href="#" id="navbar-button-dropdown-recent-projects" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ "Recent projects" | trans }}
+                            <span class="small-icon recent-icon"></span> {{ "Recent projects" | trans }}
                         </a>
                         <ul class="dropdown-menu" id="navbar-dropdown-menu-recent-projects" aria-labelledby="navbar-button-dropdown-recent-projects">
                             <li class="text-center">...</li>
                         </ul>
                     </li>
                     <li class="dropdown-divider"></li>
-                    <li><a id="navbar-button-save" class="dropdown-item" href="#">{{ "Save" | trans }}</a></li>
-                    <li class="d-none"><a id="navbar-button-save-as" class="dropdown-item exe-online" href="#">{{ "Save as" | trans }}</a></li>
+                    <li><a id="navbar-button-save" class="dropdown-item" href="#"><span class="small-icon save-icon-green"></span> {{ "Save" | trans }}</a></li>
+                    <li class="d-none"><a id="navbar-button-save-as" class="dropdown-item exe-online" href="#"><span class="small-icon new-icon"></span>{{ "Save as" | trans }}</a></li>
                     <li class="dropdown dropend">
-                        <a class="dropdown-item dropdown-toggle" href="#" id="dropdownExportAs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ "Download as..." | trans }}</a>
+                        <a class="dropdown-item dropdown-toggle" href="#" id="dropdownExportAs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="small-icon download-icon-green"></span> {{ "Download as..." | trans }}</a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownExportAs">
                             <li><a class="dropdown-item exe-advanced" id="navbar-button-download-project" href="#">{{ "eXeLearning content" | trans }} ({{ constant('App\\Constants::FILE_EXTENSION_ELP' ) }})</a></li>
                             <li><a id="navbar-button-export-html5" class="dropdown-item" href="#">{{ "Website" | trans }}</a></li>
@@ -40,12 +39,12 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownUploadTo">
                             <li><a id="navbar-button-uploadtodrive" class="dropdown-item" href="#">{{ "Google Drive" | trans }}</a></li>
                             <li><a id="navbar-button-uploadtodropbox" class="dropdown-item" href="#">{{ "Dropbox" | trans }}</a></li>
-                            {% if config.platformIntegration %} 
+                            {% if config.platformIntegration %}
                                 <li><a id="navbar-button-uploadtoplatform" class="dropdown-item" href="#">{{ config.platformName | trans }}</a></li>
                             {% endif %}
                         </ul>
                     </li>#}
-                    {% if config.platformIntegration %} 
+                    {% if config.platformIntegration %}
                     <li class="dropdown dropend exe-advanced">
                         <a class="dropdown-item dropdown-toggle" href="#" id="dropdownUploadTo" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ "Upload to" | trans }}</a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownUploadTo">
@@ -62,21 +61,27 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item btn button-tertiary button-dropdown dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdownUtilities" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{ "Utilities" | trans }}
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownUtilities">
                     {# <li><a class="dropdown-item" id="navbar-button-preferences" href="#">{{ "Preferences" | trans }}</a></li> #}
+                    {# Hidden element - not deletable in HTML #}
                     <li><a class="dropdown-item" id="navbar-button-preview" href="#">{{ "Preview" | trans }}</a></li>
+                     {# Hidden element - not deletable in HTML #}
                     <li><a class="dropdown-item exe-advanced" id="navbar-button-idevice-manager" href="#">{{ "iDevice manager" | trans }}</a></li>
-                    <li><a class="dropdown-item exe-advanced" id="navbar-button-odeusedfiles" href="#">{{ "Resources report" | trans }}</a></li>
-                    <li><a class="dropdown-item exe-advanced" id="navbar-button-odebrokenlinks" href="#">{{ "Link validation" | trans }}</a></li>
-                    <li><a class="dropdown-item exe-advanced" id="navbar-button-filemanager" href="#">{{ "File manager" | trans }}</a></li>
+                    <li><a class="dropdown-item exe-advanced" id="navbar-button-odeusedfiles" href="#"><span class="small-icon report-icon"></span> {{ "Resources report" | trans }}</a></li>
+                    <li><a class="dropdown-item exe-advanced" id="navbar-button-odebrokenlinks" href="#"><span class="small-icon link-icon"></span>  {{ "Link validation" | trans }}</a></li>
+                    <li><a class="dropdown-item exe-advanced" id="navbar-button-filemanager" href="#"><span class="small-icon image-icon"></span> {{ "File manager" | trans }}</a></li>
                 </ul>
             </li>
-            <li class="nav-item dropdown"><a class="nav-link dropdown-item" href="#" id="dropdownStyles">{{ "Styles" | trans }}</a></li>
-            <li class="nav-item dropdown">
+            {# Styles menu can't be deleted, hidden instead #}
+            <li class="nav-item dropdown" id="dropdownStylesItem">
+                <a class="nav-link dropdown-item" href="#" id="">{{ "Styles" | trans }}</a>
+            </li>
+            {# Help menu can't be deleted, hidden instead #}
+            <li class="nav-item dropdown" id="dropdownHelpItem">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdownHelp" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{ "Help" | trans }}
                 </a>

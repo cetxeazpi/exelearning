@@ -86,6 +86,8 @@ This will start all services and make the app available at `http://localhost:808
 
 More development tools, options, and real-time collaboration info are documented in the `doc/` folder.
 
+A SCSS watcher is implemented which compiles any style automatically, without the need to launch any command. SCSS can be laid out directly in the same way as CSS.
+
 ## Project Structure
 
 The application follows the standard Symfony project structure, with some specific folders for managing iDevices and educational resources.

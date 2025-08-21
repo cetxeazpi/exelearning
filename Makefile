@@ -27,7 +27,7 @@ PUBLISH_ARG := $(if $(PUBLISH),--publish $(PUBLISH),)
 EXPAND_PATH = $(subst ~,$(HOME),$(1))
 
 # Enable debug if DEBUG or ACTIONS_STEP_DEBUG is set (e.g., in GitHub Actions re-run with debug logging)
-DEBUG_FLAG := $(if $(filter 1 true yes,$(DEBUG) $(ACTIONS_STEP_DEBUG)) ,--debug,)
+DEBUG_FLAG := $(if $(filter 1 true yes,$(DEBUG) $(ACTIONS_STEP_DEBUG)) ,--debug --display-deprecations,)
 
 # Check if Docker is running
 check-docker:
@@ -360,6 +360,16 @@ endif
 	@echo "Package created successfully with version $(VERSION)"
 	@echo "Installer files available in the dist/ directory"
 
+# Copy the vendor/ directory from the container to the local host
+# Use this when you want to inspect or debug vendor code locally
+pull-vendor: check-docker check-env upd
+	@echo "⚠️  Copying /app/vendor from the container to ./vendor on your machine..."
+	@echo "💡 Use this only when you want to debug vendor libraries locally."
+	@echo "📁 This will overwrite your local ./vendor directory."
+	@docker compose cp exelearning:/app/vendor ./vendor
+	@echo "✅ Done. Local ./vendor directory updated from container."
+
+
 # Display help with available commands
 help:
 	@echo ""
@@ -376,6 +386,7 @@ help:
 	@echo "  up-local              - Run local Symfony server and prepare the environment (unstable)"
 	@echo "  upd                   - Start Docker containers in background mode (daemon)"
 	@echo "  update                - Update Composer dependencies"
+	@echo "  pull-vendor           - Copy vendor/ from container to local ./vendor (for debugging)"
 	@echo ""
 	@echo "Code quality:"
 	@echo ""

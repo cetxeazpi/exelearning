@@ -426,10 +426,11 @@ export default class ApiCallManager {
      * @param {*} sessionId
      * @returns
      */
-    async getOdeStructure(versionId, sessionId) {
+    async getOdeStructure(versionId, sessionId, odeId) {
         let url = this.endpoints.api_nav_structures_nav_structure_get.path;
         url = url.replace('{odeVersionId}', versionId);
         url = url.replace('{odeSessionId}', sessionId);
+        url = url.replace('{odeId}', odeId);
         return await this.func.get(url);
     }
 

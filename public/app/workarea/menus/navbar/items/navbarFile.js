@@ -82,6 +82,10 @@ export default class NavbarFile {
         this.setExportXmlPropertiesEvent();
         this.setImportXmlPropertiesEvent();
         this.setLeftPanelsTogglerEvents();
+
+        window.addEventListener('ode-saved', (e) => {
+            this.showMostRecentProjectsEvent();
+        });
     }
 
     /**************************************************************************************

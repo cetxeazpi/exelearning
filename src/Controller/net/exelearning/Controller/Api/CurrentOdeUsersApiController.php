@@ -354,7 +354,8 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $symfonyFullUrl = $symfonyBaseUrl.$symfonyBasePath;
 
         // Generate share URL using odeSessionId (for backward compatibility) but include both parameters
-        $response['shareSessionUrl'] = $symfonyFullUrl.Constants::SLASH.self::URL_WORKAREA_ROUTE.self::SESSION_ID_URL_PARAMETER.$currentOdeSessionId.'&odeId='.$currentOdeId;
+        //$response['shareSessionUrl'] = $symfonyFullUrl.Constants::SLASH.self::URL_WORKAREA_ROUTE.self::SESSION_ID_URL_PARAMETER.$currentOdeSessionId.'&odeId='.$currentOdeId;
+        $response['shareSessionUrl'] = $symfonyFullUrl.Constants::SLASH.self::URL_WORKAREA_ROUTE.self::SESSION_ID_URL_PARAMETER.$currentOdeId.'&odeId='.$currentOdeId;
         
         // Include both identifiers for the system to use
         $response['odeId'] = $currentOdeId;

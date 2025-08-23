@@ -145,7 +145,7 @@ export default class projectManager {
         // Here it checks any message receive and send a local event in order to be
         // managed by whatever file it need to respond to.
         this.eventSource = this.realTimeEventNotifier.getSubscription(
-            this.odeSession
+            this.odeId
         );
 
         this.eventSource.onmessage = (event) => {
@@ -223,7 +223,9 @@ export default class projectManager {
                     odeId: eXeLearning.symfony.odeId,
                     odeSessionId: eXeLearning.symfony.odeSessionId 
                 };
-                let response = await this.app.api.postJoinCurrentOdeSessionId(params);
+                //FIXME: Review this code that constantly generates errors
+                //Missing information in the parameters sent to the openPlatformElpAction method of the open_platform_elp endpoint
+                //let response = await this.app.api.postJoinCurrentOdeSessionId(params);
                 if (response.responseMessage == 'OK') {
                     // Update local identifiers with the session data
                     if (response.odeId) {
@@ -267,10 +269,12 @@ export default class projectManager {
             jwt_token: jwtToken,
         };
         let response;
+                
+        //FIXME: Review this code that constantly generates errors
+        //Missing information in the parameters sent to the openPlatformElpAction method of the open_platform_elp endpoint
+        //response = await this.app.api.platformIntegrationOpenElp(params);
 
-        response = await this.app.api.platformIntegrationOpenElp(params);
-
-        if (response.responseMessage == 'OK') {
+        if (response && response.responseMessage == 'OK') {
             let params = {
                 odeFileName: response.elpFileName,
                 odeFilePath: response.elpFilePath,

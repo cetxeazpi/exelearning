@@ -63,13 +63,13 @@ export default class RealTimeEventNotifier {
             });
     }
 
-    getSubscription(sessionId) {
+    getSubscription(odeId) {
         const that = this;
         const url = new URL(this.mercureUrl);
         if (this.eventSource) {
             this.eventSource.close();
         }
-        url.searchParams.append('topic', sessionId);
+        url.searchParams.append('topic', odeId);
         url.searchParams.append('authorization', this.jwtToken);
         if (this.lastEventID) {
             url.searchParams.append('lastEventID', this.lastEventID);
@@ -92,7 +92,7 @@ export default class RealTimeEventNotifier {
                 console.error('Mercure connection lost:', error);
                 if (!connectionLostShown) {
                     window.onbeforeunload = () => undefined;
-                    that.showConnectionLostMessage(sessionId);
+                    that.showConnectionLostMessage(odeId);
                     connectionLostShown = true;
                 }
             }

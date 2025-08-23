@@ -38,9 +38,11 @@ export default class structureEngine {
     async getOdeStructure() {
         let odeVersion = this.project.odeVersion;
         let odeSession = this.project.odeSession;
+        let odeId = this.project.odeId;
         let response = await this.project.app.api.getOdeStructure(
             odeVersion,
-            odeSession
+            odeSession,
+            odeId
         );
         let dataJson = response.structure ? response.structure : [];
         return dataJson;

@@ -110,6 +110,11 @@ export default class ShareProjectButton {
 
         urlString.classList.add('share-link-code-string');
         urlString.id = 'shareLinkCode';
+        
+        //Prevents the "Copy to clipboard" icon moving outside the text box
+        urlString.style.overflowWrap = 'break-word';
+        urlString.style.maxWidth = '90%'; 
+        
         urlString.innerHTML = `<strong> ${result.shareSessionUrl}</strong>`;
 
         urlButton.id = 'shareUrlButton';

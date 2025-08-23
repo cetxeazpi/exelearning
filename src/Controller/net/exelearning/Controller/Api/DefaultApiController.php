@@ -124,14 +124,14 @@ class DefaultApiController extends AbstractController
     /**
      * Publish message to mercure hub. $odeSessionId is used as topic. Returns false if no hub available.
      */
-    protected function publish(string $odeSessionId, string $eventName): string|bool
+    protected function publish(string $odeId, string $eventName): string|bool
     {
         if (null === $this->hub) {
             return false;
         }
         $uuid = Uuid::v4();
         $update = new Update(
-            $odeSessionId,
+            $odeId,
             json_encode(['name' => $eventName]),
             false,
             $uuid,
@@ -140,7 +140,7 @@ class DefaultApiController extends AbstractController
             $result = $this->hub->publish($update);
         } catch (\RuntimeException $exception) {
             $result = false;
-            $this->logger->error("Failed to publish event '$eventName' on topic $odeSessionId.");
+            $this->logger->error("Failed to publish event '$eventName' on topic $odeId.");
         }
 
         return $result;

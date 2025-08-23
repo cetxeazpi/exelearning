@@ -123,7 +123,7 @@ class OdeApiController extends DefaultApiController
     #[Route('/ode/save/manual', methods: ['POST'], name: 'api_odes_ode_save_manual')]
     public function manualSaveOdeAction(Request $request, $odeSessionIdParam = false)
     {
-        $responseData = [];
+        $responseData = []; 
 
         // collect parameters
         $odeId = $request->get('odeId');
@@ -235,6 +235,9 @@ class OdeApiController extends DefaultApiController
 
             $responseData['responseMessage'] = 'error: version control desactivated';
         }
+
+        $this->entityManager->flush();
+        $this->publish($odeId, 'ode-saved');
 
         $jsonData = $this->getJsonSerialized($responseData);
 
@@ -1180,6 +1183,9 @@ class OdeApiController extends DefaultApiController
             }
         }
 
+        $this->entityManager->flush();
+        $this->publish($odeId, 'new-content-published');
+
         $jsonData = $this->getJsonSerialized($responseData);
 
         return new JsonResponse($jsonData, $this->status, [], true);
@@ -1236,15 +1242,15 @@ class OdeApiController extends DefaultApiController
             }
         }
 
-        $this->entityManager->flush();
-        $this->publish($odeId, 'structure-changed');
-
         $odePropertiesDtos = [];
         foreach ($propertiesData as $odeProperties) {
             $odePropertiesDto = new OdePropertiesSyncDto();
             $odePropertiesDto->loadFromEntity($odeProperties);
             $odePropertiesDtos[$odePropertiesDto->getKey()] = $odePropertiesDto;
         }
+        
+        $this->entityManager->flush();
+        $this->publish($odeId, 'new-content-published');
 
         $responseData['responseMessage'] = 'OK';
         $responseData['odeProperties'] = $odePropertiesDtos;

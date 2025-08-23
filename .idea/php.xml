@@ -20,7 +20,7 @@
       <server host="localhost" id="3427f23a-5ad5-49fb-b891-932d14752d2c" name="eXeLearning" port="8080" use_path_mappings="true" />
     </servers>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.4" />
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
   </component>

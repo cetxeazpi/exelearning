@@ -396,6 +396,15 @@ export default class IdevicesEngine {
                                 }
                             }, 10);
                         }
+                    } else {
+                        // TODO Show error message with the user who is editing?
+                        /*if (response.userEditing) {
+                            eXeLearning.app.modals.alert.show({
+                                title: _('iDevice error'),
+                                body: _('The user %s is editing').replace('%s', response.userEditing),
+                                contentId: 'error',
+                            });
+                        }*/
                     }
                 });
         });
@@ -647,6 +656,15 @@ export default class IdevicesEngine {
                                 }
                             }, 10);
                         }
+                    } else {
+                        // TODO Show error message with the user who is editing?
+                        /*if (response.userEditing) {
+                            eXeLearning.app.modals.alert.show({
+                                title: _('iDevice error'),
+                                body: _('The user %s is editing').replace('%s', response.userEditing),
+                                contentId: 'error',
+                            });
+                        }*/
                     }
                 });
         });

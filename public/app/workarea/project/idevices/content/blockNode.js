@@ -361,11 +361,19 @@ export default class IdeviceBlockNode {
                 .isAvalaibleOdeComponent(this.blockId, null)
                 .then((response) => {
                     if (response.responseMessage !== 'OK') {
-                        eXeLearning.app.modals.alert.show({
-                            title: _('iDevice error'),
-                            body: _(response.responseMessage),
-                            contentId: 'error',
-                        });
+                        if (response.userEditing) {
+                            eXeLearning.app.modals.alert.show({
+                                title: _('iDevice error'),
+                                body: _('The user %s is editing').replace('%s', response.userEditing),
+                                contentId: 'error',
+                            });
+                        } else {
+                            eXeLearning.app.modals.alert.show({
+                                title: _('iDevice error'),
+                                body: _(response.responseMessage),
+                                contentId: 'error',
+                            });
+                        }
                     } else {
                         this.showModalChangeIcon();
                     }
@@ -385,11 +393,19 @@ export default class IdeviceBlockNode {
                 .isAvalaibleOdeComponent(this.blockId, null)
                 .then((response) => {
                     if (response.responseMessage !== 'OK') {
-                        eXeLearning.app.modals.alert.show({
-                            title: _('iDevice error'),
-                            body: _(response.responseMessage),
-                            contentId: 'error',
-                        });
+                        if (response.userEditing) {
+                            eXeLearning.app.modals.alert.show({
+                                title: _('iDevice error'),
+                                body: _('The user %s is editing').replace('%s', response.userEditing),
+                                contentId: 'error',
+                            });
+                        } else {
+                            eXeLearning.app.modals.alert.show({
+                                title: _('iDevice error'),
+                                body: _(response.responseMessage),
+                                contentId: 'error',
+                            });
+                        }
                     } else {
                         this.showModalChangeTitle();
                     }
@@ -462,11 +478,19 @@ export default class IdeviceBlockNode {
                     .isAvalaibleOdeComponent(this.blockId, null)
                     .then((response) => {
                         if (response.responseMessage !== 'OK') {
-                            eXeLearning.app.modals.alert.show({
-                                title: _('iDevice error'),
-                                body: _(response.responseMessage),
-                                contentId: 'error',
-                            });
+                            if (response.userEditing) {
+                                eXeLearning.app.modals.alert.show({
+                                    title: _('iDevice error'),
+                                    body: _('The user %s is editing').replace('%s', response.userEditing),
+                                    contentId: 'error',
+                                });
+                            } else {
+                                eXeLearning.app.modals.alert.show({
+                                    title: _('iDevice error'),
+                                    body: _(response.responseMessage),
+                                    contentId: 'error',
+                                });
+                            }
                         } else {
                             // Not move the box if it is already moving
                             if (
@@ -525,11 +549,19 @@ export default class IdeviceBlockNode {
                     .isAvalaibleOdeComponent(this.blockId, null)
                     .then((response) => {
                         if (response.responseMessage !== 'OK') {
-                            eXeLearning.app.modals.alert.show({
-                                title: _('iDevice error'),
-                                body: _(response.responseMessage),
-                                contentId: 'error',
-                            });
+                            if (response.userEditing) {
+                                eXeLearning.app.modals.alert.show({
+                                    title: _('iDevice error'),
+                                    body: _('The user %s is editing').replace('%s', response.userEditing),
+                                    contentId: 'error',
+                                });
+                            } else {
+                                eXeLearning.app.modals.alert.show({
+                                    title: _('iDevice error'),
+                                    body: _(response.responseMessage),
+                                    contentId: 'error',
+                                });
+                            }
                         } else {
                             // Not move the box if it is already moving
                             if (
@@ -587,11 +619,19 @@ export default class IdeviceBlockNode {
                     .isAvalaibleOdeComponent(this.blockId, null)
                     .then((response) => {
                         if (response.responseMessage !== 'OK') {
-                            eXeLearning.app.modals.alert.show({
-                                title: _('iDevice error'),
-                                body: _(response.responseMessage),
-                                contentId: 'error',
-                            });
+                            if (response.userEditing) {
+                                eXeLearning.app.modals.alert.show({
+                                    title: _('iDevice error'),
+                                    body: _('The user %s is editing').replace('%s', response.userEditing),
+                                    contentId: 'error',
+                                });
+                            } else {
+                                eXeLearning.app.modals.alert.show({
+                                    title: _('iDevice error'),
+                                    body: _(response.responseMessage),
+                                    contentId: 'error',
+                                });
+                            }
                         } else {
                             eXeLearning.app.modals.confirm.show({
                                 title: _('Delete box'),
@@ -622,11 +662,19 @@ export default class IdeviceBlockNode {
                     .isAvalaibleOdeComponent(this.blockId, null)
                     .then((response) => {
                         if (response.responseMessage !== 'OK') {
-                            eXeLearning.app.modals.alert.show({
-                                title: _('iDevice error'),
-                                body: _(response.responseMessage),
-                                contentId: 'error',
-                            });
+                            if (response.userEditing) {
+                                eXeLearning.app.modals.alert.show({
+                                    title: _('iDevice error'),
+                                    body: _('The user %s is editing').replace('%s', response.userEditing),
+                                    contentId: 'error',
+                                });
+                            } else {
+                                eXeLearning.app.modals.alert.show({
+                                    title: _('iDevice error'),
+                                    body: _(response.responseMessage),
+                                    contentId: 'error',
+                                });
+                            }
                         } else {
                             eXeLearning.app.modals.properties.show({
                                 node: this,
@@ -664,11 +712,19 @@ export default class IdeviceBlockNode {
                     .isAvalaibleOdeComponent(this.blockId, null)
                     .then((response) => {
                         if (response.responseMessage !== 'OK') {
-                            eXeLearning.app.modals.alert.show({
-                                title: _('iDevice error'),
-                                body: _(response.responseMessage),
-                                contentId: 'error',
-                            });
+                            if (response.userEditing) {
+                                eXeLearning.app.modals.alert.show({
+                                    title: _('iDevice error'),
+                                    body: _('The user %s is editing').replace('%s', response.userEditing),
+                                    contentId: 'error',
+                                });
+                            } else {
+                                eXeLearning.app.modals.alert.show({
+                                    title: _('iDevice error'),
+                                    body: _(response.responseMessage),
+                                    contentId: 'error',
+                                });
+                            }
                         } else {
                             // Generate body modal
                             let bodyElement =
@@ -756,11 +812,19 @@ export default class IdeviceBlockNode {
                     .isAvalaibleOdeComponent(this.blockId, null)
                     .then((response) => {
                         if (response.responseMessage !== 'OK') {
-                            eXeLearning.app.modals.alert.show({
-                                title: _('iDevice error'),
-                                body: _(response.responseMessage),
-                                contentId: 'error',
-                            });
+                            if (response.userEditing) {
+                                eXeLearning.app.modals.alert.show({
+                                    title: _('iDevice error'),
+                                    body: _('The user %s is editing').replace('%s', response.userEditing),
+                                    contentId: 'error',
+                                });
+                            } else {
+                                eXeLearning.app.modals.alert.show({
+                                    title: _('iDevice error'),
+                                    body: _(response.responseMessage),
+                                    contentId: 'error',
+                                });
+                            }
                         } else {
                             this.downloadBlockSelected(this.blockId);
                         }

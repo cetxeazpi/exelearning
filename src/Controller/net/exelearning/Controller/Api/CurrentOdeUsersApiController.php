@@ -147,15 +147,16 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $odeNavStructureSync = $odeNavStructureSyncRepo->find($odeNavStructureSyncId);
 
         // Check current_idevice of concurrent users
-        $isIdeviceFree = $this->currentOdeUsersService->checkIdeviceCurrentOdeUsers($odeSessionId, $odeIdeviceId, $odeBlockId, $user);
+        $usernameUserEditing = $this->currentOdeUsersService->checkIdeviceCurrentOdeUsers($odeSessionId, $odeIdeviceId, $odeBlockId, $user);
 
-        if ($isIdeviceFree) {
+        if (empty($usernameUserEditing)) {
             // Update CurrentOdeUsers
             $this->currentOdeUsersService->updateCurrentIdevice($odeNavStructureSync, $odeBlockId, $odeIdeviceId, $databaseUser, $odeCurrentUsersFlags);
 
             $responseData['responseMessage'] = 'OK';
         } else {
             $responseData['responseMessage'] = 'An user has an idevice open on this block';
+            $responseData['userEditing'] = $usernameUserEditing;
         }
 
         $jsonData = $this->getJsonSerialized($responseData);
@@ -178,12 +179,13 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $databaseUser = $this->userHelper->getDatabaseUser($user);
 
         // Check current_idevice of concurrent users
-        $isIdeviceFree = $this->currentOdeUsersService->checkIdeviceCurrentOdeUsers($odeSessionId, $odeIdeviceId, $odeBlockId, $user);
+        $usernameUserEditing = $this->currentOdeUsersService->checkIdeviceCurrentOdeUsers($odeSessionId, $odeIdeviceId, $odeBlockId, $user);
 
-        if ($isIdeviceFree) {
+        if (empty($usernameUserEditing)) {
             $responseData['responseMessage'] = 'OK';
         } else {
             $responseData['responseMessage'] = 'An user has an idevice open on this block';
+            $responseData['userEditing'] = $usernameUserEditing;
         }
 
         $jsonData = $this->getJsonSerialized($responseData);

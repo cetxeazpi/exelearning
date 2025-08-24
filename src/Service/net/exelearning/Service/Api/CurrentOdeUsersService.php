@@ -367,14 +367,14 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
     }
 
     /**
-     * Checks if another user in the session has the idevice open.
+     * Checks if another user in the session has the idevice open. Returns the username of the user who is editing
      *
      * @param string $odeSessionId
      * @param string $odeIdeviceId
      * @param string $odeBlockId
      * @param User   $user
      *
-     * @return bool
+     * @return string
      */
     public function checkIdeviceCurrentOdeUsers($odeSessionId, $odeIdeviceId, $odeBlockId, $user)
     {
@@ -387,16 +387,16 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
             $currentBlockId = $currentOdeUser->getCurrentBlockId();
             if (!empty($odeIdeviceId)) {
                 if ($concurrentUser !== $user && $currentComponentId == $odeIdeviceId) {
-                    return false;
+                    return $concurrentUser;
                 }
             } else {
                 if ($concurrentUser !== $user && $currentBlockId == $odeBlockId) {
-                    return false;
+                    return $concurrentUser;
                 }
             }
         }
 
-        return true;
+        return '';
     }
 
     /**

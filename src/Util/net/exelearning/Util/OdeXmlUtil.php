@@ -608,7 +608,6 @@ class OdeXmlUtil
         if (isset($xml->{self::ODE_XML_TAG_PROPERTIES})) {
             foreach ($xml->{self::ODE_XML_TAG_PROPERTIES}->children() as $xmlOdeProperty) {
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
                 $odeProperties->setKey($xmlOdeProperty->{self::ODE_XML_TAG_FIELD_KEY});
                 $odeProperties->setValue($xmlOdeProperty->{self::ODE_XML_TAG_FIELD_VALUE});
 

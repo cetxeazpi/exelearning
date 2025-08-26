@@ -184,6 +184,10 @@ update: check-docker check-env upd
 translations: check-docker check-env upd
 	docker compose exec exelearning composer --no-cache translations:extract
 
+# Clean translation obsolete strings
+translations-cleanup:
+	docker compose exec exelearning php bin/console app:translations:cleanup
+
 # Start the local environment with specific commands
 up-local: check-env
 	@echo "\033[31mWarning: Running in local environment may cause unexpected behavior. Use at your own risk.\033[0m"

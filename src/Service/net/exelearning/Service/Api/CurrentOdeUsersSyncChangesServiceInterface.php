@@ -69,7 +69,8 @@ interface CurrentOdeUsersSyncChangesServiceInterface
      * Get another user of the session in order to apply theme to the rest of users.
      *
      * @param User   $user
+     * @param string $odeId
      * @param string $odeSessionId
      */
-    public function getAnotherUserSyncSession($user, $odeSessionId);
+    public function getAnotherUserSyncSession($user, $odeId, $odeSessionId);
 }

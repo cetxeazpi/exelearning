@@ -139,25 +139,15 @@ interface CurrentOdeUsersServiceInterface
     public function checkIdeviceCurrentOdeUsers($odeId, $odeIdeviceId, $odeBlockId, $user);
 
     /**
-     * Check if any current user has the session id and set to the respective user.
-     *
-     * @param string $odeSessionId
-     * @param User   $user
-     *
-     * @return bool
-     */
-    public function checkOdeSessionIdCurrentUsers($odeSessionId, $user);
-
-    /**
      * Check and join session using either odeId or odeSessionId as primary identifier.
      *
-     * @param string $identifier
-     * @param string $identifierType ('odeId' or 'odeSessionId')
+     * @param string $odeId
+     * @param string $odeSessionId
      * @param User   $user
      *
      * @return array|false Returns session data on success, false on failure
      */
-    public function checkAndJoinSession($identifier, $identifierType, $user);
+    public function checkAndJoinSession($odeId, $odeSessionId, $user);
 
     /**
      * Examines number of current users on page.

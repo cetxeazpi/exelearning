@@ -235,9 +235,10 @@ class CurrentOdeUsersSyncChangesService implements CurrentOdeUsersSyncChangesSer
      * Get the user first created of the session in order to apply theme to the rest of users.
      *
      * @param User   $user
+     * @param string $odeId
      * @param string $odeSessionId
      */
-    public function getAnotherUserSyncSession($user, $odeSessionId)
+    public function getAnotherUserSyncSession($user, $odeId, $odeSessionId)
     {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
         $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers($odeId, null, $odeSessionId);

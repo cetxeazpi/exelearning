@@ -354,8 +354,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $symfonyFullUrl = $symfonyBaseUrl.$symfonyBasePath;
 
         // Generate share URL using odeSessionId (for backward compatibility) but include both parameters
-        //$response['shareSessionUrl'] = $symfonyFullUrl.Constants::SLASH.self::URL_WORKAREA_ROUTE.self::SESSION_ID_URL_PARAMETER.$currentOdeSessionId.'&odeId='.$currentOdeId;
-        $response['shareSessionUrl'] = $symfonyFullUrl.Constants::SLASH.self::URL_WORKAREA_ROUTE.self::SESSION_ID_URL_PARAMETER.$currentOdeId.'&odeId='.$currentOdeId;
+        $response['shareSessionUrl'] = $symfonyFullUrl.Constants::SLASH.self::URL_WORKAREA_ROUTE.self::SESSION_ID_URL_PARAMETER.$currentOdeSessionId.'&shareCodeOdeId='.$currentOdeId;
         
         // Include both identifiers for the system to use
         $response['odeId'] = $currentOdeId;
@@ -371,32 +370,25 @@ class CurrentOdeUsersApiController extends DefaultApiController
     {
         $response = [];
 
-        // Get parameters - support both odeId and odeSessionId for backward compatibility
+        // Get parameters
         $odeId = $request->get('odeId');
         $odeSessionId = $request->get('odeSessionId');
-        
-        // Determine the primary identifier to use
-        $primaryIdentifier = $odeId ?: $odeSessionId;
-        $identifierType = $odeId ? 'odeId' : 'odeSessionId';
 
         // Get user
         $user = $this->getUser();
 
-        // Check if the identifier exists and join the session
-        if (!empty($primaryIdentifier)) {
-            $result = $this->currentOdeUsersService->checkAndJoinSession($primaryIdentifier, $identifierType, $user);
+        // Check odeSessionId
+        if (!empty($odeSessionId)) {
+            $result = $this->currentOdeUsersService->checkAndJoinSession($odeId, $odeSessionId, $user);
             if (!$result) {
                 $response['responseMessage'] = 'Problem with session';
             } else {
                 $response['responseMessage'] = 'OK';
+
                 $response['odeId'] = $result['odeId'];
                 $response['odeSessionId'] = $result['odeSessionId'];
-                
-                // Generate redirect URL using odeId as primary identifier
-                $symfonyBaseUrl = $request->getSchemeAndHttpHost();
-                $symfonyBasePath = $request->getBaseURL();
-                $symfonyFullUrl = $symfonyBaseUrl.$symfonyBasePath;
-                $response['redirectUrl'] = $symfonyFullUrl.Constants::SLASH.self::URL_WORKAREA_ROUTE.self::SESSION_ID_URL_PARAMETER.$result['odeId'];
+
+                // $this->currentOdeUsersService->updateSyncCurrentUserOdeId($odeSessionId, $user);
             }
         }
 

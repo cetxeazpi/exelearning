@@ -418,49 +418,20 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
     }
 
     /**
-     * Check if any current user has the session id and set to the respective user.
-     *
-     * @param string $odeSessionId
-     * @param User   $user
-     *
-     * @return bool
-     */
-    public function checkOdeSessionIdCurrentUsers($odeId, $user)
-    {
-        // Check current users with the sessionId
-        $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
-        $currentUsers = $currentOdeUsersRepository->getCurrentUsers($odeId, null, null);
-
-        // Set odeSessionId to the user
-        if (!empty($currentUsers)) {
-            $currentUser = $currentOdeUsersRepository->getCurrentSessionForUser($user->getUsername());
-            $currentUser->setOdeId($odeId);
-
-            $this->entityManager->persist($currentUser);
-
-            $this->entityManager->flush();
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Check and join session using either odeId or odeSessionId as primary identifier.
      *
-     * @param string $identifier
-     * @param string $identifierType ('odeId' or 'odeSessionId')
+     * @param string $odeId
+     * @param string $odeSessionId
      * @param User   $user
      *
      * @return array|false Returns session data on success, false on failure
      */
-    public function checkAndJoinSession($identifier, $identifierType, $user)
+    public function checkAndJoinSession($odeId, $odeSessionId, $user)
     {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
         
         // Use the new repository method for better performance
-        $currentUsers = $currentOdeUsersRepository->findSessionsByIdentifier($identifier, $identifierType);
+        $currentUsers = $currentOdeUsersRepository->findByOdeIdAndSessionId($odeId, $odeSessionId);
 
         if (empty($currentUsers)) {
             return false;

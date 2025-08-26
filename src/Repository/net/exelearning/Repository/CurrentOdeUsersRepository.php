@@ -112,33 +112,26 @@ class CurrentOdeUsersRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find sessions by identifier (odeId or odeSessionId).
+     * Find sessions by odeId and odeSessionId
      *
-     * @param string $identifier
-     * @param string $identifierType ('odeId' or 'odeSessionId')
+     * @param string $odeId
+     * @param string $odeSessionId
      *
      * @return CurrentOdeUsers[]
      */
-    public function findSessionsByIdentifier($identifier, $identifierType)
+    public function findByOdeIdAndSessionId($odeId, $odeSessionId)
     {
-        $queryBuilder = $this->createQueryBuilder('c');
-
-        if ($identifierType === 'odeId') {
-            $queryBuilder
-                ->andWhere('c.odeId = :identifier')
-                ->setParameter('identifier', $identifier);
-        } else {
-            $queryBuilder
-                ->andWhere('c.odeSessionId = :identifier')
-                ->setParameter('identifier', $identifier);
-        }
-
-        $queryBuilder->orderBy('c.lastAction', 'DESC');
-
-        return $queryBuilder
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->createQueryBuilder('c')
+                ->andWhere('c.odeId = :odeId')
+                ->andWhere('c.odeSessionId = :odeSessionId')
+                ->andWhere('c.isActive = :isActive')
+                ->setParameter('odeId', $odeId)
+                ->setParameter('odeSessionId', $odeSessionId)
+                ->setParameter('isActive', true)
+                ->orderBy('c.lastAction', 'DESC')
+                ->getQuery()
+                ->getResult()
+                ;
     }
 
     /**

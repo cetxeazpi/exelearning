@@ -217,22 +217,22 @@ export default class projectManager {
             let odeId = response.currentOdeUsers.odeId;
 
             // Case join the shared session
-            if (eXeLearning.symfony.odeId) {
+            if (eXeLearning.symfony.odeSessionId && eXeLearning.symfony.sharedOdeId) {
                 // Check if the shared identifier is an odeId or odeSessionId
                 let params = { 
-                    odeId: eXeLearning.symfony.odeId,
+                    odeId: eXeLearning.symfony.sharedOdeId,
                     odeSessionId: eXeLearning.symfony.odeSessionId 
                 };
                 //FIXME: Review this code that constantly generates errors
                 //Missing information in the parameters sent to the openPlatformElpAction method of the open_platform_elp endpoint
-                //let response = await this.app.api.postJoinCurrentOdeSessionId(params);
-                if (response.responseMessage == 'OK') {
+                let responseSharedSession = await this.app.api.postJoinCurrentOdeSessionId(params);
+                if (responseSharedSession.responseMessage == 'OK') {
                     // Update local identifiers with the session data
-                    if (response.odeId) {
-                        this.odeId = response.odeId;
+                    if (responseSharedSession.odeId) {
+                        this.odeId = responseSharedSession.odeId;
                     }
-                    if (response.odeSessionId) {
-                        this.odeSession = response.odeSessionId;
+                    if (responseSharedSession.odeSessionId) {
+                        this.odeSession = responseSharedSession.odeSessionId;
                     }
                     window.location.replace('workarea');
                 }
@@ -272,7 +272,7 @@ export default class projectManager {
                 
         //FIXME: Review this code that constantly generates errors
         //Missing information in the parameters sent to the openPlatformElpAction method of the open_platform_elp endpoint
-        //response = await this.app.api.platformIntegrationOpenElp(params);
+        let responsePlatformIntegration = await this.app.api.platformIntegrationOpenElp(params);
 
         if (response && response.responseMessage == 'OK') {
             let params = {

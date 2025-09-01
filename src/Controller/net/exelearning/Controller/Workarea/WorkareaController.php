@@ -153,6 +153,7 @@ class WorkareaController extends DefaultWorkareaController
 
         $request->setLocale($localeUserPreferences);
         $request->setDefaultLocale($localeUserPreferences);
+        $this->translator->setLocale($request->getLocale());
 
         // Themes
         $themeTypeBase = Constants::THEME_TYPE_BASE;
@@ -171,8 +172,8 @@ class WorkareaController extends DefaultWorkareaController
         $this->currentOdeUsersSyncChangesService->removeSyncActionsByUser($userLogged);
 
         // Try to set theme of the ode propietary if shareSession
-        if (!empty($odeSessionId) && !empty($sharedOdeId)) {
-            $sessionUser = $this->currentOdeUsersSyncChangesService->getAnotherUserSyncSession($userLogged, $sharedOdeId, $odeSessionId);
+        if (!empty($odeSessionId)) {
+            $sessionUser = $this->currentOdeUsersSyncChangesService->getAnotherUserSyncSession($userLogged, $odeSessionId);
             if (!empty($sessionUser)) {
                 // Retrieve the session user's preferences
                 $sessionUserPreferences = $this->userHelper->getSessionUserPreferencesFromDatabase($sessionUser);
@@ -249,7 +250,6 @@ class WorkareaController extends DefaultWorkareaController
                 ],
                 'symfony' => [
                     'odeSessionId' => $odeSessionId,
-                    'sharedOdeId' => $sharedOdeId,
                     'environment' => $_ENV['APP_ENV'],
                     'baseURL' => $symfonyBaseUrl,
                     'basePath' => $symfonyBasePath,

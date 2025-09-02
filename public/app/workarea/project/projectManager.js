@@ -173,11 +173,16 @@ export default class projectManager {
 
         const odeIdeviceId = params['odeIdeviceId'];
         const actionType = params['actionType'];
-        const shouldUnlock = actionType?.includes('FORCE_UNLOCK');
+
+        const unlockKeywords = ['FORCE_UNLOCK', 'HIDE_UNLOCK_BUTTON'];
+        const shouldUnlock = unlockKeywords.some(keyword => actionType?.includes(keyword));
+
         const isOdeComponentFlag = params['odeComponentFlag'] === 'true';
         const isEditingOrInactive = actionType?.includes('EDIT') || shouldUnlock || isOdeComponentFlag;
         const timeIdeviceEditing = params['timeIdeviceEditing'] ?? 0;
         const isNotSameEmail = userEmail && userEmail !== currentUserEmail;
+
+        const elementId = params['elementId'];
 
         const existingOverlay = targetBlock.querySelector('.user-editing-overlay');
         const odeElementSave = document.getElementById('saveIdevice' + odeIdeviceId)
@@ -229,7 +234,7 @@ export default class projectManager {
             description.textContent = 'This resource is being edited by:';
             emailElement.textContent = userEmail;
 
-            const dateMilis = new Date(timeIdeviceEditing * 1000);
+            const dateMilis = new Date(Number(timeIdeviceEditing));
 
             const hours = String(dateMilis.getHours()).padStart(2, '0');
             const minutes = String(dateMilis.getMinutes()).padStart(2, '0');
@@ -247,6 +252,7 @@ export default class projectManager {
             if (shouldUnlock) {
                 const unlockBtn = document.createElement('button');
 
+                unlockBtn.id = `unlock-btn-${elementId}`;
                 unlockBtn.className = 'user-editing-unlock-btn';
                 unlockBtn.textContent = 'Force Unlock';
                 unlockBtn.style.display = 'block';
@@ -254,6 +260,15 @@ export default class projectManager {
                 messageBox.appendChild(unlockBtn);
                 
                 unlockBtn.onclick = () => this.unlockResource(blockId, odeIdeviceId);
+            }
+        }
+
+        if (actionType?.includes('HIDE_UNLOCK_BUTTON')) {
+            const buttonId = `unlock-btn-${elementId}`;
+            const existingBtn = document.getElementById(buttonId);
+            
+            if (existingBtn) {
+                existingBtn.remove(); // Remove the unlock button
             }
         }
     }
@@ -270,7 +285,6 @@ export default class projectManager {
             actionType: 'UNLOCK_RESOURCE',
             odeComponentFlag: false,
             timeIdeviceEditing: null
-
         }).then(response => {
             if (response.responseMessage === 'OK') {
                 this.showUnlockSuccess();

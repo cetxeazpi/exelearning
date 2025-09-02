@@ -365,62 +365,100 @@ export default class IdeviceNode {
      * @returns {function} Cleanup function to stop tracking
      */
     inactivityInElement(elementId, timeoutSeconds, callback) {
-        // Debug
         console.log(`Setting up inactivity tracker for ${elementId}`);
 
-        // Debug
         if (!elementId) {
             console.error('Element ID is undefined');
             return () => {};
         }
 
-        // Cancel any existing timer first
-        if (this.inactivityTimer) {
-            clearTimeout(this.inactivityTimer);
-            this.inactivityTimer = null;
-        }
-
         const element = document.getElementById(elementId);
-    
         if (!element) {
             console.log(`Element with ID ${elementId} not found`);
             return () => {};
         }
 
-        // Reset the inactivity timer
+        // Create storage for multiple iDevices if it doesn't exist
+        if (!this.inactivityTimers) this.inactivityTimers = {};
+        if (!this.inactiveStates) this.inactiveStates = {};
+
+        // Clears any previous timers for that item
+        if (this.inactivityTimers[elementId]) {
+            clearTimeout(this.inactivityTimers[elementId]);
+        }
+
         const resetTimer = () => {
-            if (this.inactivityTimer) clearTimeout(this.inactivityTimer);
-            this.inactivityTimer = setTimeout(() => {
+            console.log(`[Inactivity] Event triggered on ${elementId}`);
+            
+            // If inactive ? now active ? send HIDE_UNLOCK
+            if (this.inactiveStates[elementId]) {
+                console.log(`[Inactivity] User is active again, sending HIDE_UNLOCK for ${elementId}`);
+                this.updateResourceLockStatus({
+                    odeIdeviceId: this.odeIdeviceId,
+                    blockId: this.blockId,
+                    actionType: 'HIDE_UNLOCK_BUTTON',
+                    destinationPageId: this.block?.pageId ?? ''
+                });
+                this.inactiveStates[elementId] = false;
+            }
+
+            // Reset the timer
+            clearTimeout(this.inactivityTimers[elementId]);
+            this.inactivityTimers[elementId] = setTimeout(() => {
                 const now = new Date();
                 const odeElementSave = document.getElementById('saveIdevice' + elementId);
 
-                console.log(`[${now.toLocaleTimeString()}] Lock time expired:`, {
-                    elementId: elementId,
-                    timeout: `${timeoutSeconds} seconds`,
-                    action: 'FORCE_UNLOCK'
+                console.log(`[${now.toLocaleTimeString()}] Inactivity timeout for ${elementId}. Sending FORCE_UNLOCK...`);
+
+                this.inactiveStates[elementId] = true; // Now inactive
+
+                if (odeElementSave) callback(); // Show unlock button
+                this.updateResourceLockStatus({
+                    odeIdeviceId: this.odeIdeviceId,
+                    blockId: this.blockId,
+                    actionType: 'FORCE_UNLOCK',
+                    destinationPageId: this.block?.pageId ?? ''
                 });
-                if (odeElementSave) {
-                    callback();
-                }
-            }, timeoutSeconds * 10);
+            }, (timeoutSeconds * 10) / 2); // ? FIXME: Change for 1000
         };
 
-        // Events that will reset the timer
-        const events = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click'];
+        const events = ['mousedown', 'mousemove', 'mouseover', 'scroll', 'touchstart', 'click'];
         events.forEach(event => {
             element.addEventListener(event, resetTimer);
         });
 
-        // Start tracking
+        // Main keyboard events for each idevice block
+        // Para cada bloque
+        eXeLearning.app.project.idevices.components.blocks.forEach((blockNode) => {
+            const blockElement = blockNode.blockContent;
+            if (!blockElement) return;
+
+            // Eventos a nivel de bloque principal
+            const keyEvents = ['keydown', 'keypress'];
+
+            keyEvents.forEach(event => {
+                blockElement.addEventListener(event, resetTimer, true); // 'true' para captura
+            });
+
+            // Y también en el iframe de TinyMCE (como ya haces)
+            const iframe = blockElement.querySelector('iframe.tox-edit-area__iframe');
+            if (iframe?.contentDocument?.body) {
+                keyEvents.forEach(event => {
+                    iframe.contentDocument.body.addEventListener(event, resetTimer, true);
+                });
+            }
+        });
+
+        // Init tracking
         resetTimer();
 
-        // Return cleanup function
+        // Returns cleanup function
         return () => {
-            if (this.inactivityTimer) {
-                clearTimeout(this.inactivityTimer);
-                this.inactivityTimer = null;
-                console.log('cleanup');
-            }
+            clearTimeout(this.inactivityTimers[elementId]);
+            delete this.inactivityTimers[elementId];
+            delete this.inactiveStates[elementId];
+            console.log(`Inactivity tracker cleaned for ${elementId}`);
+
             events.forEach(event => {
                 element.removeEventListener(event, resetTimer);
             });
@@ -432,14 +470,14 @@ export default class IdeviceNode {
      * @param {Object} params - Configuration object
      * @param {boolean} [params.odeSessionId=false] - Session ID (default: false)
      * @param {string|null} [params.odeNavStructureSyncId=null] - Navigation sync ID (default: null) 
-     * @param {string} params.ideviceId - The ID of the iDevice element
+     * @param {string} params.odeIdeviceId - The ID of the iDevice element
      * @param {string} params.blockId - The ID of the containing block
      * @param {string} params.actionType - Action type ('EDIT_BLOCK', 'FORCE_UNLOCK', etc.)
      * @param {string} [params.destinationPageId=''] - Destination page ID (default: empty string)
      * @example
      * // Minimal usage
      * updateResourceLockStatus({
-     *   ideviceId: 'idevice123',
+     *   odeIdeviceId: 'idevice123',
      *   blockId: 'block456', 
      *   actionType: 'FORCE_UNLOCK'
      * });
@@ -448,7 +486,7 @@ export default class IdeviceNode {
      * updateResourceLockStatus({
      *   odeSessionId: true,
      *   odeNavStructureSyncId: 'nav789',
-     *   ideviceId: 'idevice123',
+     *   odeIdeviceId: 'idevice123',
      *   blockId: 'block456',
      *   actionType: 'EDIT_BLOCK',
      *   destinationPageId: 'page101'
@@ -457,7 +495,7 @@ export default class IdeviceNode {
     updateResourceLockStatus({
         odeSessionId = false, 
         odeNavStructureSyncId = null, 
-        ideviceId, 
+        odeIdeviceId, 
         blockId, 
         actionType, 
         destinationPageId = ''
@@ -466,7 +504,7 @@ export default class IdeviceNode {
             odeSessionId,
             odeNavStructureSyncId,
             blockId,
-            ideviceId,
+            odeIdeviceId,
             actionType,
             destinationPageId,
             this.timeIdeviceEditing
@@ -484,7 +522,7 @@ export default class IdeviceNode {
         const handleTimeout = () => {
         	this.editUnlockDevice = 'FORCE_UNLOCK';
             this.updateResourceLockStatus({
-                ideviceId: this.odeIdeviceId,
+                odeIdeviceId: this.odeIdeviceId,
                 blockId: this.blockId, 
                 actionType: 'FORCE_UNLOCK'
             });
@@ -534,7 +572,7 @@ export default class IdeviceNode {
                 this.createAddTextBtn();
                 
                 this.updateResourceLockStatus({
-                    ideviceId: this.odeIdeviceId,
+                    odeIdeviceId: this.odeIdeviceId,
                     blockId: this.blockId,
                     actionType: 'EDIT_BLOCK'
                 });
@@ -572,7 +610,7 @@ export default class IdeviceNode {
 
     checkIdeviceIsEditing() {
         this.updateResourceLockStatus({
-            ideviceId: this.odeIdeviceId,
+            odeIdeviceId: this.odeIdeviceId,
             blockId: this.blockId, 
             actionType: 'LOADING'
         });

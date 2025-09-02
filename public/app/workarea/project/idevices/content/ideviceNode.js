@@ -419,7 +419,7 @@ export default class IdeviceNode {
                     actionType: 'FORCE_UNLOCK',
                     destinationPageId: this.block?.pageId ?? ''
                 });
-            }, (timeoutSeconds * 10) / 2); // ? FIXME: Change for 1000
+            }, timeoutSeconds * 1000);
         };
 
         const events = ['mousedown', 'mousemove', 'mouseover', 'scroll', 'touchstart', 'click'];
@@ -440,7 +440,7 @@ export default class IdeviceNode {
                 blockElement.addEventListener(event, resetTimer, true); // 'true' para captura
             });
 
-            // Y también en el iframe de TinyMCE (como ya haces)
+            // Y tambiï¿½n en el iframe de TinyMCE (como ya haces)
             const iframe = blockElement.querySelector('iframe.tox-edit-area__iframe');
             if (iframe?.contentDocument?.body) {
                 keyEvents.forEach(event => {

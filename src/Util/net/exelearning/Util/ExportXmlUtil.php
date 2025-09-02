@@ -292,7 +292,7 @@ class ExportXmlUtil
         $titleValue = isset($titleElement) ? $titleElement->getValue() : 'eXe-p-'.$odeId;
         $titleString = $title->addChild('lom:lom:string', $titleValue);
 
-        $titleLang = $odeProperties['pp_lang']; // todo -> title lang property
+        $titleLang = $odeProperties['pp_lang'];
         $titleLang = isset($titleLang) ? $titleLang->getValue() : Settings::DEFAULT_LOCALE;
         $titleString->addAttribute('language', $titleLang);
 
@@ -547,13 +547,6 @@ class ExportXmlUtil
                 }
             }
         }
-
-        // TODO, besides the previous one, there are more "weird" directories
-
-        // Where can we create directories?
-        // We need to process the iDevices' HTML and look for references to custom/ because they are from the file manager
-        // TODO see what else needs to be added, like the file manager stuff, and remove the libs that are in the iDevices
-        // TODO should we add the math files that load by themselves? in common resource?
     }
 
     /**
@@ -1222,7 +1215,7 @@ class ExportXmlUtil
                 $domHead->documentElement->appendChild($import);
             }
 
-            // TODO simplexml load the DOM but introduce scaping characters
+            // TODO simplexml load the DOM but introduce scaping characters?
             $head = simplexml_import_dom($domHead);
         }
 
@@ -1982,18 +1975,35 @@ class ExportXmlUtil
             self::appendSimpleXml($pageHeader, $pageNumber);
         }
 
+        // Package title
+        $packageTitleValue = isset($odeProperties['pp_title']) ? $odeProperties['pp_title']->getValue() : '';
+        if (Constants::EXPORT_TYPE_HTML5_SP == $exportType) {
+            $packageTitleValue = '';
+        } // The single page export has its own package title
+        if ('' != $packageTitleValue) {
+            $packageTitle = $pageHeader->addChild('h1', $packageTitleValue);
+            $packageTitle->addAttribute('class', 'package-title');
+        }
+
         // Page title
+        $pageTitleTag = 'h1';
+        if ('' != $packageTitleValue) {
+            $pageTitleTag = 'h2';
+        }
         if ('' != $titlePage) {
             $headerEmpty = false;
-            $pageTitle = $pageHeader->addChild('h1', $titlePage);
+            $pageTitle = $pageHeader->addChild($pageTitleTag, $titlePage);
             $pageTitle->addAttribute('class', 'page-title');
         }
 
         if ($headerEmpty) {
-            $pageHeader->addAttribute('class', 'sr-av');
-            $pageTitle = $pageHeader->addChild('h1', $odeNavStructureSync->getPageName());
+            $pageTitle = $pageHeader->addChild($pageTitleTag, $odeNavStructureSync->getPageName());
             $pageTitle->addAttribute('id', 'page-title-node-content');
-            $pageTitle->addAttribute('class', 'page-title');
+            if ('' == $packageTitleValue) {
+                $pageHeader->addAttribute('class', 'sr-av');
+            } else {
+                $pageTitle->addAttribute('class', 'page-title sr-av');
+            }
         }
 
         return $pageHeaderMain;
@@ -2625,7 +2635,7 @@ class ExportXmlUtil
             ];
         }
 
-        // TODO issue 315
+        // TODO issue 315 (exelearning-web)
         // if ('true' == $odeProperties['pp_addSearchBox']->getValue()) {
         //    Here we add the search files
         // }

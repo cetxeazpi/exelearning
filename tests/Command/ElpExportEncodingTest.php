@@ -2,7 +2,6 @@
 namespace App\Tests\Functional\Command;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Command\net\exelearning\Command\ElpExportHtml5Command;
@@ -29,9 +28,6 @@ class ElpExportEncodingTest extends KernelTestCase
         $this->fs = new Filesystem();
 
         $command = $c->get(ElpExportHtml5Command::class);
-        $app = new Application();
-        $app->add($command);
-
         $this->tester = new CommandTester($command);
     }
 
@@ -39,10 +35,6 @@ class ElpExportEncodingTest extends KernelTestCase
     public function test_index_html_is_utf8_has_charset_meta_and_no_mojibake(): void
     {
         $input = realpath(__DIR__ . '/../Fixtures/encoding_test.elp');
-        if (!$input) {
-            $this->markTestSkipped('Missing fixture: encoding_test.elp');
-        }
-
         $this->outDir = sys_get_temp_dir() . '/elp_export_' . uniqid('', true);
         $this->fs->mkdir($this->outDir);
 

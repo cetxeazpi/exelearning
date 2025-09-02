@@ -11,7 +11,8 @@
         "js:lint": "eslint 'public/**/*.js'",
         "js:fix": "eslint 'public/**/*.js' --fix",
         "check-format": "prettier --check \"public/**/*.js\"",
-        "format": "prettier --write \"public/**/*.js\""
+        "format": "prettier --write \"public/**/*.js\"",
+        "test": "playwright test tests/electron"
     },
     "keywords": [],
     "author": {
@@ -28,6 +29,7 @@
         "sass": "^1.90.0"
     },
     "devDependencies": {
+        "@playwright/test": "^1.55.0",
         "electron": "^37.1.0",
         "electron-builder": "^26.0.12",
         "eslint": "^9.20.0",
@@ -55,6 +57,7 @@
         "disableDefaultIgnoredFiles": true,
         "files": [
             "main.js",
+            "preload.js",
             "composer.json",
             "composer.lock",
             ".env.dist",

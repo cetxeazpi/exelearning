@@ -63,9 +63,6 @@ class App {
         await this.addNoTranslateForGoogle();
         // Execute the custom JavaScript code
         await this.runCustomJavaScriptCode();
-
-        // Electron: show toast with final saved path
-        this.bindElectronDownloadToasts();
     }
 
     /**
@@ -262,44 +259,6 @@ class App {
         try {
             $eXeLearningCustom.init();
         } catch (e) {}
-    }
-
-    /**
-     * Bind Electron download-done to show final path toast (offline desktop)
-     */
-    bindElectronDownloadToasts() {
-        if (
-            !window.electronAPI ||
-            typeof window.electronAPI.onDownloadDone !== 'function'
-        )
-            return;
-        try {
-            window.electronAPI.onDownloadDone(({ ok, path, error }) => {
-                const esc = (s) =>
-                    (s || '')
-                        .toString()
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;');
-                if (ok) {
-                    let toastData = {
-                        title: _('Saved'),
-                        body: `Saved to: <code>${esc(path)}</code>`,
-                        icon: 'task_alt',
-                        remove: 3500,
-                    };
-                    this.toasts.createToast(toastData);
-                } else {
-                    let toastData = {
-                        title: _('Error'),
-                        body: esc(error || _('Unknown error.')),
-                        icon: 'error',
-                        error: true,
-                        remove: 5000,
-                    };
-                    this.toasts.createToast(toastData);
-                }
-            });
-        } catch (_e) {}
     }
 
     /**

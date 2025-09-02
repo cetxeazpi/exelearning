@@ -9,9 +9,6 @@ export default class NavbarFile {
         this.tutorialButton = this.menu.navbar.querySelector(
             '#navbar-button-exe-tutorial'
         );
-        this.apiDocsButton = this.menu.navbar.querySelector(
-            '#navbar-button-api-docs'
-        );
         this.releaseNotesButton = this.menu.navbar.querySelector(
             '#navbar-button-release-notes'
         );
@@ -36,7 +33,6 @@ export default class NavbarFile {
     setEvents() {
         this.setAssistantEvent();
         this.setTutorialEvent();
-        this.setApiDocsEvent();
         this.setReleaseNotesEvent();
         this.setLegalNotesEvent();
         this.setExeWebEvent();
@@ -67,16 +63,6 @@ export default class NavbarFile {
     setTutorialEvent() {
         this.tutorialButton.addEventListener('click', () => {
             this.tutorialEvent();
-        });
-    }
-
-    /**
-     * API Docs
-     * Help -> API Docs (Swagger)
-     */
-    setApiDocsEvent() {
-        this.apiDocsButton.addEventListener('click', () => {
-            this.apiDocsEvent();
         });
     }
 
@@ -153,14 +139,6 @@ export default class NavbarFile {
      */
     tutorialEvent() {
         let url = 'https://exelearning.net/ayuda/';
-        window.open(url, '_blank').focus();
-    }
-
-    /**
-     * Open API Swagger docs in new tab
-     */
-    apiDocsEvent() {
-        let url = '/api/v2/docs'; // ruta de API Platform
         window.open(url, '_blank').focus();
     }
 

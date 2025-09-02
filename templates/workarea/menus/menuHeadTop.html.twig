@@ -1,10 +1,4 @@
-<div class="top">
-    <div id="exe-logo">
-        <img src="style/workarea/images/exelearning.png" class="exe-logo content" alt="eXeLearning" width="200" height="181">
-    </div>
-    <div id="exe-title">
-        <h2 class="exe-title content">...</h2>
-    </div>
+<div class="top" id="eXeLearningNavbar">
     <div class="main-menu">
         <div class="main-menu-left">
             {# Site navigation #}
@@ -17,21 +11,26 @@
                 <span class="visually-hidden">{{ "Properties" | trans }}</span>
             </button>
             #}
-            <button id="head-bottom-preview" class="btn" title="{{ "Preview" | trans }}">
-                <span class="auto-icon" aria-hidden="true">visibility</span>
-                <span class="btn-label">{{ "Preview" | trans }}</span>        
-            </button>
-            <button id="head-top-save-button" class="btn" title="{{ "Save" | trans }}">
-                <span class="auto-icon" aria-hidden="true">save</span>
-                <span class="btn-label">{{ "Save" | trans }}</span>
-            </button>
+            {# Download button can't be deleted, hidden instead #}
             <button id="head-top-download-button" class="btn" title="{{ "Download" | trans }}">
                 <span class="auto-icon" aria-hidden="true">download</span>
                 <span class="btn-label">{{ "Download" | trans }}</span>
             </button>
-            <button id="head-top-share-button" class="btn exe-online exe-advanced" title="{{ "Share" | trans }}">
-                <span class="auto-icon" aria-hidden="true">share</span>
-                <span class="btn-label">{{ "Share" | trans }}</span>
+            <button id="head-top-save-button" class="btn button-display d-flex justify-content-center align-items-center" title="{{ "Save" | trans }}">
+                <div class="small-icon save-icon-white"></div>
+                <span>{{ "Save" | trans }}</span>
+            </button>
+            <button id="head-bottom-preview" class="btn button-display display-outline button-square d-flex justify-content-center align-items-center" title="{{ "Preview" | trans }}">
+                <div class="small-icon preview-icon-green"></div>
+            </button>
+            <button id="dropdownStyles" class="btn button-tertiary button-square d-flex justify-content-center align-items-center" title="{{ "Styles" | trans }}">
+                <span class="medium-icon styles-icon"></span>
+            </button>
+            <button id="head-top-settings-button" class="btn button-tertiary button-square d-flex justify-content-center align-items-center" title="{{ "Settings" | trans }}">
+                <span class="medium-icon settings-icon"></span>
+            </button>
+            <button id="head-top-share-button" class="btn button-tertiary button-square d-flex justify-content-center align-items-center" title="{{ "Share" | trans }}">
+                <span class="medium-icon share-icon"></span>
             </button>
             <div id="exe-last-edition" class="btn">
                 <span class="content"></span>

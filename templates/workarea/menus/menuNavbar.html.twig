@@ -10,7 +10,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownFile">
                     <li><a class="dropdown-item" id="navbar-button-new" href="#"><span class="small-icon new-icon"></span> {{ "New" | trans }}</a></li>
-                    <li><a class="dropdown-item" id="navbar-button-openuserodefiles" href="#"><span class="small-icon open-icon"></span> {{ "Open" | trans }}</a></li>
+                    <li class="exe-online"><a class="dropdown-item" id="navbar-button-openuserodefiles" href="#"><span class="small-icon open-icon"></span> {{ "Open" | trans }}</a></li>
                     <li class="dropdown dropend exe-online">
                         <a class="dropdown-item dropdown-toggle" href="#" id="navbar-button-dropdown-recent-projects" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="small-icon recent-icon"></span> {{ "Recent projects" | trans }}
@@ -36,12 +36,12 @@
                         </ul>
                     </li>
                     {% if config.isOfflineInstallation %}
-                        <li class="exe-offline"><a class="dropdown-item" id="navbar-button-open-offline" href="#">{{ "Open" | trans }}</a></li>
+                        <li class="exe-offline"><a class="dropdown-item" id="navbar-button-open-offline" href="#"><span class="small-icon open-icon"></span> {{ "Open" | trans }}</a></li>
                         <li class="dropdown-divider exe-offline"></li>
-                        <li class="exe-offline"><a class="dropdown-item" id="navbar-button-save-offline" href="#">{{ "Save" | trans }}</a></li>
-                        <li class="exe-offline"><a class="dropdown-item" id="navbar-button-save-as-offline" href="#">{{ "Save as" | trans }}</a></li>
+                        <li class="exe-offline"><a class="dropdown-item" id="navbar-button-save-offline" href="#"><span class="small-icon save-icon-green"></span> {{ "Save" | trans }}</a></li>
+                        <li class="exe-offline"><a class="dropdown-item" id="navbar-button-save-as-offline" href="#"><span class="small-icon save-icon"></span> {{ "Save as" | trans }}</a></li>
                         <li class="dropdown dropend exe-offline">
-                            <a class="dropdown-item dropdown-toggle" href="#" id="dropdownExportAsOffline" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ "Export as..." | trans }}</a>
+                            <a class="dropdown-item dropdown-toggle" href="#" id="dropdownExportAsOffline" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="small-icon download-icon-green"></span> {{ "Export as..." | trans }}</a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownExportAsOffline">
                                 <li><a id="navbar-button-exportas-html5" class="dropdown-item" href="#">{{ "Website" | trans }}</a></li>
                                 <li><a id="navbar-button-exportas-html5-folder" class="dropdown-item" href="#">{{ "Export to Folder (Unzipped Website)" | trans }}</a></li>

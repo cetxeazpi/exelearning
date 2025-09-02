@@ -38,11 +38,10 @@ export default class OdeTitleMenu {
 
     setChangeTitle() {
         const title = this.odeTitleMenuHeadElement;
-        this.titleButton
-            .addEventListener('click', (e) => {
-                e.stopPropagation();
-                title.click();
-            });
+        this.titleButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            title.click();
+        });
         title.addEventListener('click', () => {
             if (eXeLearning.app.project.checkOpenIdevice()) return;
             title.setAttribute('contenteditable', 'true');

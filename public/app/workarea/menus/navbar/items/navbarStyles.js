@@ -348,8 +348,8 @@ export default class NavbarFile {
             'button-tertiary',
             'button-narrow',
             'action-back',
-            'd-flex', 
-            'justify-content-center', 
+            'd-flex',
+            'justify-content-center',
             'align-items-center'
         );
         const backIcon = document.createElement('div');
@@ -940,7 +940,14 @@ export default class NavbarFile {
     buttonSave(theme) {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.classList.add('btn', 'btn-save-theme', 'button-tertiary', 'd-flex', 'align-items-center', 'justify-content-start');
+        btn.classList.add(
+            'btn',
+            'btn-save-theme',
+            'button-tertiary',
+            'd-flex',
+            'align-items-center',
+            'justify-content-start'
+        );
         btn.title = _('Save');
         const icon = document.createElement('span');
         icon.classList.add('small-icon', 'save-icon');

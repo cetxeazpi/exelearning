@@ -152,7 +152,6 @@ export default class ModalIdeviceManager extends Modal {
         }, time);
     }
 
-
     /**
      * Set body element
      *
@@ -378,7 +377,6 @@ export default class ModalIdeviceManager extends Modal {
 
         return buttonImportIdevice;
     }
-
 
     /**
      * Make element table idevices

@@ -79,11 +79,11 @@ export default class MenuIdevicesCompose {
     addIdevicesToCategory() {
         for (let [key, idevice] of Object.entries(this.idevicesInstalled)) {
             // TODO commented only for develop -> if (idevice.visible) {
-                if (!this.categoriesIdevices[idevice.category]) {
-                    this.categoriesIdevices[idevice.category] = [];
-                    this.categoriesExtra.push(idevice.category);
-                }
-                this.categoriesIdevices[idevice.category].push(idevice);
+            if (!this.categoriesIdevices[idevice.category]) {
+                this.categoriesIdevices[idevice.category] = [];
+                this.categoriesExtra.push(idevice.category);
+            }
+            this.categoriesIdevices[idevice.category].push(idevice);
             // }
         }
     }
@@ -166,7 +166,9 @@ export default class MenuIdevicesCompose {
             const userIdevicesContent = document.createElement('div');
             userIdevicesContent.classList.add('useridevices-content');
             ideviceData.forEach((ideviceData) => {
-                userIdevicesContent.append(this.elementDivIdeviceImported(ideviceData));
+                userIdevicesContent.append(
+                    this.elementDivIdeviceImported(ideviceData)
+                );
             });
             nodeDivIdevices.append(userIdevicesContent);
             nodeDivIdevices.append(this.createImportDeviceBox());
@@ -279,7 +281,9 @@ export default class MenuIdevicesCompose {
             ) {
                 this.idevicesList.removeIdevice(params.id);
                 document.getElementById(params.id).remove();
-                const idx = this.categoriesIdevices[_('Imported')].findIndex(obj => obj.id === params.id);
+                const idx = this.categoriesIdevices[_('Imported')].findIndex(
+                    (obj) => obj.id === params.id
+                );
                 if (idx !== -1) {
                     this.categoriesIdevices[_('Imported')].splice(idx, 1);
                 }
@@ -314,10 +318,14 @@ export default class MenuIdevicesCompose {
     }
 
     rebuildImportedIdevices() {
-        this.importedIdevicesContent = document.querySelector('.idevices.type_imported .useridevices-content');
+        this.importedIdevicesContent = document.querySelector(
+            '.idevices.type_imported .useridevices-content'
+        );
         this.importedIdevicesContent.innerHTML = '';
         this.categoriesIdevices[_('Imported')].forEach((ideviceData) => {
-            this.importedIdevicesContent.append(this.elementDivIdeviceImported(ideviceData));
+            this.importedIdevicesContent.append(
+                this.elementDivIdeviceImported(ideviceData)
+            );
         });
         eXeLearning.app.project.idevices.behaviour();
     }
@@ -461,31 +469,42 @@ export default class MenuIdevicesCompose {
         btnAction.setAttribute('type', 'button');
         btnAction.setAttribute('data-bs-toggle', 'dropdown');
         btnAction.setAttribute('aria-expanded', 'false');
-        btnAction.innerHTML = '<span class="small-icon dots-menu-vertical-icon ideviceMenu"></span>';
+        btnAction.innerHTML =
+            '<span class="small-icon dots-menu-vertical-icon ideviceMenu"></span>';
 
         const dropdownMenu = document.createElement('ul');
-        dropdownMenu.classList.add('dropdown-menu', 'ideviceMenu', 'dropdown-menu-with-cols');
+        dropdownMenu.classList.add(
+            'dropdown-menu',
+            'ideviceMenu',
+            'dropdown-menu-with-cols'
+        );
 
         const liExport = document.createElement('li');
         const btnExport = document.createElement('button');
         btnExport.classList.add('dropdown-item', 'userIdeviceExport');
-        btnExport.innerHTML = '<span class="small-icon download-icon-green"></span> ' + _('Export');
+        btnExport.innerHTML =
+            '<span class="small-icon download-icon-green"></span> ' +
+            _('Export');
         liExport.appendChild(btnExport);
         btnExport.addEventListener('click', (e) => {
             e.preventDefault();
             this.downloadIdeviceZip(ideviceData);
-        })
+        });
 
         const liDelete = document.createElement('li');
         const btnDelete = document.createElement('button');
         btnDelete.classList.add('dropdown-item', 'userIdeviceDelete');
-        btnDelete.innerHTML = '<span class="small-icon delete-icon-red"></span> ' + _('Delete');
+        btnDelete.innerHTML =
+            '<span class="small-icon delete-icon-red"></span> ' + _('Delete');
         liDelete.appendChild(btnDelete);
         btnDelete.addEventListener('click', (event) => {
             event.preventDefault();
             eXeLearning.app.modals.confirm.show({
                 title: _('Delete iDevice'),
-                body: _('Delete this iDevice: %s?').replace('%s', ideviceDiv.id),
+                body: _('Delete this iDevice: %s?').replace(
+                    '%s',
+                    ideviceDiv.id
+                ),
                 confirmButtonText: _('Delete'),
                 cancelButtonText: _('Cancel'),
                 confirmExec: () => {
@@ -501,7 +520,6 @@ export default class MenuIdevicesCompose {
         return ideviceDiv;
     }
 
-
     /**
      *
      * @param {Array} ideviceData
@@ -512,8 +530,7 @@ export default class MenuIdevicesCompose {
         ideviceIcon.classList.add('idevice_icon');
         if (ideviceData.icon.type === 'exe-icon') {
             ideviceIcon.innerHTML = ideviceData.icon.name;
-        }
-        else if (ideviceData.icon.type === 'img') {
+        } else if (ideviceData.icon.type === 'img') {
             ideviceIcon.classList.add('idevice-img-icon');
             ideviceIcon.style.backgroundImage = `url(${ideviceData.path}/${ideviceData.icon.url})`;
             ideviceIcon.style.backgroundRepeat = 'no-repeat';

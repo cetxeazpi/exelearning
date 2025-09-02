@@ -250,9 +250,12 @@ export default class IdeviceBlockNode {
         this.iconElement.classList.add('exe-icon');
         this.iconElement.classList.add('box-icon', 'exe-app-tooltip');
         this.iconElement.setAttribute('data-bs-toggle', 'tooltip');
-        this.iconElement.setAttribute('data-bs-original-title', _('Select an icon'));
+        this.iconElement.setAttribute(
+            'data-bs-original-title',
+            _('Select an icon')
+        );
         this.iconElement.setAttribute('aria-label', _('Select an icon'));
-        this.iconElement.setAttribute('type', "button");
+        this.iconElement.setAttribute('type', 'button');
         // Get actual theme icon based in icon-id
         let iconData = false;
         // Get icon id

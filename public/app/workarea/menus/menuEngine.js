@@ -29,7 +29,9 @@ export default class MenuEngine {
 
     closeMenusEvent() {
         this.titleProjectButton = document.querySelector('.title-menu-button');
-        this.titleButtonDots = document.querySelector('.title-menu-button .dots-menu-vertical-icon');
+        this.titleButtonDots = document.querySelector(
+            '.title-menu-button .dots-menu-vertical-icon'
+        );
         [
             'click',
             'dragstart',
@@ -47,9 +49,13 @@ export default class MenuEngine {
                         '[data-bs-toggle="dropdown"].show'
                     );
                     if (menus.length > 0) {
-                        menus.forEach(menu => {
-                            if (!menu.contains(event.target) &&
-                                !event.target.classList.contains('dropdown-toggle')) {
+                        menus.forEach((menu) => {
+                            if (
+                                !menu.contains(event.target) &&
+                                !event.target.classList.contains(
+                                    'dropdown-toggle'
+                                )
+                            ) {
                                 menu.click();
                             }
                         });

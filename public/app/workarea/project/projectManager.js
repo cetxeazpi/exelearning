@@ -174,7 +174,7 @@ export default class projectManager {
         };
 
         // A new `new-user-editing` message is sent to notify that there is a new user editing
-        this.realTimeEventNotifier.notify(this.odeSession, {
+        this.realTimeEventNotifier.notify(this.odeId, {
             name: 'new-user-editing',
             payload: this.app.user.name,
         });
@@ -231,9 +231,6 @@ export default class projectManager {
                     if (responseSharedSession.odeId) {
                         this.odeId = responseSharedSession.odeId;
                     }
-                    if (responseSharedSession.odeSessionId) {
-                        this.odeSession = responseSharedSession.odeSessionId;
-                    }
                     window.location.replace('workarea');
                 }
             } else if (eXeLearning.user.odePlatformId) {
@@ -287,6 +284,7 @@ export default class projectManager {
                 this.app.project.odeVersion = response.odeVersionId;
                 this.app.project.odeId = response.odeId;
                 // Load project
+                this.odeId = response.odeId;
                 this.odeSession = response.odeSessionId;
                 window.location.replace('workarea' + '?jwt_token=' + jwtToken);
             }
@@ -526,7 +524,7 @@ export default class projectManager {
             let response = await this.app.api.postOdeSave(data);
             if (response && response.responseMessage == 'OK') {
                 if (!this.offlineInstallation) {
-                    this.realTimeEventNotifier.notify(this.odeSession, {
+                    this.realTimeEventNotifier.notify(this.odeId, {
                         name: 'new-content-published',
                     });
                 }
@@ -561,7 +559,7 @@ export default class projectManager {
             let response = await this.app.api.postOdeSave(data);
             if (response && response.responseMessage == 'OK') {
                 if (!this.offlineInstallation) {
-                    this.realTimeEventNotifier.notify(this.odeSession, {
+                    this.realTimeEventNotifier.notify(this.odeId, {
                         name: 'new-content-published',
                     });
                 }

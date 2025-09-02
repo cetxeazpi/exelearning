@@ -286,6 +286,7 @@ class IdeviceApiController extends DefaultApiController
 
                 if (!empty($odeNavStructureSync)) {
                     // Update CurrentOdeUsers
+                    // TODO review the $odeNavStructureSync should have odesession id
                     $this->currentOdeUsersService->insertOrUpdateFromOdeNavStructureSync($odeNavStructureSync, $databaseUser, $clientIp);
 
                     $loadOdePagStructureSyncs = true;

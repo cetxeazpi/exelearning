@@ -133,7 +133,7 @@ export default class ModalSessionLogout extends Modal {
                 this.close();
             } else {
                 window.onbeforeunload = null;
-                this.closeSession(odeParams['odeSessionId'], data);
+                this.closeSession(odeParams['odeSessionId'], eXeLearning.app.project.odeId, data);
             }
         });
     }
@@ -153,7 +153,7 @@ export default class ModalSessionLogout extends Modal {
             if (response.responseMessage == 'OK') {
                 if (!data.openOdeFile && !data.newFile) {
                     window.onbeforeunload = null;
-                    this.closeSession(odeParams['odeSessionId'], data);
+                    this.closeSession(odeParams['odeSessionId'], odeParams['odeId'], data);
                 } else if (data.openOdeFile) {
                     if (data.localOdeFile) {
                         eXeLearning.app.modals.openuserodefiles.openUserLocalOdeFilesWithOpenSession(
@@ -189,9 +189,9 @@ export default class ModalSessionLogout extends Modal {
      * closeSession
      *
      * @param {*} odeSessionId
+     * @param String odeId
      */
-    async closeSession(odeSessionId, data) {
-        console.log('asdjhjkaslhdkjashkjda');
+    async closeSession(odeSessionId, odeId, data) {
         let params = { odeSessionId: odeSessionId };
         if (data.newFile) {
             eXeLearning.app.menus.navbar.file.createSession(params);
@@ -202,7 +202,7 @@ export default class ModalSessionLogout extends Modal {
                 .then((response) => {
                     if (response.responseMessage == 'OK') {
                         if (!this.offlineInstallation) {
-                            this.realTimeEventNotifier.notify(odeSessionId, {
+                            this.realTimeEventNotifier.notify(odeId, {
                                 name: 'user-exiting',
                                 payload: eXeLearning.user.username,
                             });

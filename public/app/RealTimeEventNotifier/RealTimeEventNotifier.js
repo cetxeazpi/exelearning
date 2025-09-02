@@ -34,9 +34,9 @@ export default class RealTimeEventNotifier {
             .join('');
     }
 
-    notify(sessionId, jsonMessage) {
+    notify(odeId, jsonMessage) {
         let data = new URLSearchParams();
-        data.append('topic', sessionId);
+        data.append('topic', odeId);
         data.append('data', JSON.stringify(jsonMessage));
         data.append('id', RealTimeEventNotifier.generateUUID());
 

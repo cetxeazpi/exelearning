@@ -65,7 +65,7 @@ class CurrentOdeUsersSyncChangesService implements CurrentOdeUsersSyncChangesSer
     /**
      * Activate the user syncUpdateFlag.
      *
-     * @param string $odeSessionId
+     * @param string $odeId
      * @param string $odeIdeviceId
      * @param string $odeBlockId
      * @param string $odePageId
@@ -73,7 +73,7 @@ class CurrentOdeUsersSyncChangesService implements CurrentOdeUsersSyncChangesSer
      * @param string $actionType
      */
     public function activateSyncUpdateFlag(
-        $odeSessionId,
+        $odeId,
         $odeIdeviceId,
         $odeBlockId,
         $odePageId,
@@ -82,7 +82,7 @@ class CurrentOdeUsersSyncChangesService implements CurrentOdeUsersSyncChangesSer
         $destinationPageId,
     ) {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
-        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers($odeId, null, $odeSessionId);
+        $currentOdeUsers = $currentOdeUsersRepository->getCurrentUsers($odeId, null, null);
         $user = $user->getUsername();
         $actualCurrentOdeUser = $currentOdeUsersRepository->getCurrentSessionForUser($user);
         $actualCurrentOdeUserPageId = $actualCurrentOdeUser->getCurrentPageId();

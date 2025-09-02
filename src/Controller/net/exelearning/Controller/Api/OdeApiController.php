@@ -1021,7 +1021,10 @@ class OdeApiController extends DefaultApiController
 
         $onlyManualSave = false;
 
-        $odeFilesSync = $odeFilesSyncRepo->listOdeFilesByUser($userLoggedName, $onlyManualSave);
+        $onlyMine = $request->get('onlyMine') == 'true';
+
+        $odeFilesSync = $odeFilesSyncRepo->listOdeFilesByUser($userLoggedName, $onlyManualSave, $onlyMine);
+        // ADD shared as well
 
         // Create ode file dto
         $odeFilesDto = [];

@@ -5,7 +5,9 @@ namespace App\Service\net\exelearning\Service\Api;
 use App\Constants;
 use App\Entity\net\exelearning\Entity\CurrentOdeUsers;
 use App\Entity\net\exelearning\Entity\OdeNavStructureSync;
+use App\Entity\net\exelearning\Entity\OdeUsers;
 use App\Entity\net\exelearning\Entity\User;
+use App\Enum\Role;
 use App\Util\net\exelearning\Util\Util;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -81,7 +83,7 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
      *
      * @return CurrentOdeUsers
      */
-    public function insertOrUpdateFromOdeNavStructureSync($odeNavStructureSync, $user, $clientIp)
+    public function insertOrUpdateFromOdeNavStructureSync(OdeNavStructureSync $odeNavStructureSync, $user, $clientIp)
     {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
         $currentOdeSessionForUser = $currentOdeUsersRepository->getCurrentSessionForUser($user->getUserIdentifier());
@@ -93,6 +95,7 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
             $odeId = Util::generateId();
 
             $odeVersionId = Util::generateId();
+            // TODO check if this is correct
             $odeSessionId = $odeNavStructureSync->getOdeSessionId();
 
             // Insert into current_ode_users
@@ -557,5 +560,61 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
         $response['isAvailable'] = true;
 
         return $response;
+    }
+
+    /**
+     * Add user as the user first created of the session in order to apply theme to the rest of users.
+     *
+     * @param User   $user
+     * @param string $odeId
+     * @param role $role
+     * @param string $nodeIp
+     */
+    public function addUserToOdeIfNotExit($user, $odeId, Role $role, $nodeIp)
+    {
+        $odeUserRepository = $this->entityManager->getRepository(OdeUsers::class);
+        $currentOdeUsers = $odeUserRepository->getOdeUsers($odeId);
+        $userRepository = $this->entityManager->getRepository(User::class);
+        $username = $user->getUsername();
+
+        foreach ($currentOdeUsers as $currentOdeUser) {
+            $concurrentUser = $currentOdeUser->getUser();
+            if ($concurrentUser === $username) {
+                if ($role->value != $currentOdeUser->getRole()->value) {
+                    if ($currentOdeUser->getRole() === Role::OWNER) {
+                        $this->logger->error("Can't change user " . $concurrentUser . ' to role ' . $role->value . ' because is the ' . Role::OWNER->value . ' of the ode_id ' . $odeId );
+                        return false;
+                    } else {
+                        $currentOdeUser->setRole($role);
+                        $this->entityManager->persist($currentOdeUser);
+                        $this->entityManager->flush();
+                    }
+                }
+                // Get user form database user
+                $user = $userRepository->findBy(['email' => $concurrentUser]);
+                if (!empty($user)) {
+                    return $user[0];
+                }
+            }
+        }
+
+        // Create new OdeUsers entry for this user
+        $newOdeUser = new OdeUsers();
+        $newOdeUser->setOdeId($odeId);
+        $newOdeUser->setUser($username);
+        $newOdeUser->setRole($role);
+        $newOdeUser->setLastAction(new \DateTime());
+        $newOdeUser->setNodeIp($nodeIp);
+
+        $this->entityManager->persist($newOdeUser);
+        $this->entityManager->flush();
+
+        $sameUser = $userRepository->findBy(['email' => $username]);
+        if (!empty($sameUser)) {
+
+            return $sameUser[0];
+        } else {
+            return false;
+        }
     }
 }

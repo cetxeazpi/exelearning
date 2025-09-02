@@ -4,6 +4,7 @@ namespace App\Service\net\exelearning\Service\Api;
 
 use App\Entity\net\exelearning\Entity\OdeNavStructureSync;
 use App\Entity\net\exelearning\Entity\User;
+use App\Enum\Role;
 
 interface CurrentOdeUsersServiceInterface
 {
@@ -41,7 +42,7 @@ interface CurrentOdeUsersServiceInterface
      *
      * @return \App\Entity\net\exelearning\Entity\CurrentOdeUsers
      */
-    public function insertOrUpdateFromOdeNavStructureSync($odeNavStructureSync, $user, $clientIp);
+    public function insertOrUpdateFromOdeNavStructureSync(OdeNavStructureSync $odeNavStructureSync, $user, $clientIp);
 
     /**
      * Inserts or updates CurrentOdeUsers from root node data.
@@ -179,4 +180,14 @@ interface CurrentOdeUsersServiceInterface
      * @param User $user
      */
     public function removeActiveSyncComponentsFlag($user);
+
+    /**
+     * Add user to OdeShared
+     * @param $user
+     * @param $odeId
+     * @param Role $role
+     * @param $nodeIp
+     * @return mixed
+     */
+    public  function addUserToOdeIfNotExit($user, $odeId, Role $role, $nodeIp);
 }

@@ -4,6 +4,7 @@ namespace App\Controller\net\exelearning\Controller\Workarea;
 
 use App\Constants;
 use App\Entity\net\exelearning\Entity\User;
+use App\Enum\Role;
 use App\Helper\net\exelearning\Helper\FileHelper;
 use App\Helper\net\exelearning\Helper\UserHelper;
 use App\Service\net\exelearning\Service\Api\CurrentOdeUsersServiceInterface;
@@ -174,6 +175,7 @@ class WorkareaController extends DefaultWorkareaController
         if (!empty($odeSessionId) && !empty($sharedOdeId)) {
             $sessionUser = $this->currentOdeUsersSyncChangesService->getAnotherUserSyncSession($userLogged, $sharedOdeId, $odeSessionId);
             if (!empty($sessionUser)) {
+                $this->currentOdeUsersService->addUserToOdeIfNotExit($userLogged, $sharedOdeId, Role::COLLABORATOR, $request->getClientIp());
                 // Retrieve the session user's preferences
                 $sessionUserPreferences = $this->userHelper->getSessionUserPreferencesFromDatabase($sessionUser);
                 // Check if the 'theme' key exists in the session user's preferences

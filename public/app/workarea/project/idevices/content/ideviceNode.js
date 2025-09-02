@@ -1833,7 +1833,6 @@ export default class IdeviceNode {
             eXeLearning.app.project.structure.getSelectNodeNavId();
         let defaultOdePageId =
             eXeLearning.app.project.structure.getSelectNodePageId();
-        let odeId = eXeLearning.app.project.odeId;
         return {
             odeComponentsSyncId: this.id,
             odeVersionId: defaultVersion,
@@ -1854,8 +1853,7 @@ export default class IdeviceNode {
             odeIdeviceTypeName: this.idevice.name,
             jsonProperties: this.getJsonProperties(true),
             htmlView: this.getViewHTML(),
-            order: this.order,
-            odeId: odeId,
+            order: this.order
         };
     }
 
@@ -2593,7 +2591,7 @@ export default class IdeviceNode {
     sendPublishedNotification() {
         if (!this.offlineInstallation) {
             this.realTimeEventNotifier.notify(
-                eXeLearning.app.project.odeSession,
+                eXeLearning.app.project.odeId,
                 {
                     name: 'new-content-published',
                 }

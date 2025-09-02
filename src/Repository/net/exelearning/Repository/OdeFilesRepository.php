@@ -3,6 +3,7 @@
 namespace App\Repository\net\exelearning\Repository;
 
 use App\Entity\net\exelearning\Entity\OdeFiles;
+use App\Enum\Role;
 use App\Settings;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -123,24 +124,38 @@ class OdeFilesRepository extends ServiceEntityRepository
      *
      * @param string $userName
      * @param bool   $onlyManualSave
+     * @param bool   $onlyMine
      *
      * @return OdeFiles
      */
-    public function listOdeFilesByUser($userName, $onlyManualSave)
+    public function listOdeFilesByUser($userName, $onlyManualSave, $onlyMine = true)
     {
-        $queryBuilder = $this->createQueryBuilder('a')
-            ->andWhere('a.user = :userName')
-            ->setParameter('userName', $userName);
+        $queryBuilder = $this->createQueryBuilder('a');
+
+        if ($onlyMine) {
+            // Only show files where the user is the owner
+            $queryBuilder
+                ->andWhere('a.user = :userName')
+                ->setParameter('userName', $userName);
+        } else {
+            // Show files where user is owner OR where user is CONTRIBUTOR/VIEWER in ode_users
+            $queryBuilder
+                ->leftJoin('App\Entity\net\exelearning\Entity\OdeUsers', 'ou', 'WITH', 'ou.odeId = a.odeId AND ou.user = :userName')
+                ->andWhere('(a.user = :userName OR (ou.user = :userName AND ou.role IN (:contributorRole, :viewerRole)))')
+                ->setParameter('userName', $userName)
+                ->setParameter('contributorRole', Role::COLLABORATOR)
+                ->setParameter('viewerRole', Role::VIEWER);
+        }
 
         if ($onlyManualSave) {
             $queryBuilder
                 ->andWhere('a.isManualSave = :isManualSave')
                 ->setParameter('isManualSave', $onlyManualSave);
         }
-
+        
         $queryBuilder
             ->orderBy('a.updatedAt', 'DESC');
-
+    
         return $queryBuilder
             ->getQuery()
             ->getResult();

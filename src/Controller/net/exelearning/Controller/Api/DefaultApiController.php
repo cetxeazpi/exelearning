@@ -122,7 +122,7 @@ class DefaultApiController extends AbstractController
     }
 
     /**
-     * Publish message to mercure hub. $odeSessionId is used as topic. Returns false if no hub available.
+     * Publish message to mercure hub. $odeId is used as topic. Returns false if no hub available.
      */
     protected function publish(string $odeId, string $eventName): string|bool
     {
@@ -140,7 +140,7 @@ class DefaultApiController extends AbstractController
             $result = $this->hub->publish($update);
         } catch (\RuntimeException $exception) {
             $result = false;
-            $this->logger->error("Failed to publish event '$eventName' on topic $odeId.");
+            $this->logger->error("Failed to publish event '$eventName' on topic $odeId. " . print_r($exception, 1) );
         }
 
         return $result;

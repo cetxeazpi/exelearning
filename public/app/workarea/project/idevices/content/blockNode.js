@@ -1696,7 +1696,7 @@ export default class IdeviceBlockNode {
     sendPublishedNotification() {
         if (!this.offlineInstallation) {
             this.realTimeEventNotifier.notify(
-                eXeLearning.app.project.odeSession,
+                eXeLearning.app.project.odeId,
                 {
                     name: 'new-content-published',
                 }

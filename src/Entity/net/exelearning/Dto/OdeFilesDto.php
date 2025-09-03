@@ -38,6 +38,11 @@ class OdeFilesDto extends BaseDto
     /**
      * @var string
      */
+    protected $user;
+
+    /**
+     * @var string
+     */
     protected $versionName;
 
     /**
@@ -140,6 +145,22 @@ class OdeFilesDto extends BaseDto
     public function setTitle($title)
     {
         $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param string $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 
     /**
@@ -255,6 +276,7 @@ class OdeFilesDto extends BaseDto
         $this->setSize($odeFiles->getSize());
         $this->setIsManualSave($odeFiles->getIsManualSave());
         $this->setUpdatedAt($odeFiles->getUpdatedAt());
+        $this->setUser($odeFiles->getUser());
 
         // Get formated size
         $this->setSizeFormatted(FileUtil::formatFilesize($this->getSize()));

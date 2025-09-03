@@ -1051,7 +1051,9 @@ class OdeApiController extends DefaultApiController
         // User name
         $userLoggedName = $this->userHelper->getLoggedUserName($userLogged);
 
-        $odeFilesSync = $odeFilesSyncRepo->listRecentOdeFilesByUser($userLoggedName);
+        $onlyMine = $request->get('onlyMine') == 'true';
+
+        $odeFilesSync = $odeFilesSyncRepo->listRecentOdeFilesByUser($userLoggedName, $onlyMine);
 
         // Create ode file dto
         $odeFilesDto = [];

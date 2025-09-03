@@ -6,6 +6,7 @@ use App\Entity\net\exelearning\Entity\OdeFiles;
 use App\Enum\Role;
 use App\Settings;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -130,22 +131,7 @@ class OdeFilesRepository extends ServiceEntityRepository
      */
     public function listOdeFilesByUser($userName, $onlyManualSave, $onlyMine = true)
     {
-        $queryBuilder = $this->createQueryBuilder('a');
-
-        if ($onlyMine) {
-            // Only show files where the user is the owner
-            $queryBuilder
-                ->andWhere('a.user = :userName')
-                ->setParameter('userName', $userName);
-        } else {
-            // Show files where user is owner OR where user is CONTRIBUTOR/VIEWER in ode_users
-            $queryBuilder
-                ->leftJoin('App\Entity\net\exelearning\Entity\OdeUsers', 'ou', 'WITH', 'ou.odeId = a.odeId AND ou.user = :userName')
-                ->andWhere('(a.user = :userName OR (ou.user = :userName AND ou.role IN (:contributorRole, :viewerRole)))')
-                ->setParameter('userName', $userName)
-                ->setParameter('contributorRole', Role::COLLABORATOR)
-                ->setParameter('viewerRole', Role::VIEWER);
-        }
+        $queryBuilder = $this->getMainQuery($userName, $onlyMine);
 
         if ($onlyManualSave) {
             $queryBuilder
@@ -155,24 +141,46 @@ class OdeFilesRepository extends ServiceEntityRepository
         
         $queryBuilder
             ->orderBy('a.updatedAt', 'DESC');
-    
+
         return $queryBuilder
             ->getQuery()
             ->getResult();
+    }
+
+    private function getMainQuery($userName, $onlyMine) : QueryBuilder {
+        $queryBuilder = $this->createQueryBuilder('a');
+
+        if ($onlyMine) {
+            // Only show files where the user is the owner
+            $queryBuilder
+                    ->andWhere('a.user = :userName')
+                    ->setParameter('userName', $userName);
+        } else {
+            // Show files where user is owner OR where user is CONTRIBUTOR/VIEWER in ode_users
+            $queryBuilder
+                    ->leftJoin('App\Entity\net\exelearning\Entity\OdeUsers',
+                            'ou',
+                            'WITH',
+                            'ou.odeId = a.odeId AND ou.user = :userName')
+                    ->andWhere('(a.user = :userName OR (ou.user = :userName AND ou.role IN (:contributorRole, :viewerRole)))')
+                    ->setParameter('userName', $userName)
+                    ->setParameter('contributorRole', Role::COLLABORATOR)
+                    ->setParameter('viewerRole', Role::VIEWER);
+        }
+        return $queryBuilder;
     }
 
     /**
      * List of 3 manual save OdeFiles by user and order by most recent updated date.
      *
      * @param string $userName
+     * @param bool $onlyMine
      *
      * @return OdeFiles
      */
-    public function listRecentOdeFilesByUser($userName)
+    public function listRecentOdeFilesByUser($userName, $onlyMine = true)
     {
-        $queryBuilder = $this->createQueryBuilder('a')
-            ->andWhere('a.user = :userName')
-            ->setParameter('userName', $userName);
+        $queryBuilder = $this->getMainQuery($userName, $onlyMine);
 
         $queryBuilder
             ->andWhere('a.isManualSave = :isManualSave')

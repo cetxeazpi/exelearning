@@ -645,9 +645,9 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
             $newOdeUser = new OdeUsers();
             $newOdeUser->setOdeId($odeId);
             if (isset($userPropietary)) {
-                $newOdeUser->setUser($userPropietary);
+                $newOdeUser->setUser($userPropietary->getUsername());
             } else {
-                $newOdeUser->setUser($user);
+                $newOdeUser->setUser($user->getUsername());
             }
             $newOdeUser->setRole(Role::OWNER);
             $newOdeUser->setLastAction(new \DateTime());

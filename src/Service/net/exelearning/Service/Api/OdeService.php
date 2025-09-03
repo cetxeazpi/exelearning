@@ -243,7 +243,6 @@ class OdeService implements OdeServiceInterface
      *
      * @param string $odeId
      * @param string $odeVersionId
-     * @param string $odeSessionId
      * @param User   $user
      *
      * @return string
@@ -251,7 +250,6 @@ class OdeService implements OdeServiceInterface
     private function createElpOdeFilesToDist(
         $odeId,
         $odeVersionId,
-        $odeSessionId,
         $user,
     ) {
         $path = $this->fileHelper->getOdeSessionDistDirForUser($odeId, $user);
@@ -413,7 +411,6 @@ class OdeService implements OdeServiceInterface
                         $elpFileName = $this->createElpOdeFilesToDist(
                             $odeId,
                             $odeVersionId,
-                            $odeSessionId,
                             $user
                         );
                         $result['elpFileName'] = $elpFileName;
@@ -608,7 +605,6 @@ class OdeService implements OdeServiceInterface
         $elpFileName = $this->createElpOdeFilesToDist(
             $odeId,
             $odeVersionId,
-            $odeSessionId,
             $user
         );
         $result['elpFileName'] = $elpFileName;

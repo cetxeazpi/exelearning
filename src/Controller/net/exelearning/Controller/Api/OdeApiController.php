@@ -12,6 +12,7 @@ use App\Entity\net\exelearning\Entity\CurrentOdeUsers;
 use App\Entity\net\exelearning\Entity\OdeComponentsSync;
 use App\Entity\net\exelearning\Entity\OdeFiles;
 use App\Entity\net\exelearning\Entity\OdeNavStructureSync;
+use App\Enum\Role;
 use App\Exception\net\exelearning\Exception\Logical\AutosaveRecentSaveException;
 use App\Exception\net\exelearning\Exception\Logical\UserAlreadyOpenSessionException;
 use App\Exception\net\exelearning\Exception\Logical\UserInsufficientSpaceException;
@@ -199,6 +200,7 @@ class OdeApiController extends DefaultApiController
                         );
 
                         if ('OK' == $saveOdeResult['responseMessage']) {
+                            $this->currentOdeUsersService->addOwnerToOdeIfNotExit($databaseUser, $odeId, $request->getClientIp());
                             // Properties title
                             $odePropertiesName = $odeProperties['pp_title']->getValue();
                             if (empty($odePropertiesName)) {

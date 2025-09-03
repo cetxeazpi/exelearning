@@ -4,6 +4,7 @@ namespace App\Service\net\exelearning\Service\Api;
 
 use App\Constants;
 use App\Entity\net\exelearning\Entity\CurrentOdeUsers;
+use App\Entity\net\exelearning\Entity\OdeFiles;
 use App\Entity\net\exelearning\Entity\OdeNavStructureSync;
 use App\Entity\net\exelearning\Entity\OdeUsers;
 use App\Entity\net\exelearning\Entity\User;
@@ -615,6 +616,46 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
             return $sameUser[0];
         } else {
             return false;
+        }
+    }
+
+    /**
+     * @param $user
+     * @param $odeId
+     * @param $nodeIp
+     * @return void
+     */
+    public function addOwnerToOdeIfNotExit($user, $odeId, $nodeIp) {
+        $odeUserRepository = $this->entityManager->getRepository(OdeUsers::class);
+        $currentOdeUsers = $odeUserRepository->getOdeUsers($odeId);
+
+        if (count($currentOdeUsers) == 0) {
+
+
+            $odeFilesRepository = $this->entityManager->getRepository(OdeFiles::class);
+            $lastOdeFileByOdeId = $odeFilesRepository->getLastFileForOde($odeId);
+            if (!empty($lastOdeFileByOdeId)) {
+                $userPropietary = $lastOdeFileByOdeId->getUser();
+                // Check that last ode file is from another user
+                if ($userPropietary == $user) {
+                    $userPropietary = null;
+                }
+            }
+
+            $newOdeUser = new OdeUsers();
+            $newOdeUser->setOdeId($odeId);
+            if (isset($userPropietary)) {
+                $newOdeUser->setUser($userPropietary);
+            } else {
+                $newOdeUser->setUser($user);
+            }
+            $newOdeUser->setRole(Role::OWNER);
+            $newOdeUser->setLastAction(new \DateTime());
+            $newOdeUser->setNodeIp($nodeIp);
+
+            $this->entityManager->persist($newOdeUser);
+            $this->entityManager->flush();
+
         }
     }
 }

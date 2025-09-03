@@ -11541,6 +11541,18 @@
         <source>Free response</source>
         <target></target>
       </trans-unit>
+      <trans-unit id="this_resource_edited_by">
+        <source>This resource is being edited by:</source>
+        <target>This resource is being edited by:</target>
+      </trans-unit>
+      <trans-unit id="at_time_hhmmss">
+        <source>at</source>
+        <target>at</target>
+      </trans-unit>
+      <trans-unit id="force_unlock">
+        <source>Force Unlock</source>
+        <target>Force Unlock</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

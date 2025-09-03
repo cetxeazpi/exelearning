@@ -231,7 +231,7 @@ export default class projectManager {
             emailElement.className = 'user-editing-email';
             lockTime.className = 'user-editing-time';
             
-            description.textContent = 'This resource is being edited by:';
+            description.textContent = _('This resource is being edited by:');
             emailElement.textContent = userEmail;
 
             const dateMilis = new Date(Number(timeIdeviceEditing));
@@ -240,7 +240,7 @@ export default class projectManager {
             const minutes = String(dateMilis.getMinutes()).padStart(2, '0');
             const seconds = String(dateMilis.getSeconds()).padStart(2, '0');
 
-            lockTime.textContent = `at ${hours}:${minutes}:${seconds}`;
+            lockTime.textContent = `${_('at')} ${hours}:${minutes}:${seconds}`;
 
             messageBox.appendChild(description);
             messageBox.appendChild(emailElement);
@@ -254,7 +254,7 @@ export default class projectManager {
 
                 unlockBtn.id = `unlock-btn-${elementId}`;
                 unlockBtn.className = 'user-editing-unlock-btn';
-                unlockBtn.textContent = 'Force Unlock';
+                unlockBtn.textContent = _('Force Unlock');
                 unlockBtn.style.display = 'block';
 
                 messageBox.appendChild(unlockBtn);

@@ -428,19 +428,18 @@ export default class IdeviceNode {
         });
 
         // Main keyboard events for each idevice block
-        // Para cada bloque
         eXeLearning.app.project.idevices.components.blocks.forEach((blockNode) => {
             const blockElement = blockNode.blockContent;
             if (!blockElement) return;
 
-            // Eventos a nivel de bloque principal
+            // Main block level events
             const keyEvents = ['keydown', 'keypress'];
 
             keyEvents.forEach(event => {
-                blockElement.addEventListener(event, resetTimer, true); // 'true' para captura
+                blockElement.addEventListener(event, resetTimer, true);
             });
 
-            // Y tambi�n en el iframe de TinyMCE (como ya haces)
+            // Also in the TinyMCE iframe
             const iframe = blockElement.querySelector('iframe.tox-edit-area__iframe');
             if (iframe?.contentDocument?.body) {
                 keyEvents.forEach(event => {

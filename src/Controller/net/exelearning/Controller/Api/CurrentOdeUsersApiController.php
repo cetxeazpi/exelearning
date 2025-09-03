@@ -19,6 +19,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mercure\HubInterface;
+use App\Service\net\exelearning\Service\Api\ResourceLockService;
 
 #[Route('/api/current-ode-users-management/current-ode-user')]
 class CurrentOdeUsersApiController extends DefaultApiController
@@ -30,13 +32,18 @@ class CurrentOdeUsersApiController extends DefaultApiController
     private $currentOdeUsersService;
     private $currentOdeUsersSyncChangesService;
 
-    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger, UserHelper $userHelper, CurrentOdeUsersServiceInterface $currentOdeUsersService, CurrentOdeUsersSyncChangesServiceInterface $currentOdeUsersSyncChangesService)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger, UserHelper $userHelper,
+        CurrentOdeUsersServiceInterface $currentOdeUsersService,
+        CurrentOdeUsersSyncChangesServiceInterface $currentOdeUsersSyncChangesService,
+        HubInterface $hub,)
     {
         $this->userHelper = $userHelper;
         $this->currentOdeUsersService = $currentOdeUsersService;
         $this->currentOdeUsersSyncChangesService = $currentOdeUsersSyncChangesService;
 
-        parent::__construct($entityManager, $logger);
+        parent::__construct($entityManager, $logger, $hub);
     }
 
     #[Route('/get/user/by/current/component/id', methods: ['GET'], name: 'get_user_by_current_component_id')]
@@ -122,13 +129,20 @@ class CurrentOdeUsersApiController extends DefaultApiController
     {
         $responseData = [];
 
+        // Debug the incoming request
+        $this->logger->info('Force Unlock Debug - Request payload: ' . json_encode($request->request->all()));
+
+        // Get parameters with proper type casting
+        $odeComponentFlag = $request->get('odeComponentFlag');
+
         // Get parameters
         $odeId = $request->get('odeId');
         $odeNavStructureSyncId = $request->get('odeNavStructureSyncId');
         $odeBlockId = $request->get('blockId');
         $odeIdeviceId = $request->get('odeIdeviceId');
+        $actionType = $request->get('actionType');
+        $timeIdeviceEditing = $request->get('timeIdeviceEditing');
         // Active or deactive flags
-        $odeComponentFlag = $request->get('odeComponentFlag');
         $odePagStructureFlag = $request->get('odePagStructureFlag');
         $odeNavStructureFlag = $request->get('odeNavStructureFlag');
 
@@ -147,16 +161,43 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $odeNavStructureSyncRepo = $this->entityManager->getRepository(OdeNavStructureSync::class);
         $odeNavStructureSync = $odeNavStructureSyncRepo->find($odeNavStructureSyncId);
 
-        // Check current_idevice of concurrent users
-        $isIdeviceFree = $this->currentOdeUsersService->checkIdeviceCurrentOdeUsers($odeId, $odeIdeviceId, $odeBlockId, $user);
+        $this->publishOdeBlockStatusEvent(
+            $odeId,
+            $odeBlockId,
+            $odeIdeviceId,
+            $actionType,
+            $databaseUser->getUserIdentifier(),
+            $odeComponentFlag,
+            $timeIdeviceEditing
+        );
 
-        if ($isIdeviceFree) {
-            // Update CurrentOdeUsers
-            $this->currentOdeUsersService->updateCurrentIdevice($odeNavStructureSync, $odeBlockId, $odeIdeviceId, $databaseUser, $odeCurrentUsersFlags);
+        try {
 
-            $responseData['responseMessage'] = 'OK';
-        } else {
-            $responseData['responseMessage'] = 'An user has an idevice open on this block';
+            // Check current_idevice of concurrent users
+            $isIdeviceFree = $this->currentOdeUsersService->checkIdeviceCurrentOdeUsers(
+                $odeId,
+                $odeIdeviceId,
+                $odeBlockId,
+                $user
+            );
+
+            if ($isIdeviceFree) {
+                // Update CurrentOdeUsers
+                $this->currentOdeUsersService->updateCurrentIdevice($odeNavStructureSync, $odeBlockId, $odeIdeviceId, $databaseUser, $odeCurrentUsersFlags);
+                $responseData['responseMessage'] = 'OK';
+            } else {
+
+                $responseData['responseMessage'] = 'An user has an idevice open on this block';
+            }
+
+        } catch (\Exception $e) {
+            // Make sure to release the lock in case of error
+            $this->logger->error('Error updating user flag: ' . $e->getMessage());
+
+            return new JsonResponse(
+                ['responseMessage' => 'Internal server error'],
+                JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         $jsonData = $this->getJsonSerialized($responseData);
@@ -220,6 +261,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $odePagId = $request->get('odePageId');
         $destinationPageId = $request->get('destinationPageId');
         $actionType = $request->get('actionType');
+        $timeIdeviceEditing = $request->get('timeIdeviceEditing');
 
         $user = $this->getUser();
         $databaseUser = $this->userHelper->getDatabaseUser($user);
@@ -232,6 +274,17 @@ class CurrentOdeUsersApiController extends DefaultApiController
         } else {
             $this->currentOdeUsersSyncChangesService->activateSyncUpdateFlag($odeId, $odeIdeviceId, $odeBlockId, $odePagId, $user, $actionType, $destinationPageId);
         }
+
+        $this->publishOdeBlockStatusEvent(
+            $odeId,
+            $odeBlockId,
+            $odeIdeviceId,
+            $actionType,
+            $databaseUser->getUserIdentifier(),
+            $odeComponentFlag,
+            $timeIdeviceEditing
+        );
+
         $responseData['responseMessage'] = 'OK';
         $jsonData = $this->getJsonSerialized($responseData);
 
@@ -343,7 +396,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
 
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
         $currentOdeSessionForUser = $currentOdeUsersRepository->getCurrentSessionForUser($user->getUserIdentifier());
-        
+
         // Get the user odeId (primary identifier) and odeSessionId (for backward compatibility)
         $currentOdeId = $currentOdeSessionForUser->getOdeId();
         $currentOdeSessionId = $currentOdeSessionForUser->getOdeSessionId();
@@ -355,7 +408,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
 
         // Generate share URL using odeSessionId (for backward compatibility) but include both parameters
         $response['shareSessionUrl'] = $symfonyFullUrl.Constants::SLASH.self::URL_WORKAREA_ROUTE.self::SESSION_ID_URL_PARAMETER.$currentOdeSessionId.'&shareCodeOdeId='.$currentOdeId;
-        
+
         // Include both identifiers for the system to use
         $response['odeId'] = $currentOdeId;
         $response['odeSessionId'] = $currentOdeSessionId;
@@ -395,5 +448,25 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $jsonData = $this->getJsonSerialized($response);
 
         return new JsonResponse($jsonData, $this->status, [], true);
+    }
+
+    private function publishOdeBlockStatusEvent(
+        string $odeSessionId,
+        string $odeBlockId,
+        string $odeIdeviceId,
+        ?string $actionType,
+        string $userEmail,
+        ?string $odeComponentFlag = null,
+        ?string $timeIdeviceEditing
+    ): void {
+        $this->publish(
+            $odeSessionId,
+            'blockId:' . $odeBlockId .
+            ',odeIdeviceId:' . $odeIdeviceId .
+            ',actionType:' . $actionType .
+            ',userEmail:' . $userEmail .
+            ',odeComponentFlag:' . $odeComponentFlag .
+            ',timeIdeviceEditing:' . $timeIdeviceEditing
+        );
     }
 }

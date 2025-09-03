@@ -11517,6 +11517,18 @@
         <source>Free response</source>
         <target>Respuesta libre</target>
       </trans-unit>
+      <trans-unit id="this_resource_edited_by">
+        <source>This resource is being edited by:</source>
+        <target>Este recurso está siendo editado por:</target>
+      </trans-unit>
+      <trans-unit id="at_time_hhmmss">
+        <source>at</source>
+        <target>a las</target>
+      </trans-unit>
+      <trans-unit id="force_unlock">
+        <source>Force Unlock</source>
+        <target>Forzar desbloqueo</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

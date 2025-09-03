@@ -54,6 +54,13 @@ export default class IdeviceNode {
                 eXeLearning.mercure.jwtSecretKey
             );
         }
+
+        this.timeIdeviceEditing = null;
+		this.editUnlockDevice = null;
+        this.inactivityCleanup = null;
+        this.inactivityTimer = null; // To save the timer directly
+
+        document.addEventListener("DOMContentLoaded", this.checkIdeviceIsEditing());
     }
 
     /**
@@ -348,31 +355,264 @@ export default class IdeviceNode {
     }
 
     /*********************************
-     * BUTTONS EVENTS */
+            BUTTONS EVENTS
+     *********************************/
+    /**
+     * Tracks inactivity in a DOM element
+     * @param {string} elementId - ID of element to monitor
+     * @param {number} timeoutSeconds - Seconds of inactivity to wait
+     * @param {function} callback - Function to execute after inactivity
+     * @returns {function} Cleanup function to stop tracking
+     */
+    inactivityInElement(elementId, timeoutSeconds, callback) {
+        console.log(`Setting up inactivity tracker for ${elementId}`);
+
+        if (!elementId) {
+            console.error('Element ID is undefined');
+            return () => {};
+        }
+
+        const element = document.getElementById(elementId);
+        if (!element) {
+            console.log(`Element with ID ${elementId} not found`);
+            return () => {};
+        }
+
+        // Create storage for multiple iDevices if it doesn't exist
+        if (!this.inactivityTimers) this.inactivityTimers = {};
+        if (!this.inactiveStates) this.inactiveStates = {};
+
+        // Clears any previous timers for that item
+        if (this.inactivityTimers[elementId]) {
+            clearTimeout(this.inactivityTimers[elementId]);
+        }
+
+        const resetTimer = () => {
+            console.log(`[Inactivity] Event triggered on ${elementId}`);
+            
+            // If inactive ? now active ? send HIDE_UNLOCK
+            if (this.inactiveStates[elementId]) {
+                console.log(`[Inactivity] User is active again, sending HIDE_UNLOCK for ${elementId}`);
+                this.updateResourceLockStatus({
+                    odeIdeviceId: this.odeIdeviceId,
+                    blockId: this.blockId,
+                    actionType: 'HIDE_UNLOCK_BUTTON',
+                    destinationPageId: this.block?.pageId ?? ''
+                });
+                this.inactiveStates[elementId] = false;
+            }
+
+            // Reset the timer
+            clearTimeout(this.inactivityTimers[elementId]);
+            this.inactivityTimers[elementId] = setTimeout(() => {
+                const now = new Date();
+                const odeElementSave = document.getElementById('saveIdevice' + elementId);
+
+                console.log(`[${now.toLocaleTimeString()}] Inactivity timeout for ${elementId}. Sending FORCE_UNLOCK...`);
+
+                this.inactiveStates[elementId] = true; // Now inactive
+
+                if (odeElementSave) callback(); // Show unlock button
+                this.updateResourceLockStatus({
+                    odeIdeviceId: this.odeIdeviceId,
+                    blockId: this.blockId,
+                    actionType: 'FORCE_UNLOCK',
+                    destinationPageId: this.block?.pageId ?? ''
+                });
+            }, timeoutSeconds * 1000);
+        };
+
+        const events = ['mousedown', 'mousemove', 'mouseover', 'scroll', 'touchstart', 'click'];
+        events.forEach(event => {
+            element.addEventListener(event, resetTimer);
+        });
+
+        // Main keyboard events for each idevice block
+        eXeLearning.app.project.idevices.components.blocks.forEach((blockNode) => {
+            const blockElement = blockNode.blockContent;
+            if (!blockElement) return;
+
+            // Main block level events
+            const keyEvents = ['keydown', 'keypress'];
+
+            keyEvents.forEach(event => {
+                blockElement.addEventListener(event, resetTimer, true);
+            });
+
+            // Also in the TinyMCE iframe
+            const iframe = blockElement.querySelector('iframe.tox-edit-area__iframe');
+            if (iframe?.contentDocument?.body) {
+                keyEvents.forEach(event => {
+                    iframe.contentDocument.body.addEventListener(event, resetTimer, true);
+                });
+            }
+        });
+
+        // Init tracking
+        resetTimer();
+
+        // Returns cleanup function
+        return () => {
+            clearTimeout(this.inactivityTimers[elementId]);
+            delete this.inactivityTimers[elementId];
+            delete this.inactiveStates[elementId];
+            console.log(`Inactivity tracker cleaned for ${elementId}`);
+
+            events.forEach(event => {
+                element.removeEventListener(event, resetTimer);
+            });
+        };
+    }
 
     /**
-     *
+     * Updates the resource lock status with the specified parameters
+     * @param {Object} params - Configuration object
+     * @param {boolean} [params.odeSessionId=false] - Session ID (default: false)
+     * @param {string|null} [params.odeNavStructureSyncId=null] - Navigation sync ID (default: null) 
+     * @param {string} params.odeIdeviceId - The ID of the iDevice element
+     * @param {string} params.blockId - The ID of the containing block
+     * @param {string} params.actionType - Action type ('EDIT_BLOCK', 'FORCE_UNLOCK', etc.)
+     * @param {string} [params.destinationPageId=''] - Destination page ID (default: empty string)
+     * @example
+     * // Minimal usage
+     * updateResourceLockStatus({
+     *   odeIdeviceId: 'idevice123',
+     *   blockId: 'block456', 
+     *   actionType: 'FORCE_UNLOCK'
+     * });
+     * 
+     * // Full usage
+     * updateResourceLockStatus({
+     *   odeSessionId: true,
+     *   odeNavStructureSyncId: 'nav789',
+     *   odeIdeviceId: 'idevice123',
+     *   blockId: 'block456',
+     *   actionType: 'EDIT_BLOCK',
+     *   destinationPageId: 'page101'
+     * });
+     */
+    updateResourceLockStatus({
+        odeSessionId = false, 
+        odeNavStructureSyncId = null, 
+        odeIdeviceId, 
+        blockId, 
+        actionType, 
+        destinationPageId = ''
+    } = {}) {
+        eXeLearning.app.project.updateCurrentOdeUsersUpdateFlag(
+            odeSessionId,
+            odeNavStructureSyncId,
+            blockId,
+            odeIdeviceId,
+            actionType,
+            destinationPageId,
+            this.timeIdeviceEditing
+        );
+    }
+
+    /**
+     * Configures the inactivity tracker with proper cleanup
      */
     addBehaviourSaveIdeviceButton() {
-        this.ideviceButtons
-            .querySelector('#saveIdevice' + this.odeIdeviceId)
+        this.timeIdeviceEditing = new Date().getTime();
+
+        const element = document.getElementById(this.odeIdeviceId);
+        
+        const handleTimeout = () => {
+        	this.editUnlockDevice = 'FORCE_UNLOCK';
+            this.updateResourceLockStatus({
+                odeIdeviceId: this.odeIdeviceId,
+                blockId: this.blockId, 
+                actionType: 'FORCE_UNLOCK'
+            });
+        };
+
+        const setupInactivityTracker = (timeout) => {
+            // Clean previous tracker if exists
+            if (this.inactivityCleanup) {
+                this.inactivityCleanup();
+            }
+            
+            // Setup new tracker
+            this.inactivityCleanup = this.inactivityInElement(
+                this.odeIdeviceId,
+                timeout,
+                handleTimeout
+            );
+        };
+
+        // Initialize with API timeout or fallback
+        const initializeTracker = () => {
+            try {
+                eXeLearning.app.api.getResourceLockTimeout()
+                    .then(timeout => {
+                        console.log('Lock timeout:', timeout);
+                        setupInactivityTracker(timeout);
+                    })
+                    .catch(error => {
+                        console.error('Timeout API error:', error);
+                        setupInactivityTracker(900000); // 15 min fallback
+                    });
+            } catch (error) {
+                console.error('Error:', error);
+                setupInactivityTracker(900000); // 15 min fallback
+            }
+        };
+
+        // Save button handler
+        this.ideviceButtons.querySelector('#saveIdevice' + this.odeIdeviceId)
             .addEventListener('click', (e) => {
                 if (e.target.disabled) return;
+                
                 this.toogleIdeviceButtonsState(true);
                 // Save and desactivate component flag
                 this.save(true);
                 // Create the "Add Text" button
                 this.createAddTextBtn();
-                // Activate update flag
-                eXeLearning.app.project.updateCurrentOdeUsersUpdateFlag(
-                    false,
-                    null,
-                    this.blockId,
-                    this.odeIdeviceId,
-                    'EDIT',
-                    null
-                );
+                
+                this.updateResourceLockStatus({
+                    odeIdeviceId: this.odeIdeviceId,
+                    blockId: this.blockId,
+                    actionType: 'EDIT_BLOCK'
+                });
+                
+                // Reset inactivity timer on save
+                setupInactivityTracker(900000); // Reuse current timeout or fallback
             });
+
+        // Initial setup
+        initializeTracker();
+    }
+
+    /**
+     * Cleanup resources when needed
+     */
+    cleanupInactivityTracker() {
+        // Debug
+        console.log('Attempting to clean up timer');
+
+        if (this.inactivityCleanup) {
+            console.log('Cleaning up inactivity timer');
+            this.inactivityCleanup();
+            this.inactivityCleanup = null;
+        } else {
+            console.log('No inactivityCleanup function to call');
+        }
+
+        // Clear the timer directly
+        if (this.inactivityTimer) {
+            console.log('Clearing inactivity timer directly');
+            clearTimeout(this.inactivityTimer);
+            this.inactivityTimer = null;
+        }
+    }
+
+    checkIdeviceIsEditing() {
+        this.updateResourceLockStatus({
+            odeIdeviceId: this.odeIdeviceId,
+            blockId: this.blockId, 
+            actionType: 'LOADING'
+        });
     }
 
     /**
@@ -415,6 +655,7 @@ export default class IdeviceNode {
      *
      */
     addBehaviourEditionIdeviceButton() {
+        this.timeIdeviceEditing = new Date().getTime();
         this.ideviceButtons
             .querySelector('#editIdevice' + this.odeIdeviceId)
             .addEventListener('click', (e) => {
@@ -426,7 +667,9 @@ export default class IdeviceNode {
                         true,
                         this.odeNavStructureSyncId,
                         this.blockId,
-                        this.odeIdeviceId
+                        this.odeIdeviceId,
+                        null,
+                        this.timeIdeviceEditing
                     )
                     .then((response) => {
                         if (response.responseMessage !== 'OK') {
@@ -457,6 +700,7 @@ export default class IdeviceNode {
      *
      */
     addBehaviourEditionIdeviceDoubleClick() {
+        this.timeIdeviceEditing = new Date().getTime();
         this.ideviceBody.addEventListener('dblclick', (element) => {
             if (this.mode == 'export') {
                 eXeLearning.app.project
@@ -464,7 +708,9 @@ export default class IdeviceNode {
                         true,
                         this.odeNavStructureSyncId,
                         this.blockId,
-                        this.odeIdeviceId
+                        this.odeIdeviceId,
+                        null,
+                        this.timeIdeviceEditing
                     )
                     .then((response) => {
                         if (response.responseMessage !== 'OK') {
@@ -513,7 +759,8 @@ export default class IdeviceNode {
                         this.odeNavStructureSyncId,
                         this.blockId,
                         this.odeIdeviceId,
-                        true
+                        true,
+                        null
                     )
                     .then((response) => {
                         if (response.responseMessage !== 'OK') {
@@ -572,6 +819,9 @@ export default class IdeviceNode {
                     body: _('Discard all changes?'),
                     confirmButtonText: _('Yes'),
                     confirmExec: () => {
+                        // Clear the inactivity timer
+                        this.cleanupInactivityTracker();
+
                         // Create the "Add Text" button
                         this.createAddTextBtn();
                         eXeLearning.app.project.changeUserFlagOnEdit(

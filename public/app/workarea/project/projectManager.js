@@ -203,7 +203,7 @@ export default class projectManager {
 
             setTimeout(() => {
                 this.app.api.postEditIdevice({
-                    odeSessionId: this.odeSession,
+                    odeId: this.odeId,
                     odeNavStructureSyncId: this.app.project.structure.nodeSelected.getAttribute('nav-id'),
                     blockId: blockId,
                     odeIdeviceId: odeIdeviceId,
@@ -278,7 +278,7 @@ export default class projectManager {
      */
     unlockResource(blockId, odeIdeviceId) {
         this.app.api.postEditIdevice({
-            odeSessionId: this.odeSession,
+            odeId: this.odeId,
             odeNavStructureSyncId: this.app.project.structure.nodeSelected.getAttribute('nav-id'),
             blockId: blockId,
             odeIdeviceId: odeIdeviceId,

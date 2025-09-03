@@ -1107,7 +1107,9 @@ export default class IdevicesEngine {
                     'nav-id'
                 ),
                 ideviceNode.blockId,
-                ideviceNode.ideviceContent.id
+                ideviceNode.ideviceContent.id,
+                true,
+                new Date().getTime()
             );
             ideviceNode.goWindowToIdevice();
         }

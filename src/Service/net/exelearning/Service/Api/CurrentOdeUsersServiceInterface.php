@@ -190,4 +190,13 @@ interface CurrentOdeUsersServiceInterface
      * @return mixed
      */
     public  function addUserToOdeIfNotExit($user, $odeId, Role $role, $nodeIp);
+
+    /**
+     * Adds owner to Ode
+     * @param $user
+     * @param $odeId
+     * @param $nodeIp
+     * @return mixed
+     */
+    public  function addOwnerToOdeIfNotExit($user, $odeId, $nodeIp);
 }

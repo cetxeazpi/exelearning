@@ -156,6 +156,7 @@ export default class modalOpenUserOdeFiles extends Modal {
         let thColumns = [
             '',
             _('Title'),
+            _('Owner'),
             _('Version'),
             _('Size'),
             _('Date'),
@@ -164,6 +165,7 @@ export default class modalOpenUserOdeFiles extends Modal {
         ];
         let thColumnsTypes = [
             'checkbox',
+            'string',
             'string',
             'float',
             'float',
@@ -214,6 +216,7 @@ export default class modalOpenUserOdeFiles extends Modal {
         // Title
         row.append(this.makeCheckboxTd(odeFile));
         row.append(this.makeTitleOdeFileTd(odeFile));
+        row.append(this.makeOwnerFileTd(odeFile));
         row.append(this.makeVersionNameOdeFileTd(odeFile));
         row.append(this.makeSizeTd(odeFile));
         row.append(this.makeDateTd(odeFile));
@@ -251,24 +254,26 @@ export default class modalOpenUserOdeFiles extends Modal {
     makeCheckboxTd(odeFile) {
         let checkboxVisibleTd = document.createElement('td');
         checkboxVisibleTd.classList.add('ode-file-check');
-        let checkboxInput = document.createElement('input');
-        checkboxInput.setAttribute('type', 'checkbox');
-        checkboxInput.addEventListener('change', () => {
-            if (checkboxInput.checked) {
-                if (!this.odeFiles.includes(odeFile.id)) {
-                    this.odeFiles.push(odeFile.id);
-                }
-                this.makeDeleteButtonFooter(this.odeFiles);
-            } else {
-                this.odeFiles = this.odeFiles.filter(
-                    function (value, index, arr) {
-                        return value !== odeFile.id;
+        if (this.iAmTheOwner(odeFile)) {
+            let checkboxInput = document.createElement('input');
+            checkboxInput.setAttribute('type', 'checkbox');
+            checkboxInput.addEventListener('change', () => {
+                if (checkboxInput.checked) {
+                    if (!this.odeFiles.includes(odeFile.id)) {
+                        this.odeFiles.push(odeFile.id);
                     }
-                );
-                this.removeDeleteButtonFooter(this.odeFiles);
-            }
-        });
-        checkboxVisibleTd.append(checkboxInput);
+                    this.makeDeleteButtonFooter(this.odeFiles);
+                } else {
+                    this.odeFiles = this.odeFiles.filter(
+                        function (value, index, arr) {
+                            return value !== odeFile.id;
+                        }
+                    );
+                    this.removeDeleteButtonFooter(this.odeFiles);
+                }
+            });
+            checkboxVisibleTd.append(checkboxInput);
+        }
         return checkboxVisibleTd;
     }
 
@@ -316,6 +321,19 @@ export default class modalOpenUserOdeFiles extends Modal {
         }
 
         return titleTd;
+    }
+    /**
+     *
+     * @param {*} odeFile
+     * @returns
+     */
+    makeOwnerFileTd(odeFile) {
+        let ownerTd = document.createElement('td');
+        ownerTd.classList.add('ode-file-owner');
+        ownerTd.setAttribute('id', odeFile.fileName + odeFile.user);
+        ownerTd.innerHTML = this.iAmTheOwner(odeFile) ? _('Mine') : odeFile.user;
+
+        return ownerTd;
     }
 
     /**
@@ -392,47 +410,59 @@ export default class modalOpenUserOdeFiles extends Modal {
 
     /**
      *
+     * Return if current user is the owner
+     * @param odeFile
+     * @returns {boolean}
+     */
+    iAmTheOwner(odeFile) {
+        return odeFile.user === eXeLearning.user.username
+    }
+
+    /**
+     *
      * @param {*} odeFile
      * @returns
      */
     makeDeleteButtonTd(odeFile) {
         let deleteTd = document.createElement('td');
         deleteTd.setAttribute('class', 'ode-file-actions');
-        let deleteButton = document.createElement('div');
-        deleteButton.setAttribute(
-            'class',
-            'exe-icon open-user-ode-file-action open-user-ode-file-action-delete'
-        );
-        deleteButton.setAttribute('title', _('Delete'));
-        deleteButton.innerHTML = 'delete_forever';
-        // Add event
-        deleteButton.addEventListener('click', () => {
-            eXeLearning.app.modals.confirm.show({
-                title: _('Delete project'),
-                body: _(
-                    'Do you want to delete the project (elp)? This cannot be undone.'
-                ),
-                confirmButtonText: _('Delete'),
-                cancelButtonText: _('Cancel'),
-                confirmExec: () => {
-                    // Delete ode file
-                    this.deleteOdeFileEvent(odeFile.id);
-                },
-                closeExec: () => {
-                    // Return to ode files list
-                    setTimeout(() => {
-                        eXeLearning.app.menus.navbar.file.openUserOdeFilesEvent();
-                    }, this.timeMax);
-                },
-                cancelExec: () => {
-                    // Return to ode files list
-                    setTimeout(() => {
-                        eXeLearning.app.menus.navbar.file.openUserOdeFilesEvent();
-                    }, this.timeMax);
-                },
+        if (this.iAmTheOwner(odeFile)) {
+            let deleteButton = document.createElement('div');
+            deleteButton.setAttribute(
+                'class',
+                'exe-icon open-user-ode-file-action open-user-ode-file-action-delete'
+            );
+            deleteButton.setAttribute('title', _('Delete'));
+            deleteButton.innerHTML = 'delete_forever';
+            // Add event
+            deleteButton.addEventListener('click', () => {
+                eXeLearning.app.modals.confirm.show({
+                    title: _('Delete project'),
+                    body: _(
+                        'Do you want to delete the project (elp)? This cannot be undone.'
+                    ),
+                    confirmButtonText: _('Delete'),
+                    cancelButtonText: _('Cancel'),
+                    confirmExec: () => {
+                        // Delete ode file
+                        this.deleteOdeFileEvent(odeFile.id);
+                    },
+                    closeExec: () => {
+                        // Return to ode files list
+                        setTimeout(() => {
+                            eXeLearning.app.menus.navbar.file.openUserOdeFilesEvent();
+                        }, this.timeMax);
+                    },
+                    cancelExec: () => {
+                        // Return to ode files list
+                        setTimeout(() => {
+                            eXeLearning.app.menus.navbar.file.openUserOdeFilesEvent();
+                        }, this.timeMax);
+                    },
+                });
             });
-        });
-        deleteTd.appendChild(deleteButton);
+            deleteTd.appendChild(deleteButton);
+        }
 
         return deleteTd;
     }

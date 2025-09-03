@@ -962,6 +962,8 @@ export default class NavbarFile {
                     let odeSessionId = eXeLearning.app.project.odeSession;
                     let odeVersionId = eXeLearning.app.project.odeVersion;
                     let odeId = eXeLearning.app.project.odeId;
+                    // TODO show in a recent if I'm the owner or not
+                    let iAmTheOwner = eXeLearning.user.username === odeFile.user;
 
                     let params = {
                         odeSessionId: odeSessionId,

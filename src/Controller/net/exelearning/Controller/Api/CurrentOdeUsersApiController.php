@@ -260,6 +260,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $odeBlockId = $request->get('blockId');
         $odePagId = $request->get('odePageId');
         $destinationPageId = $request->get('destinationPageId');
+        $odeComponentFlag = $request->get('odeComponentFlag');
         $actionType = $request->get('actionType');
         $timeIdeviceEditing = $request->get('timeIdeviceEditing');
 
@@ -451,7 +452,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
     }
 
     private function publishOdeBlockStatusEvent(
-        string $odeSessionId,
+        string $odeId,
         string $odeBlockId,
         string $odeIdeviceId,
         ?string $actionType,
@@ -460,7 +461,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
         ?string $timeIdeviceEditing
     ): void {
         $this->publish(
-            $odeSessionId,
+            $odeId,
             'blockId:' . $odeBlockId .
             ',odeIdeviceId:' . $odeIdeviceId .
             ',actionType:' . $actionType .

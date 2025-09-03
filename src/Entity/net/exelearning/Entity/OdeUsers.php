@@ -7,8 +7,8 @@ use App\Repository\net\exelearning\Repository\OdeUsersRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'ode_users')]
-#[ORM\Index(name: 'index2', columns: ['ode_id'])]
-#[ORM\Index(name: 'index3', columns: ['user'])]
+#[ORM\Index(name: 'ode_users_index1', columns: ['ode_id'])]
+#[ORM\Index(name: 'ode_users_index2', columns: ['user'])]
 #[ORM\Entity(repositoryClass: OdeUsersRepository::class)]
 class OdeUsers extends BaseEntity
 {

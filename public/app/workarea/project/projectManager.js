@@ -185,7 +185,7 @@ export default class projectManager {
         const elementId = params['elementId'];
 
         const existingOverlay = targetBlock.querySelector('.user-editing-overlay');
-        const odeElementSave = document.getElementById('saveIdevice' + odeIdeviceId)
+        const odeElementSave = document.getElementById('saveIdevice' + odeIdeviceId);
 
         if (existingOverlay) existingOverlay.remove(); // Delete if existing overlay
 

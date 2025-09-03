@@ -1191,7 +1191,8 @@ class OdeApiController extends DefaultApiController
         }
 
         $this->entityManager->flush();
-        $this->publish($odeId, 'new-content-published');
+        // Prevent reload when editing a resource
+        // $this->publish($odeId, 'new-content-published');
 
         $jsonData = $this->getJsonSerialized($responseData);
 

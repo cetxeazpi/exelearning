@@ -620,7 +620,6 @@ class OdeXmlUtil
             $odeNavStructureSync = new OdeNavStructureSync();
 
             // OdeNavStructureSync fields
-            $odeNavStructureSync->setOdeSessionId($odeSessionId);
             $odeNavStructureSync->setOdePageId($xmlOdeNavStructure->{self::ODE_XML_TAG_FIELD_ODE_PAGE_ID});
             $odeNavStructureSync->setOdeParentPageId($xmlOdeNavStructure->{self::ODE_XML_TAG_FIELD_ODE_PARENT_PAGE_ID});
             $odeNavStructureSync->setPageName($xmlOdeNavStructure->{self::ODE_XML_TAG_FIELD_PAGE_NAME});
@@ -1407,7 +1406,6 @@ class OdeXmlUtil
                 $odeNavStructureSync = new OdeNavStructureSync();
 
                 // OdeNavStructureSync fields
-                $odeNavStructureSync->setOdeSessionId($odeSessionId);
                 $odeNavStructureSync->setOdePageId($newOdePageId);
 
                 // Add page to parent

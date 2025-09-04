@@ -150,16 +150,19 @@ export default class ConcurrentUsers {
         let buttonMore = this.concurrentUsersElement.querySelector(
             '#button-more-exe-concurrent-users'
         );
-        if (this.currentUsers.length > 1) {
+        
+        if (this.currentUsers && Array.isArray(this.currentUsers) && this.currentUsers.length > 1) {
             buttonMore.style.display = 'block';
+            buttonMore.title = `${_('Users online')} (${this.currentUsers.length})`;
         } else {
             buttonMore.style.display = 'none';
+            buttonMore.title = `${_('Users online')}`;
         }
-        buttonMore.title = `${_('Users online')} (${this.currentUsers.length})`;
+        
         buttonMore.addEventListener('click', () => {
             // Show modal
             eXeLearning.app.modals.info.show({
-                title: `${_('Users online')} (${this.currentUsers.length})`,
+                title: `${_('Users online')} (${this.currentUsers?.length || 0})`,
                 body: this.makeBodyHTMLConcurrentUsersModal(),
             });
             // Add tooltips

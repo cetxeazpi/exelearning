@@ -132,16 +132,20 @@ class CurrentOdeUsersApiController extends DefaultApiController
         // Debug the incoming request
         $this->logger->info('Force Unlock Debug - Request payload: ' . json_encode($request->request->all()));
 
-        // Get parameters with proper type casting
-        $odeComponentFlag = $request->get('odeComponentFlag');
+        $user = $this->getUser();
+        $databaseUser = $this->userHelper->getDatabaseUser($user);
 
         // Get parameters
         $odeId = $request->get('odeId');
-        $odeNavStructureSyncId = $request->get('odeNavStructureSyncId');
         $odeBlockId = $request->get('blockId');
         $odeIdeviceId = $request->get('odeIdeviceId');
         $actionType = $request->get('actionType');
+        $userEmail = $databaseUser->getUserIdentifier();
+        $odeComponentFlag = $request->get('odeComponentFlag');
         $timeIdeviceEditing = $request->get('timeIdeviceEditing');
+
+        $odeNavStructureSyncId = $request->get('odeNavStructureSyncId');
+
         // Active or deactive flags
         $odePagStructureFlag = $request->get('odePagStructureFlag');
         $odeNavStructureFlag = $request->get('odeNavStructureFlag');
@@ -153,10 +157,6 @@ class CurrentOdeUsersApiController extends DefaultApiController
             'odeNavStructureFlag' => $odeNavStructureFlag,
         ];
 
-        $user = $this->getUser();
-
-        $databaseUser = $this->userHelper->getDatabaseUser($user);
-
         // Get odeNav
         $odeNavStructureSyncRepo = $this->entityManager->getRepository(OdeNavStructureSync::class);
         $odeNavStructureSync = $odeNavStructureSyncRepo->find($odeNavStructureSyncId);
@@ -166,7 +166,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
             $odeBlockId,
             $odeIdeviceId,
             $actionType,
-            $databaseUser->getUserIdentifier(),
+            $userEmail,
             $odeComponentFlag,
             $timeIdeviceEditing
         );
@@ -254,18 +254,20 @@ class CurrentOdeUsersApiController extends DefaultApiController
     #[Route('/current/ode/users/update/flag', methods: ['POST'], name: 'current_ode_users_update_flag')]
     public function currentOdeUsersUpdateFlagAction(Request $request)
     {
-        // Get parameters
-        $odeId = $request->get('odeId');
-        $odeIdeviceId = $request->get('odeIdeviceId');
-        $odeBlockId = $request->get('blockId');
-        $odePagId = $request->get('odePageId');
-        $destinationPageId = $request->get('destinationPageId');
-        $odeComponentFlag = $request->get('odeComponentFlag');
-        $actionType = $request->get('actionType');
-        $timeIdeviceEditing = $request->get('timeIdeviceEditing');
-
         $user = $this->getUser();
         $databaseUser = $this->userHelper->getDatabaseUser($user);
+
+        // Get parameters
+        $odeId = $request->get('odeId');
+        $odeBlockId = $request->get('blockId');
+        $odeIdeviceId = $request->get('odeIdeviceId');
+        $actionType = $request->get('actionType');
+        $userEmail = $databaseUser->getUserIdentifier();
+        $odeComponentFlag = $request->get('odeComponentFlag');
+        $timeIdeviceEditing = $request->get('timeIdeviceEditing');
+
+        $odePagId = $request->get('odePageId');
+        $destinationPageId = $request->get('destinationPageId');
 
         // If not empty odPagId synchronize changes even if you're not on the same page
         if (!empty($odePagId)) {
@@ -281,7 +283,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
             $odeBlockId,
             $odeIdeviceId,
             $actionType,
-            $databaseUser->getUserIdentifier(),
+            $userEmail,
             $odeComponentFlag,
             $timeIdeviceEditing
         );

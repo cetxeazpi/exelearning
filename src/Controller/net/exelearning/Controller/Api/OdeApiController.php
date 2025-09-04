@@ -56,7 +56,7 @@ class OdeApiController extends DefaultApiController
         CurrentOdeUsersServiceInterface $currentOdeUsersService,
         CurrentOdeUsersSyncChangesServiceInterface $currentOdeUsersSyncChangesService,
         TranslatorInterface $translator,
-        HubInterface $hub,
+        HubInterface $hub
     ) {
         $this->fileHelper = $fileHelper;
         $this->odeService = $odeService;
@@ -114,9 +114,16 @@ class OdeApiController extends DefaultApiController
     
 
         if (!empty($currentOdeUsers)) {
+            $onlineTimeoutMinutes = $_ENV['USER_ONLINE_TIMEOUT_MINUTES'] ?? null;
+
+            if (is_numeric($onlineTimeoutMinutes) && $onlineTimeoutMinutes > 0) {
+                $onlineTimeoutMinutes = (int)$onlineTimeoutMinutes;
+            } else {
+                $onlineTimeoutMinutes = 5; // Default value
+            }
+
             foreach ($currentOdeUsers as $currentOdeUser) {
-                // TODO add it to env variables and to Readme
-                $isOnline = $currentOdeUser->getLastAction() > new \DateTime('-5 minute');
+                $isOnline = $currentOdeUser->getLastAction() > new \DateTime('-' . $onlineTimeoutMinutes . ' minute');
                 $responseData->addCurrentUser($currentOdeUser->getUser(), $isOnline);
             }
         } else {

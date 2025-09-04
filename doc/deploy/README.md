@@ -51,6 +51,7 @@ You can customize the deployment by setting these environment variables:
 - `APP_SECRET`: Secret key for Symfony (required for production)
 - `TEST_USER_EMAIL`, `TEST_USER_USERNAME`, `TEST_USER_PASSWORD`: Credentials for the first test user
 - `MERCURE_JWT_SECRET_KEY`: Secret key for Mercure real-time updates
+- `USER_ONLINE_TIMEOUT_MINUTES`: Timeout in minutes to consider a user as online in collaborative sessions (default: 5)
 
 ### Database-Specific Variables
 - PostgreSQL:

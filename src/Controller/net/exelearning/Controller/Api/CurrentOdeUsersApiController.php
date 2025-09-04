@@ -37,7 +37,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
         LoggerInterface $logger, UserHelper $userHelper,
         CurrentOdeUsersServiceInterface $currentOdeUsersService,
         CurrentOdeUsersSyncChangesServiceInterface $currentOdeUsersSyncChangesService,
-        HubInterface $hub,)
+        HubInterface $hub)
     {
         $this->userHelper = $userHelper;
         $this->currentOdeUsersService = $currentOdeUsersService;

@@ -20,6 +20,11 @@ class UserDto extends BaseDto
     protected $initials;
 
     /**
+     * @var bool
+     */
+    protected $isOnline;
+
+    /**
      * @var string
      */
     protected $gravatarUrl;
@@ -75,6 +80,22 @@ class UserDto extends BaseDto
     public function setInitials($initials)
     {
         $this->initials = $initials;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsOnline()
+    {
+        return $this->isOnline;
+    }
+
+    /**
+     * @param bool $isOnline
+     */
+    public function setIsOnline($isOnline)
+    {
+        $this->isOnline = $isOnline;
     }
 
     /**

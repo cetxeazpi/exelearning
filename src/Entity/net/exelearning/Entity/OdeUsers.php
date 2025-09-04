@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'ode_users')]
 #[ORM\Index(name: 'ode_users_index1', columns: ['ode_id'])]
 #[ORM\Index(name: 'ode_users_index2', columns: ['user'])]
+#[ORM\Index(name: 'ode_users_index3', columns: ['ode_id', 'user'])]
 #[ORM\Entity(repositoryClass: OdeUsersRepository::class)]
 class OdeUsers extends BaseEntity
 {

@@ -12,6 +12,7 @@ use App\Entity\net\exelearning\Entity\CurrentOdeUsers;
 use App\Entity\net\exelearning\Entity\OdeComponentsSync;
 use App\Entity\net\exelearning\Entity\OdeFiles;
 use App\Entity\net\exelearning\Entity\OdeNavStructureSync;
+use App\Entity\net\exelearning\Entity\OdeUsers;
 use App\Enum\Role;
 use App\Exception\net\exelearning\Exception\Logical\AutosaveRecentSaveException;
 use App\Exception\net\exelearning\Exception\Logical\UserAlreadyOpenSessionException;
@@ -101,16 +102,22 @@ class OdeApiController extends DefaultApiController
             return new JsonResponse(['error' => 'Offline mode enabled, operation not allowed'], JsonResponse::HTTP_FORBIDDEN);
         }
 
+
         $responseData = new OdeCurrentUsersDto();
         $responseData->setOdeSessionId($odeSessionId);
 
-        $repo = $this->entityManager->getRepository(CurrentOdeUsers::class);
+        $odeUserRepository = $this->entityManager->getRepository(OdeUsers::class);
 
-        $currentOdeUsers = $repo->getCurrentUsers($odeId, null, $odeSessionId);
+        $odeUserRepository->updateLastAction($odeId, $this->getUser()->getUsername());
+
+        $currentOdeUsers = $odeUserRepository->getOdeUsers($odeId);
+    
 
         if (!empty($currentOdeUsers)) {
             foreach ($currentOdeUsers as $currentOdeUser) {
-                $responseData->addCurrentUser($currentOdeUser->getUser());
+                // TODO add it to env variables and to Readme
+                $isOnline = $currentOdeUser->getLastAction() > new \DateTime('-5 minute');
+                $responseData->addCurrentUser($currentOdeUser->getUser(), $isOnline);
             }
         } else {
             $this->logger->error('data not found', ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]);

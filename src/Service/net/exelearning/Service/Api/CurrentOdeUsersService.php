@@ -631,7 +631,6 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
 
         if (count($currentOdeUsers) == 0) {
 
-
             $odeFilesRepository = $this->entityManager->getRepository(OdeFiles::class);
             $lastOdeFileByOdeId = $odeFilesRepository->getLastFileForOde($odeId);
             if (!empty($lastOdeFileByOdeId)) {

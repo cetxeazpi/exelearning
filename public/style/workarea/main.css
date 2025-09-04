@@ -1526,6 +1526,11 @@ body[mode="advanced"] #main #head #exe-mode-check {
     transition: var(--tr-04);
 }
 
+.modal .exe-concurrent-users .user-current-letter-icon.user-disconnected {
+    border: 1px solid var(--remove);
+    background-color: var(--error-bg);
+}
+
 .modal #change-block-icon-modal-content .option-block-icon.exe-icon {
     content: "select_all";
     font-family: var(--icons-ff);
@@ -4751,7 +4756,7 @@ body > .tooltip{
     margin-left: 3px;
     height: 33px;
   }
-  .main-menu-right button,{
+  .main-menu-right button {
       margin-left: 5px!important;
   }
   

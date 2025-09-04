@@ -118,6 +118,8 @@ export default class ConcurrentUsers {
                 let nodeConcurrentUser = document.createElement('div');
                 nodeConcurrentUser.classList.add('user-current-letter-icon');
                 nodeConcurrentUser.classList.add('exe-top-icons');
+                nodeConcurrentUser.classList.add(user.isOnline ? 'user-isOnline' : 'user-disconnected');
+
                 nodeConcurrentUser.setAttribute('title', username);
 
                 if (user.gravatarUrl) {

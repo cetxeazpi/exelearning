@@ -98,14 +98,17 @@ class OdeCurrentUsersDto extends BaseDto
 
     /**
      * @param string $currentUserName
+     * @param bool $isOnline
      */
-    public function addCurrentUser($currentUserName)
+    public function addCurrentUser($currentUserName, bool $isOnline)
     {
         $currentUser = new UserDto();
         $currentUser->setUsername($currentUserName);
 
         // We set the initial to the first char of userName
         $currentUser->setInitials(mb_substr($currentUser->getUserName(), 0, 1));
+
+        $currentUser->setIsOnline($isOnline);
 
         $this->currentUsers[] = $currentUser;
 

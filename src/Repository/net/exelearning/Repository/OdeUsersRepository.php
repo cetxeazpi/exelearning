@@ -46,4 +46,18 @@ class OdeUsersRepository extends ServiceEntityRepository
         ;
     }
 
+    public function updateLastAction($odeId, $user) {
+
+        $currentOdeUsers = $this->findBy(['odeId' => $odeId, 'user' => $user]);
+        if (count($currentOdeUsers) > 0) {
+            $currentOdeUser = $currentOdeUsers[0];
+            $currentOdeUser->setLastAction(new \DateTime());
+
+            $em = $this->getEntityManager();
+            $em->persist($currentOdeUser);
+            $em->flush();
+    
+        }
+    }
+
 }

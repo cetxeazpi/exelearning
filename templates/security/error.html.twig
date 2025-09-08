@@ -28,10 +28,10 @@
                 <div class="d-block mt-4 mb-3 pb-1">
                   <h1 class="lead mb-2">eXeLearning</h1>
                 </div>
-                
+
                 {# Generic error title #}
                 <h2 class="visually-hidden">Error</h2>
-                
+
                 {# Show dynamic error message if available #}
                 {% if error is defined and error is not empty %}
                   <div class="alert alert-danger show mb-4" role="alert">
@@ -46,11 +46,11 @@
 
                 {# Return button to login page or workarea if user is already authenticated #}
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                  <a href="{{ path('workarea') }}" class="btn btn-dark">{{ 'Return to work area' | trans }}</a>
+                  <a href="{{ path('workarea') }}" class="btn button-primary">{{ 'Return to work area' | trans }}</a>
                 {% else %}
-                  <a href="{{ path('app_login') }}" class="btn btn-dark">{{ 'Return to login' | trans }}</a>
+                  <a href="{{ path('app_login') }}" class="btn button-primary">{{ 'Return to login' | trans }}</a>
                 {% endif %}
-                
+
               </div>
             </div>
           </div>

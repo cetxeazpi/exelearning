@@ -686,7 +686,7 @@ class OdeApiController extends DefaultApiController
         // Publishes logout event, differentiating between button click and other exits
         $this->publish(
             $odeId, 
-            $request->get('isLogoutButton') ?? true ? 'user-exiting' : 'user-exiting-newFile',
+            filter_var($request->get('isLogoutButton'), FILTER_VALIDATE_BOOL) ? 'user-exiting' : 'user-exiting-newFile',
             ['username' => $this->getUser()->getUsername()]
         );
 

@@ -532,6 +532,9 @@ export default class NavbarFile {
             .postCheckCurrentOdeUsers(params)
             .then((response) => {
                 if (response['leaveEmptySession']) {
+                    // Remove 'exe-concurrent-users' icon on 'New Project' menu to avoid confusion
+                    document.getElementById('exe-concurrent-users')?.remove();
+
                     this.createSession(params);
                 } else {
                     eXeLearning.app.modals.sessionlogout.show(data);

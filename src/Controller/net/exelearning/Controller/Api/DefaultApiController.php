@@ -124,15 +124,21 @@ class DefaultApiController extends AbstractController
     /**
      * Publish message to mercure hub. $odeId is used as topic. Returns false if no hub available.
      */
-    protected function publish(string $odeId, string $eventName): string|bool
+    protected function publish(string $odeId, string $eventName, array $payload = []): string|bool
     {
         if (null === $this->hub) {
             return false;
         }
+        
+        $data = ['name' => $eventName];
+        if (!empty($payload)) {
+            $data['payload'] = $payload;
+        }
+        
         $uuid = Uuid::v4();
         $update = new Update(
             $odeId,
-            json_encode(['name' => $eventName]),
+            json_encode($data),
             false,
             $uuid,
         );

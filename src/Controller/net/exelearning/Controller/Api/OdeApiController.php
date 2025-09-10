@@ -102,16 +102,13 @@ class OdeApiController extends DefaultApiController
             return new JsonResponse(['error' => 'Offline mode enabled, operation not allowed'], JsonResponse::HTTP_FORBIDDEN);
         }
 
-
         $responseData = new OdeCurrentUsersDto();
         $responseData->setOdeSessionId($odeSessionId);
 
         $odeUserRepository = $this->entityManager->getRepository(OdeUsers::class);
-
         $odeUserRepository->updateLastAction($odeId, $this->getUser()->getUsername());
 
         $currentOdeUsers = $odeUserRepository->getOdeUsers($odeId);
-    
 
         if (!empty($currentOdeUsers)) {
             $onlineTimeoutMinutes = $_ENV['USER_ONLINE_TIMEOUT_MINUTES'] ?? null;
@@ -124,7 +121,7 @@ class OdeApiController extends DefaultApiController
 
             foreach ($currentOdeUsers as $currentOdeUser) {
                 $isOnline = $currentOdeUser->getLastAction() > new \DateTime('-' . $onlineTimeoutMinutes . ' minute');
-                $responseData->addCurrentUser($currentOdeUser->getUser(), $isOnline);
+                $responseData->addCurrentUser($currentOdeUser->getUser(), $isOnline, $odeId, $odeSessionId);
             }
         } else {
             $this->logger->error('data not found', ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]);
@@ -654,6 +651,7 @@ class OdeApiController extends DefaultApiController
 
         // collect parameters
         $odeSessionId = $request->get('odeSessionId');
+        $odeId = $request->get('odeId');
 
         $user = $this->getUser();
         $databaseUser = $this->userHelper->getDatabaseUser($user);
@@ -684,6 +682,13 @@ class OdeApiController extends DefaultApiController
 
             $responseData['responseMessage'] = 'error: invalid data';
         }
+
+        // Publishes logout event, differentiating between button click and other exits
+        $this->publish(
+            $odeId, 
+            $request->get('isLogoutButton') ?? true ? 'user-exiting' : 'user-exiting-newFile',
+            ['username' => $this->getUser()->getUsername()]
+        );
 
         $jsonData = $this->getJsonSerialized($responseData);
 

@@ -30,6 +30,16 @@ class UserDto extends BaseDto
     protected $gravatarUrl;
 
     /**
+     * @var string
+     */
+    protected $odeId;
+
+        /**
+     * @var string
+     */
+    protected $odeSessionId;
+
+    /**
      * @return string
      */
     public function getUsername()
@@ -106,5 +116,37 @@ class UserDto extends BaseDto
     public function getGravatarUrl()
     {
         return $this->gravatarUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOdeId()
+    {
+        return $this->odeId;
+    }
+
+    /**
+     * @param string $odeId
+     */
+    public function setOdeId($odeId)
+    {
+        $this->odeId = $odeId;
+    }
+
+        /**
+     * @return string
+     */
+    public function getOdeSessionId()
+    {
+        return $this->odeSessionId;
+    }
+
+    /**
+     * @param string $odeSessionId
+     */
+    public function setOdeSessionId($odeSessionId)
+    {
+        $this->odeSessionId = $odeSessionId;
     }
 }

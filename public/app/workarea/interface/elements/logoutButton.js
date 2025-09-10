@@ -29,6 +29,7 @@ export default class LogoutButton {
             let odeVersionId = eXeLearning.app.project.odeVersion;
             let odeId = eXeLearning.app.project.odeId;
             let params = {
+                isLogoutButton : true, // Identifies when logout is initiated from the logout button
                 odeSessionId: odeSessionId,
                 odeVersionId: odeVersionId,
                 odeId: odeId,

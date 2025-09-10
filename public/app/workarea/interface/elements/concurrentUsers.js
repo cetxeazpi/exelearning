@@ -12,18 +12,24 @@ export default class ConcurrentUsers {
 
     async updateConcurrentUsers(event) {
         let message = event.detail;
-
-        console.log('new-user-editing, actualizando usuarios');
+        
+        // Shows the event type dynamically in 'Console', using the object's own type
+        console.log(`${event.type}, actualizando usuarios`);
         // Remove last users to add current users
         if (event.detail.user != this.app.user.name) {
             let userDiv = this.concurrentUsersElement.querySelectorAll('div');
-            // if (userDiv) {
-            //   userDiv.forEach(function (childDiv) {
-            //     childDiv.parentElement.removeChild(childDiv);
-            //   });
-            // }
+
+            // Remove unnecessary elements in 'exe-concurrent-users'
+            userDiv?.forEach(childDiv => childDiv.parentElement?.removeChild(childDiv));
+
             // Update user info menu
             await this.loadConcurrentUsers();
+
+            // Handle user-exiting event
+            if (event.type.includes('user-exiting')) {
+                await this.handleUserExiting(event.detail.user, event.type.includes('newFile'));
+            }
+
             await this.addConcurrentUsersToElement();
             await this.addEventClickButtonMore();
             // Update user info modal only if it's open
@@ -38,6 +44,21 @@ export default class ConcurrentUsers {
                     }
                 );
             }
+        }
+    }
+
+    async handleUserExiting(username, isNewFile) {
+        if (this.currentUsers && Array.isArray(this.currentUsers)) {
+            this.currentUsers = this.currentUsers.map(user => {
+                if (user.username === username.username) {
+                    console.log(`Usuario marcado como offline: ${username.username}`);
+                    return {
+                        ...user,
+                        isOnline: isNewFile ? 'newFile' : false
+                    };
+                }
+                return user;
+            });
         }
     }
 
@@ -59,6 +80,10 @@ export default class ConcurrentUsers {
         });
 
         window.addEventListener('user-exiting', async (event) => {
+            this.updateConcurrentUsers(event);
+        });
+
+        window.addEventListener('user-exiting-newFile', async (event) => {
             this.updateConcurrentUsers(event);
         });
     }
@@ -116,9 +141,11 @@ export default class ConcurrentUsers {
                 let initials = user.initials.toUpperCase();
                 let username = user.username;
                 let nodeConcurrentUser = document.createElement('div');
+                let userClass = user.isOnline === 'newFile' ? 'onlineAnotherProject' : (user.isOnline ? 'isOnline' : 'disconnected');
+                
                 nodeConcurrentUser.classList.add('user-current-letter-icon');
                 nodeConcurrentUser.classList.add('exe-top-icons');
-                nodeConcurrentUser.classList.add(user.isOnline ? 'user-isOnline' : 'user-disconnected');
+                nodeConcurrentUser.classList.add(`user-${userClass}`);
 
                 nodeConcurrentUser.setAttribute('title', username);
 
@@ -144,7 +171,6 @@ export default class ConcurrentUsers {
 
     /**
      * Add event click to "more" button
-     *
      */
     addEventClickButtonMore() {
         let buttonMore = this.concurrentUsersElement.querySelector(

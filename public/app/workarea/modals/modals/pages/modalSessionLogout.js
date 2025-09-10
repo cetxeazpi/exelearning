@@ -192,9 +192,18 @@ export default class ModalSessionLogout extends Modal {
      * @param String odeId
      */
     async closeSession(odeSessionId, odeId, data) {
-        let params = { odeSessionId: odeSessionId };
+        let params = { 
+            odeSessionId: odeSessionId,
+            odeId: odeId 
+        };
         if (data.newFile) {
             eXeLearning.app.menus.navbar.file.createSession(params);
+
+            this.realTimeEventNotifier.notify(odeId, {
+                name: 'user-exiting',
+                payload: eXeLearning.user.username,
+            });
+            
             this.close();
         } else {
             await eXeLearning.app.api

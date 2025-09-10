@@ -10,6 +10,7 @@ use App\Entity\net\exelearning\Entity\CurrentOdeUsersSyncChanges;
 use App\Entity\net\exelearning\Entity\OdeComponentsSync;
 use App\Entity\net\exelearning\Entity\OdeNavStructureSync;
 use App\Entity\net\exelearning\Entity\OdePagStructureSync;
+use App\Entity\net\exelearning\Entity\OdeUsers;
 use App\Helper\net\exelearning\Helper\UserHelper;
 use App\Service\net\exelearning\Service\Api\CurrentOdeUsersServiceInterface;
 use App\Service\net\exelearning\Service\Api\CurrentOdeUsersSyncChangesServiceInterface;
@@ -290,6 +291,9 @@ class CurrentOdeUsersApiController extends DefaultApiController
 
         $responseData['responseMessage'] = 'OK';
         $jsonData = $this->getJsonSerialized($responseData);
+
+        $odeUserRepository = $this->entityManager->getRepository(OdeUsers::class);
+        $odeUserRepository->updateLastAction($odeId, $this->getUser()->getUsername());
 
         return new JsonResponse($jsonData, $this->status, [], true);
     }

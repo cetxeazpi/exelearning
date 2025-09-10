@@ -122,6 +122,8 @@
     --bg-light-gray: #e9e9e9;
     --bg-lighter-gray: #fdfdfd;
     --file-odd: #f2f2f2;
+    --onlineAnotherProject: #00F;
+    --onlineAnotherProject-bg: #008;
 
     /* Sizes */
     --min-node-content-height: 60px;
@@ -1529,6 +1531,12 @@ body[mode="advanced"] #main #head #exe-mode-check {
 .modal .exe-concurrent-users .user-current-letter-icon.user-disconnected {
     border: 1px solid var(--remove);
     background-color: var(--error-bg);
+}
+
+/* Identify user logout from collaborative project but still online, normally when creates a 'New file' */
+.modal .exe-concurrent-users .user-current-letter-icon.user-onlineAnotherProject {
+    border: 1px solid var(--onlineAnotherProject);
+    background-color: var(--onlineAnotherProject-bg);
 }
 
 .modal #change-block-icon-modal-content .option-block-icon.exe-icon {

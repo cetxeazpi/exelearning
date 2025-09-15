@@ -16,6 +16,7 @@ import ModalAbout from './modals/pages/modalAbout.js';
 import ModalProperties from './modals/pages/modalProperties.js';
 import ModalOpenUserOdeFiles from './modals/pages/modalOpenUserOdeFiles.js';
 import ModalSessionLogout from './modals/pages/modalSessionLogout.js';
+import ModalPublishToGithub from './modals/pages/modalPublishToGithub.js';
 
 export default class ModalsManagement {
     constructor(app) {
@@ -38,6 +39,7 @@ export default class ModalsManagement {
         this.properties = null;
         this.openuserodefiles = null;
         this.sessionlogout = null;
+        this.publishtogithub = null;
     }
 
     /**
@@ -62,6 +64,8 @@ export default class ModalsManagement {
         this.properties = new ModalProperties(this);
         this.openuserodefiles = new ModalOpenUserOdeFiles(this);
         this.sessionlogout = new ModalSessionLogout(this);
+        this.publishtogithub = new ModalPublishToGithub(this);
+        this.publishtogithub.init();
     }
 
     /**
@@ -86,6 +90,7 @@ export default class ModalsManagement {
         this.properties.behaviour();
         this.openuserodefiles.behaviour();
         this.sessionlogout.behaviour();
+        this.publishtogithub.behaviour();
     }
 
     /**
@@ -113,6 +118,7 @@ export default class ModalsManagement {
             this.properties,
             this.openuserodefiles,
             this.sessionlogout,
+            this.publishtogithub,
         ];
     }
 

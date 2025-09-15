@@ -36,6 +36,14 @@
                             <li><a id="navbar-button-export-epub3" class="dropdown-item" href="#">{{ "ePub3" | trans }}</a></li>
                         </ul>
                     </li>
+                    {% if config.enableGithubPublishing %}
+                        <li class="dropdown dropend exe-online">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="dropdownPublish" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ "Publish" | trans }}</a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownPublish">
+                                <li><a id="navbar-button-publish-github" class="dropdown-item" href="#">{{ "Publish to GitHub" | trans }}</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
                     {% if config.isOfflineInstallation %}
                         <li class="exe-offline"><a class="dropdown-item" id="navbar-button-open-offline" href="#" data-shortcut="Mod+O" aria-keyshortcuts="Control+O Meta+O">{{ "Open" | trans }}</a></li>
                         <li class="dropdown-divider exe-offline"></li>

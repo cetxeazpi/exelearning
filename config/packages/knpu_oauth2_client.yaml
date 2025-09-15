@@ -1,0 +1,10 @@
+knpu_oauth2_client:
+    clients:
+        github:
+            type: github
+            client_id: '%env(string:GITHUB_OAUTH_CLIENT_ID)%'
+            client_secret: '%env(string:GITHUB_OAUTH_CLIENT_SECRET)%'
+            redirect_route: oauth_github_check
+            redirect_params: { }
+            # Scopes configured at runtime in controller when redirecting
+

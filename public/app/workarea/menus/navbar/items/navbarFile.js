@@ -81,6 +81,9 @@ export default class NavbarFile {
         this.exportEPUB3AsButton = this.menu.navbar.querySelector(
             '#navbar-button-exportas-epub3'
         );
+        this.publishGithubButton = this.menu.navbar.querySelector(
+            '#navbar-button-publish-github'
+        );
         this.exportXmlPropertiesButton = this.menu.navbar.querySelector(
             '#navbar-button-export-xml-properties'
         );
@@ -132,6 +135,7 @@ export default class NavbarFile {
         this.setExportXmlPropertiesAsEvent();
         this.setImportXmlPropertiesEvent();
         this.setLeftPanelsTogglerEvents();
+        this.setPublishGithubEvent();
     }
 
     /**************************************************************************************
@@ -476,6 +480,18 @@ export default class NavbarFile {
         this.importXmlPropertiesButton.addEventListener('click', () => {
             if (eXeLearning.app.project.checkOpenIdevice()) return;
             this.importXmlPropertiesEvent();
+        });
+    }
+
+    /**
+     * Publish to GitHub
+     * File -> Export/Download as -> Publish to GitHub
+     */
+    setPublishGithubEvent() {
+        if (!this.publishGithubButton) return;
+        this.publishGithubButton.addEventListener('click', () => {
+            if (eXeLearning.app.project.checkOpenIdevice()) return;
+            eXeLearning.app.modals.publishtogithub.showFromMenu();
         });
     }
 

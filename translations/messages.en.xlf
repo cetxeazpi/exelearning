@@ -11541,6 +11541,94 @@
         <source>Free response</source>
         <target></target>
       </trans-unit>
-    </body>
-  </file>
+      <trans-unit id="gh_publish_label" resname="Publish to GitHub">
+        <source>Publish to GitHub</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_authenticate" resname="Authenticate with GitHub">
+        <source>Authenticate with GitHub</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_select_repo" resname="Select repository">
+        <source>Select repository</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_create_repo" resname="Create repository">
+        <source>Create repository</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_publish" resname="Publish">
+        <source>Publish</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_overwrite" resname="Overwrite contents?">
+        <source>Overwrite contents?</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_publishing" resname="Publishing…">
+        <source>Publishing…</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_published" resname="Published">
+        <source>Published</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_view_site" resname="View site">
+        <source>View site</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_confirm_target" resname="Confirm publish target">
+        <source>Confirm publish target</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_reload" resname="Reload">
+        <source>Reload</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_public" resname="Public">
+        <source>Public</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_private" resname="Private">
+        <source>Private</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_name" resname="Name">
+        <source>Name</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_filter" resname="Filter">
+        <source>Filter</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_authorize_here" resname="Authorize here">
+        <source>Authorize here</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_verification_url" resname="Verification URL">
+        <source>Verification URL</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_code" resname="Code">
+        <source>Code</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_copy" resname="Copy">
+        <source>Copy</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_waiting_auth" resname="Waiting for authorization...">
+        <source>Waiting for authorization...</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_authorized_loading" resname="Authorized. Loading repositories...">
+        <source>Authorized. Loading repositories...</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="gh_code_expired" resname="Code expired.">
+        <source>Code expired.</source>
+        <target></target>
+      </trans-unit>
+  </body>
+</file>
 </xliff>

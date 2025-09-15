@@ -245,6 +245,7 @@ class WorkareaController extends DefaultWorkareaController
                     'defaultTheme' => $defaultTheme,
                     'isOfflineInstallation' => $isOfflineInstallation,
                     'platformIntegration' => $platformIntegration,
+                    'enableGithubPublishing' => $this->getParameter('enable_github_publishing'),
                 ],
                 'symfony' => [
                     'odeSessionId' => $odeSessionId,
@@ -261,6 +262,7 @@ class WorkareaController extends DefaultWorkareaController
                     'ideviceTypeBase' => $ideviceTypeBase,
                     'ideviceTypeUser' => $ideviceTypeUser,
                     'ideviceVisibilityPreferencePre' => $ideviceVisibilityPreferencePre,
+                    'githubPagesBranch' => $this->getParameter('github.pages_branch'),
                 ],
                 'mercure' => $mercure,
             ]

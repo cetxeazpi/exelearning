@@ -55,6 +55,11 @@ parameters:
     app.logs.dir:  '%env(default:logs_default_dir:LOG_DIR)%'
     app.cache.dir: '%env(default:cache_default_dir:CACHE_DIR)%'
 
+    # GitHub settings
+    github.api_base: '%env(default::string:GITHUB_API_BASE)%'
+    github.pages_branch: '%env(default::string:GITHUB_PAGES_BRANCH)%'
+    enable_github_publishing: '%env(bool:ENABLE_GITHUB_PUBLISHING)%'
+
 services:
     Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
     # default configuration for services in *this* file
@@ -186,6 +191,32 @@ services:
         decorates: translator
         arguments:
             - '@.inner'
+
+    # GitHub publish services
+    App\Security\TokenEncryptor:
+        arguments:
+            $appSecret: '%env(APP_SECRET)%'
+
+    App\Service\GithubClientFactory:
+        arguments:
+            $apiBase: '%github.api_base%'
+
+    App\Service\PagesEnabler:
+        arguments:
+            $apiBase: '%github.api_base%'
+
+    App\Service\GithubPublisher:
+        arguments:
+            $defaultBranch: '%github.pages_branch%'
+
+    App\Controller\GithubPublishController:
+        arguments:
+            $pagesBranch: '%github.pages_branch%'
+
+    App\Service\GithubDeviceFlow:
+        arguments:
+            $clientId: '%env(string:GITHUB_OAUTH_CLIENT_ID)%'
+            $clientSecret: '%env(string:GITHUB_OAUTH_CLIENT_SECRET)%'
 
 twig:
     globals:

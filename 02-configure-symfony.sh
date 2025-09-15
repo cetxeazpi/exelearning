@@ -44,9 +44,11 @@ assert_users_table_exists() {
 
 # --- Main ---
 
-# If DB_HOST is set, check the availability of the database
-if [ -n "$DB_HOST" ]; then
-    check_db_availability "$DB_HOST" "$DB_PORT"
+# DB wait: only for non-SQLite with host and port present
+if [ "${DB_DRIVER}" != "pdo_sqlite" ] && [ -n "${DB_HOST}" ] && [ -n "${DB_PORT}" ]; then
+    check_db_availability "${DB_HOST}" "${DB_PORT}"
+else
+    echo -e "${GREEN}Skipping DB wait (driver=${DB_DRIVER:-unset} host=${DB_HOST:-unset} port=${DB_PORT:-unset}).${NC}"
 fi
 
 # Execute pre-configuration commands if set
@@ -66,7 +68,7 @@ echo -e "${GREEN}Creating/updating database tables (schema:update)${NC}"
 php bin/console doctrine:schema:update --force
 
 # Run migrations
-echo -e "${GREEN}Running migrations{NC}"
+echo -e "${GREEN}Running migrations${NC}"
 php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --all-or-nothing
 
 # Fails the script if 'users' isn't there

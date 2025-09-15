@@ -8,6 +8,7 @@ export default class ApiCallManager {
         this.apiUrlParameters = `${this.apiUrlBase}${this.apiUrlBasePath}/api/parameter-management/parameters/data/list`;
         this.func = new ApiCallBaseFunctions();
         this.endpoints = {};
+        this.githubApiBase = `${app.eXeLearning.symfony.baseURL}${app.eXeLearning.symfony.basePath}`;
     }
 
     /**
@@ -358,6 +359,54 @@ export default class ApiCallManager {
         url = url.replace('{odeSessionId}', odeSessionId);
         url = url.replace('{ideviceDirName}', ideviceDirName);
         return await this.func.get(url);
+    }
+
+    /**
+     * GitHub: list repositories (requires OAuth)
+     */
+    async getGithubRepos() {
+        const url = `${this.githubApiBase}/api/publish/github/repos`;
+        return await this.func.get(url);
+    }
+
+    /**
+     * GitHub: create repository
+     */
+    async postGithubCreateRepo(params) {
+        const url = `${this.githubApiBase}/api/publish/github/repos`;
+        return await this.func.post(url, params);
+    }
+
+    /**
+     * GitHub: check repo status
+     */
+    async postGithubCheck(params) {
+        const url = `${this.githubApiBase}/api/publish/github/check`;
+        return await this.func.post(url, params);
+    }
+
+    /**
+     * GitHub: publish exported site
+     */
+    async postGithubPublish(params) {
+        const url = `${this.githubApiBase}/api/publish/github/publish`;
+        return await this.func.post(url, params);
+    }
+
+    /**
+     * GitHub device flow: start
+     */
+    async postGithubDeviceStart(params) {
+        const url = `${this.githubApiBase}/api/publish/github/device/start`;
+        return await this.func.post(url, params);
+    }
+
+    /**
+     * GitHub device flow: poll
+     */
+    async postGithubDevicePoll(params) {
+        const url = `${this.githubApiBase}/api/publish/github/device/poll`;
+        return await this.func.post(url, params);
     }
 
     /**

@@ -82,6 +82,7 @@ interface OdeServiceInterface
      * @return array
      */
     public function closeOdeSession(
+        $odeId,
         $odeSessionId,
         $autosavedSessionOdeFilesToMaintain,
         $user,

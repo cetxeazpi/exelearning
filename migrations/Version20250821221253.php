@@ -24,10 +24,10 @@ final class Version20250821221253 extends AbstractMigration
             }
         }
 
-        $platform = $this->connection->getDatabasePlatform()->getName();
-        if (str_contains($platform, 'sqlite')) {
+        $platform = $this->connection->getDatabasePlatform();
+        if ($platform instanceof \Doctrine\DBAL\Platforms\SQLitePlatform) {
             $this->addSql('ALTER TABLE users ADD COLUMN quota_mb INTEGER DEFAULT NULL');
-        } elseif (str_contains($platform, 'mysql')) {
+        } elseif ($platform instanceof \Doctrine\DBAL\Platforms\MySQLPlatform || $platform instanceof \Doctrine\DBAL\Platforms\MariaDBPlatform) {
             $this->addSql('ALTER TABLE users ADD COLUMN quota_mb INT DEFAULT NULL');
         } else { // postgresql or others
             $this->addSql('ALTER TABLE users ADD COLUMN quota_mb INT NULL');

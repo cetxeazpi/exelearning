@@ -112,7 +112,7 @@ public function testHandleCasTicket(): void
 /**
  * Test handling an OIDC token with an existing user.
  */
-public function testHandleOidcToken(): void
+    public function testHandleOidcToken(): void
 {
     $jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIn0.signature';
     $identifier = 'sub_12345';
@@ -225,6 +225,57 @@ public function testHandleOidcToken(): void
         
         // Assert email was updated
         $this->assertEquals($realEmail, $user->getEmail());
+    }
+
+    /**
+     * Test that authentication is denied when an existing user is disabled.
+     */
+    public function testDeniedWhenUserInactive(): void
+    {
+        $jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJpZGVudGlmaWVyIiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIn0.signature';
+        $identifier = 'identifier';
+        $email = 'user@example.com';
+
+        // UserBadge produced by OIDC handler
+        $userBadge = new UserBadge(
+            $identifier,
+            null,
+            ['email' => $email]
+        );
+
+        $this->oidcHandler->expects($this->once())
+            ->method('getUserBadgeFrom')
+            ->with($jwtToken)
+            ->willReturn($userBadge);
+
+        // Existing disabled user
+        $existingUser = new User();
+        $existingUser->setEmail($email);
+        $existingUser->setRoles(['ROLE_USER']);
+        $existingUser->setExternalIdentifier($identifier);
+        // Simulate inactive
+        $refIsActive = new \ReflectionProperty($existingUser, 'isActive');
+        $refIsActive->setAccessible(true);
+        $refIsActive->setValue($existingUser, false);
+
+        $this->userRepository->method('findOneBy')
+            ->willReturnCallback(function($criteria) use ($identifier, $email, $existingUser) {
+                if (isset($criteria['externalIdentifier']) && $criteria['externalIdentifier'] === $identifier) {
+                    return $existingUser;
+                }
+                if (isset($criteria['email']) && $criteria['email'] === $email) {
+                    return $existingUser;
+                }
+                return null;
+            });
+
+        $result = $this->tokenHandler->getUserBadgeFrom($jwtToken);
+
+        $this->expectException(BadCredentialsException::class);
+        $this->expectExceptionMessage('User account is disabled.');
+
+        $loader = $result->getUserLoader();
+        $loader($identifier); // Should throw
     }
     
     /**

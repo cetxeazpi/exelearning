@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'admin.maintenance.title'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 3rem;">
+        <h1>{{ 'admin.maintenance.status_on'|trans }}</h1>
+        {% if message %}
+            <p>{{ message }}</p>
+        {% else %}
+            <p>{{ 'admin.errors.service_unavailable'|trans({}, 'messages') }}</p>
+        {% endif %}
+
+        {% if scheduledEndAt %}
+            <p>{{ 'admin.maintenance.scheduled_end'|trans }}: {{ scheduledEndAt|date('Y-m-d H:i') }}</p>
+        {% endif %}
+    </div>
+{% endblock %}
+

@@ -65,6 +65,11 @@
     <env name="API_JWT_AUDIENCE" value="clients"/>
     <!-- ###- doctrine/doctrine-bundle ### -->
 
+    <!-- Use local SQLite database for tests -->
+    <env name="DB_DRIVER" value="pdo_sqlite"/>
+    <env name="DB_PATH" value="%kernel.project_dir%/var/test.sqlite"/>
+    <env name="DB_SERVER_VERSION" value="3.32"/>
+
   </php>
 
   <extensions>

@@ -150,7 +150,7 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
 
     #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'is_lopd_accepted', type: 'boolean')]
-    private bool $isLopdAccepted;
+    private bool $isLopdAccepted = false;
 
     #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'quota_mb', type: 'integer', nullable: true)]
@@ -247,7 +247,8 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
 
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        // Ensure roles is always an array; guard against legacy null values
+        $roles = (array) $this->roles;
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);

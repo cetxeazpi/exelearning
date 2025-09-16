@@ -11541,6 +11541,106 @@
         <source>Free response</source>
         <target></target>
       </trans-unit>
+      <trans-unit id="admin.menu.dashboard" resname="admin.menu.dashboard">
+        <source>Administration</source>
+        <target>Administration</target>
+      </trans-unit>
+      <trans-unit id="admin.menu.users" resname="admin.menu.users">
+        <source>Users</source>
+        <target>Users</target>
+      </trans-unit>
+      <trans-unit id="admin.menu.maintenance" resname="admin.menu.maintenance">
+        <source>Maintenance</source>
+        <target>Maintenance</target>
+      </trans-unit>
+      <trans-unit id="admin.users.title" resname="admin.users.title">
+        <source>Users</source>
+        <target>Users</target>
+      </trans-unit>
+      <trans-unit id="admin.users.email" resname="admin.users.email">
+        <source>Email</source>
+        <target>Email</target>
+      </trans-unit>
+      <trans-unit id="admin.users.username" resname="admin.users.username">
+        <source>Username</source>
+        <target>Username</target>
+      </trans-unit>
+      <trans-unit id="admin.users.new" resname="admin.users.new">
+        <source>Create user</source>
+        <target>Create user</target>
+      </trans-unit>
+      <trans-unit id="admin.users.edit" resname="admin.users.edit">
+        <source>Edit user</source>
+        <target>Edit user</target>
+      </trans-unit>
+      <trans-unit id="admin.users.delete_confirm" resname="admin.users.delete_confirm">
+        <source>Delete this user?</source>
+        <target>Delete this user?</target>
+      </trans-unit>
+      <trans-unit id="admin.users.roles" resname="admin.users.roles">
+        <source>Roles</source>
+        <target>Roles</target>
+      </trans-unit>
+      <trans-unit id="admin.users.enabled" resname="admin.users.enabled">
+        <source>Enabled</source>
+        <target>Enabled</target>
+      </trans-unit>
+      <trans-unit id="admin.users.cannot_remove_last_admin" resname="admin.users.cannot_remove_last_admin">
+        <source>You cannot remove your own last admin role.</source>
+        <target>You cannot remove your own last admin role.</target>
+      </trans-unit>
+      <trans-unit id="admin.users.password_help" resname="admin.users.password_help">
+        <source>Set a new password (leave blank to keep current)</source>
+        <target>Set a new password (leave blank to keep current)</target>
+      </trans-unit>
+      <trans-unit id="admin.maintenance.title" resname="admin.maintenance.title">
+        <source>Maintenance</source>
+        <target>Maintenance</target>
+      </trans-unit>
+      <trans-unit id="admin.maintenance.status_on" resname="admin.maintenance.status_on">
+        <source>Maintenance is ON</source>
+        <target>Maintenance is ON</target>
+      </trans-unit>
+      <trans-unit id="admin.maintenance.status_off" resname="admin.maintenance.status_off">
+        <source>Maintenance is OFF</source>
+        <target>Maintenance is OFF</target>
+      </trans-unit>
+      <trans-unit id="admin.maintenance.toggle_on" resname="admin.maintenance.toggle_on">
+        <source>Enable maintenance</source>
+        <target>Enable maintenance</target>
+      </trans-unit>
+      <trans-unit id="admin.maintenance.toggle_off" resname="admin.maintenance.toggle_off">
+        <source>Disable maintenance</source>
+        <target>Disable maintenance</target>
+      </trans-unit>
+      <trans-unit id="admin.maintenance.message_label" resname="admin.maintenance.message_label">
+        <source>Public message</source>
+        <target>Public message</target>
+      </trans-unit>
+      <trans-unit id="admin.maintenance.scheduled_end" resname="admin.maintenance.scheduled_end">
+        <source>Scheduled end time</source>
+        <target>Scheduled end time</target>
+      </trans-unit>
+      <trans-unit id="admin.maintenance.saved" resname="admin.maintenance.saved">
+        <source>Maintenance settings saved.</source>
+        <target>Maintenance settings saved.</target>
+      </trans-unit>
+      <trans-unit id="admin.maintenance.save" resname="admin.maintenance.save">
+        <source>Save</source>
+        <target>Save</target>
+      </trans-unit>
+      <trans-unit id="admin.maintenance.last_changed" resname="admin.maintenance.last_changed">
+        <source>Last changed</source>
+        <target>Last changed</target>
+      </trans-unit>
+      <trans-unit id="admin.errors.forbidden" resname="admin.errors.forbidden">
+        <source>Access denied.</source>
+        <target>Access denied.</target>
+      </trans-unit>
+      <trans-unit id="admin.errors.service_unavailable" resname="admin.errors.service_unavailable">
+        <source>The service is temporarily unavailable due to maintenance.</source>
+        <target>The service is temporarily unavailable due to maintenance.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

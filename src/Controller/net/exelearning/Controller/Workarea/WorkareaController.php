@@ -3,6 +3,7 @@
 namespace App\Controller\net\exelearning\Controller\Workarea;
 
 use App\Constants;
+use App\Entity\AdditionalHtml;
 use App\Entity\net\exelearning\Entity\User;
 use App\Helper\net\exelearning\Helper\FileHelper;
 use App\Helper\net\exelearning\Helper\UserHelper;
@@ -222,6 +223,9 @@ class WorkareaController extends DefaultWorkareaController
             ];
         }
 
+        // Additional HTML injections for workarea
+        $additionalHtmlSettings = $this->entityManager->getRepository(AdditionalHtml::class)->findOneBy([]);
+
         // Render
         return $this->render(
             $view,
@@ -263,6 +267,10 @@ class WorkareaController extends DefaultWorkareaController
                     'ideviceVisibilityPreferencePre' => $ideviceVisibilityPreferencePre,
                 ],
                 'mercure' => $mercure,
+                // Additional HTML injections (workarea only)
+                'additionalHtmlHead' => $additionalHtmlSettings?->getHeadHtml(),
+                'additionalHtmlTop' => $additionalHtmlSettings?->getTopOfBodyHtml(),
+                'additionalHtmlFooter' => $additionalHtmlSettings?->getFooterHtml(),
             ]
         );
     }

@@ -4,7 +4,8 @@
         <meta charset="UTF-8">
         <meta name="robots" content="noindex">
         <title>{% block title %}{% endblock %}</title>
-        <link rel="icon" href="{{ asset("favicon.ico") }}">
+        {% set ts = theme_settings() %}
+        <link rel="icon" href="{{ ts.favicon ?: asset('favicon.ico') }}">
         {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
         {# include own css #}
@@ -12,13 +13,25 @@
         {% endblock %}
         <link class="exe" rel="stylesheet" href="{{ asset('style/workarea/custom.css') }}">
         <script class="exe" src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
+        {# Inject additional HTML at the end of <head> for workarea only #}
+        {% if additionalHtmlHead is defined and additionalHtmlHead %}
+            {{ additionalHtmlHead|raw }}
+        {% endif %}
         {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
         {% endblock %}
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
+        {# Inject additional HTML right after <body> for workarea only #}
+        {% if additionalHtmlTop is defined and additionalHtmlTop %}
+            {{ additionalHtmlTop|raw }}
+        {% endif %}
         {% block body %}{% endblock %}
         <script src="{{ asset('app/workarea/custom.js') }}"></script>
+        {# Inject additional HTML before </body> for workarea only #}
+        {% if additionalHtmlFooter is defined and additionalHtmlFooter %}
+            {{ additionalHtmlFooter|raw }}
+        {% endif %}
     </body>
 </html>

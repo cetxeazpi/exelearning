@@ -4,7 +4,8 @@
 {% trans_default_domain 'messages' %}
 
 {# Set default image using asset() to generate absolute URL #}
-{% set default_image_url = asset('images/default.jpg') %}
+{% set ts = theme_settings() %}
+{% set default_image_url = ts.loginImage ?: asset('images/default.jpg') %}
 
 {% block stylesheets %}
     <link class="exe" rel="stylesheet" href="{{ asset('libs/bootstrap/bootstrap.min.css') }}">
@@ -25,7 +26,10 @@
             </div>
             <div class="col-md-6 col-lg-7 d-flex">
               <div class="card-body p-4 p-lg-5 text-black">
-                <div class="d-block mt-4 mb-3 pb-1">
+                <div class="d-block mt-4 mb-3 pb-1 text-center text-md-start">
+                  {% if ts.loginLogo %}
+                    <img src="{{ ts.loginLogo }}" alt="Login logo" style="max-height:64px" class="mb-2">
+                  {% endif %}
                   <h1 class="lead text-center text-md-start mb-2">eXeLearning </h1>
                 </div>
                 <div id="exe-version" class="text-muted small p-4 p-lg-5">

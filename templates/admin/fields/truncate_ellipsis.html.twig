@@ -1,0 +1,8 @@
+{# Custom truncated text with tooltip for long values #}
+{% set full = (field.formattedValue is defined and field.formattedValue is not same as(null)) ? field.formattedValue : (field.value ?? '') %}
+<span
+  {% if full is not same as('') %}title="{{ full }}"{% endif %}
+  style="display:inline-block; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom;"
+>
+  {{ full }}
+</span>

@@ -16,7 +16,7 @@ class BaseEntity
     protected ?int $id = null;
 
     #[ORM\Column(name: 'is_active', type: 'boolean', nullable: false, options: ['default' => true])]
-    protected bool $isActive;
+    protected bool $isActive = true;
 
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: true)]
     protected ?\DateTime $createdAt = null;

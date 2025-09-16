@@ -158,6 +158,11 @@ class MultiTokenHandler implements AccessTokenHandlerInterface
         if ($user) {
             $this->updateExistingUser($user, $identifier, $emailFromClaims);
 
+            // Allow admins to authenticate even if disabled; block others
+            if (!$user->getIsActive() && !in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+                throw new BadCredentialsException('User account is disabled.');
+            }
+
             return $user;
         }
 
@@ -172,6 +177,11 @@ class MultiTokenHandler implements AccessTokenHandlerInterface
         $user = $this->createNewUser($identifier, $emailFromClaims);
         $this->em->persist($user);
         $this->em->flush();
+
+        // Block disabled users (unlikely right after create, but safe)
+        if (!$user->getIsActive() && !in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+            throw new BadCredentialsException('User account is disabled.');
+        }
 
         return $user;
     }

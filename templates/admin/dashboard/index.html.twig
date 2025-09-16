@@ -1,0 +1,29 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Dashboard{% endblock %}
+
+{% block main %}
+    <div class="ea-content">
+        <div class="content-panel">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card text-center">
+                        <div class="card-body" style="padding: 2rem;">
+                            <div style="font-size: 3rem; font-weight: 700;">{{ totalUsers }}</div>
+                            <div style="font-size: 1.1rem; color: #666;">Users</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card text-center">
+                        <div class="card-body" style="padding: 2rem;">
+                            <div style="font-size: 3rem; font-weight: 700;">{{ totalProjects }}</div>
+                            <div style="font-size: 1.1rem; color: #666;">Projects</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

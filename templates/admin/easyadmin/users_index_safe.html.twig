@@ -1,0 +1,25 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{#
+  Minimal, safe Index template for UserCrudController to avoid a PHP 8.4
+  strict-typing crash inside EasyAdmin's default index template when
+  setController(null) is evaluated in certain paths.
+  This template intentionally keeps things simple; actions like New/Edit
+  still work via the sidebar/menu and other dedicated routes.
+#}
+
+{% block content_title %}{{ 'admin.users.title'|trans }}{% endblock %}
+
+{% block main %}
+  <div class="ea-content">
+    <div class="content-panel">
+      <p style="margin: 1rem 0;">
+        {{ 'admin.users.title'|trans }}
+      </p>
+
+      <div class="alert alert-info">
+        User list is temporarily simplified for compatibility. Core actions still work.
+      </div>
+    </div>
+  </div>
+{% endblock %}

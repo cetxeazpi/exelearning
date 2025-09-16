@@ -510,7 +510,7 @@ class NavStructureApiController extends DefaultApiController
                 $deletedPageIds = array_values(array_unique($deletedPageIds));
 
                 if (!empty($deletedPageIds)) {
-                    $this->cleanCrossReferencesForDeletedNodes($deletedPageIds, $odeNavStructureSync->getOdeSessionId());
+                    $this->cleanCrossReferencesForDeletedNodes($deletedPageIds, $odeNavStructureSync->getOdeId());
                 }
 
                 foreach ($odeNavStructureSyncsToDelete as $odeNavStructureSync) {

@@ -55,7 +55,7 @@ class OdeOldXmlCatalogPropertiesMetadataGet
      *
      * @return array
      */
-    public static function oldElpCatalogMetadataPropertiesGet($odeSessionId, $nodeCatalogProperties, $propertyCatalogKey, $xpathNamespace)
+    public static function oldElpCatalogMetadataPropertiesGet($odeId, $nodeCatalogProperties, $propertyCatalogKey, $xpathNamespace)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -74,10 +74,10 @@ class OdeOldXmlCatalogPropertiesMetadataGet
             return $result;
         }
         foreach ($lomMetadataPropertiesNodes as $lomMetadataPropertiesNode) {
-            $identifierProperties = self::getIdentifierProperties($odeSessionId, $lomMetadataPropertiesNode, $xpathNamespace, $propertyCatalogMetadataKey);
-            $languageProperties = self::getLanguageMetadataProperties($odeSessionId, $lomMetadataPropertiesNode, $xpathNamespace, $propertyCatalogMetadataKey);
-            $contributionProperties = self::getContributionProperties($odeSessionId, $lomMetadataPropertiesNode, $xpathNamespace, $propertyCatalogMetadataKey);
-            $metadataSchemaProperties = self::getMetadataSchemaProperties($odeSessionId, $lomMetadataPropertiesNode, $xpathNamespace, $propertyCatalogMetadataKey);
+            $identifierProperties = self::getIdentifierProperties($odeId, $lomMetadataPropertiesNode, $xpathNamespace, $propertyCatalogMetadataKey);
+            $languageProperties = self::getLanguageMetadataProperties($odeId, $lomMetadataPropertiesNode, $xpathNamespace, $propertyCatalogMetadataKey);
+            $contributionProperties = self::getContributionProperties($odeId, $lomMetadataPropertiesNode, $xpathNamespace, $propertyCatalogMetadataKey);
+            $metadataSchemaProperties = self::getMetadataSchemaProperties($odeId, $lomMetadataPropertiesNode, $xpathNamespace, $propertyCatalogMetadataKey);
 
             $lomMetadataPropertiesArray = array_merge(
                 $identifierProperties['odeProperties'],
@@ -103,7 +103,7 @@ class OdeOldXmlCatalogPropertiesMetadataGet
      *
      * @return array
      */
-    private static function getMetadataSchemaProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getMetadataSchemaProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -125,7 +125,7 @@ class OdeOldXmlCatalogPropertiesMetadataGet
                 }
             }
             $odeProperties = new OdePropertiesSync();
-            $odeProperties->setOdeSessionId($odeSessionId);
+            $odeProperties->setOdeId($odeId);
             $odeProperties->setKey($propertyCatalogGeneralMetadataSchemaKey);
             $odeProperties->setValue($lomGeneralMetadataSchemaPropertiesNodeValue[0]);
             array_push($result['odeProperties'], $odeProperties);
@@ -144,7 +144,7 @@ class OdeOldXmlCatalogPropertiesMetadataGet
      *
      * @return array
      */
-    private static function getIdentifierProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
+    private static function getIdentifierProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -184,7 +184,7 @@ class OdeOldXmlCatalogPropertiesMetadataGet
                         following-sibling::f:string[1]/@value");
                     if (!empty($identifierValueArray) && isset($identifierValueArray[0])) {
                         $odeProperties = new OdePropertiesSync();
-                        $odeProperties->setOdeSessionId($odeSessionId);
+                        $odeProperties->setOdeId($odeId);
                         if ($key >= 1) {
                             $identifierPropertyCatalogKey = $propertyCatalogKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend;
                             ++$i;
@@ -212,7 +212,7 @@ class OdeOldXmlCatalogPropertiesMetadataGet
                         following-sibling::f:string[1]/@value");
                     if (!empty($entryValueArray) && isset($entryValueArray[0])) {
                         $odeProperties = new OdePropertiesSync();
-                        $odeProperties->setOdeSessionId($odeSessionId);
+                        $odeProperties->setOdeId($odeId);
                         if ($key >= 1) {
                             $identifierPropertyEntryKey = $propertyCatalogKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend;
                             ++$i;
@@ -238,7 +238,7 @@ class OdeOldXmlCatalogPropertiesMetadataGet
      *
      * @return array
      */
-    private static function getLanguageMetadataProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getLanguageMetadataProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -254,7 +254,7 @@ class OdeOldXmlCatalogPropertiesMetadataGet
         following-sibling::f:instance[1]/f:dictionary/f:string[@value = 'valueOf_']/following-sibling::f:string[1]/@value");
         if (!empty($languageValueArray) && isset($languageValueArray[0])) {
             $odeProperties = new OdePropertiesSync();
-            $odeProperties->setOdeSessionId($odeSessionId);
+            $odeProperties->setOdeId($odeId);
             $odeProperties->setKey($propertyCatalogGeneralLanguageKey);
             $odeProperties->setValue($languageValueArray[0]);
             array_push($result['odeProperties'], $odeProperties);
@@ -273,7 +273,7 @@ class OdeOldXmlCatalogPropertiesMetadataGet
      *
      * @return array
      */
-    private static function getContributionProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
+    private static function getContributionProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -310,7 +310,7 @@ class OdeOldXmlCatalogPropertiesMetadataGet
                     if (!empty($dateTimeValueArray) && isset($dateTimeValueArray[0])) {
                         $dateValueArray = explode('T', $dateTimeValueArray[0]);
                         $odeProperties = new OdePropertiesSync();
-                        $odeProperties->setOdeSessionId($odeSessionId);
+                        $odeProperties->setOdeId($odeId);
                         if ($key >= 1) {
                             $contributionPropertyDateKey = $propertyCatalogKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend;
                             ++$i;
@@ -346,7 +346,7 @@ class OdeOldXmlCatalogPropertiesMetadataGet
                                         $entityChildKeyAppend = self::ODE_XML_KEY_UNDERSCORE.$entityChildKey;
                                         $contributionPropertyEntityChildKey = $contributionPropertyEntityKey.$entityChildKeyAppend;
                                         $odeProperties = new OdePropertiesSync();
-                                        $odeProperties->setOdeSessionId($odeSessionId);
+                                        $odeProperties->setOdeId($odeId);
                                         if ($key >= 1) {
                                             $contributionPropertyEntityChildKey = $propertyCatalogKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend.$entityChildKeyAppend;
                                         }
@@ -386,7 +386,7 @@ class OdeOldXmlCatalogPropertiesMetadataGet
                         f:dictionary/f:string[@value='valueOf_']/following-sibling::f:string[1]/@value");
                     if (!empty($roleValueArray) && isset($roleValueArray[0])) {
                         $odeProperties = new OdePropertiesSync();
-                        $odeProperties->setOdeSessionId($odeSessionId);
+                        $odeProperties->setOdeId($odeId);
                         if ($key >= 1) {
                             $contributionPropertyRoleValueKey = $propertyCatalogKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyRoleKeyAppend.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend;
                             ++$i;

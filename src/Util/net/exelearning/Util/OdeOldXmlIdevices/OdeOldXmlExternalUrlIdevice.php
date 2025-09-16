@@ -28,7 +28,7 @@ class OdeOldXmlExternalUrlIdevice
             <div class="iframe-error-message" style="display:none;">Unable to display an iframe loaded over HTTP on a website that uses HTTPS.</div>
         </div>';
 
-    public static function oldElpExternalUrlIdeviceStructure($odeSessionId, $odePageId, $externalUrlNodes, $generatedIds, $xpathNamespace)
+    public static function oldElpExternalUrlIdeviceStructure($odeId, $odePageId, $externalUrlNodes, $generatedIds, $xpathNamespace)
     {
         $result['odeComponentsSync'] = [];
         $result['srcRoutes'] = [];
@@ -45,7 +45,7 @@ class OdeOldXmlExternalUrlIdevice
                 $generatedIds[] = $odeBlockId;
 
                 // OdePagStructureSync fields
-                $subOdePagStructureSync->setOdeSessionId($odeSessionId);
+                $subOdePagStructureSync->setOdeId($odeId);
                 $subOdePagStructureSync->setOdePageId($odePageId);
                 $subOdePagStructureSync->setOdeBlockId($odeBlockId);
                 // $odePagStructureSync->setIconName($xmlOdePagStructure->{self::ODE_XML_TAG_FIELD_ICON_NAME});
@@ -72,7 +72,7 @@ class OdeOldXmlExternalUrlIdevice
                 $odeComponentsMapping[] = $odeIdeviceId;
 
                 // OdeComponentsSync fields
-                $odeComponentsSync->setOdeSessionId($odeSessionId);
+                $odeComponentsSync->setOdeId($odeId);
                 $odeComponentsSync->setOdePageId($odePageId);
                 $odeComponentsSync->setOdeBlockId($odeBlockId);
                 $odeComponentsSync->setOdeIdeviceId($odeIdeviceId);
@@ -89,8 +89,8 @@ class OdeOldXmlExternalUrlIdevice
 
                 $sessionPath = null;
 
-                if (!empty($odeSessionId)) {
-                    $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+                if (!empty($odeId)) {
+                    $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
                 }
 
                 // Common replaces for all OdeComponents

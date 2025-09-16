@@ -48,7 +48,7 @@ class OdeOldXmlCatalogPropertiesLifeCycleGet
     // const OLD_ODE_XML_IDEVICE_TEXT = 'instance';
     public const OLD_ODE_XML_IDEVICE_TEXT_CONTENT = 'string role="key" value="content_w_resourcePaths"';
 
-    public static function oldElpCatalogLifeCyclePropertiesGet($odeSessionId, $nodeCatalogProperties, $propertyCatalogKey, $xpathNamespace)
+    public static function oldElpCatalogLifeCyclePropertiesGet($odeId, $nodeCatalogProperties, $propertyCatalogKey, $xpathNamespace)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -58,9 +58,9 @@ class OdeOldXmlCatalogPropertiesLifeCycleGet
         $lomLifeCyclePropertiesNodes = $nodeCatalogProperties->xpath("f:dictionary/f:string[@value = 'lifeCycle']/
         following-sibling::f:instance[1]");
         foreach ($lomLifeCyclePropertiesNodes as $lomLifeCyclePropertiesNode) {
-            $contributionProperties = self::getLifeCycleContributionProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $statusProperties = self::getLifeCycleStatusProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $versionProperties = self::getVersionProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $contributionProperties = self::getLifeCycleContributionProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $statusProperties = self::getLifeCycleStatusProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $versionProperties = self::getVersionProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
 
             $lomMetadataPropertiesArray = array_merge(
                 $contributionProperties['odeProperties'],
@@ -77,7 +77,7 @@ class OdeOldXmlCatalogPropertiesLifeCycleGet
         return $result;
     }
 
-    private static function getLifeCycleStatusProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
+    private static function getLifeCycleStatusProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -113,7 +113,7 @@ class OdeOldXmlCatalogPropertiesLifeCycleGet
 
             if (!empty($lomGeneralLifeCycleStatusValuePropertiesNodeValue)) {
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($lomGeneralLifeCycleStatusValuePropertyKey);
                 $odeProperties->setValue($lomGeneralLifeCycleStatusValuePropertiesNodeValue[0]);
             }
@@ -126,7 +126,7 @@ class OdeOldXmlCatalogPropertiesLifeCycleGet
         return $result;
     }
 
-    private static function getVersionProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getVersionProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -155,7 +155,7 @@ class OdeOldXmlCatalogPropertiesLifeCycleGet
 
                 if (!empty($lomGeneralVersionPropertyStringNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         $lomGeneralVersionPropertyStringKey = $propertyCatalogGeneralVersionKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend;
                     }
@@ -175,7 +175,7 @@ class OdeOldXmlCatalogPropertiesLifeCycleGet
 
                 if (!empty($lomGeneralVersionStringPropertyLanguageNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         $lomGeneralVersionPropertyLanguageKey = $propertyCatalogGeneralVersionKey.$i.self::ODE_XML_KEY_UNDERSCORE.$lomGeneralVersionStringPropertyLanguageAppendKey;
                         ++$i;
@@ -193,7 +193,7 @@ class OdeOldXmlCatalogPropertiesLifeCycleGet
         return $result;
     }
 
-    private static function getLifeCycleContributionProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
+    private static function getLifeCycleContributionProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -225,7 +225,7 @@ class OdeOldXmlCatalogPropertiesLifeCycleGet
                     // Get first value of array element (date part)
                     $dateValueArray = explode('T', $lomGeneralContributionPropertyCatalogNodeValue[0]);
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         $lomGeneralContributionPropertyDateKey = $propertyCatalogKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend;
                         ++$i;
@@ -271,7 +271,7 @@ class OdeOldXmlCatalogPropertiesLifeCycleGet
                                             $entityChildKeyAppend = self::ODE_XML_KEY_UNDERSCORE.$entityChildKey;
                                             $lomGeneralContributionPropertyEntityChildKey = $lomGeneralContributionPropertyEntityKey.$entityChildKeyAppend;
                                             $odeProperties = new OdePropertiesSync();
-                                            $odeProperties->setOdeSessionId($odeSessionId);
+                                            $odeProperties->setOdeId($odeId);
                                             if ($key >= '1') {
                                                 $lomGeneralContributionPropertyEntityChildKey = $propertyCatalogKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend.$entityChildKeyAppend;
                                             }
@@ -307,7 +307,7 @@ class OdeOldXmlCatalogPropertiesLifeCycleGet
                 f:dictionary/f:string[@value='valueOf_']/following-sibling::f:string[1]/@value");
                 if (isset($lomGeneralContributionPropertyRoleNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         $lomGeneralContributionPropertyRoleValueKey = $propertyCatalogKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyRoleKeyAppend.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend;
                         ++$i;

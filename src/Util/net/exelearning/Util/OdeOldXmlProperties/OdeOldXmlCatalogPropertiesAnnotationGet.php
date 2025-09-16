@@ -48,7 +48,7 @@ class OdeOldXmlCatalogPropertiesAnnotationGet
     // const OLD_ODE_XML_IDEVICE_TEXT = 'instance';
     public const OLD_ODE_XML_IDEVICE_TEXT_CONTENT = 'string role="key" value="content_w_resourcePaths"';
 
-    public static function oldElpCatalogAnnotationPropertiesGet($odeSessionId, $nodeCatalogProperties, $propertyCatalogKey, $xpathNamespace)
+    public static function oldElpCatalogAnnotationPropertiesGet($odeId, $nodeCatalogProperties, $propertyCatalogKey, $xpathNamespace)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -58,9 +58,9 @@ class OdeOldXmlCatalogPropertiesAnnotationGet
         $lomLifeCyclePropertiesNodes = $nodeCatalogProperties->xpath("f:dictionary/f:string[@value = 'annotation']/
         following-sibling::f:list[1]/f:instance");
         foreach ($lomLifeCyclePropertiesNodes as $lomLifeCyclePropertiesNode) {
-            $dateProperties = self::getDateProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $descriptionProperties = self::getAnnotationDescriptionProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $entityProperties = self::getEntityProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $dateProperties = self::getDateProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $descriptionProperties = self::getAnnotationDescriptionProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $entityProperties = self::getEntityProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
 
             $lomMetadataPropertiesArray = array_merge(
                 $dateProperties['odeProperties'],
@@ -77,7 +77,7 @@ class OdeOldXmlCatalogPropertiesAnnotationGet
         return $result;
     }
 
-    private static function getDateProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
+    private static function getDateProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -110,7 +110,7 @@ class OdeOldXmlCatalogPropertiesAnnotationGet
                 // Get first value of array element (date part)
                 $dateValueArray = explode('T', $lomGeneralDateStatusValuePropertiesNodeValue[0]);
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($lomGeneralDateStatusValuePropertyKey);
                 $odeProperties->setValue($dateValueArray[0]);
             }
@@ -123,7 +123,7 @@ class OdeOldXmlCatalogPropertiesAnnotationGet
         return $result;
     }
 
-    private static function getAnnotationDescriptionProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getAnnotationDescriptionProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -147,7 +147,7 @@ class OdeOldXmlCatalogPropertiesAnnotationGet
 
                 if (!empty($lomGeneralTitlePropertyStringNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         $lomGeneralDecriptionPropertyStringKey = $propertyCatalogGeneralDescriptionKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend;
                     }
@@ -167,7 +167,7 @@ class OdeOldXmlCatalogPropertiesAnnotationGet
 
                 if (!empty($lomGeneralTitleStringPropertyLanguageNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         ++$i;
                     }
@@ -184,7 +184,7 @@ class OdeOldXmlCatalogPropertiesAnnotationGet
         return $result;
     }
 
-    private static function getEntityProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
+    private static function getEntityProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -215,7 +215,7 @@ class OdeOldXmlCatalogPropertiesAnnotationGet
                                         $entityChildKeyAppend = self::ODE_XML_KEY_UNDERSCORE.$entityChildKey;
                                         $lomGeneralContributionPropertyEntityChildKey = $propertyCatalogKey.$entityChildKeyAppend;
                                         $odeProperties = new OdePropertiesSync();
-                                        $odeProperties->setOdeSessionId($odeSessionId);
+                                        $odeProperties->setOdeId($odeId);
                                         $odeProperties->setKey($lomGeneralContributionPropertyEntityChildKey);
                                         $odeProperties->setValue($entityChildArrayValues[1]);
 

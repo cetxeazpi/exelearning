@@ -27,7 +27,7 @@ class OdeOldXmlImageMagnifierIdevice
         'textTextarea' => '',
     ];
 
-    public static function oldElpImageMagnifierIdeviceStructure($odeSessionId, $odePageId, $galleryImageNodes, $generatedIds, $xpathNamespace)
+    public static function oldElpImageMagnifierIdeviceStructure($odeId, $odePageId, $galleryImageNodes, $generatedIds, $xpathNamespace)
     {
         $result = [
             'odeComponentsSync' => [],
@@ -187,7 +187,7 @@ class OdeOldXmlImageMagnifierIdevice
             }
 
             $filenames = array_unique($filenames);
-            $sessionPath = !empty($odeSessionId) ? UrlUtil::getOdeSessionUrl($odeSessionId) : '';
+            $sessionPath = !empty($odeId) ? UrlUtil::getOdeSessionUrl($odeId) : '';
             $jsonImages = [];
 
             foreach ($filenames as $file) {
@@ -200,7 +200,7 @@ class OdeOldXmlImageMagnifierIdevice
             $odeBlockId = Util::generateIdCheckUnique($generatedIds);
             $generatedIds[] = $odeBlockId;
 
-            $subOdePagStructureSync->setOdeSessionId($odeSessionId);
+            $subOdePagStructureSync->setOdeId($odeId);
             $subOdePagStructureSync->setOdePageId($odePageId);
             $subOdePagStructureSync->setOdeBlockId($odeBlockId);
 
@@ -214,7 +214,7 @@ class OdeOldXmlImageMagnifierIdevice
             $subOdePagStructureSync->loadOdePagStructureSyncPropertiesFromConfig();
 
             $odeComponentsSync = new OdeComponentsSync();
-            $odeComponentsSync->setOdeSessionId($odeSessionId);
+            $odeComponentsSync->setOdeId($odeId);
             $odeComponentsSync->setOdePageId($odePageId);
             $odeComponentsSync->setOdeBlockId($odeBlockId);
             $odeComponentsSync->setOdeIdeviceId($odeIdeviceId);

@@ -22,7 +22,7 @@ class OdeOldXmlGameIdevices
     // const OLD_ODE_XML_IDEVICE_TEXT = 'instance';
     public const OLD_ODE_XML_IDEVICE_TEXT_CONTENT = 'string role="key" value="content_w_resourcePaths"';
 
-    public static function oldElpGameIdevicesStructure($odeSessionId, $odePageId, $gameNode, $generatedIds, $nodeGameType, $xpathNamespace)
+    public static function oldElpGameIdevicesStructure($odeId, $odePageId, $gameNode, $generatedIds, $nodeGameType, $xpathNamespace)
     {
         $result['odeComponentsSync'] = [];
         $result['srcRoutes'] = [];
@@ -40,7 +40,7 @@ class OdeOldXmlGameIdevices
                 $generatedIds[] = $odeBlockId;
 
                 // OdePagStructureSync fields
-                $subOdePagStructureSync->setOdeSessionId($odeSessionId);
+                $subOdePagStructureSync->setOdeId($odeId);
                 $subOdePagStructureSync->setOdePageId($odePageId);
                 $subOdePagStructureSync->setOdeBlockId($odeBlockId);
                 // $odePagStructureSync->setIconName($xmlOdePagStructure->{self::ODE_XML_TAG_FIELD_ICON_NAME});
@@ -67,7 +67,7 @@ class OdeOldXmlGameIdevices
                 $odeComponentsMapping[] = $odeIdeviceId;
 
                 // OdeComponentsSync fields
-                $odeComponentsSync->setOdeSessionId($odeSessionId);
+                $odeComponentsSync->setOdeId($odeId);
                 $odeComponentsSync->setOdePageId($odePageId);
                 $odeComponentsSync->setOdeBlockId($odeBlockId);
                 $odeComponentsSync->setOdeIdeviceId($odeIdeviceId);
@@ -85,8 +85,8 @@ class OdeOldXmlGameIdevices
 
                     $sessionPath = null;
 
-                    if (!empty($odeSessionId)) {
-                        $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+                    if (!empty($odeId)) {
+                        $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
                     }
 
                     // Common replaces for all OdeComponents

@@ -97,7 +97,7 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
 
             $odeVersionId = Util::generateId();
             // TODO check if this is correct
-            $odeSessionId = $odeNavStructureSync->getOdeSessionId();
+            $odeSessionId = $odeNavStructureSync->getOdeId();
 
             // Insert into current_ode_users
             $currentOdeSessionForUser = new CurrentOdeUsers();

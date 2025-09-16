@@ -34,7 +34,7 @@ class OdeOldXmlFreeTextIdevice
     // const OLD_ODE_XML_IDEVICE_TEXT = 'instance';
     public const OLD_ODE_XML_IDEVICE_TEXT_CONTENT = 'string role="key" value="content_w_resourcePaths"';
 
-    public static function oldElpFreeTextIdeviceStructure($odeSessionId, $odePageId, $freeTextNodes, $generatedIds, $xpathNamespace)
+    public static function oldElpFreeTextIdeviceStructure($odeId, $odePageId, $freeTextNodes, $generatedIds, $xpathNamespace)
     {
         $result['odeComponentsSync'] = [];
         $result['srcRoutes'] = [];
@@ -65,7 +65,7 @@ class OdeOldXmlFreeTextIdevice
                     $generatedIds[] = $odeBlockId;
 
                     // OdePagStructureSync fields
-                    $subOdePagStructureSync->setOdeSessionId($odeSessionId);
+                    $subOdePagStructureSync->setOdeId($odeId);
                     $subOdePagStructureSync->setOdePageId($odePageId);
                     $subOdePagStructureSync->setOdeBlockId($odeBlockId);
 
@@ -87,7 +87,7 @@ class OdeOldXmlFreeTextIdevice
                     $odeComponentsMapping[] = $odeIdeviceId;
 
                     // OdeComponentsSync fields
-                    $odeComponentsSync->setOdeSessionId($odeSessionId);
+                    $odeComponentsSync->setOdeId($odeId);
                     $odeComponentsSync->setOdePageId($odePageId);
                     $odeComponentsSync->setOdeBlockId($odeBlockId);
                     $odeComponentsSync->setOdeIdeviceId($odeIdeviceId);
@@ -97,8 +97,8 @@ class OdeOldXmlFreeTextIdevice
 
                     foreach ($nodeIdevice->{self::OLD_ODE_XML_DICTIONARY} as $oldXmlListDictListInstDictListInstDict) {
                         $sessionPath = null;
-                        if (!empty($odeSessionId)) {
-                            $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+                        if (!empty($odeId)) {
+                            $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
                         }
 
                         // Common replaces for all OdeComponents

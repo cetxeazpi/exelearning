@@ -34,7 +34,7 @@ class OdeOldXmlRssIdevice
     // const OLD_ODE_XML_IDEVICE_TEXT = 'instance';
     public const OLD_ODE_XML_IDEVICE_TEXT_CONTENT = 'string role="key" value="content_w_resourcePaths"';
 
-    public static function oldElpRssStructure($odeSessionId, $odePageId, $rssNodes, $generatedIds, $xpathNamespace)
+    public static function oldElpRssStructure($odeId, $odePageId, $rssNodes, $generatedIds, $xpathNamespace)
     {
         $result['odeComponentsSync'] = [];
         $result['srcRoutes'] = [];
@@ -59,8 +59,8 @@ class OdeOldXmlRssIdevice
 
                 $sessionPath = null;
 
-                if (!empty($odeSessionId)) {
-                    $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+                if (!empty($odeId)) {
+                    $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
                 }
 
                 // Common replaces for all OdeComponents
@@ -105,7 +105,7 @@ class OdeOldXmlRssIdevice
                 $generatedIds[] = $odeBlockId;
 
                 // OdePagStructureSync fields
-                $subOdePagStructureSync->setOdeSessionId($odeSessionId);
+                $subOdePagStructureSync->setOdeId($odeId);
                 $subOdePagStructureSync->setOdePageId($odePageId);
                 $subOdePagStructureSync->setOdeBlockId($odeBlockId);
                 // $odePagStructureSync->setIconName($xmlOdePagStructure->{self::ODE_XML_TAG_FIELD_ICON_NAME});
@@ -129,7 +129,7 @@ class OdeOldXmlRssIdevice
                 $odeComponentsSync = new OdeComponentsSync();
 
                 // OdeComponentsSync fields
-                $odeComponentsSync->setOdeSessionId($odeSessionId);
+                $odeComponentsSync->setOdeId($odeId);
                 $odeComponentsSync->setOdePageId($odePageId);
                 $odeComponentsSync->setOdeBlockId($odeBlockId);
                 $odeComponentsSync->setOdeIdeviceId($odeIdeviceId);

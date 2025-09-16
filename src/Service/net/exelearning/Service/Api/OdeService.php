@@ -1059,7 +1059,7 @@ class OdeService implements OdeServiceInterface
      *
      * @return array
      */
-    public function closeOdeSession($odeSessionId, $autosavedSessionOdeFilesToMaintain, $user)
+    public function closeOdeSession($odeId, $odeSessionId, $autosavedSessionOdeFilesToMaintain, $user)
     {
         $result = [];
 
@@ -1068,7 +1068,7 @@ class OdeService implements OdeServiceInterface
             $odeNavStructureSyncRepo = $this->entityManager->getRepository(OdeNavStructureSync::class);
 
             // Check if there are other CurrentOdeUsers editing the content
-            $isLastUser = $this->currentOdeUsersService->isLastUser($user, null, null, $odeSessionId);
+            $isLastUser = $this->currentOdeUsersService->isLastUser($user, $odeId, null, $odeSessionId);
 
             $odeNavStructureSyncsDeleted = 0;
 
@@ -1118,6 +1118,7 @@ class OdeService implements OdeServiceInterface
             // Delete from CurrentOdeUsers
             $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
             $currentOdeUsersDeleted = $currentOdeUsersRepository->removeByOdeSessionIdAndUser(
+                $odeId,
                 $odeSessionId,
                 $user->getUserIdentifier()
             );
@@ -2090,7 +2091,7 @@ class OdeService implements OdeServiceInterface
         $result = [];
 
         // Check if the user is in the session (throw exception)
-        $this->checkSessionCurrentUser($user, $forceCloseOdeUserPreviousSession);
+         $this->checkSessionCurrentUser($user, $forceCloseOdeUserPreviousSession);
 
         // Determine if the file exist
         $checkElpFile = $this->checkElpFile($elpFileName);
@@ -2153,6 +2154,7 @@ class OdeService implements OdeServiceInterface
 
                 // close previous session
                 $this->closeOdeSession(
+                    $odeId,
                     $currentSessionForUser->getOdeSessionId(),
                     $autosavedSessionOdeFilesToMaintain,
                     $user

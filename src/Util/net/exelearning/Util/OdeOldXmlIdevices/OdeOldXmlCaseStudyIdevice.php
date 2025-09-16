@@ -25,7 +25,7 @@ class OdeOldXmlCaseStudyIdevice
         'title' => '',
     ];
 
-    public static function oldElpCaseStudyStructure($odeSessionId, $odePageId, $caseStudyNodes, $generatedIds, $xpathNamespace)
+    public static function oldElpCaseStudyStructure($odeId, $odePageId, $caseStudyNodes, $generatedIds, $xpathNamespace)
     {
         $result['odeComponentsSync'] = [];
         $result['srcRoutes'] = [];
@@ -48,7 +48,7 @@ class OdeOldXmlCaseStudyIdevice
             if (!empty($storyNode)) {
                 $htmlHistory = (string) $storyNode[0];
                 // apply session path replacement
-                $sessionPath = $odeSessionId ? UrlUtil::getOdeSessionUrl($odeSessionId) : '';
+                $sessionPath = $odeId ? UrlUtil::getOdeSessionUrl($odeId) : '';
                 $htmlHistory = str_replace(
                     'resources'.Constants::SLASH,
                     $sessionPath.$odeIdeviceId.Constants::SLASH,
@@ -94,7 +94,7 @@ class OdeOldXmlCaseStudyIdevice
                 );
                 $feedbackHtml = !empty($fbNode) ? (string) $fbNode[0] : '';
                 // Apply replaces and collect images
-                $sessionPath = $odeSessionId ? UrlUtil::getOdeSessionUrl($odeSessionId) : '';
+                $sessionPath = $odeId ? UrlUtil::getOdeSessionUrl($odeId) : '';
                 foreach (['activityHtml' => 'questionTextArea', 'feedbackHtml' => 'feedbackTextArea'] as $key => $val) {
                     // replace resource paths
                     ${$key} = str_replace(
@@ -122,7 +122,7 @@ class OdeOldXmlCaseStudyIdevice
             $blockId = Util::generateIdCheckUnique($generatedIds);
             $generatedIds[] = $blockId;
 
-            $subPag->setOdeSessionId($odeSessionId);
+            $subPag->setOdeId($odeId);
             $subPag->setOdePageId($odePageId);
             $subPag->setOdeBlockId($blockId);
             $titleNode = $caseStudyNode->xpath(
@@ -135,7 +135,7 @@ class OdeOldXmlCaseStudyIdevice
             $subPag->loadOdePagStructureSyncPropertiesFromConfig();
 
             $comp = new OdeComponentsSync();
-            $comp->setOdeSessionId($odeSessionId);
+            $comp->setOdeId($odeId);
             $comp->setOdePageId($odePageId);
             $comp->setOdeBlockId($blockId);
             $comp->setOdeIdeviceId($odeIdeviceId);

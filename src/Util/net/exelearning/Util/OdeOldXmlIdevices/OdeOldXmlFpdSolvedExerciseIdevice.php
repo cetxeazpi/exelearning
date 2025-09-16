@@ -34,7 +34,7 @@ class OdeOldXmlFpdSolvedExerciseIdevice
     // const OLD_ODE_XML_IDEVICE_TEXT = 'instance';
     public const OLD_ODE_XML_IDEVICE_TEXT_CONTENT = 'string role="key" value="content_w_resourcePaths"';
 
-    public static function oldElpFpdSolvedExerciseIdeviceStructure($odeSessionId, $odePageId, $freeTextNodes, $generatedIds, $xpathNamespace)
+    public static function oldElpFpdSolvedExerciseIdeviceStructure($odeId, $odePageId, $freeTextNodes, $generatedIds, $xpathNamespace)
     {
         $result['odeComponentsSync'] = [];
         $result['srcRoutes'] = [];
@@ -63,7 +63,7 @@ class OdeOldXmlFpdSolvedExerciseIdevice
                 $generatedIds[] = $odeBlockId;
 
                 // OdePagStructureSync fields
-                $subOdePagStructureSync->setOdeSessionId($odeSessionId);
+                $subOdePagStructureSync->setOdeId($odeId);
                 $subOdePagStructureSync->setOdePageId($odePageId);
                 $subOdePagStructureSync->setOdeBlockId($odeBlockId);
                 // $odePagStructureSync->setIconName($xmlOdePagStructure->{self::ODE_XML_TAG_FIELD_ICON_NAME});
@@ -94,7 +94,7 @@ class OdeOldXmlFpdSolvedExerciseIdevice
                     $odeComponentsMapping[] = $odeIdeviceId;
 
                     // OdeComponentsSync fields
-                    $odeComponentsSync->setOdeSessionId($odeSessionId);
+                    $odeComponentsSync->setOdeId($odeId);
                     $odeComponentsSync->setOdePageId($odePageId);
                     $odeComponentsSync->setOdeBlockId($odeBlockId);
                     $odeComponentsSync->setOdeIdeviceId($odeIdeviceId);
@@ -111,8 +111,8 @@ class OdeOldXmlFpdSolvedExerciseIdevice
 
                     $sessionPath = null;
 
-                    if (!empty($odeSessionId)) {
-                        $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+                    if (!empty($odeId)) {
+                        $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
                     }
 
                     // Common replaces for all OdeComponents
@@ -178,7 +178,7 @@ class OdeOldXmlFpdSolvedExerciseIdevice
                     $odeComponentsMapping[] = $odeIdeviceId;
 
                     // OdeComponentsSync fields
-                    $odeComponentsSync->setOdeSessionId($odeSessionId);
+                    $odeComponentsSync->setOdeId($odeId);
                     $odeComponentsSync->setOdePageId($odePageId);
                     $odeComponentsSync->setOdeBlockId($odeBlockId);
                     $odeComponentsSync->setOdeIdeviceId($odeIdeviceId);
@@ -195,8 +195,8 @@ class OdeOldXmlFpdSolvedExerciseIdevice
 
                     $sessionPath = null;
 
-                    if (!empty($odeSessionId)) {
-                        $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+                    if (!empty($odeId)) {
+                        $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
                     }
 
                     // Common replaces for all OdeComponents
@@ -241,8 +241,8 @@ class OdeOldXmlFpdSolvedExerciseIdevice
                                     following-sibling::f:unicode[1]/@value')[0];
                             $sessionPath = null;
 
-                            if (!empty($odeSessionId)) {
-                                $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+                            if (!empty($odeId)) {
+                                $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
                             }
 
                             // Common replaces for all OdeComponents

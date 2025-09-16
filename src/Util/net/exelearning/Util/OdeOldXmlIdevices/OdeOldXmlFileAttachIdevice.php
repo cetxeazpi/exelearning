@@ -33,7 +33,7 @@ class OdeOldXmlFileAttachIdevice
         'textFeedbackTextarea' => '',
     ];
 
-    public static function oldElpFileAttachIdeviceStructure($odeSessionId, $odePageId, $galleryImageNodes, $generatedIds, $xpathNamespace)
+    public static function oldElpFileAttachIdeviceStructure($odeId, $odePageId, $galleryImageNodes, $generatedIds, $xpathNamespace)
     {
         $result['odeComponentsSync'] = [];
         $result['srcRoutes'] = [];
@@ -68,8 +68,8 @@ class OdeOldXmlFileAttachIdevice
 
                 $sessionPath = null;
 
-                if (!empty($odeSessionId)) {
-                    $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+                if (!empty($odeId)) {
+                    $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
                 }
 
                 $fullImagePath = $sessionPath.$odeIdeviceId.Constants::SLASH.(string) $filePath[0]['value'];
@@ -101,7 +101,7 @@ class OdeOldXmlFileAttachIdevice
             $generatedIds[] = $odeBlockId;
 
             // OdePagStructureSync fields
-            $subOdePagStructureSync->setOdeSessionId($odeSessionId);
+            $subOdePagStructureSync->setOdeId($odeId);
             $subOdePagStructureSync->setOdePageId($odePageId);
             $subOdePagStructureSync->setOdeBlockId($odeBlockId);
             // $odePagStructureSync->setIconName($xmlOdePagStructure->{self::ODE_XML_TAG_FIELD_ICON_NAME});
@@ -118,7 +118,7 @@ class OdeOldXmlFileAttachIdevice
             $odeComponentsSync = new OdeComponentsSync();
 
             // OdeComponentsSync fields
-            $odeComponentsSync->setOdeSessionId($odeSessionId);
+            $odeComponentsSync->setOdeId($odeId);
             $odeComponentsSync->setOdePageId($odePageId);
             $odeComponentsSync->setOdeBlockId($odeBlockId);
             $odeComponentsSync->setOdeIdeviceId($odeIdeviceId);
@@ -135,8 +135,8 @@ class OdeOldXmlFileAttachIdevice
 
             $sessionPath = null;
 
-            if (!empty($odeSessionId)) {
-                $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+            if (!empty($odeId)) {
+                $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
             }
 
             // Common replaces for all OdeComponents

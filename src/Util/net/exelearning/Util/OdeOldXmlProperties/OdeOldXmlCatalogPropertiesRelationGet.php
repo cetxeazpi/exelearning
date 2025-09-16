@@ -48,7 +48,7 @@ class OdeOldXmlCatalogPropertiesRelationGet
     // const OLD_ODE_XML_IDEVICE_TEXT = 'instance';
     public const OLD_ODE_XML_IDEVICE_TEXT_CONTENT = 'string role="key" value="content_w_resourcePaths"';
 
-    public static function oldElpCatalogRelationPropertiesGet($odeSessionId, $nodeCatalogProperties, $propertyCatalogKey, $xpathNamespace)
+    public static function oldElpCatalogRelationPropertiesGet($odeId, $nodeCatalogProperties, $propertyCatalogKey, $xpathNamespace)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -58,8 +58,8 @@ class OdeOldXmlCatalogPropertiesRelationGet
         $lomLifeCyclePropertiesNodes = $nodeCatalogProperties->xpath("f:dictionary/f:string[@value = 'relation']/
         following-sibling::f:list[1]/f:instance");
         foreach ($lomLifeCyclePropertiesNodes as $lomLifeCyclePropertiesNode) {
-            $kindProperties = self::getKindProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $resourceProperties = self::getResourceProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $kindProperties = self::getKindProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $resourceProperties = self::getResourceProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
 
             $lomMetadataPropertiesArray = array_merge(
                 $kindProperties['odeProperties'],
@@ -75,7 +75,7 @@ class OdeOldXmlCatalogPropertiesRelationGet
         return $result;
     }
 
-    private static function getKindProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
+    private static function getKindProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -106,7 +106,7 @@ class OdeOldXmlCatalogPropertiesRelationGet
 
             if (!empty($lomGeneralDateStatusValuePropertiesNodeValue)) {
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($lomGeneralDateStatusValuePropertyKey);
                 $odeProperties->setValue($lomGeneralDateStatusValuePropertiesNodeValue[0]);
             }
@@ -119,7 +119,7 @@ class OdeOldXmlCatalogPropertiesRelationGet
         return $result;
     }
 
-    private static function getResourceProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
+    private static function getResourceProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -153,7 +153,7 @@ class OdeOldXmlCatalogPropertiesRelationGet
 
                 if (!empty($lomGeneralIdentfierPropertyCatalogNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     $odeProperties->setKey($lomGeneralIdentfierPropertyCatalogKey);
                     $odeProperties->setValue($lomGeneralIdentfierPropertyCatalogNodeValue[0]);
                 }
@@ -175,7 +175,7 @@ class OdeOldXmlCatalogPropertiesRelationGet
 
                 if (!empty($lomGeneralIdentfierPropertyCatalogNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     $odeProperties->setKey($lomGeneralIdentfierPropertyCatalogKey);
                     $odeProperties->setValue($lomGeneralIdentfierPropertyCatalogNodeValue[0]);
                 }

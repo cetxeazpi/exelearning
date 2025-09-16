@@ -66,7 +66,7 @@ class OdeXmlUtil
     // Fields
     public const ODE_XML_TAG_FIELD_ODE_VERSION_NAME = 'odeVersionName';
     public const ODE_XML_TAG_FIELD_ODE_VERSION_ID = 'odeVersionId';
-    public const ODE_XML_TAG_FIELD_ODE_SESSION_ID = 'odeSessionId';
+    public const ODE_XML_TAG_FIELD_ODE_SESSION_ID = 'odeId';
     public const ODE_XML_TAG_FIELD_ODE_PAGE_ID = 'odePageId';
     public const ODE_XML_TAG_FIELD_ODE_BLOCK_ID = 'odeBlockId';
     public const ODE_XML_TAG_FIELD_ODE_IDEVICE_ID = 'odeIdeviceId';
@@ -112,7 +112,7 @@ class OdeXmlUtil
      * @return SimpleXMLElement
      */
     public static function createOdeXml(
-        $odeSessionId,
+        $odeId,
         $odeNavStructureSyncs,
         $odeProperties,
         $odeData,
@@ -120,8 +120,8 @@ class OdeXmlUtil
     ) {
         $sessionPath = null;
 
-        if (!empty($odeSessionId)) {
-            $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+        if (!empty($odeId)) {
+            $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
         }
 
         // Common replaces for all OdeComponents
@@ -366,7 +366,7 @@ class OdeXmlUtil
      * @return SimpleXMLElement
      */
     public static function createPropertiesXml(
-        $odeSessionId,
+        $odeId,
         $odeNavStructureSyncs,
         $odeProperties,
         $odeData,
@@ -374,8 +374,8 @@ class OdeXmlUtil
     ) {
         $sessionPath = null;
 
-        if (!empty($odeSessionId)) {
-            $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+        if (!empty($odeId)) {
+            $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
         }
 
         // Common replaces for all OdeComponents
@@ -425,13 +425,13 @@ class OdeXmlUtil
      *
      * @return \SimpleXMLElement
      */
-    public static function createOdeComponentsXml($odeSessionId, $odePagStructureSync, $odeComponentsSyncs)
+    public static function createOdeComponentsXml($odeId, $odePagStructureSync, $odeComponentsSyncs)
     {
         $sessionPath = null;
         $isOdeComponents = 'true';
 
-        if (!empty($odeSessionId)) {
-            $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+        if (!empty($odeId)) {
+            $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
         }
 
         $odeComponentsMapping = []; // OdeIdeviceId to rename dirs
@@ -553,7 +553,7 @@ class OdeXmlUtil
      *
      * @return OdeNavStructureSync[]
      */
-    public static function readOdeXml($odeSessionId, $elpContentFileContent)
+    public static function readOdeXml($odeId, $elpContentFileContent)
     {
         // This prevents mojibake issues when the input file content is not properly encoded,
         // which can happen on different operating systems (e.g., Windows default).
@@ -573,8 +573,8 @@ class OdeXmlUtil
 
         $sessionPath = null;
 
-        if (!empty($odeSessionId)) {
-            $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+        if (!empty($odeId)) {
+            $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
         }
 
         // Common replaces for all OdeComponents
@@ -640,7 +640,7 @@ class OdeXmlUtil
                 $odePagStructureSync = new OdePagStructureSync();
 
                 // OdePagStructureSync fields
-                $odePagStructureSync->setOdeSessionId($odeSessionId);
+                $odePagStructureSync->setOdeId($odeId);
                 $odePagStructureSync->setOdePageId($xmlOdePagStructure->{self::ODE_XML_TAG_FIELD_ODE_PAGE_ID});
                 $odePagStructureSync->setOdeBlockId($xmlOdePagStructure->{self::ODE_XML_TAG_FIELD_ODE_BLOCK_ID});
                 $odePagStructureSync->setBlockName($xmlOdePagStructure->{self::ODE_XML_TAG_FIELD_BLOCK_NAME});
@@ -662,7 +662,7 @@ class OdeXmlUtil
                     $odeComponentsSync = new OdeComponentsSync();
 
                     // OdeComponentsSync fields
-                    $odeComponentsSync->setOdeSessionId($odeSessionId);
+                    $odeComponentsSync->setOdeId($odeId);
                     $odeComponentsSync->setOdePageId($xmlOdeComponent->{self::ODE_XML_TAG_FIELD_ODE_PAGE_ID});
                     $odeComponentsSync->setOdeBlockId($xmlOdeComponent->{self::ODE_XML_TAG_FIELD_ODE_BLOCK_ID});
                     $odeComponentsSync->setOdeIdeviceId($xmlOdeComponent->{self::ODE_XML_TAG_FIELD_ODE_IDEVICE_ID});
@@ -728,7 +728,7 @@ class OdeXmlUtil
      *
      * @return OdeNavStructureSync[]
      */
-    public static function readPropertiesXml($odeSessionId, $elpContentFileContent)
+    public static function readPropertiesXml($odeId, $elpContentFileContent)
     {
         $odeResponse = [];
         $odeResponse['userPreferences'] = [];
@@ -741,7 +741,7 @@ class OdeXmlUtil
         if (isset($xml->{self::ODE_XML_TAG_PROPERTIES})) {
             foreach ($xml->{self::ODE_XML_TAG_PROPERTIES}->children() as $xmlOdeProperty) {
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($xmlOdeProperty->{self::ODE_XML_TAG_FIELD_KEY});
                 $odeProperties->setValue($xmlOdeProperty->{self::ODE_XML_TAG_FIELD_VALUE});
 
@@ -760,7 +760,7 @@ class OdeXmlUtil
      *
      * @return OdeNavStructureSync[]
      */
-    public static function readOldExeXml($odeSessionId, $elpContentFileContent)
+    public static function readOldExeXml($odeId, $elpContentFileContent)
     {
         // Array structure
         $odeResponse = [];
@@ -840,14 +840,14 @@ class OdeXmlUtil
 
         // Get general properties elp
         $elpNodeGeneralProperties = $xml->xpath('f:dictionary')[0];
-        $odeGeneralProperties = OdeOldXmlPropertiesGet::oldElpGeneralPropertiesGet($odeSessionId, $elpNodeGeneralProperties, $xpathNamespace);
+        $odeGeneralProperties = OdeOldXmlPropertiesGet::oldElpGeneralPropertiesGet($odeId, $elpNodeGeneralProperties, $xpathNamespace);
         $odeCatalogProperties['odeProperties'] = [];
 
         // Get catalog properties elp
         if ('LOMES' == (string) $odeGeneralProperties['exportMetadata']) {
             // set export metadata
             $odeProperties = new OdePropertiesSync();
-            $odeProperties->setOdeSessionId($odeSessionId);
+            $odeProperties->setOdeId($odeId);
             $odeProperties->setKey('pp_exportMetadataType');
             $odeProperties->setValue('lomes');
             array_push($odeGeneralProperties['odeProperties'], $odeProperties);
@@ -856,12 +856,12 @@ class OdeXmlUtil
             if (!empty($elpNodeCatalogProperties)) {
                 $elpNodeCatalogProperties = $elpNodeCatalogProperties[0];
                 $propertyCatalogKey = 'lom';
-                $odeCatalogProperties = OdeOldXmlPropertiesGet::oldElpCatalogPropertiesGet($odeSessionId, $elpNodeCatalogProperties, $propertyCatalogKey, $xpathNamespace);
+                $odeCatalogProperties = OdeOldXmlPropertiesGet::oldElpCatalogPropertiesGet($odeId, $elpNodeCatalogProperties, $propertyCatalogKey, $xpathNamespace);
             }
         } else {
             // set export metadata
             $odeProperties = new OdePropertiesSync();
-            $odeProperties->setOdeSessionId($odeSessionId);
+            $odeProperties->setOdeId($odeId);
             $odeProperties->setKey('pp_exportMetadataType');
             $odeProperties->setValue('lom');
             array_push($odeGeneralProperties['odeProperties'], $odeProperties);
@@ -870,7 +870,7 @@ class OdeXmlUtil
             if (!empty($elpNodeCatalogProperties)) {
                 $elpNodeCatalogProperties = $elpNodeCatalogProperties[0];
                 $propertyCatalogKey = 'lom';
-                $odeCatalogProperties = OdeOldXmlPropertiesGet::oldElpCatalogPropertiesGet($odeSessionId, $elpNodeCatalogProperties, $propertyCatalogKey, $xpathNamespace);
+                $odeCatalogProperties = OdeOldXmlPropertiesGet::oldElpCatalogPropertiesGet($odeId, $elpNodeCatalogProperties, $propertyCatalogKey, $xpathNamespace);
             }
         }
 
@@ -918,7 +918,7 @@ class OdeXmlUtil
         $nodes = $xml->xpath("//f:instance[@class='exe.engine.node.Node']");
         foreach ($nodes as $node) {
             // Get navStructure, references and routes to place content
-            $subPagesNav = self::oldElpStructureNewPage($odeSessionId, $generatedIds, $node, $xml, $xpathNamespace);
+            $subPagesNav = self::oldElpStructureNewPage($odeId, $generatedIds, $node, $xml, $xpathNamespace);
             // Get references to assign the parent
             foreach ($subPagesNav['nodeReferences'] as $key => $parentReference) {
                 $references[$key] = $parentReference;
@@ -1072,7 +1072,7 @@ class OdeXmlUtil
      *
      * @return array $result
      */
-    private static function oldElpStructureNewPage($odeSessionId, $generatedIds, $oldXmlListInst, $xml, $xpathNamespace)
+    private static function oldElpStructureNewPage($odeId, $generatedIds, $oldXmlListInst, $xml, $xpathNamespace)
     {
         // params
         $result = [];
@@ -1108,7 +1108,7 @@ class OdeXmlUtil
                 $generatedIds[] = $odePageId;
 
                 // OdeNavStructureSync fields
-                $subOdeNavStructureSync->setOdeSessionId($odeSessionId);
+                $subOdeNavStructureSync->setOdeId($odeId);
                 $subOdeNavStructureSync->setOdePageId($odePageId);
                 // $subOdeNavStructureSync->setOdeParentPageId($odeParentPage);
                 $subOdeNavStructureSync->setOdeNavStructureSyncOrder(intval($odePagOrder));
@@ -1153,7 +1153,7 @@ class OdeXmlUtil
                     // Get component sync by node type
                     $types = $oldXmlListInstDictList->xpath('f:instance/@class');
                     $references = $oldXmlListInstDictList->xpath('f:instance/@reference');
-                    $results = self::getComponentSyncFromNode($types, $references, $oldXmlListInstDictList, $odeSessionId, $odePageId, $generatedIds, $xpathNamespace);
+                    $results = self::getComponentSyncFromNode($types, $references, $oldXmlListInstDictList, $odeId, $odePageId, $generatedIds, $xpathNamespace);
                     if (!empty($results)) {
                         foreach ($results as $result) {
                             foreach ($result['odeComponentsSync'] as $odeComponentSync) {
@@ -1169,7 +1169,7 @@ class OdeXmlUtil
                     $nodeIdevicesNotaInfo = $oldXmlListInstDictList->xpath("f:instance[@class='exe.engine.listaidevice.ListaIdevice']");
 
                     // Search dropdown activity, process it and exclude from $nodeIdevicesNotaInfo
-                    $dropdownResult = self::searchDropdownActivityOldElp($odeSessionId, $odePageId, $nodeIdevicesNotaInfo, $subOdeNavStructureSync, $srcRoutes, $xpathNamespace, $generatedIds);
+                    $dropdownResult = self::searchDropdownActivityOldElp($odeId, $odePageId, $nodeIdevicesNotaInfo, $subOdeNavStructureSync, $srcRoutes, $xpathNamespace, $generatedIds);
                     $nodeIdevicesNotaInfo = $dropdownResult['nodeIdevicesNotaInfo'];
                     $subOdeNavStructureSync = $dropdownResult['subOdeNavStructureSync'];
 
@@ -1179,7 +1179,7 @@ class OdeXmlUtil
                     $nodeIdevicesTareas = array_merge($nodeIdevicesTareas, $nodeIdevicesReflexion);
 
                     if (!empty($nodeIdevicesTareas)) {
-                        $result = self::createIdeviceXmlClassTareas($odeSessionId, $odePageId, $nodeIdevicesTareas, $generatedIds, $xpathNamespace);
+                        $result = self::createIdeviceXmlClassTareas($odeId, $odePageId, $nodeIdevicesTareas, $generatedIds, $xpathNamespace);
                         foreach ($result['odeComponentsSync'] as $odeComponentSync) {
                             $subOdeNavStructureSync->addOdePagStructureSync($odeComponentSync);
                         }
@@ -1191,7 +1191,7 @@ class OdeXmlUtil
                         $nodeIdevice->registerXPathNamespace('f', $xpathNamespace);
 
                         // Search game idevice and process it
-                        $gameIdevicesResult = self::searchGameIdeviceOldElp($odeSessionId, $odePageId, $nodeIdevice, $subOdeNavStructureSync, $srcRoutes, $xpathNamespace, $generatedIds);
+                        $gameIdevicesResult = self::searchGameIdeviceOldElp($odeId, $odePageId, $nodeIdevice, $subOdeNavStructureSync, $srcRoutes, $xpathNamespace, $generatedIds);
 
                         $nodeIdevice = $gameIdevicesResult['nodeIdevice'];
                         $subOdeNavStructureSync = $gameIdevicesResult['subOdeNavStructureSync'];
@@ -1199,7 +1199,7 @@ class OdeXmlUtil
                         // In case of not be a game idevice
                         if (!empty($nodeIdevice)) {
                             // Process node text idevices
-                            $nodeIdevicesTextResult = self::searchTextIdeviceOldElp($odeSessionId, $odePageId, $nodeIdevice, $subOdeNavStructureSync, $srcRoutes, $xpathNamespace, $generatedIds);
+                            $nodeIdevicesTextResult = self::searchTextIdeviceOldElp($odeId, $odePageId, $nodeIdevice, $subOdeNavStructureSync, $srcRoutes, $xpathNamespace, $generatedIds);
                             $subOdeNavStructureSync = $nodeIdevicesTextResult['subOdeNavStructureSync'];
                             $srcRoutes = $nodeIdevicesTextResult['srcRoutes'];
                         }
@@ -1231,7 +1231,7 @@ class OdeXmlUtil
      * @return array $result
      */
     private static function createIdeviceXmlClassTareas(
-        $odeSessionId,
+        $odeId,
         $odePageId,
         $nodeIdevicesTareas,
         $generatedIds,
@@ -1254,7 +1254,7 @@ class OdeXmlUtil
                     $generatedIds[] = $odeBlockId;
 
                     // OdePagStructureSync fields
-                    $subOdePagStructureSync->setOdeSessionId($odeSessionId);
+                    $subOdePagStructureSync->setOdeId($odeId);
                     $subOdePagStructureSync->setOdePageId($odePageId);
                     $subOdePagStructureSync->setOdeBlockId($odeBlockId);
                     // $odePagStructureSync->setIconName($xmlOdePagStructure->{self::ODE_XML_TAG_FIELD_ICON_NAME});
@@ -1281,7 +1281,7 @@ class OdeXmlUtil
                     $odeComponentsMapping[] = $odeIdeviceId;
 
                     // OdeComponentsSync fields
-                    $odeComponentsSync->setOdeSessionId($odeSessionId);
+                    $odeComponentsSync->setOdeId($odeId);
                     $odeComponentsSync->setOdePageId($odePageId);
                     $odeComponentsSync->setOdeBlockId($odeBlockId);
                     $odeComponentsSync->setOdeIdeviceId($odeIdeviceId);
@@ -1299,8 +1299,8 @@ class OdeXmlUtil
 
                         $sessionPath = null;
 
-                        if (!empty($odeSessionId)) {
-                            $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+                        if (!empty($odeId)) {
+                            $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
                         }
 
                         // Common replaces for all OdeComponents
@@ -1366,7 +1366,7 @@ class OdeXmlUtil
      * @return OdeNavStructureSync[]
      */
     public static function readMultipleOdeXml(
-        $odeSessionId,
+        $odeId,
         $elpContentFileContent,
         $parentOdeNavStructureSync = null,
     ) {
@@ -1380,8 +1380,8 @@ class OdeXmlUtil
 
         $sessionPath = null;
 
-        if (!empty($odeSessionId)) {
-            $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+        if (!empty($odeId)) {
+            $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
         }
 
         // Get parent page id of navs on the current session
@@ -1443,7 +1443,7 @@ class OdeXmlUtil
                     $odePagStructureSync = new OdePagStructureSync();
 
                     // OdePagStructureSync fields
-                    $odePagStructureSync->setOdeSessionId($odeSessionId);
+                    $odePagStructureSync->setOdeId($odeId);
                     $odePagStructureSync->setOdePageId($newOdePageId);
                     $odePagStructureSync->setOdeBlockId($newOdeBlockId);
                     $odePagStructureSync->setBlockName($xmlOdePagStructure->{self::ODE_XML_TAG_FIELD_BLOCK_NAME});
@@ -1472,7 +1472,7 @@ class OdeXmlUtil
                         $odeComponentsSync = new OdeComponentsSync();
 
                         // OdeComponentsSync fields
-                        $odeComponentsSync->setOdeSessionId($odeSessionId);
+                        $odeComponentsSync->setOdeId($odeId);
                         $odeComponentsSync->setOdePageId($newOdePageId);
                         $odeComponentsSync->setOdeBlockId($newOdeBlockId);
                         $odeComponentsSync->setOdeIdeviceId($newOdeIdeviceId);
@@ -1561,7 +1561,7 @@ class OdeXmlUtil
      *
      * @return OdeNavStructureSync[]
      */
-    public static function readOdeComponentsXml($odeSessionId, $odeNavStructureSync, $elpContentFileContent)
+    public static function readOdeComponentsXml($odeId, $odeNavStructureSync, $elpContentFileContent)
     {
         $odeResponse = [];
         $odeResponse['odeNavStructureSyncs'] = [];
@@ -1573,8 +1573,8 @@ class OdeXmlUtil
 
         $sessionPath = null;
 
-        if (!empty($odeSessionId)) {
-            $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+        if (!empty($odeId)) {
+            $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
         }
 
         $xml = new \SimpleXMLElement($elpContentFileContent);
@@ -1602,7 +1602,7 @@ class OdeXmlUtil
             $odePagStructureSync = new OdePagStructureSync();
 
             // OdePagStructureSync fields
-            $odePagStructureSync->setOdeSessionId($odeSessionId);
+            $odePagStructureSync->setOdeId($odeId);
             $odePagStructureSync->setOdePageId($odeNavStructureSync->getOdePageId());
             $odePagStructureSync->setOdeBlockId($newOdeBlockId);
             $odePagStructureSync->setBlockName($xmlOdePagStructure->{self::ODE_XML_TAG_FIELD_BLOCK_NAME});
@@ -1630,7 +1630,7 @@ class OdeXmlUtil
                 $odeComponentsSync = new OdeComponentsSync();
 
                 // OdeComponentsSync fields
-                $odeComponentsSync->setOdeSessionId($odeSessionId);
+                $odeComponentsSync->setOdeId($odeId);
                 $odeComponentsSync->setOdePageId($xmlOdeComponent->{self::ODE_XML_TAG_FIELD_ODE_PAGE_ID});
                 $odeComponentsSync->setOdeBlockId($newOdeBlockId);
                 $odeComponentsSync->setOdeIdeviceId($newOdeIdeviceId);
@@ -1640,7 +1640,7 @@ class OdeXmlUtil
                 if (!empty($sessionPath)) {
                     $currentReplaces = [
                         $oldOdeIdeviceId => $newOdeIdeviceId,
-                        $oldOdeSessionId => $odeSessionId,
+                        $oldOdeSessionId => $odeId,
                     ];
 
                     $replacesToApply = $currentReplaces;
@@ -1734,7 +1734,7 @@ class OdeXmlUtil
      *
      * @return array $result
      */
-    private static function searchTextIdeviceOldElp($odeSessionId, $odePageId, $nodeIdevice, $subOdeNavStructureSync, $srcRoutes, $xpathNamespace, $generatedIds)
+    private static function searchTextIdeviceOldElp($odeId, $odePageId, $nodeIdevice, $subOdeNavStructureSync, $srcRoutes, $xpathNamespace, $generatedIds)
     {
         $result = [];
 
@@ -1757,7 +1757,7 @@ class OdeXmlUtil
                         $generatedIds[] = $odeBlockId;
 
                         // OdePagStructureSync fields
-                        $subOdePagStructureSync->setOdeSessionId($odeSessionId);
+                        $subOdePagStructureSync->setOdeId($odeId);
                         $subOdePagStructureSync->setOdePageId($odePageId);
                         $subOdePagStructureSync->setOdeBlockId($odeBlockId);
                         // $odePagStructureSync->setIconName($xmlOdePagStructure->{self::ODE_XML_TAG_FIELD_ICON_NAME});
@@ -1784,7 +1784,7 @@ class OdeXmlUtil
                         $odeComponentsMapping[] = $odeIdeviceId;
 
                         // OdeComponentsSync fields
-                        $odeComponentsSync->setOdeSessionId($odeSessionId);
+                        $odeComponentsSync->setOdeId($odeId);
                         $odeComponentsSync->setOdePageId($odePageId);
                         $odeComponentsSync->setOdeBlockId($odeBlockId);
                         $odeComponentsSync->setOdeIdeviceId($odeIdeviceId);
@@ -1802,8 +1802,8 @@ class OdeXmlUtil
 
                             $sessionPath = null;
 
-                            if (!empty($odeSessionId)) {
-                                $sessionPath = UrlUtil::getOdeSessionUrl($odeSessionId);
+                            if (!empty($odeId)) {
+                                $sessionPath = UrlUtil::getOdeSessionUrl($odeId);
                             }
 
                             // Common replaces for all OdeComponents
@@ -2302,7 +2302,7 @@ class OdeXmlUtil
      *
      * @return array $result
      */
-    private static function searchGameIdeviceOldElp($odeSessionId, $odePageId, $nodeIdevice, $subOdeNavStructureSync, $srcRoutes, $xpathNamespace, $generatedIds)
+    private static function searchGameIdeviceOldElp($odeId, $odePageId, $nodeIdevice, $subOdeNavStructureSync, $srcRoutes, $xpathNamespace, $generatedIds)
     {
         $result = [];
 
@@ -2340,7 +2340,7 @@ class OdeXmlUtil
      *
      * @return array $result
      */
-    private static function searchDropdownActivityOldElp($odeSessionId, $odePageId, $nodeIdevicesNotaInfo, $subOdeNavStructureSync, $srcRoutes, $xpathNamespace, $generatedIds)
+    private static function searchDropdownActivityOldElp($odeId, $odePageId, $nodeIdevicesNotaInfo, $subOdeNavStructureSync, $srcRoutes, $xpathNamespace, $generatedIds)
     {
         $result = [];
 
@@ -2355,7 +2355,7 @@ class OdeXmlUtil
             }
 
             if ($isDropdown) {
-                $result = OdeOldXmlDropdownIdevice::oldElpDropdownIdeviceStructure($odeSessionId, $odePageId, $nodeIdeviceNotaInfo, $generatedIds, $xpathNamespace);
+                $result = OdeOldXmlDropdownIdevice::oldElpDropdownIdeviceStructure($odeId, $odePageId, $nodeIdeviceNotaInfo, $generatedIds, $xpathNamespace);
                 foreach ($result['odeComponentsSync'] as $odeComponentSync) {
                     $subOdeNavStructureSync->addOdePagStructureSync($odeComponentSync);
                 }
@@ -2384,7 +2384,7 @@ class OdeXmlUtil
      *
      * @return array $result
      */
-    private static function getComponentSyncFromNode($types, $references, $oldXmlListInstDictList, $odeSessionId, $odePageId, $generatedIds, $xpathNamespace)
+    private static function getComponentSyncFromNode($types, $references, $oldXmlListInstDictList, $odeId, $odePageId, $generatedIds, $xpathNamespace)
     {
         $result = [];
 
@@ -2398,118 +2398,118 @@ class OdeXmlUtil
             switch ($types[$i]) {
                 // Get fill idevices
                 case 'exe.engine.clozeidevice.ClozeIdevice':
-                    $odeComponentSyncResult = OdeOldXmlFillIdevice::oldElpFillIdeviceStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlFillIdevice::oldElpFillIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get image magnifier idevices
                 case 'exe.engine.imagemagnifieridevice.ImageMagnifierIdevice':
-                    $odeComponentSyncResult = OdeOldXmlImageMagnifierIdevice::oldElpImageMagnifierIdeviceStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlImageMagnifierIdevice::oldElpImageMagnifierIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get free text idevices and process
                 case 'exe.engine.freetextidevice.FreeTextIdevice':
-                    $odeComponentSyncResult = OdeOldXmlFreeTextIdevice::oldElpFreeTextIdeviceStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlFreeTextIdevice::oldElpFreeTextIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get generic idevices and process
                 case 'exe.engine.genericidevice.GenericIdevice':
-                    $odeComponentSyncResult = OdeOldXmlGenericIdevice::oldElpGenericIdeviceStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlGenericIdevice::oldElpGenericIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get case study idevices and process
                 case 'exe.engine.casestudyidevice.CasestudyIdevice':
-                    $odeComponentSyncResult = OdeOldXmlCaseStudyIdevice::oldElpCaseStudyStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlCaseStudyIdevice::oldElpCaseStudyStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get rss idevices and process
                 case 'exe.engine.rssidevice.RssIdevice':
-                    $odeComponentSyncResult = OdeOldXmlRssIdevice::oldElpRssStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlRssIdevice::oldElpRssStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get wikipedia idevices and process
                 case 'exe.engine.wikipediaidevice.WikipediaIdevice':
-                    $odeComponentSyncResult = OdeOldXmlWikipediaIdevice::oldElpWikipediaStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlWikipediaIdevice::oldElpWikipediaStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get java application idevice
                 case 'exe.engine.appletidevice.AppletIdevice':
-                    $odeComponentSyncResult = OdeOldXmlJavaAppIdevice::oldElpJavaAppIdeviceStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlJavaAppIdevice::oldElpJavaAppIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get true false idevice
                 case 'exe.engine.truefalseidevice.TrueFalseIdevice':
-                    $odeComponentSyncResult = OdeOldXmlTrueFalseIdevice::oldElpTrueFalseStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlTrueFalseIdevice::oldElpTrueFalseStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get selection multiple idevice
                 case 'exe.engine.multichoiceidevice.MultichoiceIdevice':
-                    $odeComponentSyncResult = OdeOldXmlMultipleSelectionIdevice::oldElpMultipleSelectionStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlMultipleSelectionIdevice::oldElpMultipleSelectionStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get multiple answer idevice
                 case 'exe.engine.multiselectidevice.MultiSelectIdevice':
-                    $odeComponentSyncResult = OdeOldXmlMultipleAnswerIdevice::oldElpMultipleAnswerStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlMultipleAnswerIdevice::oldElpMultipleAnswerStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get File attach idevice
                 case 'exe.engine.fileattachidevice.FileAttachIdeviceInc':
-                    $odeComponentSyncResult = OdeOldXmlFileAttachIdevice::oldElpFileAttachIdeviceStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlFileAttachIdevice::oldElpFileAttachIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get external url idevices
                 case 'exe.engine.externalurlidevice.ExternalUrlIdevice':
-                    $odeComponentSyncResult = OdeOldXmlExternalUrlIdevice::oldElpExternalUrlIdeviceStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlExternalUrlIdevice::oldElpExternalUrlIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get image gallery idevices
                 case 'exe.engine.galleryidevice.GalleryIdevice':
-                    $odeComponentSyncResult = OdeOldXmlGalleryImageIdevice::oldElpGalleryImageIdeviceStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlGalleryImageIdevice::oldElpGalleryImageIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get scorm test idevices
                 case 'exe.engine.quiztestidevice.QuizTestIdevice':
-                    $odeComponentSyncResult = OdeOldXmlScormTestIdevice::oldElpScormTestStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlScormTestIdevice::oldElpScormTestStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get fill fpd idevice
                 case 'exe.engine.clozefpdidevice.ClozefpdIdevice':
                     // Same as fill idevice
-                    $odeComponentSyncResult = OdeOldXmlFillIdevice::oldElpFillIdeviceStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlFillIdevice::oldElpFillIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get fpd selection multiple idevices
                 case 'exe.engine.seleccionmultiplefpdidevice.SeleccionmultiplefpdIdevice':
                     // Same as multiple answer idevice
-                    $odeComponentSyncResult = OdeOldXmlMultipleAnswerIdevice::oldElpMultipleAnswerStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlMultipleAnswerIdevice::oldElpMultipleAnswerStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get fpd selection multiple idevices
                 case 'exe.engine.eleccionmultiplefpdidevice.EleccionmultiplefpdIdevice':
                     // Same as multiple selection idevice
-                    $odeComponentSyncResult = OdeOldXmlMultipleSelectionIdevice::oldElpMultipleSelectionStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlMultipleSelectionIdevice::oldElpMultipleSelectionStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get fill fpd second type idevice
                 case 'exe.engine.clozelangfpdidevice.ClozelangfpdIdevice':
-                    $odeComponentSyncResult = OdeOldXmlFpdFillSecondTypeIdevice::oldElpFpdFillSecondTypeIdeviceStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlFpdFillSecondTypeIdevice::oldElpFpdFillSecondTypeIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
@@ -2529,20 +2529,20 @@ class OdeXmlUtil
                 case 'exe.engine.reflectionfpdmodifidevice.ReflectionfpdmodifIdevice':
                 case 'exe.engine.freetextfpdidevice.FreeTextfpdIdevice':
                     // Same as free text idevice
-                    $odeComponentSyncResult = OdeOldXmlFreeTextIdevice::oldElpFreeTextIdeviceStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlFreeTextIdevice::oldElpFreeTextIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get true false fpd idevice
                 case 'exe.engine.verdaderofalsofpdidevice.VerdaderofalsofpdIdevice':
                     // Same as true false idevice
-                    $odeComponentSyncResult = OdeOldXmlTrueFalseIdevice::oldElpTrueFalseStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlTrueFalseIdevice::oldElpTrueFalseStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get solved exercises fpd idevice
                 case 'exe.engine.ejercicioresueltofpdidevice.EjercicioresueltofpdIdevice':
-                    $odeComponentSyncResult = OdeOldXmlFpdSolvedExerciseIdevice::oldElpFpdSolvedExerciseIdeviceStructure($odeSessionId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlFpdSolvedExerciseIdevice::oldElpFpdSolvedExerciseIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
                     array_push($result, $odeComponentSyncResult);
                     break;
 

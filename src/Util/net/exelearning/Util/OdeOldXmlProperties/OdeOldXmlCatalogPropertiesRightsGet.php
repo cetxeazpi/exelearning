@@ -48,7 +48,7 @@ class OdeOldXmlCatalogPropertiesRightsGet
     // const OLD_ODE_XML_IDEVICE_TEXT = 'instance';
     public const OLD_ODE_XML_IDEVICE_TEXT_CONTENT = 'string role="key" value="content_w_resourcePaths"';
 
-    public static function oldElpCatalogRightsPropertiesGet($odeSessionId, $nodeCatalogProperties, $propertyCatalogKey, $xpathNamespace)
+    public static function oldElpCatalogRightsPropertiesGet($odeId, $nodeCatalogProperties, $propertyCatalogKey, $xpathNamespace)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -58,9 +58,9 @@ class OdeOldXmlCatalogPropertiesRightsGet
         $lomRightsPropertiesNodes = $nodeCatalogProperties->xpath("f:dictionary/f:string[@value = 'rights']/
         following-sibling::f:instance[@class='exe.engine.lom.lomsubs.rightsSub']");
         foreach ($lomRightsPropertiesNodes as $lomRightsPropertiesNode) {
-            $copyrightAndOtherRestrictionsProperties = self::getCopyrightAndOtherRestrictionsProperties($odeSessionId, $lomRightsPropertiesNode, $xpathNamespace, $propertyCatalogRightsKey);
-            $costProperties = self::getCostProperties($odeSessionId, $lomRightsPropertiesNode, $xpathNamespace, $propertyCatalogRightsKey);
-            $descriptionProperties = self::getRightsDescriptionProperties($odeSessionId, $lomRightsPropertiesNode, $xpathNamespace, $propertyCatalogRightsKey);
+            $copyrightAndOtherRestrictionsProperties = self::getCopyrightAndOtherRestrictionsProperties($odeId, $lomRightsPropertiesNode, $xpathNamespace, $propertyCatalogRightsKey);
+            $costProperties = self::getCostProperties($odeId, $lomRightsPropertiesNode, $xpathNamespace, $propertyCatalogRightsKey);
+            $descriptionProperties = self::getRightsDescriptionProperties($odeId, $lomRightsPropertiesNode, $xpathNamespace, $propertyCatalogRightsKey);
 
             $lomMetadataPropertiesArray = array_merge(
                 $copyrightAndOtherRestrictionsProperties['odeProperties'],
@@ -77,7 +77,7 @@ class OdeOldXmlCatalogPropertiesRightsGet
         return $result;
     }
 
-    private static function getCostProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
+    private static function getCostProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -102,7 +102,7 @@ class OdeOldXmlCatalogPropertiesRightsGet
 
             if (!empty($lomGeneralCostValuePropertiesNodeValue)) {
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($lomGeneralCostValuePropertyKey);
                 $odeProperties->setValue($lomGeneralCostValuePropertiesNodeValue[0]);
             }
@@ -115,7 +115,7 @@ class OdeOldXmlCatalogPropertiesRightsGet
         return $result;
     }
 
-    private static function getRightsDescriptionProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getRightsDescriptionProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -139,7 +139,7 @@ class OdeOldXmlCatalogPropertiesRightsGet
 
                 if (!empty($lomGeneralTitlePropertyStringNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         $lomGeneralDecriptionPropertyStringKey = $propertyCatalogGeneralRightsDescriptionKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend;
                     }
@@ -159,7 +159,7 @@ class OdeOldXmlCatalogPropertiesRightsGet
 
                 if (!empty($lomGeneralTitleStringPropertyLanguageNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         ++$i;
                     }
@@ -176,7 +176,7 @@ class OdeOldXmlCatalogPropertiesRightsGet
         return $result;
     }
 
-    private static function getCopyrightAndOtherRestrictionsProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
+    private static function getCopyrightAndOtherRestrictionsProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -201,7 +201,7 @@ class OdeOldXmlCatalogPropertiesRightsGet
 
             if (!empty($lomGeneralCopyrightAndOtherRestrictionsValuePropertiesNodeValue)) {
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($lomGeneralCopyrightAndOtherRestrictionsValuePropertyKey);
                 $odeProperties->setValue($lomGeneralCopyrightAndOtherRestrictionsValuePropertiesNodeValue[0]);
             }

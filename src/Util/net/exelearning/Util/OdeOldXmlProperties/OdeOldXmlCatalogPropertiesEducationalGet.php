@@ -48,7 +48,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
     // const OLD_ODE_XML_IDEVICE_TEXT = 'instance';
     public const OLD_ODE_XML_IDEVICE_TEXT_CONTENT = 'string role="key" value="content_w_resourcePaths"';
 
-    public static function oldElpCatalogEducationalPropertiesGet($odeSessionId, $nodeCatalogProperties, $propertyCatalogKey, $xpathNamespace)
+    public static function oldElpCatalogEducationalPropertiesGet($odeId, $nodeCatalogProperties, $propertyCatalogKey, $xpathNamespace)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -58,17 +58,17 @@ class OdeOldXmlCatalogPropertiesEducationalGet
         $lomLifeCyclePropertiesNodes = $nodeCatalogProperties->xpath("f:dictionary/f:string[@value = 'educational']/
         following-sibling::f:list[1]/f:instance");
         foreach ($lomLifeCyclePropertiesNodes as $lomLifeCyclePropertiesNode) {
-            $descriptionProperties = self::getDescriptionProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $languageProperties = self::getLanguageProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $difficultyProperties = self::getDifficultyProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $intendedEndUserRoleProperties = self::getIntendedEndUserRoleProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $interaciveLevelProperties = self::getInteractiveLevelProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $interaciveTypeProperties = self::getInteractiveTypeProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $learningResourceTypeProperties = self::getLearningResourceTypeProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $semanticDensityProperties = self::getSemanticDensityProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $typicalAgeRangeProperties = self::getTypicalAgeRangeProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $typicalLearningTimeProperties = self::getTypicalLearningTimeProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
-            $contextProperties = self::getContextProperties($odeSessionId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $descriptionProperties = self::getDescriptionProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $languageProperties = self::getLanguageProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $difficultyProperties = self::getDifficultyProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $intendedEndUserRoleProperties = self::getIntendedEndUserRoleProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $interaciveLevelProperties = self::getInteractiveLevelProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $interaciveTypeProperties = self::getInteractiveTypeProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $learningResourceTypeProperties = self::getLearningResourceTypeProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $semanticDensityProperties = self::getSemanticDensityProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $typicalAgeRangeProperties = self::getTypicalAgeRangeProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $typicalLearningTimeProperties = self::getTypicalLearningTimeProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
+            $contextProperties = self::getContextProperties($odeId, $lomLifeCyclePropertiesNode, $xpathNamespace, $propertyCatalogLifeCycleKey);
 
             $lomMetadataPropertiesArray = array_merge(
                 $descriptionProperties['odeProperties'],
@@ -93,7 +93,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
         return $result;
     }
 
-    private static function getDescriptionProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getDescriptionProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -117,7 +117,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
 
                 if (!empty($lomGeneralTitlePropertyStringNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         $lomGeneralDecriptionPropertyStringKey = $propertyCatalogGeneralDescriptionKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend;
                     }
@@ -137,7 +137,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
 
                 if (!empty($lomGeneralTitleStringPropertyLanguageNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         ++$i;
                     }
@@ -154,7 +154,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
         return $result;
     }
 
-    private static function getLanguageProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getLanguageProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -173,7 +173,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
 
             if (!empty($lomGeneralLanguagePropertiesNodeValue)) {
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 if ($key >= '1') {
                     $propertyCatalogGeneralLanguageKey = $propertyCatalogGeneralLanguageKey.$i;
                     ++$i;
@@ -190,7 +190,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
         return $result;
     }
 
-    private static function getDifficultyProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getDifficultyProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -217,7 +217,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
 
             if (!empty($lomGeneralStructurePropertyStringNodeValue)) {
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($lomGeneralStructurePropertyStringKey);
                 $odeProperties->setValue($lomGeneralStructurePropertyStringNodeValue[0]);
             }
@@ -230,7 +230,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
         return $result;
     }
 
-    private static function getIntendedEndUserRoleProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
+    private static function getIntendedEndUserRoleProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -258,7 +258,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
 
                 if (!empty($lomGeneralIdentfierPropertyCatalogNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         $lomGeneralIdentfierPropertyCatalogKey = $propertyCatalogKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend;
                         ++$i;
@@ -276,7 +276,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
         return $result;
     }
 
-    private static function getInteractiveLevelProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getInteractiveLevelProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -303,7 +303,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
 
             if (!empty($lomGeneralStructurePropertyStringNodeValue)) {
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($lomGeneralStructurePropertyStringKey);
                 $odeProperties->setValue($lomGeneralStructurePropertyStringNodeValue[0]);
             }
@@ -316,7 +316,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
         return $result;
     }
 
-    private static function getInteractiveTypeProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getInteractiveTypeProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -343,7 +343,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
 
             if (!empty($lomGeneralStructurePropertyStringNodeValue)) {
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($lomGeneralStructurePropertyStringKey);
                 $odeProperties->setValue($lomGeneralStructurePropertyStringNodeValue[0]);
             }
@@ -356,7 +356,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
         return $result;
     }
 
-    private static function getLearningResourceTypeProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getLearningResourceTypeProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -383,7 +383,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
 
             if (!empty($lomGeneralStructurePropertyStringNodeValue)) {
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($lomGeneralStructurePropertyStringKey);
                 $odeProperties->setValue($lomGeneralStructurePropertyStringNodeValue[0]);
             }
@@ -396,7 +396,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
         return $result;
     }
 
-    private static function getSemanticDensityProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getSemanticDensityProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -423,7 +423,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
 
             if (!empty($lomGeneralStructurePropertyStringNodeValue)) {
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($lomGeneralStructurePropertyStringKey);
                 $odeProperties->setValue($lomGeneralStructurePropertyStringNodeValue[0]);
             }
@@ -436,7 +436,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
         return $result;
     }
 
-    private static function getTypicalAgeRangeProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getTypicalAgeRangeProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -460,7 +460,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
 
                 if (!empty($lomGeneralTitlePropertyStringNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         $lomGeneralDecriptionPropertyStringKey = $propertyCatalogGeneralDescriptionKey.$i.self::ODE_XML_KEY_UNDERSCORE.$propertyKeyAppend;
                     }
@@ -480,7 +480,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
 
                 if (!empty($lomGeneralTitleStringPropertyLanguageNodeValue)) {
                     $odeProperties = new OdePropertiesSync();
-                    $odeProperties->setOdeSessionId($odeSessionId);
+                    $odeProperties->setOdeId($odeId);
                     if ($key >= '1') {
                         ++$i;
                     }
@@ -497,7 +497,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
         return $result;
     }
 
-    private static function getTypicalLearningTimeProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
+    private static function getTypicalLearningTimeProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -549,7 +549,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
                                         $entityChildKeyAppend = self::ODE_XML_KEY_UNDERSCORE.$entityChildKey;
                                         $lomGeneralContributionPropertyEntityChildKey = $lomGeneralDateStatusValuePropertyKey.$entityChildKeyAppend;
                                         $odeProperties = new OdePropertiesSync();
-                                        $odeProperties->setOdeSessionId($odeSessionId);
+                                        $odeProperties->setOdeId($odeId);
                                         $odeProperties->setKey($lomGeneralContributionPropertyEntityChildKey);
                                         $odeProperties->setValue($durationValue);
 
@@ -577,7 +577,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
                                         $entityChildKeyAppend = self::ODE_XML_KEY_UNDERSCORE.$entityChildKey;
                                         $lomGeneralContributionPropertyEntityChildKey = $lomGeneralDateStatusValuePropertyKey.$entityChildKeyAppend;
                                         $odeProperties = new OdePropertiesSync();
-                                        $odeProperties->setOdeSessionId($odeSessionId);
+                                        $odeProperties->setOdeId($odeId);
                                         $odeProperties->setKey($lomGeneralContributionPropertyEntityChildKey);
                                         $odeProperties->setValue($durationValue);
 
@@ -596,7 +596,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
         return $result;
     }
 
-    private static function getContextProperties($odeSessionId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
+    private static function getContextProperties($odeId, $lomGeneralPropertiesNode, $xpathNamespace, $propertyCatalogGeneralKey)
     {
         $result = [];
         $result['odeProperties'] = [];
@@ -628,7 +628,7 @@ class OdeOldXmlCatalogPropertiesEducationalGet
                     ++$i;
                 }
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($lomGeneralStructurePropertyStringKey);
                 $odeProperties->setValue($lomGeneralStructurePropertyStringNodeValue[0]);
             }

@@ -60,7 +60,7 @@ class OdeOldXmlPropertiesGet
     // const OLD_ODE_XML_IDEVICE_TEXT = 'instance';
     public const OLD_ODE_XML_IDEVICE_TEXT_CONTENT = 'string role="key" value="content_w_resourcePaths"';
 
-    public static function oldElpGeneralPropertiesGet($odeSessionId, $nodeGeneralProperties, $xpathNamespace)
+    public static function oldElpGeneralPropertiesGet($odeId, $nodeGeneralProperties, $xpathNamespace)
     {
         $result = [];
         $result['exportMetadata'] = '';
@@ -90,7 +90,7 @@ class OdeOldXmlPropertiesGet
                 }
 
                 $odeProperties = new OdePropertiesSync();
-                $odeProperties->setOdeSessionId($odeSessionId);
+                $odeProperties->setOdeId($odeId);
                 $odeProperties->setKey($propertyKey);
                 $odeProperties->setValue($nodePropertyValue[0]);
             }

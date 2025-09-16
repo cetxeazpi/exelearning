@@ -37,7 +37,7 @@ class OdeOldXmlGalleryImageIdevice
         // "{'img':'{{image_path}}', 'thumbnail':'{{thumb_path}}', 'title':'', 'linktitle':'', 'author':'', 'linkauthor':'', 'license':''}"
     ];
 
-    public static function oldElpGalleryImageIdeviceStructure($odeSessionId, $odePageId, $galleryImageNodes, $generatedIds, $xpathNamespace)
+    public static function oldElpGalleryImageIdeviceStructure($odeId, $odePageId, $galleryImageNodes, $generatedIds, $xpathNamespace)
     {
         $result['odeComponentsSync'] = [];
         $result['srcRoutes'] = [];
@@ -71,8 +71,8 @@ class OdeOldXmlGalleryImageIdevice
                      /following-sibling::f:string[1]"
                 );
 
-                $sessionPath = !empty($odeSessionId)
-                    ? UrlUtil::getOdeSessionUrl($odeSessionId)
+                $sessionPath = !empty($odeId)
+                    ? UrlUtil::getOdeSessionUrl($odeId)
                     : '';
 
                 $fullImagePath = $sessionPath.$odeIdeviceId.Constants::SLASH.(string) $imagePath[0]['value'];
@@ -109,7 +109,7 @@ class OdeOldXmlGalleryImageIdevice
             $odeBlockId = Util::generateIdCheckUnique($generatedIds);
             $generatedIds[] = $odeBlockId;
 
-            $subOdePagStructureSync->setOdeSessionId($odeSessionId);
+            $subOdePagStructureSync->setOdeId($odeId);
             $subOdePagStructureSync->setOdePageId($odePageId);
             $subOdePagStructureSync->setOdeBlockId($odeBlockId);
             $subOdePagStructureSync->setBlockName((string) $blockNameNode[0]);
@@ -117,7 +117,7 @@ class OdeOldXmlGalleryImageIdevice
             $subOdePagStructureSync->loadOdePagStructureSyncPropertiesFromConfig();
 
             $odeComponentsSync = new OdeComponentsSync();
-            $odeComponentsSync->setOdeSessionId($odeSessionId);
+            $odeComponentsSync->setOdeId($odeId);
             $odeComponentsSync->setOdePageId($odePageId);
             $odeComponentsSync->setOdeBlockId($odeBlockId);
             $odeComponentsSync->setOdeIdeviceId($odeIdeviceId);

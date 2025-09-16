@@ -661,7 +661,7 @@ class OdeApiController extends DefaultApiController
             // The user has had the opportunity to save previously, therefore delete all autosaved files
             $autosavedSessionOdeFilesToMaintain = 0;
 
-            $result = $this->odeService->closeOdeSession($odeSessionId, $autosavedSessionOdeFilesToMaintain, $databaseUser);
+            $result = $this->odeService->closeOdeSession($odeId, $odeSessionId, $autosavedSessionOdeFilesToMaintain, $databaseUser);
 
             // If it's a shared session remove user sync changes from BBDD
             $this->currentOdeUsersSyncChangesService->removeSyncActionsByUser($databaseUser);
@@ -701,13 +701,14 @@ class OdeApiController extends DefaultApiController
         $responseData = [];
 
         // Collect parameters
+        $odeId = $request->get('odeId');
         $elpFileName = $request->get('elpFileName');
         $odeSessionId = $request->get('odeSessionId');
         $forceCloseOdeUserPreviousSession = $request->get('forceCloseOdeUserPreviousSession');
 
         if (
             $request->request->has('forceCloseOdeUserPreviousSession')
-            && (('true' == $forceCloseOdeUserPreviousSession) || ('1' == $forceCloseOdeUserPreviousSession))
+            && filter_var($forceCloseOdeUserPreviousSession, FILTER_VALIDATE_BOOL) //(('true' == $forceCloseOdeUserPreviousSession) || ('1' == $forceCloseOdeUserPreviousSession))
         ) {
             $forceCloseOdeUserPreviousSession = true;
         } else {
@@ -722,7 +723,7 @@ class OdeApiController extends DefaultApiController
         try {
             // Check content in the xml and return values
             $odeValues = $this->odeService->checkContentXmlAndCurrentUser(
-                $odeSessionId,
+                $odeId, //$odeSessionId,
                 $elpFileName,
                 $databaseUser,
                 $forceCloseOdeUserPreviousSession

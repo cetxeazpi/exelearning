@@ -272,8 +272,9 @@ class IdeviceApiController extends DefaultApiController
 
             $clientIp = $request->getClientIp();
 
-            // removes flag syncComponentsFlag
-            $this->currentOdeUsersService->removeActiveSyncComponentsFlag($user);
+            //  removes flag syncComponentsFlag
+            //  FIXME: Generates error
+            //  $this->currentOdeUsersService->removeActiveSyncComponentsFlag($user);
 
             // If is root node
             if (Constants::ROOT_NODE_IDENTIFIER == $odeNavStructureSyncId) {

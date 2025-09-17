@@ -57,11 +57,13 @@ class NavStructureApiController extends DefaultApiController
             // Get user
             $user = $this->getUser();
 
-            // Remove save flag active
-            $this->currentOdeUsersService->removeActiveSyncSaveFlag($user);
+            //  Remove save flag active
+            //  FIXME: Generates error
+            //  $this->currentOdeUsersService->removeActiveSyncSaveFlag($user);
 
-            // Remove flag syncComponentsFlag
-            $this->currentOdeUsersService->removeActiveSyncComponentsFlag($user);
+            //  Remove flag syncComponentsFlag
+            //  FIXME: Generates error
+            //  $this->currentOdeUsersService->removeActiveSyncComponentsFlag($user);
 
             $loadOdePagStructureSyncs = false;
             $loadOdeComponentsSync = false;

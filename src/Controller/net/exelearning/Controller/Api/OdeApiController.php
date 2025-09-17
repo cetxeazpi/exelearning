@@ -730,7 +730,7 @@ class OdeApiController extends DefaultApiController
             );
 
             if ('OK' !== $odeValues['responseMessage']) {
-                $responseData['responseMessage'] = $odeValues['responseMessage'];
+                $responseData['responseMessage'] = $odeValues['responseMessage'].'<br><strong>'. $elpFileName .'</strong>';
                 $jsonData = $this->getJsonSerialized($responseData);
 
                 return new JsonResponse($jsonData, $this->status, [], true);

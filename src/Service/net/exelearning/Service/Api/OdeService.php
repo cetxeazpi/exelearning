@@ -1304,6 +1304,10 @@ class OdeService implements OdeServiceInterface
      */
     private function openElp($newOdeSessionId, $elpFileName, $odeSessionDistDirPath, $checkElpFile)
     {
+        // TODO: Ensure $isImportIdevices is correctly defined and
+        // consider making it dynamic based on the use case.
+        $isImportIdevices = false;
+
         $destinationFilePathName = $odeSessionDistDirPath.$elpFileName;
         $elpCopied = FileUtil::copyFile($checkElpFile['elpFilePathName'], $destinationFilePathName);
 
@@ -2154,7 +2158,7 @@ class OdeService implements OdeServiceInterface
 
                 // close previous session
                 $this->closeOdeSession(
-                    $odeId,
+                    $odeValues['odeId'],
                     $currentSessionForUser->getOdeSessionId(),
                     $autosavedSessionOdeFilesToMaintain,
                     $user
@@ -2163,9 +2167,10 @@ class OdeService implements OdeServiceInterface
         }
 
         // Check if user has already an open session
-        $currentSessionsForUser = $currentOdeUsersRepository->getCurrentSessionForUser(
-            $dbUser->getUserIdentifier()
-        );
+        // FIXME: User must be able to open the project even if he is not the owner
+        // $currentSessionsForUser = $currentOdeUsersRepository->getCurrentSessionForUser($dbUser->getUserIdentifier());
+        
+        // TODO Revisa perquè surt
         if (!empty($currentSessionsForUser)) {
             throw new UserAlreadyOpenSessionException();
         }
@@ -2367,11 +2372,18 @@ class OdeService implements OdeServiceInterface
                 if (preg_match('/lom_metaMetadata_contribute\d*_role_value/i', $odeProperty->getKey()) && is_null($odeProperty->getValue())) {
                     $odeProperty->setValue('creator');
                 }
+
+                // Ensure have the odeId
+                $odeProperty->setOdeId($odeValues['odeId']);
+
                 $this->entityManager->persist($odeProperty);
             }
         }
         if (!empty($odeValues['odeNavStructureSyncs'])) {
             foreach ($odeValues['odeNavStructureSyncs'] as $odeNavStructureSync) {
+                // Ensure have the odeId
+                $odeNavStructureSync->setOdeId($odeValues['odeId']);
+                
                 $this->entityManager->persist($odeNavStructureSync);
 
                 foreach ($odeNavStructureSync->getOdeNavStructureSyncProperties() as $odeNavStructureSyncProperty) {
@@ -2380,22 +2392,35 @@ class OdeService implements OdeServiceInterface
 
                 foreach ($odeNavStructureSync->getOdePagStructureSyncs() as $odePagStructureSync) {
                     // Set block order if import idevice (added one is last)
-                    if ($isImportIdevices) {
-                        $odePagStructureSync->setOdePagStructureSyncOrder($maxOdePagStructureSyncOrder);
-                    }
+                    $odePagStructureSync->setOdePagStructureSyncOrder($maxOdePagStructureSyncOrder);
+
+                    // Ensure have the odeId
+                    $odePagStructureSync->setOdeId($odeValues['odeId']);
+
                     $this->entityManager->persist($odePagStructureSync);
+                    
                     // Increase block order if import idevice (added one is last)
                     if ($isImportIdevices) {
                         ++$maxOdePagStructureSyncOrder;
                     }
+
                     foreach ($odePagStructureSync->getOdePagStructureSyncProperties() as $odePagStructureSyncProperty) {
+                        // Ensure have the odeId
+                        $odePagStructureSyncProperty->setOdeId($odeValues['odeId']);
+                        
                         $this->entityManager->persist($odePagStructureSyncProperty);
                     }
 
                     foreach ($odePagStructureSync->getOdeComponentsSyncs() as $odeComponentsSync) {
                         $this->entityManager->persist($odeComponentsSync);
 
+                        // Ensure have the odeId
+                        $odeComponentsSync->setOdeId($odeValues['odeId']);
+
                         foreach ($odeComponentsSync->getOdeComponentsSyncProperties() as $odeComponentsSyncProperty) {
+                            // Ensure have the odeId
+                            $odeComponentsSyncProperty->setOdeId($odeValues['odeId']);
+
                             $this->entityManager->persist($odeComponentsSyncProperty);
                         }
                     }

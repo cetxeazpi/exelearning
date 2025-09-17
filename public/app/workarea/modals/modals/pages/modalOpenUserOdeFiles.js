@@ -602,6 +602,7 @@ export default class modalOpenUserOdeFiles extends Modal {
         };
         let response = await eXeLearning.app.api.postSelectedOdeFile(params);
         if (response.responseMessage == 'OK') {
+            eXeLearning.app.project.odeId = response.odeId;
             eXeLearning.app.project.odeSession = response.odeSessionId;
             eXeLearning.app.project.odeVersion = response.odeVersionId;
             eXeLearning.app.project.versionName = response.odeVersionName;

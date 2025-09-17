@@ -55,3 +55,11 @@ require dirname(__DIR__).'/vendor/autoload.php';
 if (method_exists(Dotenv::class, 'bootEnv')) {
     (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
 }
+
+// Non-fatal preferences sync to ensure DB has registry keys in test envs
+try {
+    // Silence output; this is best-effort for tests relying on EA/DB listings
+    @shell_exec('php ' . escapeshellarg(dirname(__DIR__).'/bin/console') . ' app:prefs:sync 2>/dev/null');
+} catch (\Throwable $e) {
+    // ignore
+}

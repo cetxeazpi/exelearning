@@ -48,8 +48,7 @@ final class AdminPanelTest extends WebTestCase
         $admin = $this->ensureAdminUser($client);
         $client->loginUser($admin);
 
-        $fqcn = urlencode('App\\Controller\\Admin\\UserCrudController');
-        $client->request('GET', "/admin?crudAction=index&crudControllerFqcn={$fqcn}");
+        $client->request('GET', "/admin/user");
         self::assertSame(200, $client->getResponse()->getStatusCode());
     }
 
@@ -59,8 +58,7 @@ final class AdminPanelTest extends WebTestCase
         $admin = $this->ensureAdminUser($client);
         $client->loginUser($admin);
 
-        $fqcn = urlencode('App\\Controller\\Admin\\UserCrudController');
-        $client->request('GET', "/admin?crudAction=new&crudControllerFqcn={$fqcn}");
+        $client->request('GET', "/admin/user/new");
         self::assertSame(200, $client->getResponse()->getStatusCode());
     }
 
@@ -70,7 +68,7 @@ final class AdminPanelTest extends WebTestCase
         $admin = $this->ensureAdminUser($client);
         $client->loginUser($admin);
 
-        $client->request('GET', '/admin/maintenance');
+        $client->request('GET', "/admin/system-preferences?prefix=maintenance.");
         self::assertSame(200, $client->getResponse()->getStatusCode());
     }
 
@@ -80,8 +78,7 @@ final class AdminPanelTest extends WebTestCase
         $admin = $this->ensureAdminUser($client);
         $client->loginUser($admin);
 
-        $client->request('GET', '/admin/additional-html');
+        $client->request('GET', "http://localhost:8080/admin/system-preferences?prefix=additional_html.");
         self::assertSame(200, $client->getResponse()->getStatusCode());
     }
 }
-

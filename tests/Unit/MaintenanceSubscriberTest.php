@@ -2,9 +2,8 @@
 
 namespace App\Tests\Unit;
 
-use App\Entity\Maintenance;
 use App\EventSubscriber\MaintenanceSubscriber;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\net\exelearning\Service\SystemPreferencesService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,23 +23,29 @@ class MaintenanceSubscriberTest extends TestCase
 
     public function test_blocks_request_when_enabled_and_non_admin(): void
     {
-        $em = $this->createMock(EntityManagerInterface::class);
-        // Mock a Doctrine repository compatible with return type
-        $repo = $this->getMockBuilder(\Doctrine\ORM\EntityRepository::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['findOneBy'])
-            ->getMock();
-        $repo->method('findOneBy')->willReturn((new Maintenance())->setEnabled(true)->setMessage('Test maintenance'));
-
-        $em->method('getRepository')->willReturn($repo);
+        $prefs = $this->createMock(SystemPreferencesService::class);
+        $prefs->method('get')->willReturnCallback(function (string $key, $default = null) {
+            return match ($key) {
+                'maintenance.enabled' => true,
+                'maintenance.message' => 'Test maintenance',
+                'maintenance.until'   => null,
+                default               => $default,
+            };
+        });
 
         $auth = $this->createMock(AuthorizationCheckerInterface::class);
-        $auth->method('isGranted')->willReturn(false);
+        $auth->method('isGranted')->willReturnCallback(function (string $attr) {
+            return match ($attr) {
+                'ROLE_ADMIN' => false,
+                'IS_AUTHENTICATED_FULLY', 'IS_AUTHENTICATED_REMEMBERED' => true,
+                default => false,
+            };
+        });
 
         $twig = $this->createMock(Environment::class);
         $twig->method('render')->willReturn('maintenance');
 
-        $subscriber = new MaintenanceSubscriber($em, $auth, $twig);
+        $subscriber = new MaintenanceSubscriber($prefs, $auth, $twig);
 
         $kernel = new class implements HttpKernelInterface {
             public function handle(Request $request, int $type = self::MAIN_REQUEST, bool $catch = true): Response
@@ -59,10 +64,17 @@ class MaintenanceSubscriberTest extends TestCase
 
     public function test_ignores_excluded_paths(): void
     {
-        $em = $this->createMock(EntityManagerInterface::class);
+        $prefs = $this->createMock(SystemPreferencesService::class);
         $auth = $this->createMock(AuthorizationCheckerInterface::class);
+        $auth->method('isGranted')->willReturnCallback(function (string $attr) {
+            return match ($attr) {
+                'ROLE_ADMIN' => false,
+                'IS_AUTHENTICATED_FULLY', 'IS_AUTHENTICATED_REMEMBERED' => true,
+                default => false,
+            };
+        });
         $twig = $this->createMock(Environment::class);
-        $subscriber = new MaintenanceSubscriber($em, $auth, $twig);
+        $subscriber = new MaintenanceSubscriber($prefs, $auth, $twig);
 
         $kernel = new class implements HttpKernelInterface {
             public function handle(Request $request, int $type = self::MAIN_REQUEST, bool $catch = true): Response

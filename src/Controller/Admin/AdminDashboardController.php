@@ -64,34 +64,26 @@ class AdminDashboardController extends AbstractDashboardController
         // Handled by EasyAdmin: URLs with query string
         yield MenuItem::linkToCrud('admin.menu.users', 'fa fa-users', User::class);
 
-        yield MenuItem::section('Customization');
-        // yield MenuItem::linkToRoute('Additional HTML', 'fa fa-code', 'admin_settings_additional_html');
-        yield MenuItem::linkToCrud('admin.menu.additional-html', 'fa fa-code', AdditionalHtml::class);
-        // yield MenuItem::linkToRoute('Theme', 'fa fa-image', 'admin_settings_theme');
-        yield MenuItem::linkToCrud('admin.menu.theme', 'fa fa-image', ThemeSettings::class);
-
-
-    // yield MenuItem::linkToCrud('Theme', 'fa fa-image', Maintenance::class)
-    //     ->setController(MaintenanceCrudController::class)
-    //     // Le indicamos que su "página principal" es nuestra ruta personalizada
-    //     ->setRouteName('admin_settings_maintenance') 
-    //     // Importante: le pasamos un parámetro vacío para que el generador de rutas funcione
-    //     ->setRouteParameters([]); 
-
-
-        // yield MenuItem::section('Customization');
-        // yield MenuItem::linkToRoute('Additional HTML', 'fa fa-code', 'admin_additional_html');
-        // yield MenuItem::linkToRoute('Theme', 'fa fa-image', 'admin_theme');
- 
         yield MenuItem::section('Projects');
         yield MenuItem::linkToCrud('Projects', 'fa fa-folder-open', \App\Entity\net\exelearning\Entity\OdeFiles::class)
             ->setController(ProjectCrudController::class);
-        yield MenuItem::section('admin.menu.maintenance');
-        // Handled by EasyAdmin: uses routeName in the panel base URL
-        // yield MenuItem::linkToRoute('admin.menu.maintenance', 'fa fa-tools', 'admin_maintenance');
-        yield MenuItem::linkToCrud('admin.menu.maintenance', 'fa fa-tools', Maintenance::class);
-        // yield MenuItem::linkToRoute('Maintenance', 'fa fa-tools', 'admin_settings_maintenance');
 
+        yield MenuItem::section('Preferences');
+
+        yield MenuItem::linkToCrud('Additional HTML', 'fa fa-code', \App\Entity\net\exelearning\Entity\SystemPreferences::class)
+            ->setController(SystemPreferencesCrudController::class)
+            ->setAction('index')
+            ->setQueryParameter('prefix', 'additional_html.');
+
+        yield MenuItem::linkToCrud('Theme', 'fa fa-image', \App\Entity\net\exelearning\Entity\SystemPreferences::class)
+            ->setController(SystemPreferencesCrudController::class)
+            ->setAction('index')
+            ->setQueryParameter('prefix', 'theme.');
+
+        yield MenuItem::linkToCrud('Maintenance', 'fa fa-tools', \App\Entity\net\exelearning\Entity\SystemPreferences::class)
+            ->setController(SystemPreferencesCrudController::class)
+            ->setAction('index')
+            ->setQueryParameter('prefix', 'maintenance.');
     }
 
     // #[Route('/admin/additional-html', name: 'admin_additional_html', methods: ['GET', 'POST'])]

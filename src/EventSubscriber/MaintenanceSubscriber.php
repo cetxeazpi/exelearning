@@ -2,8 +2,7 @@
 
 namespace App\EventSubscriber;
 
-use App\Entity\Maintenance;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\net\exelearning\Service\SystemPreferencesService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,22 +14,17 @@ use Twig\Environment;
 class MaintenanceSubscriber implements EventSubscriberInterface
 {
     private const EXCLUDED_PREFIXES = [
-        '/admin',
         '/login',
-        '/logout',
+        '/api',
         '/_profiler',
         '/_wdt',
         '/build',
         '/assets',
-        '/api',
-        '/workarea',
-        '/new_ode',
-        '/edit_ode',
         '/health',
     ];
 
     public function __construct(
-        private readonly EntityManagerInterface $em,
+        private readonly SystemPreferencesService $prefs,
         private readonly AuthorizationCheckerInterface $authChecker,
         private readonly Environment $twig,
     ) {
@@ -56,31 +50,28 @@ class MaintenanceSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // Only enforce maintenance AFTER the user is authenticated.
-        // This guarantees that unauthenticated users always reach the login page.
-        if (!$this->authChecker->isGranted('IS_AUTHENTICATED_FULLY') && !$this->authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        $enabled = (bool) $this->prefs->get('maintenance.enabled', false);
+        if (!$enabled) {
             return;
         }
 
-        // Admins bypass maintenance
+        // Admins can use the app during maintenance
         if ($this->authChecker->isGranted('ROLE_ADMIN')) {
             return;
         }
 
-        $maintenance = $this->getMaintenance();
-        if (!$maintenance->isEnabled()) {
-            return;
-        }
+        $message = $this->prefs->get('maintenance.message', null);
+        $until = $this->prefs->get('maintenance.until', null);
 
         $content = $this->twig->render('security/error.html.twig', [
-            'error' => $maintenance->getMessage(),
+            'error' => $message,
             'maintenanceMode' => true,
         ]);
 
         $response = new Response($content, Response::HTTP_SERVICE_UNAVAILABLE);
 
-        if (null !== $maintenance->getScheduledEndAt()) {
-            $response->headers->set('Retry-After', (string) $maintenance->getScheduledEndAt()->getTimestamp());
+        if ($until instanceof \DateTimeInterface) {
+            $response->headers->set('Retry-After', (string) $until->getTimestamp());
         }
 
         $event->setResponse($response);
@@ -98,16 +89,5 @@ class MaintenanceSubscriber implements EventSubscriberInterface
         return false;
     }
 
-    private function getMaintenance(): Maintenance
-    {
-        $repo = $this->em->getRepository(Maintenance::class);
-        $maintenance = $repo->findOneBy([]);
-        if (!$maintenance instanceof Maintenance) {
-            $maintenance = new Maintenance();
-            $this->em->persist($maintenance);
-            $this->em->flush();
-        }
-
-        return $maintenance;
-    }
+    // No per-entity getter; values come from SystemPreferencesService
 }

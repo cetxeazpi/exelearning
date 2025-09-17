@@ -909,6 +909,18 @@ function runSymfonyCommands() {
       stdio: 'inherit',
     });
 
+    console.log('Syncing System Preferences definitions...');
+    try {
+      execFileSync(phpBinaryPath, ['bin/console', 'app:prefs:sync'], {
+        env: env,
+        cwd: basePath,
+        windowsHide: true,
+        stdio: 'inherit',
+      });
+    } catch (_e) {
+      // non-fatal
+    }
+
     console.log('Installing assets in public...');
     execFileSync(phpBinaryPath, ['bin/console', 'assets:install', 'public'], {
       env: env,
@@ -916,6 +928,21 @@ function runSymfonyCommands() {
       windowsHide: true,
       stdio: 'inherit',
     });
+
+    // Ensure system preferences files live under FILES_DIR and are reachable from public/
+    try {
+      const filesDir = env.FILES_DIR || path.join(appDataPath, 'data');
+      const sysPrefsDir = path.join(filesDir, 'system_preferences_files');
+      ensureWritableDirectory(sysPrefsDir);
+      const linkPath = path.join(basePath, 'public', 'system_prefs');
+      try {
+        // force recreate symlink
+        if (fs.existsSync(linkPath)) fs.rmSync(linkPath, { recursive: true, force: true });
+      } catch (e) {}
+      try { fs.symlinkSync(sysPrefsDir, linkPath, 'junction'); } catch (e) {}
+    } catch (err) {
+      console.warn('Could not ensure system_prefs symlink:', err.message);
+    }
 
     console.log('Creating test user...');
     execFileSync(phpBinaryPath, [

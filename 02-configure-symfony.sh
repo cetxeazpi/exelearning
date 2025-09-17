@@ -17,13 +17,13 @@ err()  { printf "%b%s%b\n" "${RED}"   "$1" "${NC}" 1>&2; }
 check_db_availability() {
     local db_host="$1"
     local db_port="$2"
-    echo -e "${GREEN}Waiting for $db_host:$db_port to be ready...${NC}"
+    log "Waiting for $db_host:$db_port to be ready..."
     while ! nc -w 1 "$db_host" "$db_port" > /dev/null 2>&1; do
         # Show some progress
         echo -n '.'
         sleep 1
     done
-    echo -e "${GREEN}\n\nGreat, $db_host is ready!${NC}"
+    log "\n\nGreat, $db_host is ready!"
 }
 
 # Assert that a required table exists (works with SQLite/MySQL/MariaDB/PostgreSQL)
@@ -62,22 +62,35 @@ if [ -n "$BASE_PATH" ] && [ -f "/etc/nginx/server-conf.d/subdir.conf.template" ]
 fi
 
 # Update schema (kept for compatibility, but migrations are preferred)
-echo -e "${GREEN}Creating/updating database tables (schema:update)${NC}"
+log "Creating/updating database tables (schema:update)"
 php bin/console doctrine:schema:update --force
 
 # Run migrations
-echo -e "${GREEN}Running migrations{NC}"
+log "Running migrations"
 php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --all-or-nothing
+
+# Sync System Preferences definitions into DB (non-destructive)
+log "Syncing System Preferences"
+php bin/console app:prefs:sync || true
+
+# Ensure persistent dir for system preferences files exists and expose it via symlink under public/
+if [ -n "$FILES_DIR" ]; then
+    log "Ensuring system preferences files directory"
+    mkdir -p "$FILES_DIR/system_preferences_files" || true
+    if [ -d /app/public ]; then
+        ln -sfn "$FILES_DIR/system_preferences_files" /app/public/system_prefs || true
+    fi
+fi
 
 # Fails the script if 'users' isn't there
 assert_users_table_exists
 
 # Create test user using environment variables
-echo -e "${GREEN}Creating test user${NC}"
+log "Creating test user"
 php bin/console app:create-user "${TEST_USER_EMAIL}" "${TEST_USER_PASSWORD}" "${TEST_USER_USERNAME}" --no-fail
 
 # Clear cache and configure other Symfony settings
-echo -e "${GREEN}Configuring other Symfony settings${NC}"
+log "Configuring other Symfony settings"
 php bin/console cache:clear
 php bin/console assets:install public
 
@@ -87,7 +100,7 @@ if [ -n "$POST_CONFIGURE_COMMANDS" ]; then
     eval "$POST_CONFIGURE_COMMANDS"
 fi
 
-echo -e "${GREEN}Symfony has been successfully configured.${NC}"
+log "Symfony has been successfully configured."
 
 # Always return 0 (success)
 exit 0

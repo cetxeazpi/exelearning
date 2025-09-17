@@ -1,0 +1,46 @@
+{# Adaptive renderer for system preferences values on index table #}
+{% set inst = entity.instance %}
+{% set typ = inst.type ?? 'string' %}
+{% set raw = field.value %}
+
+{% if typ == 'bool' %}
+  <input type="checkbox" disabled {% if inst.valueBool %}checked{% endif %}>
+
+{% elseif typ == 'html' %}
+  {% set txt = (raw ?? '')|striptags|trim %}
+  {% if txt %}
+    <span class="badge bg-secondary" title="HTML content"><i class="fa fa-code" aria-hidden="true"></i></span>
+  {% else %}
+    <span class="text-muted">—</span>
+  {% endif %}
+
+{% elseif typ == 'file' %}
+  {% set url = raw ?? '' %}
+  {% if url %}
+    {# Strip query string and check extension case-insensitively #}
+    {% set clean = (url|split('?'))[0]|lower %}
+    {% set is_img = clean ends with '.png' or clean ends with '.jpg' or clean ends with '.jpeg' or clean ends with '.gif' or clean ends with '.webp' or clean ends with '.svg' %}
+    {% if is_img %}
+      <img src="{{ url }}" alt="file" style="width:32px;height:32px;object-fit:cover;border:1px solid #e5e5e5;border-radius:4px;"/>
+    {% else %}
+      <a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="badge bg-light text-dark">file</a>
+    {% endif %}
+  {% else %}
+    <span class="text-muted">—</span>
+  {% endif %}
+
+{% elseif typ == 'date' %}
+  {% if inst.valueDate %}{{ inst.valueDate|date('Y-m-d') }}{% else %}<span class="text-muted">—</span>{% endif %}
+
+{% elseif typ == 'datetime' %}
+  {% if inst.valueDateTime %}{{ inst.valueDateTime|date('Y-m-d H:i') }}{% else %}<span class="text-muted">—</span>{% endif %}
+
+{% elseif typ == 'int' or typ == 'float' %}
+  {{ field.formattedValue ?? field.value ?? '—' }}
+
+{% else %}
+  {% set full = (field.formattedValue is defined and field.formattedValue is not same as(null)) ? field.formattedValue : (field.value ?? '') %}
+  <span title="{{ full }}" style="display:inline-block; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom;">
+    {{ full }}
+  </span>
+{% endif %}

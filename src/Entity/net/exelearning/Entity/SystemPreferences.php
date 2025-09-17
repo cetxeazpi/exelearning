@@ -10,107 +10,37 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class SystemPreferences
 {
-    #[ORM\Id, ORM\GeneratedValue, ORM\Column(type:'integer')]
+    #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(name:'pref_key', type:'string', length:191, unique:true)]
+    #[ORM\Column(name: 'pref_key', type: 'string', length: 191, unique: true)]
     private string $key;
 
-    #[ORM\Column(type:'text', nullable:true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $value = null;
 
-    #[ORM\Column(type:'string', length:32, nullable:true)]
+    #[ORM\Column(type: 'string', length: 32, nullable: true)]
     private ?string $type = null;
 
-    #[ORM\Column(type:'datetime_immutable', nullable:true)]
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\Column(type:'string', length:180, nullable:true)]
+    #[ORM\Column(type: 'string', length: 180, nullable: true)]
     private ?string $updatedBy = null;
-
-    // getters/setters...
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function touch(): void { $this->updatedAt = new \DateTimeImmutable(); }
-}
-
-
-
-
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Put;
-use App\Controller\Api\UserPreferences\DeleteUserPreferenceAction;
-use App\Controller\Api\UserPreferences\GetUserPreferenceAction;
-use App\Controller\Api\UserPreferences\ListUserPreferencesAction;
-use App\Controller\Api\UserPreferences\UpsertUserPreferenceAction;
-use App\Repository\net\exelearning\Repository\UserPreferencesRepository;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
-
-#[ORM\Table(name: 'user_preferences')]
-#[ORM\Index(name: 'fk_user_preferences_1_idx', columns: ['user_id'])]
-#[ORM\Entity(repositoryClass: UserPreferencesRepository::class)]
-#[ApiResource(
-    operations: [
-        new GetCollection(
-            uriTemplate: '/users/{userId}/preferences',
-            controller: ListUserPreferencesAction::class,
-            read: false
-        ),
-        new Get(
-            uriTemplate: '/users/{userId}/preferences/{key}',
-            controller: GetUserPreferenceAction::class,
-            read: false
-        ),
-        new Put(
-            uriTemplate: '/users/{userId}/preferences/{key}',
-            controller: UpsertUserPreferenceAction::class,
-            read: false
-        ),
-        new Delete(
-            uriTemplate: '/users/{userId}/preferences/{key}',
-            controller: DeleteUserPreferenceAction::class,
-            read: false
-        ),
-    ],
-    normalizationContext: ['groups' => ['user_prefs:read']],
-    denormalizationContext: ['groups' => ['user_prefs:write']]
-)]
-class UserPreferences extends BaseEntity
-{
-    #[Groups(['user_prefs:read', 'user_prefs:write'])]
-    #[ORM\Column(name: 'user_id', type: 'string', length: 255, nullable: false)]
-    protected string $userId;
-
-    #[Groups(['user_prefs:read', 'user_prefs:write'])]
-    #[ORM\Column(name: 'user_preferences_key', type: 'string', length: 255, nullable: false)]
-    protected string $key;
-
-    #[Groups(['user_prefs:read', 'user_prefs:write'])]
-    #[ORM\Column(name: 'user_preferences_value', type: 'text', nullable: false)]
-    protected string $value;
-
-    #[Groups(['user_prefs:read', 'user_prefs:write'])]
-    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
-    protected ?string $description = null;
-
-    public function getUserId(): ?string
+    public function touch(): void
     {
-        return $this->userId;
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
-    public function setUserId(string $userId): self
+    public function getId(): ?int
     {
-        $this->userId = $userId;
-
-        return $this;
+        return $this->id;
     }
 
-    public function getKey(): ?string
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -127,40 +57,116 @@ class UserPreferences extends BaseEntity
         return $this->value;
     }
 
-    public function setValue(string $value): self
+    public function setValue(?string $value): self
     {
         $this->value = $value;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getType(): ?string
     {
-        return $this->description;
+        return $this->type;
     }
 
-    public function setDescription(?string $description): self
+    public function setType(?string $type): self
     {
-        $this->description = $description;
+        $this->type = $type;
 
         return $this;
     }
 
-    /**
-     * Loads key and value from properties constants config.
-     *
-     * @return self
-     */
-    public function loadFromPropertiesConfig(
-        string $userId,
-        string $userPreferencesConfigKey,
-        array $userPreferencesConfigValues,
-    ) {
-        $this->setUserId($userId);
-        $this->setKey($userPreferencesConfigKey);
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
 
-        $value = isset($userPreferencesConfigValues['value']) ? $userPreferencesConfigValues['value'] : '';
-        $this->setValue($value);
+    public function setUpdatedAt(?\DateTimeImmutable $dt): self
+    {
+        $this->updatedAt = $dt;
+
+        return $this;
+    }
+
+    public function getUpdatedBy(): ?string
+    {
+        return $this->updatedBy;
+    }
+
+    public function setUpdatedBy(?string $by): self
+    {
+        $this->updatedBy = $by;
+
+        return $this;
+    }
+
+    // BOOL
+    public function getValueBool(): bool
+    {
+        return (bool) (int) ($this->value ?? '0');
+    }
+
+    public function setValueBool(bool $v): self
+    {
+        $this->value = $v ? '1' : '0';
+
+        return $this;
+    }
+
+    // INT
+    public function getValueInt(): ?int
+    {
+        return null === $this->value ? null : (int) $this->value;
+    }
+
+    public function setValueInt(?int $v): self
+    {
+        $this->value = null === $v ? null : (string) $v;
+
+        return $this;
+    }
+
+    // FLOAT
+    public function getValueFloat(): ?float
+    {
+        return null === $this->value ? null : (float) $this->value;
+    }
+
+    public function setValueFloat(?float $v): self
+    {
+        $this->value = null === $v ? null : (string) $v;
+
+        return $this;
+    }
+
+    // DATE (solo fecha)
+    public function getValueDate(): ?\DateTimeInterface
+    {
+        if (!$this->value) {
+            return null;
+        }
+        // admite 'Y-m-d' o ISO/‘Y-m-d H:i:s’
+        $d = \DateTimeImmutable::createFromFormat('Y-m-d', substr($this->value, 0, 10));
+
+        return $d ?: new \DateTimeImmutable($this->value);
+    }
+
+    public function setValueDate(?\DateTimeInterface $d): self
+    {
+        $this->value = $d ? $d->format('Y-m-d') : null;
+
+        return $this;
+    }
+
+    // DATETIME
+    public function getValueDateTime(): ?\DateTimeInterface
+    {
+        return $this->value ? new \DateTimeImmutable($this->value) : null;
+    }
+
+    public function setValueDateTime(?\DateTimeInterface $d): self
+    {
+        $this->value = $d ? $d->format('Y-m-d H:i:s') : null;
 
         return $this;
     }

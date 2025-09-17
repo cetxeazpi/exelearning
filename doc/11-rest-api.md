@@ -172,3 +172,37 @@ curl -s -X PATCH -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application
 * Validation errors: `400` with `{ "title", "detail", "type" }`.
 * Not found: `404` with `{ "title":"Not found", ... }`.
 * Auth: include `Authorization: Bearer <JWT>` on every request.
+
+---
+
+## System Preferences (admin, API Platform)
+
+System-wide settings are exposed via API Platform for administrators. These keys are backed by the System Preferences registry and stored in the DB. See 13-preferences.md for details and CLI/UI alternatives.
+
+Base URL (under `/api/v2`): `/api/v2/system-preferences`
+
+- List all keys (with current values):
+
+```bash
+curl -s -H "Authorization: Bearer $TOKEN_ADMIN" -H 'Accept: application/json' \
+  http://localhost:8080/api/v2/system-preferences
+```
+
+- Get one key:
+
+```bash
+curl -s -H "Authorization: Bearer $TOKEN_ADMIN" -H 'Accept: application/json' \
+  http://localhost:8080/api/v2/system-preferences/maintenance.enabled
+```
+
+- Update a key (typed):
+
+```bash
+curl -s -X PUT -H "Authorization: Bearer $TOKEN_ADMIN" -H 'Content-Type: application/json' \
+  -d '{"value": true, "type": "bool"}' \
+  http://localhost:8080/api/v2/system-preferences/maintenance.enabled
+```
+
+Notes:
+- Only `ROLE_ADMIN` can access these endpoints by default.
+- Unknown keys return 404 (defined set comes from the registry).

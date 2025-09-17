@@ -4,8 +4,7 @@
         <meta charset="UTF-8">
         <meta name="robots" content="noindex">
         <title>{% block title %}{% endblock %}</title>
-        {% set ts = theme_settings() %}
-        <link rel="icon" href="{{ ts.favicon ?: asset('favicon.ico') }}">
+        <link rel="icon" href="{{ sys_pref('theme.favicon_path') ?: asset('favicon.ico') }}">
         {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
         {# include own css #}

@@ -2,8 +2,7 @@
 
 namespace App\Tests\Unit;
 
-use App\Entity\Maintenance;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\net\exelearning\Service\SystemPreferencesService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class MaintenanceRepositoryTest extends KernelTestCase
@@ -11,22 +10,28 @@ class MaintenanceRepositoryTest extends KernelTestCase
     public function test_read_write_toggle(): void
     {
         self::bootKernel();
-        $em = static::getContainer()->get(EntityManagerInterface::class);
+        $prefs = static::getContainer()->get(SystemPreferencesService::class);
 
-        /** @var Maintenance|null $maintenance */
-        $maintenance = $em->getRepository(Maintenance::class)->findOneBy([]);
-        if (!$maintenance instanceof Maintenance) {
-            $maintenance = new Maintenance();
-            $em->persist($maintenance);
+        // Write
+        $prefs->set('maintenance.enabled', true, 'bool', 'tests');
+        $prefs->set('maintenance.message', 'Testing', 'string', 'tests');
+
+        // Read back via service
+        self::assertTrue((bool) $prefs->get('maintenance.enabled'));
+        self::assertSame('Testing', $prefs->get('maintenance.message'));
+    }
+
+    protected function tearDown(): void
+    {
+        if (static::getContainer()) {
+            try {
+                $prefs = static::getContainer()->get(\App\Service\net\exelearning\Service\SystemPreferencesService::class);
+                $prefs->set('maintenance.enabled', false, 'bool', 'tests');
+                $prefs->set('maintenance.message', null, 'string', 'tests');
+            } catch (\Throwable) {
+                // ignore
+            }
         }
-
-        $maintenance->setEnabled(true)->setMessage('Testing');
-        $em->flush();
-
-        $found = $em->getRepository(Maintenance::class)->findOneBy([]);
-        self::assertInstanceOf(Maintenance::class, $found);
-        self::assertTrue($found->isEnabled());
-        self::assertSame('Testing', $found->getMessage());
+        parent::tearDown();
     }
 }
-

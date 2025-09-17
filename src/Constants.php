@@ -4,6 +4,14 @@ namespace App;
 
 /**
  * Constants.
+ *
+ * Note: We are progressively moving user-configurable runtime options to the
+ * System Preferences key–value store. Prefer using SystemPreferencesService
+ * (and the registry in src/Config) for settings that may change at runtime.
+ * See doc/13-preferences.md for details about keys, types, CLI and API usage.
+ *
+ * Constants here remain for build-time paths, filenames and other low-level
+ * values that are not meant to be edited at runtime.
  */
 class Constants
 {

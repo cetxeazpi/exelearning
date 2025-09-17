@@ -1143,4 +1143,71 @@ export default class ApiCallManager {
         url = url.replace('{odeSessionId}', odeSessionId);
         return await this.func.get(url);
     }
+
+    // =========================
+    // GitHub publishing (custom)
+    // =========================
+    async getGithubStatus() {
+        const url = `${this.githubApiBase}/api/publish/github/status`;
+        return await this.func.get(url);
+    }
+
+    async getGithubRepos() {
+        const url = `${this.githubApiBase}/api/publish/github/repos`;
+        return await this.func.get(url);
+    }
+
+    async postGithubCreateRepo(data) {
+        const url = `${this.githubApiBase}/api/publish/github/repos`;
+        // send as JSON
+        return await $.ajax({
+            url,
+            method: 'POST',
+            data: JSON.stringify(data || {}),
+            contentType: 'application/json',
+            dataType: 'json',
+            timeout: eXeLearning.config.clientCallWaitingTime,
+        });
+    }
+
+    async postGithubCheck(data) {
+        const url = `${this.githubApiBase}/api/publish/github/check`;
+        return await $.ajax({
+            url,
+            method: 'POST',
+            data: JSON.stringify(data || {}),
+            contentType: 'application/json',
+            dataType: 'json',
+            timeout: eXeLearning.config.clientCallWaitingTime,
+        });
+    }
+
+    async postGithubPublish(data) {
+        const url = `${this.githubApiBase}/api/publish/github/publish`;
+        return await $.ajax({
+            url,
+            method: 'POST',
+            data: JSON.stringify(data || {}),
+            contentType: 'application/json',
+            dataType: 'json',
+            timeout: eXeLearning.config.clientCallWaitingTime,
+        });
+    }
+
+    async getGithubBranches(owner, repo) {
+        const url = `${this.githubApiBase}/api/publish/github/branches?owner=${encodeURIComponent(owner)}&repo=${encodeURIComponent(repo)}`;
+        return await this.func.get(url);
+    }
+
+    async postGithubDeviceStart(scope) {
+        const url = `${this.githubApiBase}/api/publish/github/device/start`;
+        return await this.func.post(url, {
+            scope: scope || 'read:user public_repo',
+        });
+    }
+
+    async postGithubDevicePoll(device_code) {
+        const url = `${this.githubApiBase}/api/publish/github/device/poll`;
+        return await this.func.post(url, { device_code });
+    }
 }

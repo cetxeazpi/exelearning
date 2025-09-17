@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use Github\Client as GithubClient;
-use Symfony\Component\HttpClient\HttpClient;
 
 class GithubClientFactory
 {
@@ -11,16 +10,12 @@ class GithubClientFactory
     {
     }
 
-    public function createAuthenticatedClient(string $accessToken): GithubClient
+    public function createAuthenticatedClient(string $accessToken): object
     {
-        $httpClient = HttpClient::create();
-        $client = new GithubClient($httpClient);
-        if ($this->apiBase) {
-            $client->getHttpClient()->setOption('base_uri', $this->apiBase);
-        }
+        // Create default GitHub client with its own Builder
+        $client = new GithubClient();
         $client->authenticate($accessToken, null, GithubClient::AUTH_ACCESS_TOKEN);
 
         return $client;
     }
 }
-

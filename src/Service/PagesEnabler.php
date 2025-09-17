@@ -35,6 +35,7 @@ class PagesEnabler
         } catch (\Throwable $e) {
             // ignore, fallback to manual instructions
         }
+
         return ['enabled' => false, 'manual' => true];
     }
 
@@ -43,4 +44,3 @@ class PagesEnabler
         return sprintf('https://%s.github.io/%s/', $owner, $repo);
     }
 }
-

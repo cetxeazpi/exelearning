@@ -2,8 +2,6 @@
 
 namespace App\Service;
 
-use Github\Client as GithubClient;
-
 class GithubPublisher
 {
     public function __construct(
@@ -28,13 +26,29 @@ class GithubPublisher
                 'default_branch' => $r['default_branch'] ?? 'main',
             ];
         }
+
         return $repos;
+    }
+
+    public function listBranches(string $token, string $owner, string $repo): array
+    {
+        $client = $this->factory->createAuthenticatedClient($token);
+        $branches = [];
+        foreach ($client->api('repo')->branches($owner, $repo) as $b) {
+            if (isset($b['name'])) {
+                $branches[] = $b['name'];
+            }
+        }
+
+        return $branches;
     }
 
     public function createRepository(string $token, string $name, string $visibility = 'public'): array
     {
         $client = $this->factory->createAuthenticatedClient($token);
-        $repo = $client->api('me')->repositories()->create($name, '', '', $visibility !== 'private');
+        // Create repository for the authenticated user
+        $repo = $client->api('repo')->create($name, '', '', 'private' !== $visibility);
+
         return [
             'name' => $repo['name'],
             'owner' => $repo['owner']['login'],
@@ -45,29 +59,44 @@ class GithubPublisher
     public function ensureBranch(string $token, string $owner, string $repo, string $branch, ?string $baseRef = null): string
     {
         $client = $this->factory->createAuthenticatedClient($token);
-        $refs = $client->api('gitData')->references()->all($owner, $repo);
-        $heads = array_filter($refs, fn ($r) => str_starts_with($r['ref'], 'refs/heads/'));
-        $headSha = null;
         $branchRef = 'refs/heads/'.$branch;
-        foreach ($heads as $h) {
-            if ($h['ref'] === $branchRef) {
-                return $h['object']['sha'];
+        // If it already exists, return its head sha
+        try {
+            $existing = $client->api('gitData')->references()->show($owner, $repo, 'heads/'.$branch);
+            if (!empty($existing['object']['sha'])) {
+                return $existing['object']['sha'];
             }
+        } catch (\Throwable $e) {
+            // continue to create
         }
         // Determine base: use default branch head, or provided baseRef
+        $headSha = null;
         if ($baseRef) {
-            $base = $client->api('gitData')->references()->show($owner, $repo, $baseRef);
-            $headSha = $base['object']['sha'];
+            try {
+                $base = $client->api('gitData')->references()->show($owner, $repo, $baseRef);
+                $headSha = $base['object']['sha'] ?? null;
+            } catch (\Throwable $e) {
+                $headSha = null; // fallback below
+            }
         } else {
-            $repoData = $client->api('repo')->show($owner, $repo);
-            $default = $repoData['default_branch'] ?? 'main';
-            $base = $client->api('gitData')->references()->show($owner, $repo, 'heads/'.$default);
-            $headSha = $base['object']['sha'];
+            try {
+                $repoData = $client->api('repo')->show($owner, $repo);
+                $default = $repoData['default_branch'] ?? 'main';
+                $base = $client->api('gitData')->references()->show($owner, $repo, 'heads/'.$default);
+                $headSha = $base['object']['sha'] ?? null;
+            } catch (\Throwable $e) {
+                $headSha = null;
+            }
+        }
+        if (!$headSha) {
+            // Fallback for empty/new repos or when default branch head cannot be resolved
+            $headSha = str_repeat('0', 40);
         }
         $created = $client->api('gitData')->references()->create($owner, $repo, [
             'ref' => $branchRef,
             'sha' => $headSha,
         ]);
+
         return $created['object']['sha'];
     }
 
@@ -156,12 +185,14 @@ class GithubPublisher
         $base = rtrim($path, '/');
         $it = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($base, \FilesystemIterator::SKIP_DOTS));
         foreach ($it as $file) {
-            if (!$file->isFile()) continue;
+            if (!$file->isFile()) {
+                continue;
+            }
             $fsPath = $file->getPathname();
             $rel = ltrim(str_replace($base, '', $fsPath), '/');
             $files[$rel] = $fsPath;
         }
+
         return $files;
     }
 }
-

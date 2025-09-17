@@ -12,6 +12,12 @@
           {% if error is defined and error %}
           payload.error = {{ error|json_encode|raw }};
           {% endif %}
+          {% if session_id is defined %}
+          payload.session_id = {{ session_id|json_encode|raw }};
+          {% endif %}
+          {% if session_has_token is defined %}
+          payload.session_has_token = {{ session_has_token ? 'true':'false' }};
+          {% endif %}
           if (window.opener) {
             window.opener.postMessage(payload, '*');
           }

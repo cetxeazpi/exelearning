@@ -220,8 +220,10 @@ services:
 
     App\Service\GithubDeviceFlow:
         arguments:
-            $clientId: '%env(string:GITHUB_OAUTH_CLIENT_ID)%'
-            $clientSecret: '%env(string:GITHUB_OAUTH_CLIENT_SECRET)%'
+            $clientId: '%env(string:GITHUB_DEVICE_CLIENT_ID)%'
+
+    # Alias the interface to the concrete so autowire resolves to the service above
+    App\Service\GithubDeviceFlowInterface: '@App\Service\GithubDeviceFlow'
 
 twig:
     globals:

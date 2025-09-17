@@ -1,80 +1,105 @@
 <div class="modal fade" id="modalPublishToGithub" tabindex="-1" aria-labelledby="modalPublishToGithubLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable" style="min-height:80vh;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modalPublishToGithubLabel">{{ "Publish to GitHub" | trans }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Hide' | trans }}"></button>
       </div>
+
       <div class="modal-body">
-        <div id="gh-step-auth" class="gh-step">
-          <p>{{ 'Authenticate with GitHub' | trans }}</p>
-          <div class="d-flex gap-2 flex-wrap">
-            <a id="gh-auth-btn" class="btn btn-primary" href="{{ path('oauth_github_connect') }}?popup=1" target="_blank" rel="noopener">{{ 'Authenticate with GitHub' | trans }}</a>
+        <!-- Small auth area -->
+        <div id="gh-step-auth" class="mb-3">
+          <div class="d-flex gap-2 align-items-center flex-wrap">
+            <a id="gh-auth-btn" class="btn btn-outline-primary btn-sm exe-online" href="{{ path('oauth_github_connect') }}?popup=1" target="_blank">
+              <span class="me-1" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" focusable="false">
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+              </span>
+              {{ 'Authenticate with GitHub' | trans }}
+            </a>
+            <div id="gh-auth-status" class="small text-muted"></div>
           </div>
-          <div id="gh-auth-status" class="small text-muted mt-2"></div>
-        </div>
-
-        <div id="gh-step-repo" class="gh-step d-none">
-          <h6>{{ 'Select repository' | trans }}</h6>
-          <div class="row g-2 align-items-end mb-2">
-            <div class="col-md-6">
-              <label for="gh-repo-filter" class="form-label">{{ 'Filter' | trans }}</label>
-              <input id="gh-repo-filter" type="text" class="form-control" placeholder="owner/name" />
-            </div>
-          </div>
-          <div class="mb-3">
-            <select id="gh-repo-select" class="form-select"></select>
-          </div>
-          <div class="mb-3">
-            <button id="gh-refresh-repos" class="btn btn-outline-secondary btn-sm">{{ 'Reload' | trans }}</button>
-          </div>
-          <hr/>
-          <h6>{{ 'Create repository' | trans }}</h6>
-          <div class="row g-2 align-items-end">
-            <div class="col-md-6">
-              <label for="gh-new-repo" class="form-label">{{ 'Name' | trans }}</label>
-              <input id="gh-new-repo" type="text" class="form-control" placeholder="my-pages" />
-            </div>
-            <div class="col-md-4">
-              <label for="gh-new-visibility" class="form-label">{{ 'Visibility' | trans }}</label>
-              <select id="gh-new-visibility" class="form-select">
-                <option value="public">{{ 'Public' | trans }}</option>
-                <option value="private">{{ 'Private' | trans }}</option>
-              </select>
-            </div>
-            <div class="col-md-2">
-              <button id="gh-create-repo" class="btn btn-success w-100">{{ 'Create' | trans }}</button>
+          <!-- Device flow panel (desktop mode) -->
+          <div id="gh-device" class="card mt-3 d-none">
+            <div class="card-body py-2">
+              <div class="d-flex align-items-center gap-3 flex-wrap">
+                <span class="small">{{ 'Enter this code at' | trans }} <a id="gh-verify-url" href="#" target="_blank" rel="noopener">github.com/login/device</a>:</span>
+                <code id="gh-user-code" class="fs-6">…</code>
+              </div>
+              <div id="gh-device-msg" class="small text-muted mt-1"></div>
             </div>
           </div>
         </div>
 
-        <div id="gh-step-confirm" class="gh-step d-none">
-          <h6>{{ 'Confirm publish target' | trans }}</h6>
-          <p id="gh-confirm-text" class="mb-2"></p>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="1" id="gh-overwrite">
-            <label class="form-check-label" for="gh-overwrite">{{ 'Overwrite contents?' | trans }}</label>
+        <!-- Step: Repo + Branch -->
+        <div id="stepSelect">
+          <div class="row g-3 align-items-top-end">
+            <!-- Left: repository dropdown with filter + reload -->
+            <div class="col-md-7">
+              <label class="form-label">{{ 'Repository' | trans }}</label>
+              <div class="d-flex gap-2">
+                <!-- Dropdown with filter -->
+                <div class="dropdown dropdown-repos flex-grow-1">
+                  <button id="btnRepo" class="btn btn-outline-secondary w-100 text-start dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span id="btnRepoText">{{ 'Select repository…' | trans }}</span>
+                  </button>
+                  <div class="dropdown-menu p-0">
+                    <div class="repo-search p-2 border-bottom bg-body">
+                      <input id="repoFilter" type="search" class="form-control form-control-sm" placeholder="{{ 'Filter repositories…' | trans }}">
+                    </div>
+                    <div id="repoMenu" class="list-group list-group-flush"></div>
+                  </div>
+                </div>
+                <!-- Reload button -->
+                <button id="btnReloadRepos" class="btn btn-outline-secondary" type="button" title="{{ 'Reload repositories' | trans }}">
+                  <span class="auto-icon" aria-hidden="true">autorenew</span>
+                </button>
+              </div>
+              <div class="form-text">
+                {{ 'Need a new repository? Create it on' | trans }} <a href="https://github.com/new" target="_blank" rel="noopener">GitHub</a>.
+              </div>
+            </div>
+
+            <!-- Right: branch input with datalist -->
+            <div class="col-md-5">
+              <label for="branchInput" class="form-label">{{ 'Branch' | trans }}</label>
+              <input id="branchInput" class="form-control" list="branchList" placeholder="{{ 'Type or pick a branch…' | trans }}" autocomplete="off" disabled>
+              <datalist id="branchList"></datalist>
+              <div id="branchHint" class="form-text">{{ 'Choose an existing branch or type a new one.' | trans }}</div>
+              <div id="branchWarn" class="alert alert-warning py-2 px-3 mt-2 d-none">
+                {{ 'This branch does not exist. It will be created on publish.' | trans }}
+              </div>
+              <div id="overwriteWrap" class="form-check mt-2 d-none">
+                <input class="form-check-input" type="checkbox" id="overwriteCheckbox">
+                <label class="form-check-label" for="overwriteCheckbox">{{ 'Overwrite existing content' | trans }}</label>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div id="gh-step-progress" class="gh-step d-none">
+        <!-- Step: progress -->
+        <div id="stepProgress" class="mt-4 d-none">
           <h6>{{ 'Publishing…' | trans }}</h6>
           <div class="progress">
-            <div id="gh-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 10%;" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
-          <div id="gh-progress-msg" class="small text-muted mt-2"></div>
+          <div id="progressMsg" class="small text-muted mt-2">{{ 'Starting…' | trans }}</div>
         </div>
 
-        <div id="gh-step-done" class="gh-step d-none">
+        <!-- Done -->
+        <div id="publishDone" class="mt-4 d-none">
           <h6>{{ 'Published' | trans }}</h6>
-          <p class="mb-0"><a id="gh-view-site" href="#" target="_blank" class="btn btn-success">{{ 'View site' | trans }}</a></p>
-          <p class="mt-2"><a id="gh-view-repo" href="#" target="_blank">{{ 'Open repository' | trans }}</a></p>
-          <div id="gh-pages-manual" class="alert alert-warning d-none mt-3"></div>
+          <p class="mb-1">
+            <a id="doneRepoUrl" href="#" target="_blank" rel="noopener" class="btn btn-success btn-sm">{{ 'Open repository' | trans }}</a>
+          </p>
+          <p id="doneText" class="text-muted mb-0"></p>
         </div>
       </div>
+
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Hide' | trans }}</button>
-        <button id="gh-next" type="button" class="btn btn-primary d-none">{{ 'Publish' | trans }}</button>
+        <button id="btnCancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Cancel' | trans }}</button>
+        <button id="btnPublish" type="button" class="btn btn-primary" disabled>{{ 'Publish' | trans }}</button>
       </div>
     </div>
   </div>

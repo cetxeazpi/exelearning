@@ -2,28 +2,28 @@
 
 namespace App\Controller;
 
+use App\Constants;
 use App\Entity\GithubAccount;
 use App\Entity\net\exelearning\Entity\User as AppUser;
+use App\Helper\net\exelearning\Helper\FileHelper;
 use App\Security\TokenEncryptor;
 use App\Service\GithubClientFactory;
+use App\Service\GithubDeviceFlowInterface;
 use App\Service\GithubPublisher;
-use App\Service\PagesEnabler;
-use App\Service\GithubDeviceFlow;
 use App\Service\net\exelearning\Service\Api\OdeExportServiceInterface;
-use App\Helper\net\exelearning\Helper\FileHelper;
-use App\Constants;
+use App\Service\PagesEnabler;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\GithubResourceOwner;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Psr\Log\LoggerInterface;
 
 class GithubPublishController extends AbstractController
 {
@@ -34,7 +34,7 @@ class GithubPublishController extends AbstractController
         private readonly GithubPublisher $publisher,
         private readonly GithubClientFactory $clientFactory,
         private readonly PagesEnabler $pagesEnabler,
-        private readonly GithubDeviceFlow $deviceFlow,
+        private readonly GithubDeviceFlowInterface $deviceFlow,
         private readonly OdeExportServiceInterface $exportService,
         private readonly FileHelper $fileHelper,
         private readonly string $pagesBranch,
@@ -59,71 +59,87 @@ class GithubPublishController extends AbstractController
         if ($request->query->getBoolean('popup')) {
             $this->requestStack->getSession()?->set('github_popup', true);
         }
+
         return $this->clients->getClient('github')->redirect($scopes);
     }
 
     #[Route('/oauth/github/check', name: 'oauth_github_check')]
-    #[IsGranted('ROLE_USER')]
     public function oauthCallback(Request $request): Response
     {
         $client = $this->clients->getClient('github');
+        $sess = $this->requestStack->getSession();
+        $accessToken = null;
+        $githubUser = null;
+
+        // Step 1: obtain access token
         try {
-            /** @var GithubResourceOwner $githubUser */
             $accessToken = $client->getAccessToken();
-            $githubUser = $client->fetchUserFromToken($accessToken);
         } catch (\Throwable $e) {
-            // If popup flow, notify opener and close without reloading main page
-            if ($this->requestStack->getSession()?->remove('github_popup')) {
+            if ($sess?->remove('github_popup')) {
                 return $this->render('oauth/github_popup_close.html.twig', [
                     'ok' => false,
                     'error' => $e->getMessage(),
+                    'session_id' => $sess?->getId(),
+                    'session_has_token' => (bool) $sess?->has('github_access_token'),
                 ]);
             }
-            throw $e; // Bubble up for normal error handling
+            throw $e;
         }
 
-        /** @var AppUser $user */
-        $user = $this->getUser();
-        // Session fallback first — ensures API can proceed even if DB write fails
-        $sess = $this->requestStack->getSession();
+        // Step 2: store token in session immediately (so UI can proceed)
         $sess?->set('github_access_token', $accessToken->getToken());
         $this->logger->info('GitHub OAuth: session token stored', [
-            'user' => method_exists($user, 'getEmail') ? $user->getEmail() : null,
             'sessionId' => $sess?->getId(),
             'tokenLen' => strlen((string) $accessToken->getToken()),
         ]);
 
+        // Step 3: try to fetch user profile (best-effort)
         try {
-            $repo = $this->em->getRepository(GithubAccount::class);
-            $link = $repo->findOneBy(['user' => $user]);
-            if (!$link) {
-                $link = new GithubAccount();
-                $link->setUser($user);
-                $this->em->persist($link);
+            /** @var GithubResourceOwner $githubUser */
+            $githubUser = $client->fetchUserFromToken($accessToken);
+        } catch (\Throwable $e) {
+            $this->logger->warning('GitHub OAuth: fetch user failed (continuing with session token only): '.$e->getMessage());
+        }
+
+        // Step 4: if we have an authenticated app user and a GitHub profile, persist the link
+        try {
+            /** @var AppUser|null $user */
+            $user = $this->getUser();
+            if ($user && $githubUser) {
+                $repo = $this->em->getRepository(GithubAccount::class);
+                $link = $repo->findOneBy(['user' => $user]);
+                if (!$link) {
+                    $link = new GithubAccount();
+                    $link->setUser($user);
+                    $this->em->persist($link);
+                }
+                $link->setProvider('github');
+                $link->setGithubLogin($githubUser->getNickname());
+                $link->setGithubId((string) $githubUser->getId());
+                $link->setAccessTokenEnc($this->encryptor->encrypt($accessToken->getToken()));
+                $link->setRefreshTokenEnc($this->encryptor->encrypt($accessToken->getRefreshToken()));
+                $expires = $accessToken->getExpires();
+                $link->setTokenExpiresAt($expires ? new \DateTimeImmutable('@'.$expires) : null);
+                $this->em->flush();
+                $this->logger->info('GitHub OAuth: DB link persisted', [
+                    'githubLogin' => $githubUser->getNickname(),
+                ]);
             }
-            $link->setProvider('github');
-            $link->setGithubLogin($githubUser->getNickname());
-            $link->setGithubId((string) $githubUser->getId());
-            $link->setAccessTokenEnc($this->encryptor->encrypt($accessToken->getToken()));
-            $link->setRefreshTokenEnc($this->encryptor->encrypt($accessToken->getRefreshToken()));
-            $expires = $accessToken->getExpires();
-            $link->setTokenExpiresAt($expires ? new \DateTimeImmutable('@'.$expires) : null);
-            $this->em->flush();
-            $this->logger->info('GitHub OAuth: DB link persisted', [
-                'user' => method_exists($user, 'getEmail') ? $user->getEmail() : null,
-                'githubLogin' => $githubUser->getNickname(),
-            ]);
         } catch (\Throwable $e) {
             $this->logger->error('GitHub OAuth callback DB persist failed: '.$e->getMessage(), [
                 'exception' => $e,
             ]);
-            // Continue with session fallback
         }
 
-        // If popup flow, render a small page that notifies opener and closes
-        if ($this->requestStack->getSession()?->remove('github_popup')) {
-            return $this->render('oauth/github_popup_close.html.twig', ['ok' => true]);
+        // Step 5: close popup and notify opener
+        if ($sess?->remove('github_popup')) {
+            return $this->render('oauth/github_popup_close.html.twig', [
+                'ok' => true,
+                'session_id' => $sess?->getId(),
+                'session_has_token' => (bool) $sess?->has('github_access_token'),
+            ]);
         }
+
         return $this->render('workarea/modals/pages/publishtogithub.html.twig');
     }
 
@@ -146,6 +162,7 @@ class GithubPublishController extends AbstractController
         if (!$token) {
             throw $this->createAccessDeniedException('GitHub token missing');
         }
+
         return $token;
     }
 
@@ -155,7 +172,23 @@ class GithubPublishController extends AbstractController
     {
         $token = $this->requireToken();
         $repos = $this->publisher->listUserRepositories($token);
+
         return $this->json($repos);
+    }
+
+    #[Route('/api/publish/github/branches', name: 'api_github_branches', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function listBranches(Request $request): JsonResponse
+    {
+        $owner = (string) $request->query->get('owner', '');
+        $repo = (string) $request->query->get('repo', '');
+        if ('' === $owner || '' === $repo) {
+            return $this->json(['error' => 'owner/repo required'], 400);
+        }
+        $token = $this->requireToken();
+        $branches = $this->publisher->listBranches($token, $owner, $repo);
+
+        return $this->json($branches);
     }
 
     #[Route('/api/publish/github/status', name: 'api_github_status', methods: ['GET'])]
@@ -219,6 +252,7 @@ class GithubPublishController extends AbstractController
     {
         $scope = (string) ($request->toArray()['scope'] ?? 'read:user public_repo');
         $data = $this->deviceFlow->start($scope);
+
         return $this->json($data);
     }
 
@@ -228,7 +262,9 @@ class GithubPublishController extends AbstractController
     {
         $payload = $request->toArray();
         $deviceCode = (string) ($payload['device_code'] ?? '');
-        if (!$deviceCode) return $this->json(['error' => 'device_code required'], 400);
+        if (!$deviceCode) {
+            return $this->json(['error' => 'device_code required'], 400);
+        }
         $res = $this->deviceFlow->poll($deviceCode);
         if (!empty($res['access_token'])) {
             // Save token
@@ -242,8 +278,10 @@ class GithubPublishController extends AbstractController
             $link->setTokenExpiresAt(null);
             $this->em->persist($link);
             $this->em->flush();
+
             return $this->json(['ok' => true]);
         }
+
         // pending: {error: authorization_pending}, slow_down, expired_token, etc.
         return $this->json($res, 202);
     }
@@ -260,6 +298,7 @@ class GithubPublishController extends AbstractController
             return $this->json(['error' => 'Missing name'], 400);
         }
         $repo = $this->publisher->createRepository($token, $name, $visibility);
+
         return $this->json($repo, 201);
     }
 
@@ -271,12 +310,15 @@ class GithubPublishController extends AbstractController
         $data = json_decode($request->getContent(), true) ?: [];
         $owner = (string) ($data['owner'] ?? '');
         $repo = (string) ($data['repo'] ?? '');
-        if (!$owner || !$repo) return $this->json(['error' => 'owner/repo required'], 400);
+        if (!$owner || !$repo) {
+            return $this->json(['error' => 'owner/repo required'], 400);
+        }
 
         $client = $this->clientFactory->createAuthenticatedClient($token);
         $repoData = $client->api('repo')->show($owner, $repo);
         $default = $repoData['default_branch'] ?? 'main';
-        $branch = $this->pagesBranch ?: 'gh-pages';
+        $branchInput = (string) ($data['branch'] ?? '');
+        $branch = '' !== $branchInput ? $branchInput : ($this->pagesBranch ?: 'gh-pages');
 
         $hasContent = false;
         try {
@@ -306,7 +348,9 @@ class GithubPublishController extends AbstractController
         $repo = (string) ($data['repo'] ?? '');
         $overwrite = (bool) ($data['overwrite'] ?? false);
         $branch = $this->pagesBranch ?: 'gh-pages';
-        if (!$owner || !$repo) return $this->json(['error' => 'owner/repo required'], 400);
+        if (!$owner || !$repo) {
+            return $this->json(['error' => 'owner/repo required'], 400);
+        }
 
         // Export to temp dir using HTML5 preview export
         $odeSessionId = (string) ($data['odeSessionId'] ?? '') ?: $this->getRequestOdeSessionId($request);
@@ -362,6 +406,7 @@ class GithubPublishController extends AbstractController
             // As a last resort, ask the front-end to pass it; keep empty
             $sessionId = '';
         }
+
         return (string) $sessionId;
     }
 }

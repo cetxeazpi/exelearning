@@ -292,6 +292,12 @@ function determineDevMode() {
 
 function combineEnv() {
   env = Object.assign({}, customEnv, process.env);
+  // Security: never pass GitHub OAuth client secret to the bundled PHP server
+  try {
+    if ('GITHUB_OAUTH_CLIENT_SECRET' in env) {
+      delete env.GITHUB_OAUTH_CLIENT_SECRET;
+    }
+  } catch (_e) {}
 }
 
 // Handler factory: creates an identical handler for any window

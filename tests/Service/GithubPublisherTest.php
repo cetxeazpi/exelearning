@@ -40,6 +40,7 @@ class GithubPublisherTest extends TestCase
                         public function references(){
                             $root = $this->root;
                             return new class($root) {
+                                private $root;
                                 public function __construct($r){$this->root=$r;}
                                 public function show($o,$r,$h){ throw new \RuntimeException('missing'); }
                                 public function create($o,$r,$arr){ return ['object'=>['sha'=>'base_sha']]; }
@@ -49,6 +50,7 @@ class GithubPublisherTest extends TestCase
                         public function blobs(){
                             $root = $this->root;
                             return new class($root) {
+                                private $root;
                                 public function __construct($r){$this->root=$r;}
                                 public function create($o,$r,$arr){ return ['sha'=>sha1($arr['content'])]; }
                             };
@@ -82,4 +84,3 @@ class GithubPublisherTest extends TestCase
         $this->assertFileExists($local.'.nojekyll');
     }
 }
-

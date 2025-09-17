@@ -74,7 +74,6 @@ services:
             - '../src/ApiResource/'
             - '../src/Kernel.php'
             - '../src/var/'
-            - '/app/src/var/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -181,19 +180,11 @@ services:
         tags:
             - { name: 'api_platform.doctrine.orm.query_extension.collection', priority: -999999 }
 
-
     decorating_translator:
         class:     App\Translation\net\exelearning\Translation\Translator
         decorates: translator
         arguments:
             - '@.inner'
-
-    # Twig extension to provide a safe ea_url() that tolerates null controllers
-    App\Twig\EasyAdminSafeUrlExtension:
-        tags:
-            # Register with very high priority so Twig adds it first.
-            # Twig keeps the first function definition when names collide.
-            - { name: 'twig.extension', priority: 10000 }
 
 twig:
     globals:

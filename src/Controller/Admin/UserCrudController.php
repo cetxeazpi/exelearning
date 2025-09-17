@@ -40,12 +40,7 @@ class UserCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('admin.users.title')
             ->setEntityLabelInPlural('admin.users.title')
             ->setPageTitle(Crud::PAGE_INDEX, 'admin.users.title')
-            ->setSearchFields(['email', 'userId'])
-            // Workaround: override index template to avoid EA calling setController(null) in vendor template on PHP 8.4
-            // We provide a minimal index that renders without 500s while we investigate upstream.
-            ->overrideTemplates([
-                'crud/index' => 'admin/easyadmin/users_index_safe.html.twig',
-            ]);
+            ->setSearchFields(['email', 'userId']);
     }
 
     public function configureFields(string $pageName): iterable

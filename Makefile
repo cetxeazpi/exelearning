@@ -143,7 +143,7 @@ test: check-docker check-env
 test-unit: check-docker check-env
 	@echo "Running PHPUnit tests..."
 	# We add -e APP_ENV=test to ensure that Symfony runs in the test environment.
-	@docker compose run --rm --no-deps -e APP_ENV=test exelearning composer --no-cache phpunit-unit
+	@docker compose run --rm --no-deps -e XDEBUG_MODE=off -e memory_limit=512M -e APP_ENV=test exelearning composer --no-cache phpunit-unit
 
 # Run unit tests in parallel using "paratest"
 test-unit-parallel: check-docker check-env

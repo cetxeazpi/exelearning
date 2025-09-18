@@ -2170,10 +2170,9 @@ class OdeService implements OdeServiceInterface
         // FIXME: User must be able to open the project even if he is not the owner
         // $currentSessionsForUser = $currentOdeUsersRepository->getCurrentSessionForUser($dbUser->getUserIdentifier());
         
-        // TODO Revisa perquè surt
-        if (!empty($currentSessionsForUser)) {
-            throw new UserAlreadyOpenSessionException();
-        }
+        // if (!empty($currentSessionsForUser)) {
+        //     throw new UserAlreadyOpenSessionException();
+        // }
 
         // Insert into current_ode_users
         $this->currentOdeUsersService->createCurrentOdeUsers(

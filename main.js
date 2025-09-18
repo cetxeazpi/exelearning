@@ -264,6 +264,9 @@ customEnv = {
   LOG_DIR: process.env.LOG_DIR || path.join(appDataPath, 'log'),
   MERCURE_URL: process.env.MERCURE_URL || '',
   API_JWT_SECRET: process.env.API_JWT_SECRET || 'CHANGE_THIS_FOR_A_SECRET',
+  GITHUB_OAUTH_CLIENT_ID: '',
+  GITHUB_OAUTH_CLIENT_SECRET: '',
+
 };
 }
 /**
@@ -948,6 +951,25 @@ function runSymfonyCommands() {
 function phpIniArgs() {
   const opcacheDir = path.join(customEnv.CACHE_DIR, 'opcache');
   ensureWritableDirectory(opcacheDir);
+
+  const isDev = determineDevMode();
+
+  // In development, revalidate timestamps and avoid file-cache-only to prevent stale code
+  if (isDev) {
+    return [
+      '-dopcache.enable=1',
+      '-dopcache.enable_cli=1',
+      '-dopcache.memory_consumption=128',
+      '-dopcache.interned_strings_buffer=16',
+      '-dopcache.max_accelerated_files=20000',
+      `-dopcache.file_cache=${opcacheDir}`,
+      '-dopcache.validate_timestamps=1',
+      '-drealpath_cache_size=4096k',
+      '-drealpath_cache_ttl=600',
+    ];
+  }
+
+  // In production, use file-cache-only and disable timestamp validation for performance
   return [
     '-dopcache.enable=1',
     '-dopcache.enable_cli=1',

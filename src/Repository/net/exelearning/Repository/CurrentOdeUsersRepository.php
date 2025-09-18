@@ -165,18 +165,20 @@ class CurrentOdeUsersRepository extends ServiceEntityRepository
     public function removeByOdeSessionIdAndUser($odeId, $odeSessionId, $user)
     {
         $queryDeleteCurrentOdeUsers = $this->createQueryBuilder('n')
-            ->delete()
-            
-            ->setParameter('odeSessionId', $odeSessionId)
-            ->setParameter('odeId', $odeId)
-            ->setParameter('user', $user)
-            ->where('n.odeSessionId = :odeSessionId')
-            ->andWhere('n.user = :user')
-            ->andWhere('n.odeId = :odeId')
-            
-            ->getQuery();
+        ->delete()
+        
+        ->setParameter('odeSessionId', $odeSessionId)
+        ->setParameter('user', $user)
+        ->where('n.odeSessionId = :odeSessionId')
+        ->andWhere('n.user = :user');
 
-        $currentOdeUsersDeleted = $queryDeleteCurrentOdeUsers->execute();
+        
+        if (!empty($odeId)) {
+            $queryDeleteCurrentOdeUsers->andWhere('n.odeId = :odeId')
+                ->setParameter('odeId', $odeId);
+        }
+
+        $currentOdeUsersDeleted = $queryDeleteCurrentOdeUsers->getQuery()->execute();
 
         return $currentOdeUsersDeleted;
     }

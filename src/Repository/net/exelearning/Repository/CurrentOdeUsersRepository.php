@@ -104,7 +104,7 @@ class CurrentOdeUsersRepository extends ServiceEntityRepository
             ->getResult()
         ;
 
-        if ((!empty($currentSessionsForUser)) && (count($currentSessionsForUser) <= 1) && (isset($currentSessionsForUser[0]))) {
+        if ((!empty($currentSessionsForUser)) && count($currentSessionsForUser) > 0) {
             return $currentSessionsForUser[0];
         } else {
             return null;

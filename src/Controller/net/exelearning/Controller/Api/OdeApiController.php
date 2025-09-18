@@ -174,7 +174,7 @@ class OdeApiController extends DefaultApiController
                 $isConcurrentUserSave = $this->currentOdeUsersService->checkSyncSaveFlag($odeId, $odeSessionId);
 
                 // Get odeComponentFlag
-                $isEditingIdevice = $currentSessionForUser->getSyncComponentsFlag();
+                $isEditingIdevice = $currentSessionForUser && $currentSessionForUser->getSyncComponentsFlag();
 
                 // Check flags
                 if ($isConcurrentUserSave || $isEditingIdevice) {
@@ -292,7 +292,7 @@ class OdeApiController extends DefaultApiController
                 $isConcurrentUserSave = $this->currentOdeUsersService->checkSyncSaveFlag($odeId, $odeSessionId);
 
                 // Get odeComponentFlag
-                $isEditingIdevice = $currentSessionForUser->getSyncComponentsFlag();
+                $isEditingIdevice = $currentSessionForUser && $currentSessionForUser->getSyncComponentsFlag();
 
                 // Check flags
                 if ($isConcurrentUserSave || $isEditingIdevice) {

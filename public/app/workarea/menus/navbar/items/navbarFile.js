@@ -552,6 +552,12 @@ export default class NavbarFile {
                 // Reload project
                 eXeLearning.app.project.loadCurrentProject();
                 eXeLearning.app.project.openLoad();
+            } else {
+                eXeLearning.app.modals.alert.show({
+                    title: _('Error closing'),
+                    body: _(response.responseMessage),
+                    contentId: 'error',
+                });
             }
         });
     }

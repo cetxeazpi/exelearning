@@ -532,7 +532,8 @@ export default class ApiCallManager {
     async getOdeExportDownload(odeSessionId, exportType) {
         let downloadResponse = [];
         let url = this.endpoints.api_ode_export_download.path;
-        url = url.replace('{odeSessionId}', odeSessionId);
+        //url = url.replace('{odeSessionId}', odeSessionId);
+        url = url.replace('{odeSessionId}', eXeLearning.app.project.odeId);
         url = url.replace('{exportType}', exportType);
 
         return await this.func.get(url);

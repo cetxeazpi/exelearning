@@ -1014,7 +1014,7 @@ class NavStructureApiController extends DefaultApiController
         $targetHrefs = array_map(fn ($id) => 'exe-node:'.$id, $deletedPageIds);
 
         $componentRepo = $this->entityManager->getRepository(\App\Entity\net\exelearning\Entity\OdeComponentsSync::class);
-        $allComponentsInSession = $componentRepo->findBy(['odeSessionId' => $sessionId]);
+        $allComponentsInSession = $componentRepo->findBy(['odeId' => $sessionId]);
 
         foreach ($allComponentsInSession as $component) {
             $componentId = $component->getId();

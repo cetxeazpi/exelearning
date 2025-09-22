@@ -121,7 +121,8 @@ class OdeExportService implements OdeExportServiceInterface
         $this->translator->setLocale($localeUserPreferences);
 
         // Get ode id
-        $odeId = $this->currentOdeUsersService->getOdeIdByOdeSessionId($dbUser, $odeSessionId);
+        // $odeId = $this->currentOdeUsersService->getOdeIdByOdeSessionId($dbUser, $odeSessionId);
+        $odeId = $odeSessionId;
 
         // Get ode version
         $odeVersionId = $this->currentOdeUsersService->getOdeVersionIdByOdeSessionId($user, $odeSessionId);

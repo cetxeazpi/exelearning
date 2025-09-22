@@ -129,9 +129,11 @@ export default class ModalOdeBrokenLinks extends Modal {
     async downloadCsv() {
         this.preventCloseModal = true;
         let sessionId = eXeLearning.app.project.odeSession;
+        let odeId = eXeLearning.app.project.odeId;
         let params = {
             csv: true,
             odeSessionId: sessionId,
+            odeId: odeId
         };
         await eXeLearning.app.api
             .getOdeSessionBrokenLinks(params)

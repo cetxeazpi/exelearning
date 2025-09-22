@@ -533,13 +533,14 @@ class OdeApiController extends DefaultApiController
     {
         $odeSessionId = $request->get('odeSessionId');
         $csv = $request->get('csv');
+        $odeId = $request->get('odeId');
 
-        if (!empty($odeSessionId)) {
+        if (!empty($odeId)) {
             // Base URL
             $symfonyFullUrl = self::getSymfonyUrl($request);
 
             $odeComponentsSyncRepo = $this->entityManager->getRepository(OdeComponentsSync::class);
-            $odeComponentsSync = $odeComponentsSyncRepo->findBy(['odeSessionId' => $odeSessionId]);
+            $odeComponentsSync = $odeComponentsSyncRepo->findBy(['odeId' => $odeId]);
 
             if (!empty($odeComponentsSync)) {
                 $brokenLinks = $this->odeComponentsSyncService->getBrokenLinks(
@@ -552,14 +553,14 @@ class OdeApiController extends DefaultApiController
             } else {
                 $this->logger->notice(
                     'data not found',
-                    ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]
+                    ['odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]
                 );
                 $responseData['responseMessage'] = 'notice: data not found';
             }
         } else {
             $this->logger->error(
                 'invalid data',
-                ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]
+                ['odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]
             );
             $responseData['responseMessage'] = 'error: invalid data';
         }
@@ -575,6 +576,7 @@ class OdeApiController extends DefaultApiController
         $odeSessionId = $request->get('odeSessionId');
         $csv = $request->get('csv');
         $resourceReport = $request->get('resourceReport');
+        $odeId =  $request->get('odeId');
 
         $responseData = [];
 
@@ -583,7 +585,7 @@ class OdeApiController extends DefaultApiController
             $symfonyFullUrl = self::getSymfonyUrl($request);
 
             $odeComponentsSyncRepo = $this->entityManager->getRepository(OdeComponentsSync::class);
-            $odeComponentsSync = $odeComponentsSyncRepo->findBy(['odeSessionId' => $odeSessionId]);
+            $odeComponentsSync = $odeComponentsSyncRepo->findBy(['odeId' => $odeId]);
 
             if (!empty($odeComponentsSync)) {
                 $usedFiles = $this->odeComponentsSyncService->getBrokenLinks(
@@ -597,14 +599,14 @@ class OdeApiController extends DefaultApiController
             } else {
                 $this->logger->notice(
                     'data not found',
-                    ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]
+                    ['odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]
                 );
                 $responseData['responseMessage'] = 'notice: data not found';
             }
         } else {
             $this->logger->error(
                 'invalid data',
-                ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]
+                ['odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]
             );
             $responseData['responseMessage'] = 'error: invalid data';
         }

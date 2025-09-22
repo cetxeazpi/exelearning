@@ -192,9 +192,11 @@ export default class NavbarFile {
      */
     async getOdeSessionBrokenLinksEvent() {
         let sessionId = eXeLearning.app.project.odeSession;
+        let odeId = eXeLearning.app.project.odeId;
         let params = {
             csv: false,
             odeSessionId: sessionId,
+            odeId: odeId
         };
         let odeSessionBrokenLinks =
             await eXeLearning.app.api.getOdeSessionBrokenLinks(params);
@@ -238,10 +240,12 @@ export default class NavbarFile {
      */
     async getOdeSessionUsedFilesEvent() {
         let sessionId = eXeLearning.app.project.odeSession;
+        let odeId = eXeLearning.app.project.odeId;
         let params = {
             csv: false,
             odeSessionId: sessionId,
             resourceReport: true,
+            odeId: odeId
         };
         let odeSessionUsedFiles =
             await eXeLearning.app.api.getOdeSessionUsedFiles(params);
@@ -306,8 +310,8 @@ export default class NavbarFile {
             icon: 'preview',
         };
         let toast = eXeLearning.app.toasts.createToast(toastData);
-        let odeSessionId = eXeLearning.app.project.odeSession;
-        let response = await eXeLearning.app.api.getOdePreviewUrl(odeSessionId);
+        let odeId = eXeLearning.app.project.odeId;
+        let response = await eXeLearning.app.api.getOdePreviewUrl(odeId);
         if (response['responseMessage'] == 'OK') {
             toast.toastBody.innerHTML = _('The preview has been generated.');
             setTimeout(() => {

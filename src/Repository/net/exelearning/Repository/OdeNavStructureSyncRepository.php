@@ -64,7 +64,7 @@ class OdeNavStructureSyncRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.odeId = :odeId')
-            ->andWhere('c.odeParentPageId IS NULL')
+            ->andWhere('(c.odeParentPageId IS NULL OR LENGTH(c.odeParentPageId) > 0)')
             ->setParameter('odeId', $odeId)
             ->addOrderBy('CASE WHEN c.odeNavStructureSync IS NULL THEN 1 ELSE 0 END', 'DESC')
             ->addOrderBy('c.odeNavStructureSync', 'ASC')

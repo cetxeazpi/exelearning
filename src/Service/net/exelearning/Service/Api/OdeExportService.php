@@ -112,6 +112,7 @@ class OdeExportService implements OdeExportServiceInterface
         $exportType,
         $preview = false,
         $isIntegration = false,
+        $tempPath = '',
     ) {
         $response = [];
 
@@ -262,7 +263,8 @@ class OdeExportService implements OdeExportServiceInterface
                 $baseUrl,
                 $exportType,
                 $preview,
-                $isIntegration
+                $isIntegration,
+                $tempPath
             );
         } catch (\Exception $e) {
             $exportStructure = ['responseMessage' => $this->translator->trans('Export generation error')];
@@ -276,15 +278,18 @@ class OdeExportService implements OdeExportServiceInterface
             return $response;
         }
 
+        // Export dir path
+        // $exportDirPath = $this->fileHelper->getOdeSessionUserTmpExportDir($odeSessionId, $dbUser);
+        $exportDirPath = $this->fileHelper->getOdeSessionUserTmpExportDir($odeSessionId, $dbUser, $tempPath);
+        $exportDirPath = $exportDirPath.$tempPath;
+
         // Get url to export dir
         $urlExportDir = UrlUtil::getOdeSessionExportUrl($odeSessionId, $dbUser);
+        $urlExportDir = $urlExportDir.$tempPath;
 
         // Index filename
         $indexFileName = self::generateIndexFileName();
         $response['urlPreviewIndex'] = $urlExportDir.$indexFileName;
-
-        // Export dir path
-        $exportDirPath = $this->fileHelper->getOdeSessionUserTmpExportDir($odeSessionId, $dbUser);
 
         // In case it is not a preview we need compress the export files to generate the zip
         if (!$preview) {
@@ -501,6 +506,7 @@ class OdeExportService implements OdeExportServiceInterface
         $exportType,
         $isPreview,
         $isIntegration,
+        $tempPath = '',
     ) {
         // To do (see #198)
         $isPreview = false;
@@ -514,8 +520,8 @@ class OdeExportService implements OdeExportServiceInterface
         $addElpToExport = false;
 
         // Server export dir path
-        $exportDirPath = $this->fileHelper->getOdeSessionUserTmpExportDir($odeSessionId, $dbUser);
-
+        $exportParentDirPath = $this->fileHelper->getOdeSessionUserTmpExportDir($odeSessionId, $dbUser);
+        $exportDirPath = $exportParentDirPath.'/'.$tempPath.'/';
         // Check dist dir
         if (!($exportDirPath && FilePermissionsUtil::isWritable($exportDirPath))) {
             $response['responseMessage'] = $this->translator->trans('Export folder could not be created');
@@ -523,12 +529,13 @@ class OdeExportService implements OdeExportServiceInterface
             return $response;
         }
 
-        // Export url prefix (used in preview)
+        // Export url prefix (used in preview)y
+        // $isPreview=True;
         if ($isPreview) {
             $collection = $this->router->getRouteCollection();
             $routes = $collection->all();
             $apiFilesRoute = $routes['api_idevices_download_file_resources']->getPath();
-            $exportUrlPath = substr(UrlUtil::getOdeSessionExportUrl($odeSessionId, $dbUser), 5);
+            $exportUrlPath = substr(UrlUtil::getOdeSessionExportUrl($odeSessionId, $dbUser), 5).$tempPath.'/';
             $resourcesPrefix = $baseUrl.$apiFilesRoute.'?resource='.$exportUrlPath;
         } else {
             $resourcesPrefix = '';
@@ -573,7 +580,7 @@ class OdeExportService implements OdeExportServiceInterface
         );
 
         // Remove export dir
-        FileUtil::removeDirContent($exportDirPath);
+        FileUtil::removeDirContent($exportParentDirPath);
 
         // ///////////////////////////////////////////////////
         // COPY FILES
@@ -841,6 +848,7 @@ class OdeExportService implements OdeExportServiceInterface
         // Generate export type files
         // Create files: xml, html, etc. depending on the type of export
         $viewContentGenerated = false;
+
         if ($exportService) {
             try {
                 $viewContentGenerated = $exportService->generateExportFiles(

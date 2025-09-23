@@ -7,6 +7,7 @@ use App\Entity\net\exelearning\Entity\OdeComponentsSync;
 use App\Entity\net\exelearning\Entity\OdePagStructureSync;
 use App\Util\net\exelearning\Util\UrlUtil;
 use App\Util\net\exelearning\Util\Util;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * OdeOldXmlFreeTextIdevice.
@@ -34,7 +35,7 @@ class OdeOldXmlFreeTextIdevice
     // const OLD_ODE_XML_IDEVICE_TEXT = 'instance';
     public const OLD_ODE_XML_IDEVICE_TEXT_CONTENT = 'string role="key" value="content_w_resourcePaths"';
 
-    public static function oldElpFreeTextIdeviceStructure($odeId, $odePageId, $freeTextNodes, $generatedIds, $xpathNamespace)
+    public static function oldElpFreeTextIdeviceStructure($odeId, $odePageId, $freeTextNodes, $generatedIds, $xpathNamespace, TranslatorInterface $translator)
     {
         $result['odeComponentsSync'] = [];
         $result['srcRoutes'] = [];

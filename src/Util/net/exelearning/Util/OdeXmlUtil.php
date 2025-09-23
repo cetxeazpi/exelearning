@@ -13,6 +13,7 @@ use App\Entity\net\exelearning\Entity\OdeNavStructureSyncProperties;
 use App\Entity\net\exelearning\Entity\OdePagStructureSync;
 use App\Entity\net\exelearning\Entity\OdePagStructureSyncProperties;
 use App\Entity\net\exelearning\Entity\OdePropertiesSync;
+use App\Translation\net\exelearning\Translation;
 use App\Util\net\exelearning\Util\OdeOldXmlIdevices\OdeOldXmlCaseStudyIdevice;
 use App\Util\net\exelearning\Util\OdeOldXmlIdevices\OdeOldXmlDropdownIdevice;
 use App\Util\net\exelearning\Util\OdeOldXmlIdevices\OdeOldXmlExternalUrlIdevice;
@@ -32,6 +33,7 @@ use App\Util\net\exelearning\Util\OdeOldXmlIdevices\OdeOldXmlScormTestIdevice;
 use App\Util\net\exelearning\Util\OdeOldXmlIdevices\OdeOldXmlTrueFalseIdevice;
 use App\Util\net\exelearning\Util\OdeOldXmlIdevices\OdeOldXmlWikipediaIdevice;
 use App\Util\net\exelearning\Util\OdeOldXmlProperties\OdeOldXmlPropertiesGet;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * OdeXmlUtil.
@@ -761,7 +763,7 @@ class OdeXmlUtil
      *
      * @return OdeNavStructureSync[]
      */
-    public static function readOldExeXml($odeId, $elpContentFileContent)
+    public static function readOldExeXml($odeId, $elpContentFileContent, $translator)
     {
         // Array structure
         $odeResponse = [];
@@ -771,6 +773,9 @@ class OdeXmlUtil
         $odeResponse['odeNavStructureSyncs'] = [];
         $odeResponse['srcRoutes'] = [];
         $odeResponse['odeComponentsMapping'] = [];
+
+        // new translator for old ELPs to translate feedback buttons, info task, etc.
+        $translatorForOldIdevices = new Translation\Translator($translator);
 
         // odeNavSyncs
         $odeNavSyncs = [];
@@ -843,6 +848,18 @@ class OdeXmlUtil
         $elpNodeGeneralProperties = $xml->xpath('f:dictionary')[0];
         $odeGeneralProperties = OdeOldXmlPropertiesGet::oldElpGeneralPropertiesGet($odeId, $elpNodeGeneralProperties, $xpathNamespace);
         $odeCatalogProperties['odeProperties'] = [];
+
+        $lang = null;
+        foreach ($odeGeneralProperties['odeProperties'] as $odeProperty) {
+            if ('pp_lang' === $odeProperty->getKey()) {
+                $lang = $odeProperty->getValue();
+                break;
+            }
+        }
+        // Set ELP language to translator for old iDevices
+        if (null !== $lang) {
+            $translatorForOldIdevices->switchTemporaryLocale($lang);
+        }
 
         // Get catalog properties elp
         if ('LOMES' == (string) $odeGeneralProperties['exportMetadata']) {
@@ -919,7 +936,7 @@ class OdeXmlUtil
         $nodes = $xml->xpath("//f:instance[@class='exe.engine.node.Node']");
         foreach ($nodes as $node) {
             // Get navStructure, references and routes to place content
-            $subPagesNav = self::oldElpStructureNewPage($odeId, $generatedIds, $node, $xml, $xpathNamespace);
+            $subPagesNav = self::oldElpStructureNewPage($odeId, $generatedIds, $node, $xml, $xpathNamespace, $translatorForOldIdevices);
             // Get references to assign the parent
             foreach ($subPagesNav['nodeReferences'] as $key => $parentReference) {
                 $references[$key] = $parentReference;
@@ -1006,6 +1023,9 @@ class OdeXmlUtil
 
         $odeResponse['odeNavStructureSyncs'] = self::changeOldExeNodeLink($odeResponse['odeNavStructureSyncs']);
 
+        // Restore previous locale
+        $translatorForOldIdevices->restorePreviousLocale();
+
         return $odeResponse;
     }
 
@@ -1073,7 +1093,7 @@ class OdeXmlUtil
      *
      * @return array $result
      */
-    private static function oldElpStructureNewPage($odeId, $generatedIds, $oldXmlListInst, $xml, $xpathNamespace)
+    private static function oldElpStructureNewPage($odeId, $generatedIds, $oldXmlListInst, $xml, $xpathNamespace, $translator)
     {
         // params
         $result = [];
@@ -1154,7 +1174,7 @@ class OdeXmlUtil
                     // Get component sync by node type
                     $types = $oldXmlListInstDictList->xpath('f:instance/@class');
                     $references = $oldXmlListInstDictList->xpath('f:instance/@reference');
-                    $results = self::getComponentSyncFromNode($types, $references, $oldXmlListInstDictList, $odeId, $odePageId, $generatedIds, $xpathNamespace);
+                    $results = self::getComponentSyncFromNode($types, $references, $oldXmlListInstDictList, $odeId, $odePageId, $generatedIds, $xpathNamespace, $translator);
                     if (!empty($results)) {
                         foreach ($results as $result) {
                             foreach ($result['odeComponentsSync'] as $odeComponentSync) {
@@ -2385,7 +2405,7 @@ class OdeXmlUtil
      *
      * @return array $result
      */
-    private static function getComponentSyncFromNode($types, $references, $oldXmlListInstDictList, $odeId, $odePageId, $generatedIds, $xpathNamespace)
+    private static function getComponentSyncFromNode($types, $references, $oldXmlListInstDictList, $odeId, $odePageId, $generatedIds, $xpathNamespace, TranslatorInterface $translator)
     {
         $result = [];
 
@@ -2411,13 +2431,13 @@ class OdeXmlUtil
 
                     // Get free text idevices and process
                 case 'exe.engine.freetextidevice.FreeTextIdevice':
-                    $odeComponentSyncResult = OdeOldXmlFreeTextIdevice::oldElpFreeTextIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlFreeTextIdevice::oldElpFreeTextIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace, $translator);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
                     // Get generic idevices and process
                 case 'exe.engine.genericidevice.GenericIdevice':
-                    $odeComponentSyncResult = OdeOldXmlGenericIdevice::oldElpGenericIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlGenericIdevice::oldElpGenericIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace, $translator);
                     array_push($result, $odeComponentSyncResult);
                     break;
 
@@ -2530,7 +2550,7 @@ class OdeXmlUtil
                 case 'exe.engine.reflectionfpdmodifidevice.ReflectionfpdmodifIdevice':
                 case 'exe.engine.freetextfpdidevice.FreeTextfpdIdevice':
                     // Same as free text idevice
-                    $odeComponentSyncResult = OdeOldXmlFreeTextIdevice::oldElpFreeTextIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace);
+                    $odeComponentSyncResult = OdeOldXmlFreeTextIdevice::oldElpFreeTextIdeviceStructure($odeId, $odePageId, $node, $generatedIds, $xpathNamespace, $translator);
                     array_push($result, $odeComponentSyncResult);
                     break;
 

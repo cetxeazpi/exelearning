@@ -1504,7 +1504,6 @@ class OdeService implements OdeServiceInterface
         $odeNavStructureSync,
     ) {
         $destinationFilePathName = $odeSessionDistDirPath.$elpFileName;
-
         FileUtil::copyFile($elpFilePath, $destinationFilePathName);
 
         try {
@@ -1549,7 +1548,7 @@ class OdeService implements OdeServiceInterface
         try {
             // Read XML
             if (!$isNewOdeXml) {
-                $odeResponse = OdeXmlUtil::readOldExeXml($newOdeSessionId, $elpContentFileContent);
+                $odeResponse = OdeXmlUtil::readOldExeXml($newOdeSessionId, $elpContentFileContent, $this->translator);
             } else {
                 if (!$isImportIdevices) {
                     $odeResponse = OdeXmlUtil::readOdeXml($newOdeSessionId, $elpContentFileContent);
@@ -1558,6 +1557,14 @@ class OdeService implements OdeServiceInterface
                     $themeDirPath = $odeSessionDistDirPath.Constants::EXPORT_DIR_THEME;
                     if (is_dir($themeDirPath)) {
                         $odeResponse['themeDir'] = true;
+                        $themePath = $themeDirPath.DIRECTORY_SEPARATOR.'config.xml';
+                        $isInstallable = $this->fileHelper->xmlKeyValue($themePath, Constants::THEME_INSTALLABLE);
+                        if ($isInstallable) {
+                            $odeResponse['themeInstallable'] = true;
+                        } else {
+                            $odeResponse['themeInstallable'] = false;
+                        }
+
                         // Copy theme dir to new session dir
                         $this->copyThemeFilesToSession($newOdeSessionId, $odeSessionDistDirPath);
                     }

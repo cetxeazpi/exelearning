@@ -272,6 +272,11 @@ class OdePagStructureSyncDto extends BaseDto
      */
     public function loadFromEntity($odePagStructureSync, $loadOdeComponentsSync, $loadOdePagStructureSyncProperties, $loadOdeComponentsSyncProperties)
     {
+        // FIXME: Fix if $odePagStructureSync is null
+        if ($odePagStructureSync === null) {
+            return;
+        }
+
         $this->setId($odePagStructureSync->getId());
         $this->setOdeNavStructureSyncId($odePagStructureSync->getOdeNavStructureSync()->getId());
         $this->setOdeId($odePagStructureSync->getOdeId());

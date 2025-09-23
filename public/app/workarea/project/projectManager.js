@@ -1185,8 +1185,11 @@ export default class projectManager {
      * @param {*} pageId
      */
     async checkUserUpdateFlag(pageId) {
+        if (!pageId) {
+            return false;
+        }
         // Check if the user has an update
-        this.app.api.postCheckUserOdeUpdates().then((response) => {
+        this.app.api.postCheckUserOdeUpdates(pageId).then((response) => {
             if (response.responseMessage == 'OK') {
                 for (let syncChange of response.syncChanges) {
                     setTimeout(() => {

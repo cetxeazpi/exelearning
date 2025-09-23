@@ -1648,12 +1648,21 @@ class IdeviceApiController extends DefaultApiController
             $resourcePath = $resource;
         }
 
-        $filePathName = $base.$resourcePath;
+        $filePathName = $base . $resourcePath;
 
         // If the file does not exist in the original location, try in public/files
         if (!file_exists($filePathName)) {
             $projectDir = $this->getParameter('kernel.project_dir');
-            $alternativePath = $projectDir.'/public/files/'.$resource;
+            
+            /*  FIXME: Specific fix path issue for two cases:
+                - 0jquery-ui.min.css
+                - resource=perm/idevices/base/relate/export/jquery-ui.min.css */
+            if (str_contains($resource, 'jquery-ui.min.css')) {
+                $alternativePath = $projectDir . '/public/libs/jquery-ui/jquery-ui.min.js';
+                $filePathName = $alternativePath;
+            } else {
+                $alternativePath = $projectDir . '/public/files/' . $resource;
+            }
 
             if (file_exists($alternativePath)) {
                 $filePathName = $alternativePath;

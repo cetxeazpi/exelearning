@@ -11749,14 +11749,6 @@
         <source>abcdefghijklmnñopqrstuvwxyz</source>
         <target></target>
       </trans-unit>
-      <trans-unit id="ZLhutDM" resname="Send to AI">
-        <source>Send to AI</source>
-        <target></target>
-      </trans-unit>
-      <trans-unit id="HAl2U3v" resname="There is no query to send to the assistant.">
-        <source>There is no query to send to the assistant.</source>
-        <target></target>
-      </trans-unit>
       <trans-unit id="UKnYe.P" resname="Owner">
         <source>Owner</source>
         <target>Propietario</target>
@@ -12243,10 +12235,6 @@
       </trans-unit>
       <trans-unit id="s5Q81qh" resname="Don't forget to check the Accessibility tab.">
         <source>Don't forget to check the Accessibility tab.</source>
-        <target></target>
-      </trans-unit>
-      <trans-unit id="zp1nkll" resname="Hangman Game">
-        <source>Hangman Game</source>
         <target></target>
       </trans-unit>
       <trans-unit id=".wwVlaA" resname="Automatically include capital letters">

@@ -11713,10 +11713,6 @@
         <source>Teacher mode</source>
         <target>~Modo profesor</target>
       </trans-unit>
-      <trans-unit id="zp1nkll" resname="Hangman Game">
-        <source>Hangman Game</source>
-        <target>~Xogo do aforcado</target>
-      </trans-unit>
       <trans-unit id="Qmo7OQW" resname="Stat">
         <source>Stat</source>
         <target>~Estatística</target>
@@ -11747,14 +11743,6 @@
       </trans-unit>
       <trans-unit id="dVTYTrX" resname="abcdefghijklmnñopqrstuvwxyz">
         <source>abcdefghijklmnñopqrstuvwxyz</source>
-        <target></target>
-      </trans-unit>
-      <trans-unit id="ZLhutDM" resname="Send to AI">
-        <source>Send to AI</source>
-        <target></target>
-      </trans-unit>
-      <trans-unit id="HAl2U3v" resname="There is no query to send to the assistant.">
-        <source>There is no query to send to the assistant.</source>
         <target></target>
       </trans-unit>
       <trans-unit id="UKnYe.P" resname="Owner">

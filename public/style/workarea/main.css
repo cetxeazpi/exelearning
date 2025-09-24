@@ -5796,6 +5796,12 @@ body > .tooltip{
     border-bottom: none;
   }
 
+/* tmp (to review) */
+/* Hide "Import iDevice" */
+#modalIdeviceManagerContent .idevices-button-container{
+    display: none;
+}
+
 /* Another user is editing a resource */
 .user-editing-overlay {
     align-items: center;

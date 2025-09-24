@@ -1,0 +1,88 @@
+<div class="modal fade" id="modalPublishToCloudflare" tabindex="-1" aria-labelledby="modalPublishToCloudflareLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="height:85vh;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalPublishToCloudflareLabel">{{ 'Publish to Cloudflare Pages' | trans }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Hide' | trans }}"></button>
+      </div>
+
+      <div class="modal-body">
+        <div id="cf-auth" class="mb-3">
+          <label class="form-label">{{ 'Cloudflare API Token' | trans }}</label>
+          <div class="input-group">
+            <input id="cf-token" type="password" class="form-control" placeholder="{{ 'Paste your Cloudflare API Token…' | trans }}">
+            <button id="cf-save-token" class="btn btn-outline-primary" type="button">{{ 'Connect' | trans }}</button>
+          </div>
+          <div class="form-text">
+            {{ 'Create a token with Pages permissions in' | trans }} <a href="https://dash.cloudflare.com/profile/api-tokens" target="_blank" rel="noopener">Cloudflare</a>.
+          </div>
+        </div>
+
+        <div id="cf-select" class="d-none">
+          <div class="row g-3 align-items-top-end">
+            <div class="col-md-5">
+              <label class="form-label">{{ 'Account' | trans }}</label>
+              <div class="dropdown w-100">
+                <button id="cf-btn-account" class="btn btn-outline-secondary w-100 text-start dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span id="cf-btn-account-text">{{ 'Select account…' | trans }}</span>
+                </button>
+                <div class="dropdown-menu p-0" style="max-height: 40vh; overflow:auto;">
+                  <div id="cf-account-menu" class="list-group list-group-flush"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-7">
+              <label class="form-label">{{ 'Project' | trans }}</label>
+              <div class="d-flex gap-2">
+                <div class="dropdown w-100">
+                  <button id="cf-btn-project" class="btn btn-outline-secondary w-100 text-start dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                    <span id="cf-btn-project-text">{{ 'Select project…' | trans }}</span>
+                  </button>
+                  <div class="dropdown-menu p-0" style="max-height: 40vh; overflow:auto;">
+                    <div id="cf-project-menu" class="list-group list-group-flush"></div>
+                  </div>
+                </div>
+                <button id="cf-btn-refresh" class="btn btn-outline-secondary" type="button" title="{{ 'Refresh projects' | trans }}">
+                  <span class="auto-icon" aria-hidden="true">autorenew</span>
+                </button>
+              </div>
+              <div class="form-text">{{ 'Pick or create a project to deploy into.' | trans }}</div>
+              <div class="input-group mt-2">
+                <input id="cf-project-name" class="form-control" placeholder="{{ 'New project name…' | trans }}">
+                <button id="cf-btn-create" class="btn btn-outline-secondary" type="button">{{ 'Create' | trans }}</button>
+              </div>
+              <div class="form-check mt-3">
+                <input class="form-check-input" type="checkbox" value="1" id="cf-deploy-production" checked>
+                <label class="form-check-label" for="cf-deploy-production">
+                  {{ 'Deploy to production (make it visible)' | trans }}
+                </label>
+              </div>
+              <div class="form-text">{{ 'If you select an existing project, the new deployment will replace the current live version.' | trans }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="cf-progress" class="mt-4 d-none">
+          <h6>{{ 'Publishing…' | trans }}</h6>
+          <div class="progress">
+            <div id="cf-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 10%;" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <div id="cf-progress-msg" class="small text-muted mt-2">{{ 'Starting…' | trans }}</div>
+        </div>
+
+        <div id="cf-done" class="mt-4 d-none">
+          <h6>{{ 'Published' | trans }}</h6>
+          <p class="mb-1 d-flex gap-2 flex-wrap">
+            <a id="cf-site-url" href="#" target="_blank" rel="noopener" class="btn btn-primary btn-sm d-none">{{ 'View site' | trans }}</a>
+          </p>
+          <p id="cf-done-text" class="text-muted mb-0"></p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Cancel' | trans }}</button>
+        <button id="cf-btn-publish" type="button" class="btn btn-primary" disabled>{{ 'Publish' | trans }}</button>
+      </div>
+    </div>
+  </div>
+</div>

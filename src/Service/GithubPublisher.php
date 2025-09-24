@@ -69,7 +69,7 @@ class GithubPublisher
         } catch (\Throwable $e) {
             // continue to create
         }
-        // Determine base: use default branch head, or provided baseRef
+        // Determine base: use provided base ref or the repo default branch if it exists
         $headSha = null;
         if ($baseRef) {
             try {
@@ -78,7 +78,8 @@ class GithubPublisher
             } catch (\Throwable $e) {
                 $headSha = null; // fallback below
             }
-        } else {
+        }
+        if (!$headSha) {
             try {
                 $repoData = $client->api('repo')->show($owner, $repo);
                 $default = $repoData['default_branch'] ?? 'main';
@@ -88,42 +89,87 @@ class GithubPublisher
                 $headSha = null;
             }
         }
-        if (!$headSha) {
-            // Fallback for empty/new repos or when default branch head cannot be resolved
-            $headSha = str_repeat('0', 40);
-        }
-        $created = $client->api('gitData')->references()->create($owner, $repo, [
-            'ref' => $branchRef,
-            'sha' => $headSha,
-        ]);
 
-        return $created['object']['sha'];
+        if ($headSha) {
+            // Base commit exists -> create branch at that commit (or return if it appeared)
+            try {
+                $created = $client->api('gitData')->references()->create($owner, $repo, [
+                    'ref' => $branchRef,
+                    'sha' => $headSha,
+                ]);
+
+                return $created['object']['sha'] ?? $headSha;
+            } catch (\Throwable $e) {
+                // If it already exists due to a race, show and return current SHA
+                $existing = $client->api('gitData')->references()->show($owner, $repo, 'heads/'.$branch);
+
+                return $existing['object']['sha'] ?? $headSha;
+            }
+        }
+
+        // Empty repository: create an initial empty commit and point the new branch to it
+        $initialTree = $client->api('gitData')->trees()->create($owner, $repo, [
+            'tree' => [
+                // Keep empty to create an empty root tree
+            ],
+        ]);
+        $initialCommit = $client->api('gitData')->commits()->create($owner, $repo, [
+            'message' => 'Initial commit',
+            'tree' => $initialTree['sha'],
+        ]);
+        try {
+            $client->api('gitData')->references()->create($owner, $repo, [
+                'ref' => $branchRef,
+                'sha' => $initialCommit['sha'],
+            ]);
+        } catch (\Throwable $e) {
+            // If created concurrently, fall back to update (use 'heads/{branch}')
+            $client->api('gitData')->references()->update($owner, $repo, 'heads/'.$branch, [
+                'sha' => $initialCommit['sha'],
+                'force' => false,
+            ]);
+        }
+
+        return $initialCommit['sha'];
     }
 
-    public function publishTree(string $token, string $owner, string $repo, string $branch, string $localPath, string $commitMessage = 'Publish site'): string
-    {
+    public function publishTree(
+        string $token,
+        string $owner,
+        string $repo,
+        string $branch,
+        string $localPath,
+        string $commitMessage = 'Publish site',
+        bool $forceUpdateRef = true,
+    ): string {
         $client = $this->factory->createAuthenticatedClient($token);
         $branchRef = 'refs/heads/'.$branch;
 
-        // Get HEAD of target branch (create if missing based on default branch)
-        $repoData = $client->api('repo')->show($owner, $repo);
-        $defaultBranch = $repoData['default_branch'] ?? 'main';
+        // Determine base commit and tree (if branch exists)
+        $baseCommitSha = null;
+        $baseTreeSha = null;
         try {
             $head = $client->api('gitData')->references()->show($owner, $repo, 'heads/'.$branch);
-            $baseSha = $head['object']['sha'];
+            $baseCommitSha = $head['object']['sha'] ?? null;
+            if ($baseCommitSha) {
+                $baseCommit = $client->api('gitData')->commits()->show($owner, $repo, $baseCommitSha);
+                $baseTreeSha = $baseCommit['tree']['sha'] ?? null;
+            }
         } catch (\Throwable $e) {
-            $baseSha = $this->ensureBranch($token, $owner, $repo, $branch, 'heads/'.$defaultBranch);
+            // Branch does not exist yet. We will create the ref after creating the first commit below.
+            $baseCommitSha = null;
+            $baseTreeSha = null;
         }
 
-        // Build file list
+        // Build file list to publish
         $files = $this->scanFiles($localPath);
         if (!isset($files['.nojekyll'])) {
-            // Ensure .nojekyll
+            // Ensure .nojekyll exists (disables Jekyll processing on Pages)
             file_put_contents(rtrim($localPath, '/').'/.nojekyll', '');
             $files['.nojekyll'] = rtrim($localPath, '/').'/.nojekyll';
         }
 
-        // Create blobs
+        // Create blobs for all files
         $blobs = [];
         foreach ($files as $path => $fsPath) {
             $content = file_get_contents($fsPath);
@@ -134,7 +180,7 @@ class GithubPublisher
             $blobs[$path] = $blob['sha'];
         }
 
-        // Create tree from blobs
+        // Create a new tree representing exactly the exported site (full overwrite)
         $tree = [];
         foreach ($blobs as $path => $sha) {
             $tree[] = [
@@ -144,23 +190,46 @@ class GithubPublisher
                 'sha' => $sha,
             ];
         }
-        $newTree = $client->api('gitData')->trees()->create($owner, $repo, [
-            'base_tree' => $baseSha,
-            'tree' => $tree,
-        ]);
 
-        // Create commit
-        $commit = $client->api('gitData')->commits()->create($owner, $repo, [
+        // Build tree payload. We omit base_tree to fully replace previous contents.
+        $treePayload = [
+            'tree' => $tree,
+        ];
+        $newTree = $client->api('gitData')->trees()->create($owner, $repo, $treePayload);
+
+        // Create commit. Include parent only if branch already existed.
+        $commitPayload = [
             'message' => $commitMessage,
             'tree' => $newTree['sha'],
-            'parents' => [$baseSha],
-        ]);
+        ];
+        if ($baseCommitSha) {
+            $commitPayload['parents'] = [$baseCommitSha];
+        }
+        $commit = $client->api('gitData')->commits()->create($owner, $repo, $commitPayload);
 
-        // Update ref
-        $client->api('gitData')->references()->update($owner, $repo, $branchRef, [
-            'sha' => $commit['sha'],
-            'force' => true,
-        ]);
+        // Update or create branch reference (robust against races)
+        try {
+            $client->api('gitData')->references()->show($owner, $repo, 'heads/'.$branch);
+            // Ref exists -> update (note: update ref path uses 'heads/{branch}', not 'refs/heads/{branch}')
+            $client->api('gitData')->references()->update($owner, $repo, 'heads/'.$branch, [
+                'sha' => $commit['sha'],
+                'force' => $forceUpdateRef,
+            ]);
+        } catch (\Throwable $e) {
+            // Ref may be missing; try create and if it already exists, fall back to update
+            try {
+                $client->api('gitData')->references()->create($owner, $repo, [
+                    'ref' => $branchRef,
+                    'sha' => $commit['sha'],
+                ]);
+            } catch (\Throwable $createEx) {
+                // If another process created it meanwhile, just update it
+                $client->api('gitData')->references()->update($owner, $repo, 'heads/'.$branch, [
+                    'sha' => $commit['sha'],
+                    'force' => $forceUpdateRef,
+                ]);
+            }
+        }
 
         return $commit['sha'];
     }

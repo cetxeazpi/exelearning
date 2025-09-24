@@ -313,6 +313,8 @@ class Constants
     public const MODAL_CLIENT_ALREADY_LOGGED_USER_TIME = 30;
     // Client timeout for server response (milliseconds)
     public const CLIENT_CALL_WAITING_TIME = 20000;
+    // Longer timeout for GitHub publish (milliseconds)
+    public const CLIENT_CALL_WAITING_TIME_GITHUB_PUBLISH = 300000; // 5 minutes
 
     // Client interval get last edition (milliseconds)
     public const CLIENT_INTERVAL_GET_LAST_EDITION = 20000;

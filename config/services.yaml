@@ -63,6 +63,17 @@ parameters:
     github.pages_branch: '%env(default::string:GITHUB_PAGES_BRANCH)%'
     enable_github_publishing: '%env(bool:ENABLE_GITHUB_PUBLISHING)%'
 
+    # Netlify settings
+    netlify.api_base: '%env(default::string:NETLIFY_API_BASE)%'
+    enable_netlify_publishing: '%env(bool:ENABLE_NETLIFY_PUBLISHING)%'
+
+    # Surge settings (UI only, no API key needed)
+    enable_surge_publishing: '%env(bool:ENABLE_SURGE_PUBLISHING)%'
+
+    # Cloudflare Pages settings
+    cfpages.api_base: '%env(default::string:CFPAGES_API_BASE)%'
+    enable_cfpages_publishing: '%env(bool:ENABLE_CFPAGES_PUBLISHING)%'
+
 services:
     Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
     # default configuration for services in *this* file
@@ -224,6 +235,15 @@ services:
 
     # Alias the interface to the concrete so autowire resolves to the service above
     App\Service\GithubDeviceFlowInterface: '@App\Service\GithubDeviceFlow'
+
+    # Netlify deployer service
+    App\Service\NetlifyDeployer:
+        arguments:
+            $apiBase: '%netlify.api_base%'
+
+    App\Service\CloudflareDeployer:
+        arguments:
+            $apiBase: '%cfpages.api_base%'
 
 twig:
     globals:

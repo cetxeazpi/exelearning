@@ -138,6 +138,8 @@ class WorkareaController extends DefaultWorkareaController
         $clientIntervalGetLastEdition = Constants::CLIENT_INTERVAL_GET_LAST_EDITION;
         // Client interval get last edition
         $clientIntervalUpdate = Constants::CLIENT_INTERVAL_GET_UPDATES;
+        // GitHub publish timeout (ms)
+        $clientGithubPublishTimeout = Constants::CLIENT_CALL_WAITING_TIME_GITHUB_PUBLISH;
         // Default user locale
         $defaultLocale = $this->getParameter('kernel.default_locale');
 
@@ -242,10 +244,14 @@ class WorkareaController extends DefaultWorkareaController
                     'clientCallWaitingTime' => $clientCallWaitingTime,
                     'clientIntervalGetLastEdition' => $clientIntervalGetLastEdition,
                     'clientIntervalUpdate' => $clientIntervalUpdate,
+                    'githubPublishTimeoutMs' => $clientGithubPublishTimeout,
                     'defaultTheme' => $defaultTheme,
                     'isOfflineInstallation' => $isOfflineInstallation,
                     'platformIntegration' => $platformIntegration,
                     'enableGithubPublishing' => $this->getParameter('enable_github_publishing'),
+                    'enableNetlifyPublishing' => $this->getParameter('enable_netlify_publishing'),
+                    'enableSurgePublishing' => $this->getParameter('enable_surge_publishing'),
+                    'enableCfpagesPublishing' => $this->getParameter('enable_cfpages_publishing'),
                 ],
                 'symfony' => [
                     'odeSessionId' => $odeSessionId,

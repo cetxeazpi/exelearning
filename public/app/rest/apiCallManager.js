@@ -1184,13 +1184,16 @@ export default class ApiCallManager {
 
     async postGithubPublish(data) {
         const url = `${this.githubApiBase}/api/publish/github/publish`;
-        return await $.ajax({
+        const timeout =
+            eXeLearning.config.githubPublishTimeoutMs ||
+            eXeLearning.config.clientCallWaitingTime;
+        return $.ajax({
             url,
             method: 'POST',
             data: JSON.stringify(data || {}),
             contentType: 'application/json',
             dataType: 'json',
-            timeout: eXeLearning.config.clientCallWaitingTime,
+            timeout,
         });
     }
 
@@ -1209,5 +1212,107 @@ export default class ApiCallManager {
     async postGithubDevicePoll(device_code) {
         const url = `${this.githubApiBase}/api/publish/github/device/poll`;
         return await this.func.post(url, { device_code });
+    }
+
+    // ============ Netlify (custom) ============
+    async getNetlifyStatus() {
+        const url = `${this.githubApiBase}/api/publish/netlify/status`;
+        return await this.func.get(url);
+    }
+    async postNetlifySaveToken(params) {
+        const url = `${this.githubApiBase}/api/publish/netlify/token`;
+        return await $.ajax({
+            url,
+            method: 'POST',
+            data: JSON.stringify(params || {}),
+            contentType: 'application/json',
+            dataType: 'json',
+            timeout: eXeLearning.config.clientCallWaitingTime,
+        });
+    }
+    async getNetlifySites() {
+        const url = `${this.githubApiBase}/api/publish/netlify/sites`;
+        return await this.func.get(url);
+    }
+    async postNetlifyPublish(params) {
+        const url = `${this.githubApiBase}/api/publish/netlify/publish`;
+        return await $.ajax({
+            url,
+            method: 'POST',
+            data: JSON.stringify(params || {}),
+            contentType: 'application/json',
+            dataType: 'json',
+            timeout: eXeLearning.config.clientCallWaitingTime,
+        });
+    }
+    async postNetlifyCreateSite(params) {
+        const url = `${this.githubApiBase}/api/publish/netlify/sites`;
+        return await $.ajax({
+            url,
+            method: 'POST',
+            data: JSON.stringify(params || {}),
+            contentType: 'application/json',
+            dataType: 'json',
+            timeout: eXeLearning.config.clientCallWaitingTime,
+        });
+    }
+
+    async postSurgeExport(params) {
+        const url = `${this.githubApiBase}/api/publish/surge/export`;
+        return await $.ajax({
+            url,
+            method: 'POST',
+            data: JSON.stringify(params || {}),
+            contentType: 'application/json',
+            dataType: 'json',
+            timeout: eXeLearning.config.clientCallWaitingTime,
+        });
+    }
+
+    // ============ Cloudflare Pages (custom) ============
+    async getCfStatus() {
+        const url = `${this.githubApiBase}/api/publish/cf/status`;
+        return await this.func.get(url);
+    }
+    async postCfSaveToken(params) {
+        const url = `${this.githubApiBase}/api/publish/cf/token`;
+        return await $.ajax({
+            url,
+            method: 'POST',
+            data: JSON.stringify(params || {}),
+            contentType: 'application/json',
+            dataType: 'json',
+            timeout: eXeLearning.config.clientCallWaitingTime,
+        });
+    }
+    async getCfAccounts() {
+        const url = `${this.githubApiBase}/api/publish/cf/accounts`;
+        return await this.func.get(url);
+    }
+    async getCfProjects(account) {
+        const url = `${this.githubApiBase}/api/publish/cf/projects?account=${encodeURIComponent(account)}`;
+        return await this.func.get(url);
+    }
+    async postCfCreateProject(params) {
+        const url = `${this.githubApiBase}/api/publish/cf/projects`;
+        return await $.ajax({
+            url,
+            method: 'POST',
+            data: JSON.stringify(params || {}),
+            contentType: 'application/json',
+            dataType: 'json',
+            timeout: eXeLearning.config.clientCallWaitingTime,
+        });
+    }
+    async postCfPublish(params) {
+        const url = `${this.githubApiBase}/api/publish/cf/publish`;
+        return await $.ajax({
+            url,
+            method: 'POST',
+            data: JSON.stringify(params || {}),
+            contentType: 'application/json',
+            dataType: 'json',
+            timeout: eXeLearning.config.clientCallWaitingTime,
+        });
     }
 }

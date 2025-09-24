@@ -1,5 +1,5 @@
 <div class="modal fade" id="modalPublishToGithub" tabindex="-1" aria-labelledby="modalPublishToGithubLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable" style="min-height:80vh;">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="height:85vh;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modalPublishToGithubLabel">{{ "Publish to GitHub" | trans }}</h5>
@@ -90,16 +90,35 @@
         <!-- Done -->
         <div id="publishDone" class="mt-4 d-none">
           <h6>{{ 'Published' | trans }}</h6>
-          <p class="mb-1">
-            <a id="doneRepoUrl" href="#" target="_blank" rel="noopener" class="btn btn-success btn-sm">{{ 'Open repository' | trans }}</a>
+          <p class="mb-1 d-flex gap-2 flex-wrap">
+            <a id="doneRepoUrl" href="#" target="_blank" rel="noopener" class="btn btn-dark btn-sm">
+              <span class="me-1" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" focusable="false">
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+              </span>
+              {{ 'View repository' | trans }}
+            </a>
           </p>
           <p id="doneText" class="text-muted mb-0"></p>
         </div>
       </div>
 
-      <div class="modal-footer">
-        <button id="btnCancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Cancel' | trans }}</button>
-        <button id="btnPublish" type="button" class="btn btn-primary" disabled>{{ 'Publish' | trans }}</button>
+      <div class="modal-footer justify-content-between">
+        <div>
+          <button id="btnCancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Cancel' | trans }}</button>
+        </div>
+        <div class="d-flex gap-2">
+          <a id="btnViewSite" href="#" target="_blank" rel="noopener" class="btn btn-primary d-none">
+            <span class="me-1" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" focusable="false">
+                <path d="M8 0a8 8 0 108 8A8.009 8.009 0 008 0zm3.93 6H10a13.09 13.09 0 00-.78-2.59A6.023 6.023 0 0111.93 6zM8 2a10.963 10.963 0 011.37 4H6.63A10.963 10.963 0 018 2zM4.78 3.41A13.09 13.09 0 004 6H2.07A6.023 6.023 0 014.78 3.41zM2.07 10H4a13.09 13.09 0 00.78 2.59A6.023 6.023 0 012.07 10zM8 14a10.963 10.963 0 01-1.37-4h2.74A10.963 10.963 0 018 14zm2.22-1.41A13.09 13.09 0 0012 10h1.93a6.023 6.023 0 01-3.71 2.59zM12 6a13.09 13.09 0 01-.78 2.59H10a13.09 13.09 0 01-.78-2.59zM6.78 8.59A13.09 13.09 0 006 10H4.07A6.023 6.023 0 007.78 8.59z"/>
+              </svg>
+            </span>
+            {{ 'View site' | trans }}
+          </a>
+          <button id="btnPublish" type="button" class="btn btn-primary" disabled>{{ 'Publish' | trans }}</button>
+        </div>
       </div>
     </div>
   </div>

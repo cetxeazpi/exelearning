@@ -84,6 +84,9 @@ export default class NavbarFile {
         this.publishGithubButton = this.menu.navbar.querySelector(
             '#navbar-button-publish-github'
         );
+        this.publishNetlifyButton = this.menu.navbar.querySelector(
+            '#navbar-button-publish-netlify'
+        );
         this.exportXmlPropertiesButton = this.menu.navbar.querySelector(
             '#navbar-button-export-xml-properties'
         );
@@ -136,6 +139,7 @@ export default class NavbarFile {
         this.setImportXmlPropertiesEvent();
         this.setLeftPanelsTogglerEvents();
         this.setPublishGithubEvent();
+        this.setPublishNetlifyEvent();
     }
 
     /**************************************************************************************
@@ -499,6 +503,17 @@ export default class NavbarFile {
      * Hide/Show the left panels (left column)
      *
      */
+
+    /**
+     * Publish to Netlify
+     */
+    setPublishNetlifyEvent() {
+        if (!this.publishNetlifyButton) return;
+        this.publishNetlifyButton.addEventListener('click', () => {
+            if (eXeLearning.app.project.checkOpenIdevice()) return;
+            eXeLearning.app.modals.publishtonetlify.showFromMenu();
+        });
+    }
     setLeftPanelsTogglerEvents() {
         // See eXeLearning.app.common.initTooltips
         $(this.leftPanelsTogglerButton)

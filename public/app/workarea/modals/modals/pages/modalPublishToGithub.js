@@ -4,6 +4,10 @@ export default class ModalPublishToGithub {
         this.app = modals.app;
         this.id = 'modalPublishToGithub';
         this.modal = null;
+        this._cancelled = false;
+        this._deviceFlowActive = false;
+        this._devicePollTimeoutId = null;
+        this._xhrPublish = null;
         this.state = {
             authed: false,
             repos: [],
@@ -49,7 +53,9 @@ export default class ModalPublishToGithub {
         this.progressMsg = root.querySelector('#progressMsg');
         this.doneRepoUrl = root.querySelector('#doneRepoUrl');
         this.doneText = root.querySelector('#doneText');
-        this.overwrite = document.getElementById('gh-overwrite'); // optional
+        this.btnViewSite = root.querySelector('#btnViewSite');
+        // overwrite via checkbox in UI
+        this.overwrite = null;
     }
 
     bindEvents() {
@@ -129,8 +135,21 @@ export default class ModalPublishToGithub {
                     );
                     if (!ok) {
                         evt.preventDefault();
+                        return;
                     }
                 }
+                // mark cancelled to ignore any pending async completions
+                this._cancelled = true;
+                // abort in-flight publish request if any
+                try {
+                    if (this._xhrPublish && this._xhrPublish.abort) {
+                        this._xhrPublish.abort();
+                    }
+                } catch (_e) {}
+            });
+            el.addEventListener('hidden.bs.modal', () => {
+                // fully reset so next open starts fresh
+                this.reset();
             });
         }
     }
@@ -148,6 +167,16 @@ export default class ModalPublishToGithub {
     }
 
     reset() {
+        // stop device polling if any
+        this._deviceFlowActive = false;
+        if (this._devicePollTimeoutId) {
+            try {
+                clearTimeout(this._devicePollTimeoutId);
+            } catch (_e) {}
+            this._devicePollTimeoutId = null;
+        }
+        this._cancelled = false;
+
         this.state = {
             authed: false,
             repos: [],
@@ -161,11 +190,27 @@ export default class ModalPublishToGithub {
             this.branchInput.value = '';
             this.branchInput.disabled = true;
         }
+        if (this.repoMenu) this.repoMenu.innerHTML = '';
         if (this.branchList) this.branchList.innerHTML = '';
         if (this.branchWarn) this.branchWarn.classList.add('d-none');
+        if (this.overwriteWrap) this.overwriteWrap.classList.add('d-none');
         if (this.btnPublish) this.btnPublish.disabled = true;
         if (this.stepProgress) this.stepProgress.classList.add('d-none');
         if (this.publishDone) this.publishDone.classList.add('d-none');
+        if (this.btnPublish) this.btnPublish.classList.remove('d-none');
+        if (this.overwriteCheckbox) this.overwriteCheckbox.checked = false;
+        if (this.doneRepoUrl) this.doneRepoUrl.href = '#';
+        if (this.btnViewSite) {
+            this.btnViewSite.href = '#';
+            this.btnViewSite.classList.add('d-none');
+        }
+        if (this.doneText) this.doneText.textContent = '';
+        // Show auth area by default; hide selection/progress
+        const auth = document.getElementById('gh-step-auth');
+        if (auth) auth.classList.remove('d-none');
+        if (this.btnAuth) this.btnAuth.classList.remove('d-none');
+        if (this.devicePanel) this.devicePanel.classList.add('d-none');
+        if (this.stepSelect) this.stepSelect.classList.add('d-none');
     }
 
     async checkAuthAndLoad() {
@@ -175,6 +220,9 @@ export default class ModalPublishToGithub {
                 this.state.authed = true;
                 await this.renderRepoMenuData();
                 if (this.btnAuth) this.btnAuth.classList.add('d-none');
+                const auth = document.getElementById('gh-step-auth');
+                if (auth) auth.classList.add('d-none');
+                if (this.stepSelect) this.stepSelect.classList.remove('d-none');
                 return true;
             }
         } catch (_e) {}
@@ -189,11 +237,13 @@ export default class ModalPublishToGithub {
     async decideFlow() {
         const offline = !!this.app?.eXeLearning?.config?.isOfflineInstallation;
         if (!offline) {
+            // If already connected, jump to repo selection; else show auth
             const authed = await this.checkAuthAndLoad();
-            if (this.devicePanel) this.devicePanel.classList.add('d-none');
-            if (this.btnAuth) {
-                if (authed) this.btnAuth.classList.add('d-none');
-                else this.btnAuth.classList.remove('d-none');
+            if (!authed) {
+                if (this.devicePanel) this.devicePanel.classList.add('d-none');
+                if (this.btnAuth) this.btnAuth.classList.remove('d-none');
+                const stEl = document.getElementById('gh-auth-status');
+                if (stEl) stEl.textContent = '';
             }
             return;
         }
@@ -215,12 +265,14 @@ export default class ModalPublishToGithub {
             if (this.deviceCode) this.deviceCode.textContent = userCode || '…';
             if (this.deviceUrl && url) this.deviceUrl.href = url;
             let currentInterval = interval * 1000;
+            this._deviceFlowActive = true;
             const pollOnce = async () => {
+                if (this._cancelled || !this._deviceFlowActive) return;
                 try {
                     const p =
                         await this.app.api.postGithubDevicePoll(deviceCode);
                     if (p && p.access_token) {
-                        await this.checkAuthAndLoad();
+                        if (!this._cancelled) await this.checkAuthAndLoad();
                         return;
                     }
                     if (p && p.error === 'slow_down') currentInterval += 5000;
@@ -236,9 +288,12 @@ export default class ModalPublishToGithub {
                         return;
                     }
                 } catch (_e) {}
-                setTimeout(pollOnce, currentInterval);
+                this._devicePollTimeoutId = setTimeout(
+                    pollOnce,
+                    currentInterval
+                );
             };
-            setTimeout(pollOnce, currentInterval);
+            this._devicePollTimeoutId = setTimeout(pollOnce, currentInterval);
         } catch (e) {
             this.errorToast(e);
         }
@@ -389,12 +444,16 @@ export default class ModalPublishToGithub {
             const payload = {
                 owner: sel.owner,
                 repo: sel.repo,
-                overwrite: !!(this.overwrite && this.overwrite.checked),
+                overwrite: !!(
+                    this.overwriteCheckbox && this.overwriteCheckbox.checked
+                ),
                 odeSessionId: this.app.project.odeSession,
                 branch:
                     (this.branchInput && this.branchInput.value) || undefined,
             };
-            const res = await this.app.api.postGithubPublish(payload);
+            this._xhrPublish = this.app.api.postGithubPublish(payload);
+            const res = await this._xhrPublish;
+            if (this._cancelled) return;
             if (this.progressBar) this.progressBar.style.width = '100%';
             this.state.repoUrl =
                 res && res.repoUrl
@@ -402,10 +461,30 @@ export default class ModalPublishToGithub {
                     : `https://github.com/${sel.owner}/${sel.repo}`;
             if (this.stepProgress) this.stepProgress.classList.add('d-none');
             if (this.publishDone) this.publishDone.classList.remove('d-none');
-            if (this.doneRepoUrl && this.state.repoUrl)
-                this.doneRepoUrl.href = this.state.repoUrl;
-            if (this.doneText)
-                this.doneText.textContent = `${sel.owner}/${sel.repo} → ${(this.branchInput && this.branchInput.value) || ''}`;
+            const b = (this.branchInput && this.branchInput.value) || '';
+            if (this.doneRepoUrl && this.state.repoUrl) {
+                // Link directly to the pushed branch in the repo
+                this.doneRepoUrl.href = `${this.state.repoUrl}/tree/${b}`;
+            }
+            const manual = res && res.manual;
+            const pagesUrl = res && res.pagesUrl;
+            // Footer primary button becomes "View site"
+            if (this.btnViewSite) {
+                const href =
+                    pagesUrl && !manual
+                        ? pagesUrl
+                        : `${this.state.repoUrl}/tree/${b}`;
+                this.btnViewSite.href = href;
+                this.btnViewSite.classList.remove('d-none');
+            }
+            if (this.btnPublish) this.btnPublish.classList.add('d-none');
+            if (this.doneText) {
+                let msg = `${sel.owner}/${sel.repo} → ${b}`;
+                if (manual) {
+                    msg += ` · ${_('Enable GitHub Pages manually in Settings → Pages (Source: branch')} ${b} / /)`;
+                }
+                this.doneText.textContent = msg;
+            }
         } catch (e) {
             this.errorToast(e);
         }

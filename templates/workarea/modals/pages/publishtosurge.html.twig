@@ -1,0 +1,34 @@
+<div class="modal fade" id="modalPublishToSurge" tabindex="-1" aria-labelledby="modalPublishToSurgeLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" style="height:70vh;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalPublishToSurgeLabel">{{ 'Publish to Surge' | trans }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Hide' | trans }}"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted">{{ 'Surge is a simple static hosting. You can deploy with their CLI without registration (first deploy asks for your email).' | trans }}</p>
+        <div class="mb-3">
+          <label class="form-label">{{ 'Domain (optional)' | trans }}</label>
+          <input id="surge-domain" class="form-control" placeholder="example.surge.sh">
+          <div class="form-text">{{ 'Leave blank to let Surge assign a random domain.' | trans }}</div>
+        </div>
+        <div class="mb-3 d-flex gap-2">
+          <button id="surge-export" class="btn btn-primary">{{ 'Export site (ZIP)' | trans }}</button>
+          <a id="surge-zip-link" class="btn btn-success d-none" target="_blank" rel="noopener">{{ 'Download ZIP' | trans }}</a>
+        </div>
+        <div id="surge-instructions" class="d-none">
+          <h6>{{ 'Deploy with Surge CLI' | trans }}</h6>
+          <ol class="mb-2">
+            <li>{{ 'Unzip the downloaded file' | trans }}</li>
+            <li>{{ 'Install the CLI if needed' | trans }}: <code>npm i -g surge</code></li>
+            <li>{{ 'Run' | trans }}: <code id="surge-cmd">surge ./unzipped-folder {{ '(optional-domain)' | trans }}</code></li>
+          </ol>
+          <p class="small text-muted">{{ 'The first time, Surge will ask your email and create a token automatically.' | trans }}</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close' | trans }}</button>
+      </div>
+    </div>
+  </div>
+</div>

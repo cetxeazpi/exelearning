@@ -347,7 +347,8 @@ class GithubPublishController extends AbstractController
         $owner = (string) ($data['owner'] ?? '');
         $repo = (string) ($data['repo'] ?? '');
         $overwrite = (bool) ($data['overwrite'] ?? false);
-        $branch = $this->pagesBranch ?: 'gh-pages';
+        $branchInput = (string) ($data['branch'] ?? '');
+        $branch = '' !== $branchInput ? $branchInput : ($this->pagesBranch ?: 'gh-pages');
         if (!$owner || !$repo) {
             return $this->json(['error' => 'owner/repo required'], 400);
         }
@@ -378,7 +379,26 @@ class GithubPublishController extends AbstractController
         }
 
         // Publish tree (single commit)
-        $commitSha = $this->publisher->publishTree($token, $owner, $repo, $branch, rtrim($exportDir, '/'), 'Publish site');
+        try {
+            $commitSha = $this->publisher->publishTree(
+                $token,
+                $owner,
+                $repo,
+                $branch,
+                rtrim($exportDir, '/'),
+                'Publish site',
+                $overwrite
+            );
+        } catch (\Throwable $e) {
+            $this->logger->error('GitHub publish failed: '.$e->getMessage(), [
+                'exception' => $e,
+                'owner' => $owner,
+                'repo' => $repo,
+                'branch' => $branch,
+            ]);
+
+            return $this->json(['error' => 'GitHub publish failed: '.$e->getMessage()], 502);
+        }
 
         // Try to enable pages
         $enabled = $this->pagesEnabler->enablePages($token, $owner, $repo, $branch, '/');

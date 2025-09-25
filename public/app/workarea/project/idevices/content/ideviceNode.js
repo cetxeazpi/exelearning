@@ -497,7 +497,8 @@ export default class IdeviceNode {
         odeIdeviceId, 
         blockId, 
         actionType, 
-        destinationPageId = ''
+        destinationPageId = '',
+        pageId = '' // Collaborative
     } = {}) {
         eXeLearning.app.project.updateCurrentOdeUsersUpdateFlag(
             odeSessionId,
@@ -506,8 +507,39 @@ export default class IdeviceNode {
             odeIdeviceId,
             actionType,
             destinationPageId,
-            this.timeIdeviceEditing
+            this.timeIdeviceEditing,
+            pageId // Collaborative
         );
+    }
+
+    /*  Collaborative
+        Recursively traverses objects and arrays to search for
+        a given value, returning the associated pageId if found. */
+    findPageIdByValue(obj, targetValue, visited = new Set()) {
+        if (obj === null || typeof obj !== 'object') return null;
+
+        if (visited.has(obj)) return null;
+        visited.add(obj);
+
+        if (Array.isArray(obj)) {
+            for (let i = 0; i < obj.length; i++) {
+                if (obj[i] === targetValue && obj.pageId !== undefined) {
+                    return obj.pageId;
+                }
+                const result = this.findPageIdByValue(obj[i], targetValue, visited);
+                if (result !== null) return result;
+            }
+        } else {
+            for (const [key, value] of Object.entries(obj)) {
+                if (value === targetValue && obj.pageId !== undefined) {
+                    return obj.pageId;
+                }
+                const result = this.findPageIdByValue(value, targetValue, visited);
+                if (result !== null) return result;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -573,7 +605,8 @@ export default class IdeviceNode {
                 this.updateResourceLockStatus({
                     odeIdeviceId: this.odeIdeviceId,
                     blockId: this.blockId,
-                    actionType: 'EDIT_BLOCK'
+                    actionType: 'SAVE_BLOCK',
+                    pageId: this.block?.pageId ?? this.findPageIdByValue(eXeLearning, this.blockId) // Collaborative
                 });
                 
                 // Reset inactivity timer on save
@@ -685,8 +718,8 @@ export default class IdeviceNode {
                                 odeIdeviceId: this.odeIdeviceId,
                             };
                             eXeLearning.app.project.sendOdeOperationLog(
-                                this.block.pageId,
-                                this.block.pageId,
+                                this.pageId, // Collaborative
+                                this.pageId, // Collaborative
                                 'EDIT_IDEVICE',
                                 additionalData
                             );
@@ -793,8 +826,8 @@ export default class IdeviceNode {
                                                 odeIdeviceId: this.odeIdeviceId,
                                             };
                                             eXeLearning.app.project.sendOdeOperationLog(
-                                                this.block.pageId,
-                                                this.block.pageId,
+                                                this.pageId, // Collaborative
+                                                this.pageId, // Collaborative
                                                 'REMOVE_IDEVICE',
                                                 additionalData
                                             );
@@ -2032,8 +2065,8 @@ export default class IdeviceNode {
                 );
             }
             // Add idevice to block idevices
-            if (!this.block.idevices.includes(this)) {
-                this.block.idevices.push(this);
+            if (!this.block?.idevices?.includes(this)) { // Collaborative
+                this.block?.idevices?.push(this);
             }
             // All Idevices that have been modified
             if (propagation && response.odeComponentsSyncs) {
@@ -2365,7 +2398,7 @@ export default class IdeviceNode {
         // Remove idevice in engine components
         this.engine.removeIdeviceOfComponentList(this.id);
         // Remove idevice in block
-        this.block.removeIdeviceOfListById(this.id);
+        this.block?.removeIdeviceOfListById?.(this.id); // Collaborative
         // Update engine mode
         this.engine.updateMode();
         // Delete idevice in database
@@ -2383,7 +2416,7 @@ export default class IdeviceNode {
      */
     removeBlockParentProcess(bbdd) {
         // Check if the block has more idevices
-        if (this.block.idevices.length == 0) {
+        if (this.block?.idevices?.length == 0) { // Collaborative
             // Delete or ask if they want to delete the block
             if (this.block.removeIfEmpty) {
                 this.block.remove(bbdd);

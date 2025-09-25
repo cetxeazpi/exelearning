@@ -106,7 +106,7 @@ export default class projectManager {
      *
      * @param {*} pageid
      */
-    async updateUserPage(pageid) {
+    async updateUserPage(pageid, forceLoad = false) { // Collaborative
         // Get page position
         let scroll = document.querySelector('.template-page');
         let scrollPos;
@@ -117,14 +117,16 @@ export default class projectManager {
                 '#node-content-container'
             ).scrollTop;
         }
+    // Collaborative Init
         // Load structure data
         await this.loadStructureData();
         // Load modals content
         await this.loadModalsContent();
-        this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected = false;
+        if (forceLoad) this.app.menus.menuStructure.menuStructureBehaviour.nodeSelected = false;
         await this.structure.reloadStructureMenu(pageid);
         await this.initialiceProject();
-        // Move to page location
+    // Collaborative End
+    // Move to page location
         if (scroll !== null) {
             document.querySelector('.template-page').scrollTo(0, scrollPos);
         } else {
@@ -187,7 +189,32 @@ export default class projectManager {
         const existingOverlay = targetBlock.querySelector('.user-editing-overlay');
         const odeElementSave = document.getElementById('saveIdevice' + odeIdeviceId);
 
+        const pageId = params['pageId']; // Collaborative
+
         if (existingOverlay) existingOverlay.remove(); // Delete if existing overlay
+
+    // Collaborative Init
+        
+        if (actionType === 'SAVE_STOP' && pageId) {
+            this.updateUserPage(pageId, true);
+            return;
+        }
+        
+        if (pageId && isNotSameEmail && document.querySelectorAll('[id^="saveIdevice"]').length === 0) {
+            eXeLearning.app.project.updateCurrentOdeUsersUpdateFlag(
+                null,
+                null,
+                blockId,
+                odeIdeviceId,
+                'SAVE_STOP',
+                null,
+                null,
+                pageId
+            );
+            this.updateUserPage(pageId, true);
+            return;
+        }
+    // Collaborative End
 
         if (actionType === 'UNLOCK_RESOURCE' && isNotSameEmail) {
             this.cleanupCurrentIdeviceTimer();
@@ -1437,7 +1464,7 @@ export default class projectManager {
     async deleteOdeComponent(odeComponentSyncId) {
         // Delete idevice
         let oldOdeComponent = document.getElementById(odeComponentSyncId);
-        oldOdeComponent.remove();
+        oldOdeComponent?.remove?.(); // Collaborative Init
     }
 
     /**
@@ -1447,7 +1474,7 @@ export default class projectManager {
     async deleteOdeBlock(odeBlockId) {
         // Delete block
         let oldOdeComponent = document.getElementById(odeBlockId);
-        oldOdeComponent.remove();
+        oldOdeComponent?.remove?.(); // Collaborative Init
     }
 
     /**
@@ -1684,7 +1711,8 @@ export default class projectManager {
         odeIdeviceId,
         actionType,
         destPageId,
-        timeIdeviceEditing = null
+        timeIdeviceEditing = null,
+        pageId // Collaborative Init
     ) {
         let params = {
             odeId: this.odeId,
@@ -1694,7 +1722,8 @@ export default class projectManager {
             odeComponentFlag: odeComponentFlag,
             actionType: actionType,
             destinationPageId: destPageId,
-            timeIdeviceEditing: timeIdeviceEditing
+            timeIdeviceEditing: timeIdeviceEditing,
+            pageId: pageId // Collaborative Init
         };
         let response =
             await this.app.api.postActivateCurrentOdeUsersUpdateFlag(params);

@@ -155,7 +155,8 @@ class CurrentOdeUsersApiController extends DefaultApiController
             $actionType,
             $userEmail,
             $odeComponentFlag,
-            $timeIdeviceEditing
+            $timeIdeviceEditing,
+            null// Collaborative
         );
 
         try {
@@ -252,6 +253,7 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $userEmail = $databaseUser->getUserIdentifier();
         $odeComponentFlag = $request->get('odeComponentFlag');
         $timeIdeviceEditing = $request->get('timeIdeviceEditing');
+        $pageId = $request->get('pageId'); // Collaborative
 
         $odePagId = $request->get('odePageId');
         $destinationPageId = $request->get('destinationPageId');
@@ -272,7 +274,8 @@ class CurrentOdeUsersApiController extends DefaultApiController
             $actionType,
             $userEmail,
             $odeComponentFlag,
-            $timeIdeviceEditing
+            $timeIdeviceEditing,
+            $pageId // Collaborative
         );
 
         $responseData['responseMessage'] = 'OK';
@@ -450,7 +453,8 @@ class CurrentOdeUsersApiController extends DefaultApiController
         ?string $actionType,
         string $userEmail,
         ?string $odeComponentFlag = null,
-        ?string $timeIdeviceEditing
+        ?string $timeIdeviceEditing,
+        ?string $pageId = null // Collaborative
     ): void {
         $this->publish(
             $odeId,
@@ -459,7 +463,8 @@ class CurrentOdeUsersApiController extends DefaultApiController
             ',actionType:' . $actionType .
             ',userEmail:' . $userEmail .
             ',odeComponentFlag:' . $odeComponentFlag .
-            ',timeIdeviceEditing:' . $timeIdeviceEditing
+            ',timeIdeviceEditing:' . $timeIdeviceEditing .
+            ',pageId:'. $pageId // Collaborative
         );
     }
 }

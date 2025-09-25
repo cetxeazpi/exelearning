@@ -697,7 +697,7 @@ export default class MenuStructureBehaviour {
      */
     setNodeSelected(element) {
         this.nodeSelected = element;
-        this.nodeSelected.classList.add('selected');
+        this.nodeSelected?.classList.add('selected'); // Collaborative
         this.structureEngine.nodeSelected = this.nodeSelected;
         this.setNodeIdToNodeContentElement();
         this.createAddTextBtn();

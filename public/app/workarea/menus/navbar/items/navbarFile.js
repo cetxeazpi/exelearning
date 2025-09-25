@@ -814,6 +814,7 @@ export default class NavbarFile {
             odeSessionId: eXeLearning.app.project.odeSession,
             platformUrlSet: eXeLearning.config.platformUrlSet,
             jwt_token: jwt_token,
+            odeId: eXeLearning.app.project.odeId
         };
         // Save
         let response;

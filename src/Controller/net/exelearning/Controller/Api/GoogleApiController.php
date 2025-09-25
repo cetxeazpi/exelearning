@@ -264,7 +264,11 @@ class GoogleApiController extends DefaultApiController
 
             return $saveOdeResult;
         } else {
-            $this->logger->error('invalid data', ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]);
+            $this->logger->error('invalid data', [
+                'odeSessionId' => $odeSessionId ?? null, // Ensure variable is defined to avoid undefined warnings
+                'file:' => $this, 
+                'line' => __LINE__
+            ]);
         }
     }
 }

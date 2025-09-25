@@ -239,7 +239,12 @@ class OdeApiController extends DefaultApiController
                     $this->currentOdeUsersService->removeActiveSyncSaveFlag($user);
                 }
             } else {
-                $this->logger->error('invalid data', ['odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]);
+                $this->logger->error('invalid data', [
+                    'odeSessionId' => $odeSessionId ?? null,
+                    'odeId' => $odeId ?? null, // Additional identifier for debugging
+                    'file:' => $this, 
+                    'line' => __LINE__
+                ]);
 
                 $responseData['responseMessage'] = 'error: invalid data';
             }
@@ -680,7 +685,12 @@ class OdeApiController extends DefaultApiController
                 $responseData['currentOdeUsersDeleted'] = $result['currentOdeUsersDeleted'];
             }
         } else {
-            $this->logger->error('invalid data', ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]);
+            $this->logger->error('invalid data', [
+                'odeSessionId' => $odeSessionId ?? null,
+                'odeId' => $odeId ?? null, // Additional identifier for debugging
+                'file:' => $this, 
+                'line' => __LINE__
+            ]);
 
             $responseData['responseMessage'] = 'error: invalid data';
         }
@@ -1412,7 +1422,11 @@ class OdeApiController extends DefaultApiController
                 $responseData['responseMessage'] = $result['responseMessage'];
             }
         } else {
-            $this->logger->error('invalid data', ['odeSessionId' => $odeSessionId, 'file:' => $this, 'line' => __LINE__]);
+            $this->logger->error('invalid data', [
+                'odeSessionId' => $odeSessionId ?? null, // Ensure variable is defined to avoid undefined warnings
+                'file:' => $this, 
+                'line' => __LINE__
+            ]);
 
             $responseData['responseMessage'] = 'error: invalid data';
         }

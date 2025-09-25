@@ -87,6 +87,7 @@ class PlatformIntegrationApiController extends DefaultApiController
 
         // collect parameters
         $odeId = $request->get('odeId');
+        $odeSessionId = $request->get('odeSessionId');
         $jwtToken = $request->get('jwt_token');
         $integrationParams = $this->integrationUtil->getPlatformIntegrationParams($jwtToken, 'set');
 
@@ -96,8 +97,8 @@ class PlatformIntegrationApiController extends DefaultApiController
             $databaseUser = $this->userHelper->getDatabaseUser($user);
 
             // Obtain odeId and odeVersionId from currentOdeUsers
-            $odeId = $this->currentOdeUsersService->getOdeIdByOdeSessionId($user, $odeId);
-            $odeVersion = $this->currentOdeUsersService->getOdeVersionIdByOdeSessionId($user, $odeId);
+            $odeId = $this->currentOdeUsersService->getOdeIdByOdeSessionId($user, $odeSessionId);
+            $odeVersion = $this->currentOdeUsersService->getOdeVersionIdByOdeSessionId($user, $odeSessionId);
 
             // Get the last version_name from ode_files
             $lastOdeVersionName = $this->odeService->getLastVersionNameOdeFiles($odeId);
@@ -128,7 +129,7 @@ class PlatformIntegrationApiController extends DefaultApiController
                     $odeResultParameters = [
                         'odeId' => $odeId,
                         'odeVersionId' => $odeVersion,
-                        'odeId' => $odeId,
+                        'odeSessionId' => $odeSessionId,
                         'elpFileName' => $odeExportResult['zipFileName'],
                         'odePropertiesName' => $odePropertiesName,
                         'odeVersionName' => $odeVersionName,
@@ -158,7 +159,12 @@ class PlatformIntegrationApiController extends DefaultApiController
                 $responseData['responseMessage'] = 'error: '.$e->getMessage();
             }
         } else {
-            $this->logger->error('invalid data', ['odeId' => $odeId, 'file:' => $this, 'line' => __LINE__]);
+            $this->logger->error('invalid data', [
+                'odeSessionId' => $odeSessionId ?? null,
+                'odeId' => $odeId ?? null, // Additional identifier for debugging
+                'file:' => $this, 
+                'line' => __LINE__
+            ]);
 
             $responseData['responseMessage'] = 'error: invalid data';
         }

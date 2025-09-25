@@ -512,36 +512,6 @@ export default class IdeviceNode {
         );
     }
 
-    /*  Collaborative
-        Recursively traverses objects and arrays to search for
-        a given value, returning the associated pageId if found. */
-    findPageIdByValue(obj, targetValue, visited = new Set()) {
-        if (obj === null || typeof obj !== 'object') return null;
-
-        if (visited.has(obj)) return null;
-        visited.add(obj);
-
-        if (Array.isArray(obj)) {
-            for (let i = 0; i < obj.length; i++) {
-                if (obj[i] === targetValue && obj.pageId !== undefined) {
-                    return obj.pageId;
-                }
-                const result = this.findPageIdByValue(obj[i], targetValue, visited);
-                if (result !== null) return result;
-            }
-        } else {
-            for (const [key, value] of Object.entries(obj)) {
-                if (value === targetValue && obj.pageId !== undefined) {
-                    return obj.pageId;
-                }
-                const result = this.findPageIdByValue(value, targetValue, visited);
-                if (result !== null) return result;
-            }
-        }
-
-        return null;
-    }
-
     /**
      * Configures the inactivity tracker with proper cleanup
      */
@@ -602,11 +572,12 @@ export default class IdeviceNode {
                 // Create the "Add Text" button
                 this.createAddTextBtn();
                 
+                // Collaborative
                 this.updateResourceLockStatus({
                     odeIdeviceId: this.odeIdeviceId,
                     blockId: this.blockId,
                     actionType: 'SAVE_BLOCK',
-                    pageId: this.block?.pageId ?? this.findPageIdByValue(eXeLearning, this.blockId) // Collaborative
+                    pageId: this.block?.pageId ?? eXeLearning.app.project.structure.getSelectNodePageId()
                 });
                 
                 // Reset inactivity timer on save

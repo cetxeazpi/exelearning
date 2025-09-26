@@ -311,7 +311,8 @@ export default class NavbarFile {
         };
         let toast = eXeLearning.app.toasts.createToast(toastData);
         let odeId = eXeLearning.app.project.odeId;
-        let response = await eXeLearning.app.api.getOdePreviewUrl(odeId);
+        let odeSessionId = eXeLearning.app.project.odeSessionId;
+        let response = await eXeLearning.app.api.getOdePreviewUrl(odeId ?? odeSessionId);
         if (response['responseMessage'] == 'OK') {
             toast.toastBody.innerHTML = _('The preview has been generated.');
             setTimeout(() => {

@@ -107,12 +107,12 @@ class OdeExportApiController extends DefaultApiController
         return new JsonResponse($jsonData, $this->status, [], true);
     }
 
-    #[Route('/{odeSessionId}/preview', methods: ['GET'], name: 'api_ode_export_preview')]
-    public function previewExportAction(Request $request, $odeSessionId)
+    #[Route('/{odeId}/preview', methods: ['GET'], name: 'api_ode_export_preview')]
+    public function previewExportAction(Request $request, $odeId)
     {
         $exportType = Constants::EXPORT_TYPE_HTML5;
 
-        if (empty($odeSessionId) || empty($exportType)) {
+        if (empty($odeId) || empty($exportType)) {
             $jsonData = $this->getJsonSerialized(['responseMessage' => 'error: invalid data']);
 
             return new JsonResponse($jsonData, $this->status, [], true);
@@ -127,7 +127,7 @@ class OdeExportApiController extends DefaultApiController
         $odeExportResult = $this->odeExportService->export(
             $user,
             $databaseUser,
-            $odeSessionId,
+            $odeId,
             $baseUrl,
             $exportType,
             true,

@@ -107,7 +107,7 @@ class OdeExportService implements OdeExportServiceInterface
     public function export(
         $user,
         $dbUser,
-        $odeSessionId,
+        $odeId,
         $baseUrl,
         $exportType,
         $preview = false,
@@ -124,10 +124,10 @@ class OdeExportService implements OdeExportServiceInterface
 
         // Get ode id
         // $odeId = $this->currentOdeUsersService->getOdeIdByOdeSessionId($dbUser, $odeSessionId);
-        $odeId = $odeSessionId;
+        // $odeId = $odeSessionId;
 
         // Get ode version
-        $odeVersionId = $this->currentOdeUsersService->getOdeVersionIdByOdeSessionId($user, $odeSessionId);
+        $odeVersionId = $this->currentOdeUsersService->getOdeVersionIdByOdeSessionId($user, $odeId);
         $odeVersionName = $this->odeService->getLastVersionNameOdeFiles($odeId);
 
         // Get currentOdeUser
@@ -136,7 +136,7 @@ class OdeExportService implements OdeExportServiceInterface
 
         // Get ode pages
         $odeNavStructureSyncRepo = $this->entityManager->getRepository(OdeNavStructureSync::class);
-        $odeNavStructureSyncs = $odeNavStructureSyncRepo->findByOdeSessionId($odeSessionId);
+        $odeNavStructureSyncs = $odeNavStructureSyncRepo->findByOdeSessionId($odeId);
         // TODO NOT NECESSARY because it will always have a page ******************
         if (empty($odeNavStructureSyncs)) {
             $error = $this->translator->trans('Please create at least one page before exporting.');
@@ -149,7 +149,7 @@ class OdeExportService implements OdeExportServiceInterface
         $odeNavStructureSyncs = self::fixPagesOrder($odeNavStructureSyncs);
 
         // Get ode properties
-        $odeProperties = $this->odeService->getOdePropertiesFromDatabase($odeSessionId, $user);
+        $odeProperties = $this->odeService->getOdePropertiesFromDatabase($odeId, $user);
 
         // Get user preferences
         // TODO next instruction is executed at the beginning of the method
@@ -179,7 +179,9 @@ class OdeExportService implements OdeExportServiceInterface
         // ////////////////////////////////////////
         // SAVE ODE BEFORE EXPORT
         // ////////////////////////////////////////
-
+        
+        $odeSessionId = $currentSessionForUser->getOdeSessionId();
+        
         $isConcurrentUserSave = $this->currentOdeUsersService->checkSyncSaveFlag($odeId, $odeSessionId);
         $isEditingIdevice = $currentSessionForUser->getSyncComponentsFlag();
 

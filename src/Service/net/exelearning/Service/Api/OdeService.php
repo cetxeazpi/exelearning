@@ -2367,6 +2367,9 @@ class OdeService implements OdeServiceInterface
         $isImportIdevices = false,
         $odeNavStructureSync = null,
     ) {
+        // Initialize with default value to prevent null passed to setOdePagStructureSyncOrder
+        $maxOdePagStructureSyncOrder = 1;
+
         // Check that nav structure is not null
         if (!empty($odeNavStructureSync)) {
             $maxOdePagStructureSyncOrder = 1;

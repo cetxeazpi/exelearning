@@ -163,6 +163,11 @@ class WorkareaController extends DefaultWorkareaController
         // Themes css file
         $themeDefaultCssFile = Constants::THEME_DEFAULT_CSS_FILE;
 
+        // Allow user styles
+        $userStyles = $this->getParameter('app.online_themes_install');
+        // Allow user iDevices
+        $userIdevices = $this->getParameter('app.online_idevices_install');
+
         // Idevices
         $ideviceTypeBase = Constants::IDEVICE_TYPE_BASE;
         $ideviceTypeUser = Constants::IDEVICE_TYPE_USER;
@@ -252,6 +257,8 @@ class WorkareaController extends DefaultWorkareaController
                     'enableNetlifyPublishing' => $this->getParameter('enable_netlify_publishing'),
                     'enableSurgePublishing' => $this->getParameter('enable_surge_publishing'),
                     'enableCfpagesPublishing' => $this->getParameter('enable_cfpages_publishing'),
+                    'userStyles' => $userStyles,
+                    'userIdevices' => $userIdevices,
                 ],
                 'symfony' => [
                     'odeSessionId' => $odeSessionId,

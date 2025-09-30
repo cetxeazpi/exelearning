@@ -1,6 +1,12 @@
 <div class="modal fade" id="modalPublishToGithub" tabindex="-1" aria-labelledby="modalPublishToGithubLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="height:85vh;">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="height:98vh; max-height:98vh;">
     <div class="modal-content">
+      <style>
+        /* Allow dropdowns to overflow and be fully visible inside the modal */
+        #modalPublishToGithub .modal-content { overflow: visible; height: 100%; }
+        #modalPublishToGithub .modal-dialog-scrollable .modal-body { overflow: visible; min-height: 70vh; }
+        #modalPublishToGithub .dropdown-menu { z-index: 1090; width: 100%; max-height: 65vh; overflow: auto; }
+      </style>
       <div class="modal-header">
         <h5 class="modal-title" id="modalPublishToGithubLabel">{{ "Publish to GitHub" | trans }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Hide' | trans }}"></button>
@@ -41,7 +47,7 @@
               <div class="d-flex gap-2">
                 <!-- Dropdown with filter -->
                 <div class="dropdown dropdown-repos flex-grow-1">
-                  <button id="btnRepo" class="btn btn-outline-secondary w-100 text-start dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <button id="btnRepo" class="btn btn-outline-secondary w-100 text-start dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-boundary="viewport" aria-expanded="false">
                     <span id="btnRepoText">{{ 'Select repository…' | trans }}</span>
                   </button>
                   <div class="dropdown-menu p-0">

@@ -8,6 +8,8 @@ export default class ModalPublishToGithub {
         this._deviceFlowActive = false;
         this._devicePollTimeoutId = null;
         this._xhrPublish = null;
+        this.mode = 'publish';
+        this.viewSiteUrl = null;
         this.state = {
             authed: false,
             repos: [],
@@ -115,6 +117,45 @@ export default class ModalPublishToGithub {
             });
         if (this.btnPublish)
             this.btnPublish.addEventListener('click', async () => {
+                if (this.mode === 'view' && this.viewSiteUrl) {
+                    try {
+                        window.open(this.viewSiteUrl, '_blank');
+                    } catch (_e) {}
+                    return;
+                }
+                if (this.mode === 'publishing') {
+                    const ok = window.confirm(
+                        _('Publishing in progress. Do you want to cancel?')
+                    );
+                    if (!ok) return;
+                    this._cancelled = true;
+                    try {
+                        if (this._xhrPublish && this._xhrPublish.abort)
+                            this._xhrPublish.abort();
+                    } catch (_e) {}
+                    // Restore UI
+                    if (this.stepProgress)
+                        this.stepProgress.classList.add('d-none');
+                    if (this.stepSelect)
+                        this.stepSelect.classList.remove('d-none');
+                    this.mode = 'publish';
+                    if (this.btnPublish) {
+                        try {
+                            this.btnPublish.textContent = _('Publish');
+                        } catch (_e) {}
+                        this.updatePublishEnabled();
+                    }
+                    // Notify user
+                    try {
+                        this.app.toasts.createToast({
+                            title: _('Cancelled'),
+                            body: _('Publishing cancelled.'),
+                            icon: 'info',
+                            remove: 3000,
+                        });
+                    } catch (_e) {}
+                    return;
+                }
                 await this.publish();
             });
         if (this.overwriteCheckbox)
@@ -194,7 +235,14 @@ export default class ModalPublishToGithub {
         if (this.branchList) this.branchList.innerHTML = '';
         if (this.branchWarn) this.branchWarn.classList.add('d-none');
         if (this.overwriteWrap) this.overwriteWrap.classList.add('d-none');
-        if (this.btnPublish) this.btnPublish.disabled = true;
+        this.mode = 'publish';
+        this.viewSiteUrl = null;
+        if (this.btnPublish) {
+            this.btnPublish.disabled = true;
+            try {
+                this.btnPublish.textContent = _('Publish');
+            } catch (_e) {}
+        }
         if (this.stepProgress) this.stepProgress.classList.add('d-none');
         if (this.publishDone) this.publishDone.classList.add('d-none');
         if (this.btnPublish) this.btnPublish.classList.remove('d-none');
@@ -434,6 +482,7 @@ export default class ModalPublishToGithub {
     async publish() {
         const sel = this.state.selected;
         if (!sel) return;
+        if (this.btnPublish) this.btnPublish.disabled = true;
         // Show progress
         if (this.stepSelect) this.stepSelect.classList.add('d-none');
         if (this.publishDone) this.publishDone.classList.add('d-none');
@@ -452,6 +501,14 @@ export default class ModalPublishToGithub {
                     (this.branchInput && this.branchInput.value) || undefined,
             };
             this._xhrPublish = this.app.api.postGithubPublish(payload);
+            // While publishing, allow cancel
+            this.mode = 'publishing';
+            if (this.btnPublish) {
+                try {
+                    this.btnPublish.textContent = _('Cancel');
+                } catch (_e) {}
+                this.btnPublish.disabled = false;
+            }
             const res = await this._xhrPublish;
             if (this._cancelled) return;
             if (this.progressBar) this.progressBar.style.width = '100%';
@@ -469,15 +526,22 @@ export default class ModalPublishToGithub {
             const manual = res && res.manual;
             const pagesUrl = res && res.pagesUrl;
             // Footer primary button becomes "View site"
+            const href =
+                pagesUrl && !manual
+                    ? pagesUrl
+                    : `${this.state.repoUrl}/tree/${b}`;
             if (this.btnViewSite) {
-                const href =
-                    pagesUrl && !manual
-                        ? pagesUrl
-                        : `${this.state.repoUrl}/tree/${b}`;
                 this.btnViewSite.href = href;
                 this.btnViewSite.classList.remove('d-none');
             }
-            if (this.btnPublish) this.btnPublish.classList.add('d-none');
+            this.mode = 'view';
+            this.viewSiteUrl = href;
+            if (this.btnPublish) {
+                try {
+                    this.btnPublish.textContent = _('View site');
+                } catch (_e) {}
+                this.btnPublish.disabled = false;
+            }
             if (this.doneText) {
                 let msg = `${sel.owner}/${sel.repo} → ${b}`;
                 if (manual) {
@@ -487,6 +551,13 @@ export default class ModalPublishToGithub {
             }
         } catch (e) {
             this.errorToast(e);
+            if (this.btnPublish) {
+                this.mode = 'publish';
+                try {
+                    this.btnPublish.textContent = _('Publish');
+                } catch (_e) {}
+                this.btnPublish.disabled = false;
+            }
         }
     }
 

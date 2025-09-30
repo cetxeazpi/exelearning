@@ -1257,18 +1257,6 @@ export default class ApiCallManager {
         });
     }
 
-    async postSurgeExport(params) {
-        const url = `${this.githubApiBase}/api/publish/surge/export`;
-        return await $.ajax({
-            url,
-            method: 'POST',
-            data: JSON.stringify(params || {}),
-            contentType: 'application/json',
-            dataType: 'json',
-            timeout: eXeLearning.config.clientCallWaitingTime,
-        });
-    }
-
     // ============ Cloudflare Pages (custom) ============
     async getCfStatus() {
         const url = `${this.githubApiBase}/api/publish/cf/status`;

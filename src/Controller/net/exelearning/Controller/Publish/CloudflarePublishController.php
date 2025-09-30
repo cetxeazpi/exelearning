@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\net\exelearning\Controller\Publish;
 
 use App\Constants;
 use App\Entity\net\exelearning\Entity\User as AppUser;
 use App\Helper\net\exelearning\Helper\FileHelper;
+use App\Service\CloudflareDeployer;
 use App\Service\net\exelearning\Service\Api\OdeExportServiceInterface;
-use App\Service\NetlifyDeployer;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,40 +16,40 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class NetlifyPublishController extends AbstractController
+class CloudflarePublishController extends AbstractController
 {
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly OdeExportServiceInterface $exportService,
         private readonly FileHelper $fileHelper,
-        private readonly NetlifyDeployer $netlify,
+        private readonly CloudflareDeployer $cf,
         private readonly LoggerInterface $logger,
     ) {
     }
 
-    #[Route('/publish/netlify', name: 'publish_netlify_modal', methods: ['GET'])]
+    #[Route('/publish/cfpages', name: 'publish_cfpages_modal', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function modal(): Response
     {
-        return $this->render('workarea/modals/pages/publishtonetlify.html.twig');
+        return $this->render('workarea/modals/pages/publishtocloudflare.html.twig');
     }
 
     private function getToken(): ?string
     {
-        return (string) $this->requestStack->getSession()?->get('netlify_access_token');
+        return (string) $this->requestStack->getSession()?->get('cf_access_token');
     }
 
-    #[Route('/api/publish/netlify/status', name: 'api_netlify_status', methods: ['GET'])]
+    #[Route('/api/publish/cf/status', name: 'api_cf_status', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function status(): JsonResponse
     {
         $sess = $this->requestStack->getSession();
-        $has = (bool) $sess?->has('netlify_access_token');
+        $has = (bool) $sess?->has('cf_access_token');
 
         return $this->json(['connected' => $has]);
     }
 
-    #[Route('/api/publish/netlify/token', name: 'api_netlify_token', methods: ['POST'])]
+    #[Route('/api/publish/cf/token', name: 'api_cf_token', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function saveToken(Request $request): JsonResponse
     {
@@ -58,54 +58,73 @@ class NetlifyPublishController extends AbstractController
         if (!$token) {
             return $this->json(['error' => 'access_token required'], 400);
         }
-        $this->requestStack->getSession()?->set('netlify_access_token', $token);
+        $this->requestStack->getSession()?->set('cf_access_token', $token);
 
         return $this->json(['ok' => true]);
     }
 
-    #[Route('/api/publish/netlify/sites', name: 'api_netlify_sites', methods: ['GET'])]
+    #[Route('/api/publish/cf/accounts', name: 'api_cf_accounts', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
-    public function listSites(): JsonResponse
+    public function accounts(): JsonResponse
     {
         $token = $this->getToken();
         if (!$token) {
             return $this->json(['error' => 'Not connected'], 401);
         }
-        $sites = $this->netlify->listSites($token);
+        $accs = $this->cf->listAccounts($token);
+        $list = [];
+        foreach ($accs as $a) {
+            $list[] = ['id' => $a['id'] ?? null, 'name' => $a['name'] ?? null];
+        }
 
-        return $this->json(array_map(function ($s) {
-            return [
-                'id' => $s['id'] ?? null,
-                'name' => $s['name'] ?? ($s['site_id'] ?? null),
-                'url' => $s['url'] ?? ($s['ssl_url'] ?? null),
-            ];
-        }, is_array($sites) ? $sites : []));
+        return $this->json($list);
     }
 
-    #[Route('/api/publish/netlify/sites', name: 'api_netlify_sites_create', methods: ['POST'])]
+    #[Route('/api/publish/cf/projects', name: 'api_cf_projects', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
-    public function createSite(Request $request): JsonResponse
+    public function projects(Request $request): JsonResponse
+    {
+        $token = $this->getToken();
+        if (!$token) {
+            return $this->json(['error' => 'Not connected'], 401);
+        }
+        $accountId = (string) $request->query->get('account');
+        if (!$accountId) {
+            return $this->json(['error' => 'account required'], 400);
+        }
+        $projs = $this->cf->listProjects($token, $accountId);
+        $list = [];
+        foreach ($projs as $p) {
+            $list[] = [
+                'name' => $p['name'] ?? null,
+                'subdomain' => $p['subdomain'] ?? null,
+                'production_branch' => $p['production_branch'] ?? ($p['deployment_configs']['production']['branch'] ?? null),
+            ];
+        }
+
+        return $this->json($list);
+    }
+
+    #[Route('/api/publish/cf/projects', name: 'api_cf_projects_create', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function createProject(Request $request): JsonResponse
     {
         $token = $this->getToken();
         if (!$token) {
             return $this->json(['error' => 'Not connected'], 401);
         }
         $data = $request->toArray();
+        $accountId = (string) ($data['account'] ?? '');
         $name = (string) ($data['name'] ?? '');
-        try {
-            $site = $this->netlify->createSite($token, $name ?: null);
-        } catch (\Throwable $e) {
-            return $this->json(['error' => 'Create site failed: '.$e->getMessage()], 502);
+        if (!$accountId || !$name) {
+            return $this->json(['error' => 'account/name required'], 400);
         }
+        $proj = $this->cf->createProject($token, $accountId, $name);
 
-        return $this->json([
-            'id' => $site['id'] ?? null,
-            'name' => $site['name'] ?? ($site['site_id'] ?? null),
-            'url' => $site['url'] ?? ($site['ssl_url'] ?? null),
-        ], 201);
+        return $this->json(['name' => $proj['name'] ?? $name], 201);
     }
 
-    #[Route('/api/publish/netlify/publish', name: 'api_netlify_publish', methods: ['POST'])]
+    #[Route('/api/publish/cf/publish', name: 'api_cf_publish', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function publish(Request $request): JsonResponse
     {
@@ -115,19 +134,17 @@ class NetlifyPublishController extends AbstractController
         }
 
         $data = $request->toArray();
-        $siteId = (string) ($data['siteId'] ?? '');
-        if (!$siteId) {
-            return $this->json(['error' => 'siteId required'], 400);
+        $accountId = (string) ($data['account'] ?? '');
+        $project = (string) ($data['project'] ?? '');
+        $odeSessionId = (string) ($data['odeSessionId'] ?? '');
+        $production = (bool) ($data['production'] ?? true);
+        $branch = (string) ($data['branch'] ?? 'main');
+        if (!$accountId || !$project || !$odeSessionId) {
+            return $this->json(['error' => 'account/project/odeSessionId required'], 400);
         }
 
         /** @var AppUser $dbUser */
         $dbUser = $this->getUser();
-        $odeSessionId = (string) ($data['odeSessionId'] ?? '');
-        if (!$odeSessionId) {
-            return $this->json(['error' => 'odeSessionId required'], 400);
-        }
-
-        // Export site (HTML5) to temp dir (preview)
         $export = $this->exportService->export(
             $dbUser,
             $dbUser,
@@ -141,30 +158,24 @@ class NetlifyPublishController extends AbstractController
             return $this->json(['error' => 'Export failed'], 500);
         }
         $exportDir = rtrim((string) $this->fileHelper->getOdeSessionUserTmpExportDir($odeSessionId, $dbUser), '/');
-
-        // Create zip
-        $zipPath = $exportDir.'-netlify.zip';
-        $ok = $this->zipDirectory($exportDir, $zipPath);
-        if (!$ok) {
+        $zipPath = $exportDir.'-cfpages.zip';
+        if (!$this->zipDirectory($exportDir, $zipPath)) {
             return $this->json(['error' => 'Zip creation failed'], 500);
         }
 
         try {
-            $deploy = $this->netlify->deployZip($token, $siteId, $zipPath);
+            $deploy = $this->cf->deployZip($token, $accountId, $project, $zipPath, $production, $branch);
         } catch (\Throwable $e) {
-            $this->logger->error('Netlify deploy failed: '.$e->getMessage(), ['exception' => $e]);
+            $this->logger->error('Cloudflare deploy failed: '.$e->getMessage(), ['exception' => $e]);
 
-            return $this->json(['error' => 'Netlify deploy failed: '.$e->getMessage()], 502);
+            return $this->json(['error' => 'Cloudflare deploy failed: '.$e->getMessage()], 502);
         } finally {
             @unlink($zipPath);
         }
 
-        $siteUrl = $deploy['ssl_url'] ?? ($deploy['url'] ?? null);
+        $url = $deploy['url'] ?? ($deploy['deployment_trigger'] ?? null);
 
-        return $this->json([
-            'ok' => true,
-            'siteUrl' => $siteUrl,
-        ]);
+        return $this->json(['ok' => true, 'url' => $url]);
     }
 
     private function zipDirectory(string $sourceDir, string $zipPath): bool

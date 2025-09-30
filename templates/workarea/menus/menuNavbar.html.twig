@@ -36,7 +36,7 @@
                             <li><a id="navbar-button-export-epub3" class="dropdown-item" href="#">{{ "ePub3" | trans }}</a></li>
                         </ul>
                     </li>
-                    {% if config.enableGithubPublishing or config.enableNetlifyPublishing or config.enableSurgePublishing %}
+                    {% if config.enableGithubPublishing or config.enableNetlifyPublishing or config.enableCfpagesPublishing %}
                         <li class="dropdown dropend exe-online">
                             <a class="dropdown-item dropdown-toggle" href="#" id="dropdownPublish" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ "Publish" | trans }}</a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownPublish">
@@ -45,9 +45,6 @@
                                 {% endif %}
                                 {% if config.enableNetlifyPublishing %}
                                     <li><a id="navbar-button-publish-netlify" class="dropdown-item" href="#">{{ "Publish to Netlify" | trans }}</a></li>
-                                {% endif %}
-                                {% if config.enableSurgePublishing %}
-                                    <li><a id="navbar-button-publish-surge" class="dropdown-item" href="#">{{ "Publish to Surge" | trans }}</a></li>
                                 {% endif %}
                                 {% if config.enableCfpagesPublishing %}
                                     <li><a id="navbar-button-publish-cfpages" class="dropdown-item" href="#">{{ "Publish to Cloudflare Pages" | trans }}</a></li>

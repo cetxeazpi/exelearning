@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\net\exelearning\Controller\Publish;
 
 use App\Constants;
 use App\Entity\GithubAccount;

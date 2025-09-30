@@ -255,7 +255,6 @@ class WorkareaController extends DefaultWorkareaController
                     'platformIntegration' => $platformIntegration,
                     'enableGithubPublishing' => $this->getParameter('enable_github_publishing'),
                     'enableNetlifyPublishing' => $this->getParameter('enable_netlify_publishing'),
-                    'enableSurgePublishing' => $this->getParameter('enable_surge_publishing'),
                     'enableCfpagesPublishing' => $this->getParameter('enable_cfpages_publishing'),
                     'userStyles' => $userStyles,
                     'userIdevices' => $userIdevices,

@@ -18,7 +18,6 @@ import ModalOpenUserOdeFiles from './modals/pages/modalOpenUserOdeFiles.js';
 import ModalSessionLogout from './modals/pages/modalSessionLogout.js';
 import ModalPublishToGithub from './modals/pages/modalPublishToGithub.js';
 import ModalPublishToNetlify from './modals/pages/modalPublishToNetlify.js';
-import ModalPublishToSurge from './modals/pages/modalPublishToSurge.js';
 import ModalPublishToCloudflare from './modals/pages/modalPublishToCloudflare.js';
 
 export default class ModalsManagement {
@@ -44,7 +43,6 @@ export default class ModalsManagement {
         this.sessionlogout = null;
         this.publishtogithub = null;
         this.publishtonetlify = null;
-        this.publishtosurge = null;
         this.publishtocf = null;
     }
 
@@ -74,8 +72,6 @@ export default class ModalsManagement {
         this.publishtogithub.init();
         this.publishtonetlify = new ModalPublishToNetlify(this);
         this.publishtonetlify.init();
-        this.publishtosurge = new ModalPublishToSurge(this);
-        this.publishtosurge.init();
         this.publishtocf = new ModalPublishToCloudflare(this);
         this.publishtocf.init();
     }
@@ -104,7 +100,6 @@ export default class ModalsManagement {
         this.sessionlogout.behaviour();
         this.publishtogithub.behaviour();
         this.publishtonetlify.behaviour();
-        this.publishtosurge.behaviour();
         this.publishtocf.behaviour();
     }
 
@@ -135,7 +130,6 @@ export default class ModalsManagement {
             this.sessionlogout,
             this.publishtogithub,
             this.publishtonetlify,
-            this.publishtosurge,
             this.publishtocf,
         ];
     }

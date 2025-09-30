@@ -67,11 +67,9 @@ parameters:
     netlify.api_base: '%env(default::string:NETLIFY_API_BASE)%'
     enable_netlify_publishing: '%env(bool:ENABLE_NETLIFY_PUBLISHING)%'
 
-    # Surge settings (UI only, no API key needed)
-    enable_surge_publishing: '%env(bool:ENABLE_SURGE_PUBLISHING)%'
-
     # Cloudflare Pages settings
-    cfpages.api_base: '%env(default::string:CFPAGES_API_BASE)%'
+    cfpages_api_base_default: 'https://api.cloudflare.com/client/v4'
+    cfpages.api_base: '%env(default:cfpages_api_base_default:CFPAGES_API_BASE)%'
     enable_cfpages_publishing: '%env(bool:ENABLE_CFPAGES_PUBLISHING)%'
 
     # Allow users to import/install styles
@@ -231,7 +229,7 @@ services:
         arguments:
             $defaultBranch: '%github.pages_branch%'
 
-    App\Controller\GithubPublishController:
+    App\Controller\net\exelearning\Controller\Publish\GithubPublishController:
         arguments:
             $pagesBranch: '%github.pages_branch%'
 

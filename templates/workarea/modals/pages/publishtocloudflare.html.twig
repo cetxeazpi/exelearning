@@ -1,6 +1,12 @@
 <div class="modal fade" id="modalPublishToCloudflare" tabindex="-1" aria-labelledby="modalPublishToCloudflareLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="height:85vh;">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="height:98vh; max-height:98vh;">
     <div class="modal-content">
+      <style>
+        /* Allow dropdowns to overflow and be fully visible inside the modal */
+        #modalPublishToCloudflare .modal-content { overflow: visible; height: 100%; }
+        #modalPublishToCloudflare .modal-dialog-scrollable .modal-body { overflow: visible; min-height: 70vh; }
+        #modalPublishToCloudflare .dropdown-menu { z-index: 1090; width: 100%; max-height: 65vh; overflow: auto; }
+      </style>
       <div class="modal-header">
         <h5 class="modal-title" id="modalPublishToCloudflareLabel">{{ 'Publish to Cloudflare Pages' | trans }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Hide' | trans }}"></button>
@@ -23,7 +29,7 @@
             <div class="col-md-5">
               <label class="form-label">{{ 'Account' | trans }}</label>
               <div class="dropdown w-100">
-                <button id="cf-btn-account" class="btn btn-outline-secondary w-100 text-start dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button id="cf-btn-account" class="btn btn-outline-secondary w-100 text-start dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-boundary="viewport" aria-expanded="false">
                   <span id="cf-btn-account-text">{{ 'Select account…' | trans }}</span>
                 </button>
                 <div class="dropdown-menu p-0" style="max-height: 40vh; overflow:auto;">
@@ -35,7 +41,7 @@
               <label class="form-label">{{ 'Project' | trans }}</label>
               <div class="d-flex gap-2">
                 <div class="dropdown w-100">
-                  <button id="cf-btn-project" class="btn btn-outline-secondary w-100 text-start dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                  <button id="cf-btn-project" class="btn btn-outline-secondary w-100 text-start dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-boundary="viewport" aria-expanded="false" disabled>
                     <span id="cf-btn-project-text">{{ 'Select project…' | trans }}</span>
                   </button>
                   <div class="dropdown-menu p-0" style="max-height: 40vh; overflow:auto;">
@@ -46,16 +52,22 @@
                   <span class="auto-icon" aria-hidden="true">autorenew</span>
                 </button>
               </div>
-              <div class="form-text">{{ 'Pick or create a project to deploy into.' | trans }}</div>
-              <div class="input-group mt-2">
-                <input id="cf-project-name" class="form-control" placeholder="{{ 'New project name…' | trans }}">
-                <button id="cf-btn-create" class="btn btn-outline-secondary" type="button">{{ 'Create' | trans }}</button>
-              </div>
-              <div class="form-check mt-3">
-                <input class="form-check-input" type="checkbox" value="1" id="cf-deploy-production" checked>
-                <label class="form-check-label" for="cf-deploy-production">
-                  {{ 'Deploy to production (make it visible)' | trans }}
-                </label>
+            <div class="form-text">{{ 'Pick or create a project to deploy into.' | trans }}</div>
+            <div class="input-group mt-2">
+              <input id="cf-project-name" class="form-control" placeholder="{{ 'New project name…' | trans }}">
+              <button id="cf-btn-create" class="btn btn-outline-secondary" type="button">{{ 'Create' | trans }}</button>
+            </div>
+            <div id="cf-overwrite-wrap" class="form-check mt-2 d-none">
+              <input class="form-check-input" type="checkbox" id="cf-overwrite">
+              <label class="form-check-label" for="cf-overwrite">
+                {{ 'Overwrite existing content' | trans }}
+              </label>
+            </div>
+            <div class="form-check mt-3">
+              <input class="form-check-input" type="checkbox" value="1" id="cf-deploy-production" checked>
+              <label class="form-check-label" for="cf-deploy-production">
+                {{ 'Deploy to production (make it visible)' | trans }}
+              </label>
               </div>
               <div class="form-text">{{ 'If you select an existing project, the new deployment will replace the current live version.' | trans }}</div>
             </div>

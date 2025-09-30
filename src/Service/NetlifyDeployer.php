@@ -19,6 +19,14 @@ class NetlifyDeployer
                 'Accept' => 'application/json',
             ],
         ]);
+        $status = $resp->getStatusCode();
+        if (401 === $status || 403 === $status) {
+            throw new \RuntimeException('Unauthorized', $status);
+        }
+        if ($status < 200 || $status >= 300) {
+            $body = $resp->getContent(false);
+            throw new \RuntimeException('Netlify API error ('.$status.'): '.$body, $status);
+        }
 
         return $resp->toArray(false);
     }
@@ -33,6 +41,14 @@ class NetlifyDeployer
             ],
             'body' => fopen($zipPath, 'rb'),
         ]);
+        $status = $resp->getStatusCode();
+        if (401 === $status || 403 === $status) {
+            throw new \RuntimeException('Unauthorized', $status);
+        }
+        if ($status < 200 || $status >= 300) {
+            $body = $resp->getContent(false);
+            throw new \RuntimeException('Netlify API error ('.$status.'): '.$body, $status);
+        }
 
         return $resp->toArray(false);
     }
@@ -52,6 +68,14 @@ class NetlifyDeployer
             ],
             'json' => $payload,
         ]);
+        $status = $resp->getStatusCode();
+        if (401 === $status || 403 === $status) {
+            throw new \RuntimeException('Unauthorized', $status);
+        }
+        if ($status < 200 || $status >= 300) {
+            $body = $resp->getContent(false);
+            throw new \RuntimeException('Netlify API error ('.$status.'): '.$body, $status);
+        }
 
         return $resp->toArray(false);
     }

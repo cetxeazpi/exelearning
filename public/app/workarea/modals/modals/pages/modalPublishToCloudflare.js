@@ -41,6 +41,8 @@ export default class ModalPublishToCloudflare {
         this.nameInput = root.querySelector('#cf-project-name');
         this.btnCreate = root.querySelector('#cf-btn-create');
         this.chkProduction = root.querySelector('#cf-deploy-production');
+        this.overwriteWrap = root.querySelector('#cf-overwrite-wrap');
+        this.overwriteCheckbox = root.querySelector('#cf-overwrite');
         this.progress = root.querySelector('#cf-progress');
         this.progressBar = root.querySelector('#cf-progress-bar');
         this.progressMsg = root.querySelector('#cf-progress-msg');
@@ -62,6 +64,10 @@ export default class ModalPublishToCloudflare {
             this.btnPublish.addEventListener('click', async () => {
                 await this.publish();
             });
+        if (this.overwriteCheckbox)
+            this.overwriteCheckbox.addEventListener('change', () =>
+                this.updatePublishEnabled()
+            );
         if (this.btnCreate)
             this.btnCreate.addEventListener('click', async () => {
                 await this.createProject();
@@ -97,6 +103,8 @@ export default class ModalPublishToCloudflare {
             this.btnProjectText.textContent = _('Select project…');
         if (this.projectMenu) this.projectMenu.innerHTML = '';
         if (this.accountMenu) this.accountMenu.innerHTML = '';
+        if (this.overwriteWrap) this.overwriteWrap.classList.add('d-none');
+        if (this.overwriteCheckbox) this.overwriteCheckbox.checked = false;
         if (this.btnPublish) this.btnPublish.disabled = true;
         if (this.progress) this.progress.classList.add('d-none');
         if (this.done) this.done.classList.add('d-none');
@@ -175,21 +183,39 @@ export default class ModalPublishToCloudflare {
     selectProject(p) {
         this.state.project = p;
         if (this.btnProjectText) this.btnProjectText.textContent = p.name;
-        if (this.btnPublish) this.btnPublish.disabled = false;
+        // If the project was just created in this flow, no overwrite consent required
+        if (this.justCreated) {
+            if (this.overwriteWrap) this.overwriteWrap.classList.add('d-none');
+        } else {
+            if (this.overwriteWrap)
+                this.overwriteWrap.classList.remove('d-none');
+            if (this.overwriteCheckbox) this.overwriteCheckbox.checked = false;
+        }
+        this.updatePublishEnabled();
+    }
+
+    updatePublishEnabled() {
+        if (!this.btnPublish) return;
+        const hasProject = !!this.state.project;
+        if (!hasProject) {
+            this.btnPublish.disabled = true;
+            return;
+        }
+        if (this.justCreated) {
+            this.btnPublish.disabled = false;
+            return;
+        }
+        const consent = !!(
+            this.overwriteCheckbox && this.overwriteCheckbox.checked
+        );
+        this.btnPublish.disabled = !consent;
     }
 
     async publish() {
         const acc = this.state.account;
         const proj = this.state.project;
         if (!acc || !proj) return;
-        if (!this.justCreated) {
-            const ok = window.confirm(
-                _(
-                    'This will overwrite the current live version of the selected project. Continue?'
-                )
-            );
-            if (!ok) return;
-        }
+        // Overwrite consent is handled via checkbox gating
         if (this.progress) this.progress.classList.remove('d-none');
         if (this.done) this.done.classList.add('d-none');
         if (this.progressBar) this.progressBar.style.width = '10%';

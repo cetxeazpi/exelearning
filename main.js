@@ -14,6 +14,21 @@ const basePath = app.isPackaged
   ? process.resourcesPath
   : app.getAppPath();
 
+// Optional: force a predictable path/name
+log.transports.file.resolvePath = () =>
+  path.join(app.getPath('userData'), 'logs', 'main.log');
+
+// Mirror console.* to electron-log so GUI builds persist logs to file
+const origConsole = { log: console.log, error: console.error, warn: console.warn };
+console.log = (...args) => { log.info(...args); origConsole.log(...args); };
+console.warn = (...args) => { log.warn(...args); origConsole.warn(...args); };
+console.error = (...args) => { log.error(...args); origConsole.error(...args); };
+
+// Safety: capture crashes/unhandled
+process.on('uncaughtException', (e) => log.error('uncaughtException:', e));
+process.on('unhandledRejection', (e) => log.error('unhandledRejection:', e));
+
+
 // ──────────────  i18n bootstrap  ──────────────
 // Pick correct path depending on whether the app is packaged.
 const translationsDir = app.isPackaged
@@ -264,6 +279,8 @@ customEnv = {
   LOG_DIR: process.env.LOG_DIR || path.join(appDataPath, 'log'),
   MERCURE_URL: process.env.MERCURE_URL || '',
   API_JWT_SECRET: process.env.API_JWT_SECRET || 'CHANGE_THIS_FOR_A_SECRET',
+  ONLINE_THEMES_INSTALL: 1,
+  ONLINE_IDEVICES_INSTALL: 1,
 };
 }
 /**
@@ -309,7 +326,7 @@ function attachOpenHandler(win) {
       width,
       height,
       modal: false,
-      show: true,
+      show: ALLOW_UI_IN_CI ? true : !IS_E2E,
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
@@ -335,7 +352,8 @@ function attachOpenHandler(win) {
 
 }
 
-const IS_E2E = process.env.E2E_TEST === '1' || process.env.CI === 'true';
+const ALLOW_UI_IN_CI = process.env.ALLOW_UI_IN_CI === '1' || process.env.ALLOW_UI_IN_CI === 'true';
+const IS_E2E = process.env.E2E_TEST === '1' || (process.env.CI === 'true' && !ALLOW_UI_IN_CI);
 
 function createWindow() {
 
@@ -380,7 +398,8 @@ if (!IS_E2E) {
       },
       tabbingIdentifier: 'mainGroup',
       // show: false
-      show: !IS_E2E  // don't actually show in E2E/CI
+      show: ALLOW_UI_IN_CI ? true : !IS_E2E,
+      // show: !IS_E2E  // don't actually show in E2E/CI
       // titleBarStyle: 'customButtonsOnHover', // hidden title bar on macOS
     });
     
@@ -392,6 +411,16 @@ if (!IS_E2E) {
         mainWindow.maximize();
         mainWindow.show();
     }
+
+    if (process.env.ALLOW_UI_IN_CI === '1' || process.env.ALLOW_UI_IN_CI === 'true') {
+      mainWindow.setAlwaysOnTop(true, 'screen-saver');
+      mainWindow.show();
+      mainWindow.focus();
+      setTimeout(() => mainWindow.setAlwaysOnTop(false), 2500);
+    }
+
+
+
     // Allow the child windows to be created and ensure proper closing behavior
     mainWindow.webContents.on('did-create-window', (childWindow) => {
       console.log("Child window created");
@@ -909,39 +938,18 @@ function runSymfonyCommands() {
       stdio: 'inherit',
     });
 
-    console.log('Syncing System Preferences definitions...');
-    try {
-      execFileSync(phpBinaryPath, ['bin/console', 'app:prefs:sync'], {
-        env: env,
-        cwd: basePath,
-        windowsHide: true,
-        stdio: 'inherit',
-      });
-    } catch (_e) {
-      // non-fatal
-    }
-
-    console.log('Installing assets in public...');
-    execFileSync(phpBinaryPath, ['bin/console', 'assets:install', 'public'], {
-      env: env,
-      cwd: basePath,
-      windowsHide: true,
-      stdio: 'inherit',
-    });
-
-    // Ensure system preferences files live under FILES_DIR and are reachable from public/
-    try {
-      const filesDir = env.FILES_DIR || path.join(appDataPath, 'data');
-      const sysPrefsDir = path.join(filesDir, 'system_preferences_files');
-      ensureWritableDirectory(sysPrefsDir);
-      const linkPath = path.join(basePath, 'public', 'system_prefs');
+    // Do NOT run assets:install when packaged: the directory is read-only
+    if (!app.isPackaged) {
       try {
-        // force recreate symlink
-        if (fs.existsSync(linkPath)) fs.rmSync(linkPath, { recursive: true, force: true });
-      } catch (e) {}
-      try { fs.symlinkSync(sysPrefsDir, linkPath, 'junction'); } catch (e) {}
-    } catch (err) {
-      console.warn('Could not ensure system_prefs symlink:', err.message);
+        console.log('Installing assets in public (dev/local only)...');
+        execFileSync(phpBinaryPath, ['bin/console', 'assets:install', 'public', '--no-debug', '--env=prod'], {
+          env, cwd: basePath, windowsHide: true, stdio: 'inherit',
+        });
+      } catch (e) {
+        console.warn('Skipping assets:install:', e.message);
+      }
+    } else {
+      console.log('Skipping assets:install (packaged app is read-only).');
     }
 
     console.log('Creating test user...');
@@ -967,16 +975,12 @@ function runSymfonyCommands() {
 }
 
 function phpIniArgs() {
-  const opcacheDir = path.join(customEnv.CACHE_DIR, 'opcache');
-  ensureWritableDirectory(opcacheDir);
   return [
     '-dopcache.enable=1',
     '-dopcache.enable_cli=1',
     '-dopcache.memory_consumption=128',
     '-dopcache.interned_strings_buffer=16',
     '-dopcache.max_accelerated_files=20000',
-    `-dopcache.file_cache=${opcacheDir}`,
-    '-dopcache.file_cache_only=1',
     '-dopcache.validate_timestamps=0',
     '-drealpath_cache_size=4096k',
     '-drealpath_cache_ttl=600',

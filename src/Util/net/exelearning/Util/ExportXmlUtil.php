@@ -292,7 +292,7 @@ class ExportXmlUtil
         $titleValue = isset($titleElement) ? $titleElement->getValue() : 'eXe-p-'.$odeId;
         $titleString = $title->addChild('lom:lom:string', $titleValue);
 
-        $titleLang = $odeProperties['pp_lang']; // todo -> title lang property
+        $titleLang = $odeProperties['pp_lang'];
         $titleLang = isset($titleLang) ? $titleLang->getValue() : Settings::DEFAULT_LOCALE;
         $titleString->addAttribute('language', $titleLang);
 
@@ -547,13 +547,6 @@ class ExportXmlUtil
                 }
             }
         }
-
-        // TODO, besides the previous one, there are more "weird" directories
-
-        // Where can we create directories?
-        // We need to process the iDevices' HTML and look for references to custom/ because they are from the file manager
-        // TODO see what else needs to be added, like the file manager stuff, and remove the libs that are in the iDevices
-        // TODO should we add the math files that load by themselves? in common resource?
     }
 
     /**
@@ -1222,7 +1215,7 @@ class ExportXmlUtil
                 $domHead->documentElement->appendChild($import);
             }
 
-            // TODO simplexml load the DOM but introduce scaping characters
+            // TODO simplexml load the DOM but introduce scaping characters?
             $head = simplexml_import_dom($domHead);
         }
 
@@ -1361,6 +1354,8 @@ class ExportXmlUtil
         foreach ($styleCssFiles as $styleUrl) {
             $styleLink = $headCss->addChild('link', '');
             $styleLink->addAttribute('rel', 'stylesheet');
+            // TEMPORARY FIX: Added this to resolve the bug.
+            // TODO: Replace with a final, more robust solution.
             $styleLink->addAttribute('href', $styleUrl);
         }
 
@@ -1433,6 +1428,7 @@ class ExportXmlUtil
         $odeNavStructureSyncs = null, // export HTML5 need all node structure for navigatation menu
     ) {
         $body = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><body></body>');
+        $body->addChild('script', 'document.body.className+=" js"');
 
         // Page properties
         $pageProperties = $odeNavStructureSync->getOdeNavStructureSyncProperties();
@@ -1982,18 +1978,38 @@ class ExportXmlUtil
             self::appendSimpleXml($pageHeader, $pageNumber);
         }
 
+        // Package title
+        $packageTitleValue = isset($odeProperties['pp_title']) ? $odeProperties['pp_title']->getValue() : '';
+        if (Constants::EXPORT_TYPE_HTML5_SP == $exportType) {
+            $packageTitleValue = '';
+        } // The single page export has its own package title
+        if ('' != $packageTitleValue) {
+            $packageTitle = $pageHeader->addChild('h1', $packageTitleValue);
+            $packageTitle->addAttribute('class', 'package-title');
+        }
+
         // Page title
+        $pageTitleTag = 'h1';
+        if ('' != $packageTitleValue) {
+            $pageTitleTag = 'h2';
+        }
         if ('' != $titlePage) {
             $headerEmpty = false;
-            $pageTitle = $pageHeader->addChild('h1', $titlePage);
+            $pageTitle = $pageHeader->addChild($pageTitleTag, $titlePage);
             $pageTitle->addAttribute('class', 'page-title');
         }
 
         if ($headerEmpty) {
-            $pageHeader->addAttribute('class', 'sr-av');
-            $pageTitle = $pageHeader->addChild('h1', $odeNavStructureSync->getPageName());
+            $pageTitle = $pageHeader->addChild($pageTitleTag, $odeNavStructureSync->getPageName());
             $pageTitle->addAttribute('id', 'page-title-node-content');
-            $pageTitle->addAttribute('class', 'page-title');
+            if ('' == $packageTitleValue) {
+                $pageHeader->addAttribute('class', 'page-header sr-av');
+            } else {
+                $pageHeader->addAttribute('class', 'page-header');
+                $pageTitle->addAttribute('class', 'page-title sr-av');
+            }
+        } else {
+            $pageHeader->addAttribute('class', 'page-header');
         }
 
         return $pageHeaderMain;
@@ -2175,6 +2191,14 @@ class ExportXmlUtil
 
         if (isset($blockPropertiesDict['minimized']) && 'true' == $blockPropertiesDict['minimized']) {
             $class .= ' minimized';
+        }
+
+        // Teacher-only checkbox on blocks
+        if (
+            (isset($blockPropertiesDict['teacherOnly']) && 'true' == $blockPropertiesDict['teacherOnly'])
+            || (isset($blockPropertiesDict['visibilityType']) && 'teacher' === $blockPropertiesDict['visibilityType'])
+        ) {
+            $class .= ' teacher-only';
         }
 
         if (isset($blockPropertiesDict['cssClass'])) {
@@ -2363,6 +2387,14 @@ class ExportXmlUtil
         if (!$odeComponentsSync->getHtmlView()) {
             $class .= ' db-no-data';
         }
+        // Teacher-only checkbox on iDevices
+        if (
+            (isset($idevicePropertiesDict['teacherOnly']) && 'true' == $idevicePropertiesDict['teacherOnly'])
+            || (isset($idevicePropertiesDict['visibilityType']) && 'teacher' === $idevicePropertiesDict['visibilityType'])
+        ) {
+            $class .= ' teacher-only';
+        }
+
         if (isset($idevicePropertiesDict['cssClass'])) {
             $class .= ' '.$idevicePropertiesDict['cssClass'];
         }
@@ -2509,6 +2541,46 @@ class ExportXmlUtil
             foreach ($odeNavStructureSync->getOdePagStructureSyncs() as $odePagStructureSync) {
                 foreach ($odePagStructureSync->getOdeComponentsSyncs() as $odeComponentsSync) {
                     $htmlView = $odeComponentsSync->getHtmlView(); // ? $odeComponentsSync->getHtmlView() : $odeComponentsSync->getJsonProperties();
+
+                    // Detect specific drag/sort/classify iDevices and include jquery-ui when present
+                    if ((null != $htmlView) && ('' !== trim($htmlView))) {
+                        $sortableClasses = [
+                            'ordena-IDevice',
+                            'clasifica-IDevice',
+                            'relaciona-IDevice',
+                            'dragdrop-IDevice',
+                        ];
+                        foreach ($sortableClasses as $sc) {
+                            if (preg_match("~<div[^>]*class=[\"']?[^\"']*".preg_quote($sc, '~')."[^\"']*[\"']?[^>]*>~i", $htmlView)) {
+                                $uiLibDir = $libsPath.'jquery-ui';
+                                if (!in_array($uiLibDir, $librariesToCopy, true)) {
+                                    $librariesToCopy[] = $uiLibDir;
+                                }
+                                $uiFiles = ['/jquery-ui/jquery-ui.min.js'];
+                                $alreadyPresent = false;
+                                foreach ($filesToCopy as $existing) {
+                                    if (is_array($existing)) {
+                                        $containsAll = true;
+                                        foreach ($uiFiles as $f) {
+                                            if (!in_array($f, $existing, true)) {
+                                                $containsAll = false;
+                                                break;
+                                            }
+                                        }
+                                        if ($containsAll) {
+                                            $alreadyPresent = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!$alreadyPresent) {
+                                    $filesToCopy[] = $uiFiles;
+                                }
+                                break;
+                            }
+                        }
+                    }
+
                     if ((null != $htmlView) && (!empty($htmlView))) {
                         foreach ($libsToSearch as $libToSearch) {
                             if (!in_array($libToSearch[0], $librariesToCopy)) {
@@ -2625,7 +2697,7 @@ class ExportXmlUtil
             ];
         }
 
-        // TODO issue 315
+        // TODO issue 315 (exelearning-web)
         // if ('true' == $odeProperties['pp_addSearchBox']->getValue()) {
         //    Here we add the search files
         // }

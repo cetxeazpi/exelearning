@@ -1,7 +1,7 @@
 ARG ARCH=
 ARG VERSION=v0.0.0-alpha
 
-FROM ${ARCH}erseco/alpine-php-webserver:3.22.0
+FROM ${ARCH}erseco/alpine-php-webserver:3.22
 
 LABEL maintainer="INTEF <cedec@educacion.gob.es>"
 LABEL org.opencontainers.image.title="eXeLearning"
@@ -75,6 +75,7 @@ RUN apk add --no-cache \
     mkdir -p /etc/service/mercure && chown nobody:nobody /etc/service/mercure && \
 # Create /app/vendor directory and change ownership to nobody
     mkdir -p /app/vendor && chown -R nobody:nobody /app/vendor && \
+    mkdir -p /app/public && chown -R nobody:nobody /app/public && \
     mkdir -p /app/var/cache /app/var/log && chown -R nobody:nobody /app/var/cache /app/var/log
 
 # nginx configuration for assets, files and iDevices

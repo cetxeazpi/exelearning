@@ -16,6 +16,7 @@ import MenuManager from './workarea/menus/menuManager.js';
 import ThemesManager from './workarea/themes/themesManager.js';
 import UserManager from './workarea/user/userManager.js';
 import Actions from './common/app_actions.js';
+import Shortcuts from './common/shortcuts.js';
 
 class App {
     constructor(eXeLearning) {
@@ -33,6 +34,7 @@ class App {
         this.menus = new MenuManager(this);
         this.user = new UserManager(this);
         this.actions = new Actions(this);
+        this.shortcuts = new Shortcuts(this);
     }
 
     /**
@@ -63,6 +65,11 @@ class App {
         await this.addNoTranslateForGoogle();
         // Execute the custom JavaScript code
         await this.runCustomJavaScriptCode();
+        // Compose and initialize shortcuts
+        await this.initializedShortcuts();
+
+        // Electron: show toast with final saved path
+        this.bindElectronDownloadToasts();
     }
 
     /**
@@ -262,6 +269,51 @@ class App {
     }
 
     /**
+     * Compose and initialize shortcuts
+     */
+    async initializedShortcuts() {
+        this.shortcuts.init();
+    }
+
+    /**
+     * Bind Electron download-done to show final path toast (offline desktop)
+     */
+    bindElectronDownloadToasts() {
+        if (
+            !window.electronAPI ||
+            typeof window.electronAPI.onDownloadDone !== 'function'
+        )
+            return;
+        try {
+            window.electronAPI.onDownloadDone(({ ok, path, error }) => {
+                const esc = (s) =>
+                    (s || '')
+                        .toString()
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;');
+                if (ok) {
+                    let toastData = {
+                        title: _('Saved'),
+                        body: `Saved to: <code>${esc(path)}</code>`,
+                        icon: 'task_alt',
+                        remove: 3500,
+                    };
+                    this.toasts.createToast(toastData);
+                } else {
+                    let toastData = {
+                        title: _('Error'),
+                        body: esc(error || _('Unknown error.')),
+                        icon: 'error',
+                        error: true,
+                        remove: 5000,
+                    };
+                    this.toasts.createToast(toastData);
+                }
+            });
+        } catch (_e) {}
+    }
+
+    /**
      * "Not for production use" warning (alpha, beta, rc... versions)
      *
      */
@@ -387,9 +439,7 @@ class App {
                     <p class="alert alert-info mb-4">Por favor, antes de avisar de un fallo, asegúrate de que no está en esta lista.</p>
                     <p><strong>Problemas que ya conocemos:</strong></p>
                     <ul>
-                        <li class="exe-offline">Solo deja descargar proyectos, no guardar y exportar. Estamos en ello...</li>
-                        <li class="exe-offline">De momento guarda en un directorio temporal, no puedes elegir dónde.</li>
-                        <li>Solo hay un estilo.</li>
+                        <li>Solo hay dos estilos, y son casi iguales.</li>
                         <li>No hay editor de estilos.</li>
                         <li>Falta Archivo - Imprimir.</li>
                         <li>No se puede exportar o importar una página.</li>

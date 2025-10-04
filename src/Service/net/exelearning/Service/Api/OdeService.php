@@ -1283,8 +1283,12 @@ class OdeService implements OdeServiceInterface
      * @param User $user
      * @param bool $forceCloseOdeUserPreviousSession
      */
-    private function checkSessionCurrentUser($user, $forceCloseOdeUserPreviousSession)
+    private function checkSessionCurrentUser($user, $forceCloseOdeUserPreviousSession, bool $allowParallelSessions = false)
     {
+        if ($allowParallelSessions) {
+            return;
+        }
+
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
 
         // Check if user has already an open session
@@ -1836,7 +1840,7 @@ class OdeService implements OdeServiceInterface
         }
 
         // Check if the user is in the session (throw exception)
-        $this->checkSessionCurrentUser($user, $forceCloseOdeUserPreviousSession);
+        $this->checkSessionCurrentUser($user, $forceCloseOdeUserPreviousSession, $allowParallelSessions ?? false);
 
         // Don't create new session in component elp
         if (!$isImportIdevices) {
@@ -2095,11 +2099,12 @@ class OdeService implements OdeServiceInterface
         $elpFileName,
         $user,
         $forceCloseOdeUserPreviousSession,
+        bool $allowParallelSessions = false,
     ) {
         $result = [];
 
         // Check if the user is in the session (throw exception)
-        $this->checkSessionCurrentUser($user, $forceCloseOdeUserPreviousSession);
+        $this->checkSessionCurrentUser($user, $forceCloseOdeUserPreviousSession, $allowParallelSessions);
 
         // Determine if the file exist
         $checkElpFile = $this->checkElpFile($elpFileName);

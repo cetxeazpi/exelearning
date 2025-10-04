@@ -557,6 +557,7 @@ export default class modalOpenUserOdeFiles extends Modal {
         let params = {
             elpFileName: id,
             odeSessionId: eXeLearning.app.project.odeSession,
+            projectId: eXeLearning.app.project.odeId,
         };
         let odeParams = {
             odeSessionId: eXeLearning.app.project.odeSession,
@@ -628,6 +629,7 @@ export default class modalOpenUserOdeFiles extends Modal {
             elpFileName: id,
             forceCloseOdeUserPreviousSession: true,
             odeSessionId: eXeLearning.app.project.odeSession,
+            projectId: eXeLearning.app.project.odeId,
         };
         let response = await eXeLearning.app.api.postSelectedOdeFile(params);
         if (response.responseMessage == 'OK') {

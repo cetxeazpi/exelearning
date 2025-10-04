@@ -126,6 +126,7 @@ interface OdeServiceInterface
         $elpFileName,
         $user,
         $forceCloseOdeUserPreviousSession,
+        bool $allowParallelSessions = false,
     );
 
     /**

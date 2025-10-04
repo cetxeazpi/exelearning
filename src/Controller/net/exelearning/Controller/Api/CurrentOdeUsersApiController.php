@@ -56,10 +56,27 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $this->userHelper->saveUserTheme($user, Constants::THEME_DEFAULT);
 
         // Check if user has already an open session
-        $currentOdeUserForUser = $currentOdeUsersRepository->getCurrentSessionForUser($databaseUser->getUserIdentifier());
+        $requestedSessionId = $request->query->get('odeSessionId');
+        $forceNewSession = filter_var(
+            $request->query->get('forceNewSession'),
+            FILTER_VALIDATE_BOOL
+        );
+
+        $currentOdeUserForUser = null;
+        if (!$forceNewSession || $requestedSessionId) {
+            $currentOdeUserForUser = $currentOdeUsersRepository->getCurrentSessionForUser(
+                $databaseUser->getUserIdentifier(),
+                $requestedSessionId
+            );
+        }
 
         // If there isn't currentOdeUser for user create a new session
         if (empty($currentOdeUserForUser)) {
+            if ($requestedSessionId) {
+                return new JsonResponse([
+                    'responseMessage' => 'SESSION_NOT_FOUND',
+                ], JsonResponse::HTTP_NOT_FOUND);
+            }
             $odeId = Util::generateId();
             $odeVersionId = Util::generateId();
             $odeSessionId = Util::generateId();

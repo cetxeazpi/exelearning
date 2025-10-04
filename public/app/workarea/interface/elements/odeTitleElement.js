@@ -3,6 +3,7 @@ export default class OdeTitleMenu {
         this.odeTitleMenuHeadElement = document.querySelector(
             '#exe-title > .exe-title.content'
         );
+        this.defaultDocumentTitle = document.title;
     }
 
     /**
@@ -25,5 +26,8 @@ export default class OdeTitleMenu {
             : _('Untitled document');
         this.odeTitleMenuHeadElement.textContent = odeTitleText;
         this.odeTitleMenuHeadElement.setAttribute('title', odeTitleText);
+
+        const baseTitle = this.defaultDocumentTitle || 'eXeLearning';
+        document.title = `${odeTitleText} – ${baseTitle}`;
     }
 }

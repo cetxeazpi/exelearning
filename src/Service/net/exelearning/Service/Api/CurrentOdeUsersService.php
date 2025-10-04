@@ -66,7 +66,10 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
     public function insertOrUpdateFromOdeNavStructureSync($odeNavStructureSync, $user, $clientIp)
     {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
-        $currentOdeSessionForUser = $currentOdeUsersRepository->getCurrentSessionForUser($user->getUserIdentifier());
+        $currentOdeSessionForUser = $currentOdeUsersRepository->getCurrentSessionForUser(
+            $user->getUserIdentifier(),
+            $odeNavStructureSync->getOdeSessionId()
+        );
 
         if (!empty($currentOdeSessionForUser)) {
             $currentOdeSessionForUser->setCurrentPageId($odeNavStructureSync->getOdePageId());
@@ -116,7 +119,10 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
     public function updateCurrentIdevice($odeNavStructureSync, $blockId, $odeIdeviceId, $user, $odeCurrentUsersFlags)
     {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
-        $currentOdeSessionForUser = $currentOdeUsersRepository->getCurrentSessionForUser($user->getUserIdentifier());
+        $currentOdeSessionForUser = $currentOdeUsersRepository->getCurrentSessionForUser(
+            $user->getUserIdentifier(),
+            $odeNavStructureSync->getOdeSessionId()
+        );
 
         // Transform flags to boolean number
         $odeCurrentUsersFlags = $this->currentOdeUsersFlagsToBoolean($odeCurrentUsersFlags);
@@ -313,7 +319,10 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
 
         $odeId = null;
 
-        $currentSessionForUser = $currentOdeUsersRepository->getCurrentSessionForUser($user->getUsername());
+        $currentSessionForUser = $currentOdeUsersRepository->getCurrentSessionForUser(
+            $user->getUsername(),
+            $odeSessionId
+        );
 
         if ((!empty($currentSessionForUser)) && ($currentSessionForUser->getOdeSessionId() == $odeSessionId)) {
             $odeId = $currentSessionForUser->getOdeId();
@@ -336,7 +345,10 @@ class CurrentOdeUsersService implements CurrentOdeUsersServiceInterface
 
         $odeVersionId = null;
 
-        $currentSessionForUser = $currentOdeUsersRepository->getCurrentSessionForUser($user->getUsername());
+        $currentSessionForUser = $currentOdeUsersRepository->getCurrentSessionForUser(
+            $user->getUsername(),
+            $odeSessionId
+        );
 
         if ((!empty($currentSessionForUser)) && ($currentSessionForUser->getOdeSessionId() == $odeSessionId)) {
             $odeVersionId = $currentSessionForUser->getOdeVersionId();

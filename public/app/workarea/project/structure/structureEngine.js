@@ -839,15 +839,19 @@ export default class structureEngine {
      * @returns {String}
      */
     getSelectNodeNavId() {
-        return this.getSelectedNode().id;
+        const node = this.getSelectedNode();
+
+        return node ? node.id : null;
     }
 
     /**
      *
-     * @returns {String}
+     * @returns {String|null}
      */
     getSelectNodePageId() {
-        return this.getSelectedNode().pageId;
+        const node = this.getSelectedNode();
+
+        return node ? node.pageId : null;
     }
 
     /**

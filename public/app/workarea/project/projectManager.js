@@ -1684,6 +1684,16 @@ export default class projectManager {
         odeIdeviceId,
         isIdeviceRemove = false
     ) {
+        if (!odeNavStructureSyncId) {
+            odeNavStructureSyncId = this.structure.getSelectNodeNavId();
+        }
+
+        if (!odeNavStructureSyncId) {
+            return {
+                responseMessage: 'MISSING_NAV_NODE',
+            };
+        }
+
         let params = {
             odeSessionId: this.odeSession,
             odeIdeviceId: odeIdeviceId,

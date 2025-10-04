@@ -19,11 +19,14 @@ class BasicRealTimeConnectionTest extends ExelearningRealTimeE2EBase
 
         // 2) Main client navigates somewhere
         $this->mainClient->request('GET', '/workarea');
+        $this->waitForWorkareaBoot($this->mainClient);
 
         // 3) Get share URL and navigate the secondary client
         $shareUrl = $this->getMainShareUrl();
         $this->assertNotEmpty($shareUrl, 'Expected a share URL from main client.');
+
         $this->secondaryClient->request('GET', $shareUrl);
+        $this->waitForWorkareaBoot($this->secondaryClient);
 
         // 4) Wait until the concurrent users container appears in both clients
         $this->mainClient->waitFor('#exe-concurrent-users');
@@ -34,11 +37,14 @@ class BasicRealTimeConnectionTest extends ExelearningRealTimeE2EBase
 
         // Refresh the main client (otherwise, the logged-in users do not appear)
         $this->mainClient->getWebDriver()->navigate()->refresh();
+        $this->waitForWorkareaBoot($this->mainClient);
 
 
         // 5) Assert that both clients see two users connected
-        $this->assertSelectorExistsIn($this->mainClient, '#exe-concurrent-users[num="2"]', "Main client should see 2 connected users.");
-        $this->assertSelectorExistsIn($this->secondaryClient, '#exe-concurrent-users[num="2"]', "Secondary client should see 2 connected users.");
+        $this->waitForConcurrentUserCount($this->mainClient, 2);
+        $this->waitForConcurrentUserCount($this->secondaryClient, 2);
+        $this->assertSame(2, $this->getConcurrentUserCount($this->mainClient));
+        $this->assertSame(2, $this->getConcurrentUserCount($this->secondaryClient));
 
         // 6) Verify both users appear in the main client
         // $this->assertSelectorExistsIn($this->mainClient, '.user-current-letter-icon[title="user@exelearning.net"]', "Main client should see user1.");

@@ -733,7 +733,8 @@ class OdeApiController extends DefaultApiController
                 $databaseUser,
                 $clientIp,
                 $forceCloseOdeUserPreviousSession,
-                $odeValues
+                $odeValues,
+                $allowParallelSessions
             );
         } catch (UserAlreadyOpenSessionException $e) {
             $result['responseMessage'] = 'error: '.$e->getMessage();

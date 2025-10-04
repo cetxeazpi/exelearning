@@ -161,36 +161,36 @@ class ProjectMultiDocumentTest extends WebTestCase
         $this->assertSame($projectId, $reloaded['currentOdeUsers']['odeId'] ?? null);
     }
 
-    // public function testParallelSessionsShareProjectButHaveIndependentSessions(): void
-    // {
-    //     $client = static::createClient();
-    //     $this->login($client);
+    public function testParallelSessionsShareProjectButHaveIndependentSessions(): void
+    {
+        $client = static::createClient();
+        $this->login($client);
 
-    //     $project = $this->createProject($client, 'Parallel Sessions');
-    //     $projectId = $project['id'];
-    //     $this->assertNotEmpty($projectId);
+        $project = $this->createProject($client, 'Parallel Sessions');
+        $projectId = $project['id'];
+        $this->assertNotEmpty($projectId);
 
-    //     $sessionA = $this->openProjectSession($client, $projectId);
-    //     $sessionB = $this->openProjectSession($client, $projectId);
+        $sessionA = $this->openProjectSession($client, $projectId);
+        $sessionB = $this->openProjectSession($client, $projectId);
 
-    //     $this->assertSame($projectId, $sessionA['odeId'] ?? null);
-    //     $this->assertSame($projectId, $sessionB['odeId'] ?? null);
-    //     $this->assertNotSame(
-    //         $sessionA['odeSessionId'] ?? null,
-    //         $sessionB['odeSessionId'] ?? null,
-    //         'Parallel sessions must have distinct identifiers'
-    //     );
+        $this->assertSame($projectId, $sessionA['odeId'] ?? null);
+        $this->assertSame($projectId, $sessionB['odeId'] ?? null);
+        $this->assertNotSame(
+            $sessionA['odeSessionId'] ?? null,
+            $sessionB['odeSessionId'] ?? null,
+            'Parallel sessions must have distinct identifiers'
+        );
 
-    //     $confirmedA = $this->requestCurrentProject(
-    //         $client,
-    //         ['odeSessionId' => $sessionA['odeSessionId']]
-    //     );
-    //     $confirmedB = $this->requestCurrentProject(
-    //         $client,
-    //         ['odeSessionId' => $sessionB['odeSessionId']]
-    //     );
+        $confirmedA = $this->requestCurrentProject(
+            $client,
+            ['odeSessionId' => $sessionA['odeSessionId']]
+        );
+        $confirmedB = $this->requestCurrentProject(
+            $client,
+            ['odeSessionId' => $sessionB['odeSessionId']]
+        );
 
-    //     $this->assertSame($projectId, $confirmedA['currentOdeUsers']['odeId'] ?? null);
-    //     $this->assertSame($projectId, $confirmedB['currentOdeUsers']['odeId'] ?? null);
-    // }
+        $this->assertSame($projectId, $confirmedA['currentOdeUsers']['odeId'] ?? null);
+        $this->assertSame($projectId, $confirmedB['currentOdeUsers']['odeId'] ?? null);
+    }
 }

@@ -37,15 +37,14 @@ abstract class ExelearningRealTimeE2EBase extends ExelearningE2EBase
     }
 
     /**
-     * Example method to retrieve a share URL from the main client.
+     * Retrieves the current page URL after saving the document.
+     *
+     * The URL returned by this method is the same as the current one,
+     * but the document must be saved first to ensure that all related
+     * data (such as the session or project state) has been persisted.
      * 
-     * The mainClient is returning a web page with the content <html>
-     * <head><meta name="color-scheme" content="light dark"><meta cha
-     * rset="utf-8"></head><body><pre>{"shareSessionUrl":"http:\/\/ex
-     * elearning-web:8080\/workarea?shareCode=xxxxxxx"}</pre><div cla
-     * ss="json-formatter-container"></div></body></html>
-     * thats why we are parsing it and extracting from PRE, we can do
-     * this better in the future.
+     * This method simulates a real user action by clicking the "Save"
+     * button (#head-top-save-button) before returning the current URL.
      *
      * @return string
      */
@@ -55,19 +54,67 @@ abstract class ExelearningRealTimeE2EBase extends ExelearningE2EBase
             return '';
         }
 
-        $this->mainClient->waitForVisibility('#head-top-share-button');
+        $this->waitForWorkareaBoot($this->mainClient);
 
-        $apiUrl = '/api/current-ode-users-management/current-ode-user/get/ode/session/id/current/ode/user';
+        // Wait until the save button is visible and clickable
+        $this->mainClient->waitFor('#head-top-save-button');
 
-        // Execute this request by means of AJAX to avoid (in some cases)
-        // `\Facebook\WebDriver\Exception\UnexpectedAlertOpenException`
-        $shareSessionUrl = $this->mainClient->executeScript("return (async () => { const response = await fetch('$apiUrl'); if (!response.ok) { return ''; } const data = await response.json(); return data.shareSessionUrl ? data.shareSessionUrl : ''; })();");
+        // Click the save button (simulating a real user action)
+        $button = $this->mainClient->findElement(WebDriverBy::cssSelector('#head-top-save-button'));
+        $button->click();
 
-        if (!$shareSessionUrl) {
-            return '';
+        // Return the full URL currently in the browser
+        return (string) $this->mainClient->getCurrentURL();
+
+    }
+
+    /**
+     * Wait until the workarea removes the loading overlay.
+     */
+    protected function waitForWorkareaBoot(Client $client, int $timeoutSeconds = 60): void
+    {
+        $client->waitFor('#head-top-share-button');
+        $client->wait($timeoutSeconds)->until(
+            function () use ($client) {
+                $isLoading = $client->executeScript(
+                    "const el = document.querySelector('#load-screen-main'); return el ? el.classList.contains('loading') : false;"
+                );
+
+                return !$isLoading;
+            },
+            'Workarea never finished loading.'
+        );
+    }
+
+    /**
+     * Poll until the concurrent user widget reflects the expected amount.
+     */
+    protected function waitForConcurrentUserCount(Client $client, int $expected, int $timeoutSeconds = 45): void
+    {
+        $client->waitFor('#exe-concurrent-users');
+        $client->wait($timeoutSeconds)->until(
+            function () use ($client, $expected) {
+                $value = $this->getConcurrentUserCount($client);
+
+                return $value === $expected;
+            },
+            sprintf('Expected %d concurrent users but timed out.', $expected)
+        );
+    }
+
+    protected function getConcurrentUserCount(Client $client): int
+    {
+        $raw = $client->executeScript(
+            "const el = document.querySelector('#exe-concurrent-users'); return el ? el.getAttribute('num') : null;"
+        );
+
+        if (null === $raw || '' === $raw) {
+            return 0;
         }
 
-        return htmlspecialchars_decode($shareSessionUrl);
+        $numeric = (int) $raw;
+
+        return max($numeric, 0);
     }
 
 

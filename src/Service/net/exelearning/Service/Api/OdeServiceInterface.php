@@ -221,6 +221,7 @@ interface OdeServiceInterface
         $clientIp,
         $forceCloseOdeUserPreviousSession,
         $odeValues,
+        bool $allowParallelSessions = false,
     );
 
     /**

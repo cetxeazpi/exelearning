@@ -149,12 +149,26 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $odeNavStructureSyncRepo = $this->entityManager->getRepository(OdeNavStructureSync::class);
         $odeNavStructureSync = $odeNavStructureSyncRepo->find($odeNavStructureSyncId);
 
+        if (!$odeNavStructureSync instanceof OdeNavStructureSync) {
+            $responseData['responseMessage'] = 'Invalid navigation node identifier';
+            $jsonData = $this->getJsonSerialized($responseData);
+
+            return new JsonResponse($jsonData, JsonResponse::HTTP_BAD_REQUEST, [], true);
+        }
+
         // Check current_idevice of concurrent users
         $isIdeviceFree = $this->currentOdeUsersService->checkIdeviceCurrentOdeUsers($odeSessionId, $odeIdeviceId, $odeBlockId, $user);
 
         if ($isIdeviceFree) {
             // Update CurrentOdeUsers
-            $this->currentOdeUsersService->updateCurrentIdevice($odeNavStructureSync, $odeBlockId, $odeIdeviceId, $databaseUser, $odeCurrentUsersFlags);
+            $updated = $this->currentOdeUsersService->updateCurrentIdevice($odeNavStructureSync, $odeBlockId, $odeIdeviceId, $databaseUser, $odeCurrentUsersFlags);
+
+            if (null === $updated) {
+                $responseData['responseMessage'] = 'Unable to register the current edition session';
+                $jsonData = $this->getJsonSerialized($responseData);
+
+                return new JsonResponse($jsonData, JsonResponse::HTTP_CONFLICT, [], true);
+            }
 
             $responseData['responseMessage'] = 'OK';
         } else {

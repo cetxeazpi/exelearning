@@ -1309,6 +1309,7 @@ class OdeService implements OdeServiceInterface
      */
     private function openElp($newOdeSessionId, $elpFileName, $odeSessionDistDirPath, $checkElpFile)
     {
+        $isImportIdevices = false;
         $destinationFilePathName = $odeSessionDistDirPath.$elpFileName;
         $elpCopied = FileUtil::copyFile($checkElpFile['elpFilePathName'], $destinationFilePathName);
 
@@ -2113,8 +2114,14 @@ class OdeService implements OdeServiceInterface
             // Generate new odeSessionId
             $newOdeSessionId = Util::generateId();
 
-            // Create dist dir
-            $odeSessionDistDirPath = $this->fileHelper->getOdeSessionDistDirForUser($odeSessionId, $user);
+            // Create dist dir for the fresh session (avoids falling back to the public dir)
+            $odeSessionDistDirPath = $this->fileHelper->getOdeSessionDistDirForUser($newOdeSessionId, $user);
+            if (!$odeSessionDistDirPath) {
+                $result['responseMessage'] = 'error: unable to create session dist directory';
+
+                return $result;
+            }
+
             $result = $this->openElp($newOdeSessionId, $elpFileName, $odeSessionDistDirPath, $checkElpFile);
 
             // Check if the elp file could be opened correctly
@@ -2154,6 +2161,7 @@ class OdeService implements OdeServiceInterface
         $clientIp,
         $forceCloseOdeUserPreviousSession,
         $odeValues,
+        bool $allowParallelSessions = false,
     ) {
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
 
@@ -2175,11 +2183,13 @@ class OdeService implements OdeServiceInterface
         }
 
         // Check if user has already an open session
-        $currentSessionsForUser = $currentOdeUsersRepository->getCurrentSessionForUser(
-            $dbUser->getUserIdentifier()
-        );
-        if (!empty($currentSessionsForUser)) {
-            throw new UserAlreadyOpenSessionException();
+        if (!$allowParallelSessions) {
+            $currentSessionsForUser = $currentOdeUsersRepository->getCurrentSessionForUser(
+                $dbUser->getUserIdentifier()
+            );
+            if (!empty($currentSessionsForUser)) {
+                throw new UserAlreadyOpenSessionException();
+            }
         }
 
         // Insert into current_ode_users

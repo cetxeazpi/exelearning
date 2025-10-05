@@ -1036,6 +1036,17 @@ function showErrorDialog(message) {
 }
 
 function getPhpBinaryPath() {
+
+  // --- Force system PHP if architecture is ARM ---
+  if (process.arch === 'arm64') {
+    const systemPhp = '/usr/bin/php';
+    if (fs.existsSync(systemPhp)) {
+      console.log('Using system PHP:', systemPhp);
+      return systemPhp;
+    }
+  }
+
+
   const bundledDir = path.join(process.resourcesPath, 'php-bin', 'php-8.4');
   const bundledBin = path.join(bundledDir, process.platform === 'win32' ? 'php.exe' : 'php');
   if (fs.existsSync(bundledBin)) return bundledBin;

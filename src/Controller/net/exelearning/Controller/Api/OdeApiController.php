@@ -780,6 +780,10 @@ class OdeApiController extends DefaultApiController
         $elpFileName = $request->get('odeFileName');
         $elpFilePath = $request->get('odeFilePath');
         $forceCloseOdeUserPreviousSession = $request->get('forceCloseOdeUserPreviousSession');
+        $allowParallelSessions = filter_var(
+            $request->get('allowParallelSessions'),
+            FILTER_VALIDATE_BOOL
+        );
 
         $themesInstallationEnabled = $this->getParameter('app.online_themes_install');
         $isOnline = $this->getParameter('app.online_mode');
@@ -830,7 +834,10 @@ class OdeApiController extends DefaultApiController
                     $elpFileName,
                     $elpFilePath,
                     $databaseUser,
-                    $forceCloseOdeUserPreviousSession
+                    $forceCloseOdeUserPreviousSession,
+                    false,
+                    null,
+                    $allowParallelSessions
                 );
             } catch (\Exception $e) {
                 $result['responseMessage'] = $this->translator->trans('The file content is wrong');
@@ -855,7 +862,8 @@ class OdeApiController extends DefaultApiController
                 $databaseUser,
                 $clientIp,
                 $forceCloseOdeUserPreviousSession,
-                $odeValues
+                $odeValues,
+                $allowParallelSessions
             );
         } catch (UserAlreadyOpenSessionException $e) {
             $result['responseMessage'] = 'error: '.$e->getMessage();

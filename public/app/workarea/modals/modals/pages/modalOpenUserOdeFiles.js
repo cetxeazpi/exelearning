@@ -20,6 +20,50 @@ export default class modalOpenUserOdeFiles extends Modal {
     }
 
     /**
+     * Build a workarea URL that preserves contextual params.
+     *
+     * @param {{ odeSessionId?: string|null, odeId?: string|number|null }} params
+     * @returns {string}
+     */
+    buildWorkareaUrl(params = {}) {
+        const { odeSessionId = null, odeId = null } = params;
+        const basePath = eXeLearning.symfony.basePath || '';
+        let workareaPath = 'workarea';
+        if (basePath) {
+            const trimmed = basePath.endsWith('/')
+                ? basePath.slice(0, -1)
+                : basePath;
+            workareaPath = `${trimmed}/workarea`;
+        }
+
+        const searchParams = new URLSearchParams(window.location.search);
+        if (odeSessionId) {
+            searchParams.set('odeSessionId', odeSessionId);
+        } else {
+            searchParams.delete('odeSessionId');
+        }
+        if (odeId) {
+            searchParams.set('projectId', odeId);
+        } else {
+            searchParams.delete('projectId');
+            searchParams.delete('project');
+        }
+
+        const query = searchParams.toString();
+        return query ? `${workareaPath}?${query}` : workareaPath;
+    }
+
+    /**
+     * Open workarea with the provided params in a new browser tab.
+     *
+     * @param {{ odeSessionId?: string|null, odeId?: string|number|null }} params
+     */
+    openProjectInNewTab(params = {}) {
+        const targetUrl = this.buildWorkareaUrl(params);
+        window.open(targetUrl, '_blank', 'noopener');
+    }
+
+    /**
      *
      * @param {*} data
      */
@@ -558,6 +602,7 @@ export default class modalOpenUserOdeFiles extends Modal {
             elpFileName: id,
             odeSessionId: eXeLearning.app.project.odeSession,
             projectId: eXeLearning.app.project.odeId,
+            allowParallelSessions: true,
         };
         let odeParams = {
             odeSessionId: eXeLearning.app.project.odeSession,
@@ -572,11 +617,12 @@ export default class modalOpenUserOdeFiles extends Modal {
         };
         let response = await eXeLearning.app.api.postSelectedOdeFile(params);
         if (response.responseMessage == 'OK') {
-            eXeLearning.app.project.odeSession = response.odeSessionId;
-            eXeLearning.app.project.odeVersion = response.odeVersionId;
-            eXeLearning.app.project.versionName = response.odeVersionName;
-            // Load project
-            await eXeLearning.app.project.openLoad();
+            eXeLearning.app.modals.openuserodefiles.close();
+            this.openProjectInNewTab({
+                odeSessionId: response.odeSessionId,
+                odeId: response.odeId,
+            });
+            return;
         } else {
             eXeLearning.app.api
                 .postCheckCurrentOdeUsers(odeParams)
@@ -627,19 +673,18 @@ export default class modalOpenUserOdeFiles extends Modal {
     async openUserOdeFilesWithOpenSession(id) {
         let params = {
             elpFileName: id,
-            forceCloseOdeUserPreviousSession: true,
             odeSessionId: eXeLearning.app.project.odeSession,
             projectId: eXeLearning.app.project.odeId,
+            allowParallelSessions: true,
         };
         let response = await eXeLearning.app.api.postSelectedOdeFile(params);
         if (response.responseMessage == 'OK') {
-            eXeLearning.app.project.odeSession = response.odeSessionId;
-            eXeLearning.app.project.odeVersion = response.odeVersionId;
-            eXeLearning.app.project.odeId = response.odeId;
-            // Load project
-            await eXeLearning.app.project.openLoad();
-            // Check ode theme
-            this.loadOdeTheme(response);
+            eXeLearning.app.modals.openuserodefiles.close();
+            this.openProjectInNewTab({
+                odeSessionId: response.odeSessionId,
+                odeId: response.odeId,
+            });
+            return;
         } else {
             // Open eXe alert modal
             setTimeout(() => {
@@ -859,6 +904,7 @@ export default class modalOpenUserOdeFiles extends Modal {
             odeFileName: odeFileName,
             odeFilePath: odeFilePath,
             odeNavStructureSyncId: selectedNavId,
+            allowParallelSessions: true,
         };
 
         response = await eXeLearning.app.api.postLocalXmlPropertiesFile(data);
@@ -912,6 +958,7 @@ export default class modalOpenUserOdeFiles extends Modal {
             odeFileName: odeFileName,
             odeFilePath: odeFilePath,
             odeNavStructureSyncId: selectedNavId,
+            allowParallelSessions: true,
         };
         if (!isImportIdevices) {
             response = await eXeLearning.app.api.postLocalOdeFile(data);
@@ -920,14 +967,6 @@ export default class modalOpenUserOdeFiles extends Modal {
         }
         if (response.responseMessage == 'OK') {
             if (!isImportIdevices) {
-                eXeLearning.app.project.odeSession = response.odeSessionId;
-                eXeLearning.app.project.odeVersion = response.odeVersionId;
-                eXeLearning.app.project.odeId = response.odeId;
-                // Ensure Electron saves target under current project key immediately
-                try {
-                    window.__currentProjectId = response.odeId;
-                } catch (_e) {}
-                // Remember the chosen local ELP path (prefer original local path if available)
                 try {
                     const originalPath = window.__originalElpPath;
                     if (
@@ -935,20 +974,19 @@ export default class modalOpenUserOdeFiles extends Modal {
                         typeof window.electronAPI.setSavedPath === 'function' &&
                         (originalPath || odeFilePath)
                     ) {
-                        const key =
-                            response.odeId ||
-                            window.__currentProjectId ||
-                            'default';
+                        const key = response.odeId || 'default';
                         window.electronAPI.setSavedPath(
                             key,
                             originalPath || odeFilePath
                         );
                     }
                 } catch (_e) {}
-                // Load project
-                await eXeLearning.app.project.openLoad();
-                // Check ode theme
-                this.loadOdeTheme(response);
+                eXeLearning.app.modals.openuserodefiles.close();
+                this.openProjectInNewTab({
+                    odeSessionId: response.odeSessionId,
+                    odeId: response.odeId,
+                });
+                return;
             } else {
                 // Update synchronize flag to update current users
                 eXeLearning.app.project.updateCurrentOdeUsersUpdateFlag(
@@ -999,18 +1037,10 @@ export default class modalOpenUserOdeFiles extends Modal {
         let params = {
             odeFileName: odeFileName,
             odeFilePath: odeFilePath,
-            forceCloseOdeUserPreviousSession: true,
+            allowParallelSessions: true,
         };
         let response = await eXeLearning.app.api.postLocalOdeFile(params);
         if (response.responseMessage == 'OK') {
-            eXeLearning.app.project.odeSession = response.odeSessionId;
-            eXeLearning.app.project.odeVersion = response.odeVersionId;
-            eXeLearning.app.project.odeId = response.odeId;
-            // Ensure Electron saves target under current project key immediately
-            try {
-                window.__currentProjectId = response.odeId;
-            } catch (_e) {}
-            // Remember the chosen local ELP path (prefer original local path if available)
             try {
                 const originalPath = window.__originalElpPath;
                 if (
@@ -1018,20 +1048,19 @@ export default class modalOpenUserOdeFiles extends Modal {
                     typeof window.electronAPI.setSavedPath === 'function' &&
                     (originalPath || odeFilePath)
                 ) {
-                    const key =
-                        response.odeId ||
-                        window.__currentProjectId ||
-                        'default';
+                    const key = response.odeId || 'default';
                     window.electronAPI.setSavedPath(
                         key,
                         originalPath || odeFilePath
                     );
                 }
             } catch (_e) {}
-            // Load project
-            await eXeLearning.app.project.openLoad();
-            // Check ode theme
-            this.loadOdeTheme(response);
+            eXeLearning.app.modals.openuserodefiles.close();
+            this.openProjectInNewTab({
+                odeSessionId: response.odeSessionId,
+                odeId: response.odeId,
+            });
+            return;
         } else {
             // Open eXe alert modal
             setTimeout(() => {

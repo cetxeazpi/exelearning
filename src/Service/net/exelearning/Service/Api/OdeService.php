@@ -1823,6 +1823,7 @@ class OdeService implements OdeServiceInterface
         $forceCloseOdeUserPreviousSession,
         $isImportIdevices = false,
         $odeNavStructureSync = null,
+        bool $allowParallelSessions = false,
     ) {
         $result = [];
 
@@ -1841,7 +1842,11 @@ class OdeService implements OdeServiceInterface
         }
 
         // Check if the user is in the session (throw exception)
-        $this->checkSessionCurrentUser($user, $forceCloseOdeUserPreviousSession, $allowParallelSessions ?? false);
+        $this->checkSessionCurrentUser(
+            $user,
+            $forceCloseOdeUserPreviousSession,
+            $allowParallelSessions
+        );
 
         // Don't create new session in component elp
         if (!$isImportIdevices) {

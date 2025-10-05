@@ -147,6 +147,7 @@ interface OdeServiceInterface
         $forceCloseOdeUserPreviousSession,
         $isImportIdevices = false,
         $odeNavStructureSync = null,
+        bool $allowParallelSessions = false,
     );
 
     /**

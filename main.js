@@ -1,4 +1,4 @@
-// main.js — Tabs Option B (renderer-managed <webview> tabs on Win/Linux, native tabs on macOS)
+// main.js 
 // Notes:
 //  - macOS: native tab bar (always visible) using tabbingIdentifier + one-time toggle.
 //  - Windows/Linux: the renderer owns a simple HTML tab bar; each tab is a <webview>.
@@ -302,7 +302,6 @@ function createMacTab(url, title = 'Document') {
   });
 
   bindMacCloseSafety(win);
-  bindTitleSync(win, title);
 
   // Optional: set the title ASAP (native tabs show it)
   try { win.setTitle(title); } catch (_) {}
@@ -344,33 +343,34 @@ function bindMacCloseSafety(win) {
   win.on('close', () => { /* no preventDefault on macOS */ });
 }
 
-function bindTitleSync(win, fallbackTitle = 'Document') {
-  return;
-  if (!win) return;
-  win.webContents.on('page-title-updated', (event, title) => {
-    // Avoid flicker and ensure non-empty titles.
-    event.preventDefault();
-    const safe = (title && title.trim()) ? title.trim() : fallbackTitle;
-    try { win.setTitle(safe); } catch (_) {}
-  });
-}
-
 // ───────────────── window.open handler ─────────────────
 // macOS: create a real BrowserWindow that joins the native tab group.
-// Win/Linux: deny and ask the renderer to create a new <webview> tab.
+// Win/Linux: create a new window.
 function attachOpenHandler(win) {
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isMac) {
-      // Always open as native tab instead of separate window
+      // macOS → open in a native tab
       createMacTab(url, 'New');
       return { action: 'deny' };
     } else {
-      // Windows / Linux => ask renderer to add a new <webview> tab
-      try { win.webContents.send('tabs:create', { title: 'New', url }); } catch (_) {}
+      // Windows/Linux → open in a new separate BrowserWindow
+      const child = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        show: true,
+        webPreferences: {
+          nodeIntegration: false,
+          contextIsolation: true,
+          preload: path.join(__dirname, 'preload.js'),
+        },
+      });
+      child.loadURL(url);
+      child.on('closed', () => {});
       return { action: 'deny' };
     }
   });
 }
+
 
 
 // ───────────────── Feature flags ─────────────────
@@ -399,24 +399,23 @@ function createWindow() {
     const isDev = determineDevMode();
 
     // Main window:
-    //  - macOS: native tabs (no webviewTag needed)
-    //  - Win/Linux: renderer-managed tabs => enable webviewTag
+    //  - macOS: native tabs (tabbingIdentifier)
+    //  - Win/Linux: normal window, no webviewTag
     mainWindow = new BrowserWindow({
       width: 1250,
       height: 800,
       autoHideMenuBar: !isDev,
-      tabbingIdentifier: 'mainGroup',
+      ...(isMac ? { tabbingIdentifier: 'mainGroup' } : {}),
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
         preload: path.join(__dirname, 'preload.js'),
-        webviewTag: !isMac // only for Windows/Linux
+        webviewTag: false, // never use <webview> tabs now
       },
       show: ALLOW_UI_IN_CI ? true : !IS_E2E,
     });
-    if (isMac) bindMacCloseSafety(mainWindow);
-    bindTitleSync(mainWindow, 'main window');
 
+    if (isMac) bindMacCloseSafety(mainWindow);
 
     mainWindow.setMenuBarVisibility(isDev);
 
@@ -440,9 +439,6 @@ function createWindow() {
         setPref('macTabBarForced', true);
       }
     }
-
-    // Menu with a “New Tab” item across OSes
-    buildAppMenu();
 
     mainWindow.webContents.on('did-create-window', (childWindow) => {
       console.log('Child window created');
@@ -745,26 +741,16 @@ ipcMain.handle('app:exportToFolder', async (e, { downloadUrl }) => {
 app.on('browser-window-created', (_event, window) => {
   attachOpenHandler(window);
   if (isMac) bindMacCloseSafety(window);
-  bindTitleSync(window, 'Document');
-
 });
 
 // ───────────────── Tabs API: openNewDocument ─────────────────
 /**
- * Opens a new tabbed window on macOS (native tab) or asks the renderer to add a <webview> tab on Win/Linux.
+ * Opens a new tabbed window on macOS (native tab) or open a new window on Win/Linux.
  */
 function openNewDocument(url) {
   if (isMac) {
-    // Always create a real native tab instead of a separate window
     return createMacTab(url, 'Document');
   } else {
-    const target = mainWindow || BrowserWindow.getAllWindows()[0];
-    if (target && !target.isDestroyed()) {
-      target.webContents.send('tabs:create', { title: 'Document', url });
-      target.show();
-      target.focus();
-      return target;
-    }
     const win = new BrowserWindow({
       width: 1200,
       height: 800,
@@ -773,16 +759,13 @@ function openNewDocument(url) {
         nodeIntegration: false,
         contextIsolation: true,
         preload: path.join(__dirname, 'preload.js'),
-        webviewTag: true
       },
     });
-    win.loadURL(`http://localhost:${customEnv.APP_PORT}`);
-    win.once('ready-to-show', () => {
-      win.webContents.send('tabs:create', { title: 'Document', url });
-    });
+    win.loadURL(url);
     return win;
   }
 }
+
 
 // ───────────────── CI / ready ─────────────────
 if (IS_E2E) app.disableHardwareAcceleration();
@@ -1106,85 +1089,4 @@ function tOrDefault(key, fallback) {
   }
 }
 
-// ───────────────── Menu builder ─────────────────
-function buildAppMenu() {
-  const template = [];
-
-  if (isMac) {
-    template.push({
-      label: app.name,
-      submenu: [
-        { role: 'about' },
-        { type: 'separator' },
-        { role: 'services' },
-        { type: 'separator' },
-        { role: 'hide' },
-        { role: 'hideOthers' },
-        { role: 'unhide' },
-        { type: 'separator' },
-        { role: 'quit' },
-      ],
-    });
-
-    template.push({
-      label: 'File',
-      submenu: [
-        {
-          label: 'New Tab',
-          accelerator: 'CmdOrCtrl+T',
-          click: () => createMacTab(`http://localhost:${customEnv.APP_PORT}`, 'New'),
-        },
-        { type: 'separator' },
-        { role: 'close', label: 'Close Window' }, // native Cmd+W still works per-tab
-      ],
-    });
-
-    // 👇 give explicit labels to avoid blank, locale-dependent items
-    template.push({
-      label: 'Window',
-      role: 'windowMenu',
-      submenu: [
-        { role: 'minimize', label: 'Minimize' },
-        { role: 'zoom', label: 'Zoom' },
-        { type: 'separator' },
-        { role: 'toggleTabBar', label: 'Show/Hide Tab Bar' },
-        { role: 'selectPreviousTab', label: 'Show Previous Tab' },
-        { role: 'selectNextTab', label: 'Show Next Tab' },
-        { role: 'mergeAllWindows', label: 'Merge All Windows' },
-        { role: 'moveTabToNewWindow', label: 'Move Tab to New Window' },
-        // Electron supports this on recent macOS; harmless if it no-ops
-        { role: 'showAllTabs', label: 'Show All Tabs' },
-        { type: 'separator' },
-        { role: 'front', label: 'Bring All to Front' },
-      ],
-    });
-  } else {
-    template.push({
-      label: 'File',
-      submenu: [
-        {
-          label: 'New Tab',
-          accelerator: 'Ctrl+T',
-          click: () => {
-            const target = mainWindow || BrowserWindow.getAllWindows()[0];
-            if (target && !target.isDestroyed()) {
-              target.webContents.send('tabs:create', {
-                title: 'New',
-                url: `http://localhost:${customEnv.APP_PORT}/`,
-              });
-              target.show(); target.focus();
-            }
-          },
-        },
-        { role: 'quit' },
-      ],
-    });
-    template.push({ role: 'editMenu' });
-    template.push({ role: 'viewMenu' });
-    template.push({ role: 'windowMenu' });
-    template.push({ role: 'help', submenu: [] });
-  }
-
-  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-}
 

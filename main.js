@@ -284,35 +284,94 @@ function combineEnv() {
   env = Object.assign({}, customEnv, process.env);
 }
 
+function createMacTab(url, title = 'Document') {
+  // Parent is the currently focused window or the main one
+  const parent = BrowserWindow.getFocusedWindow() || mainWindow;
+
+  // Create the tabbed window hidden first
+  const win = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    show: false,                         // show after adding as tab
+    tabbingIdentifier: 'mainGroup',
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js'),
+    },
+  });
+
+  bindMacCloseSafety(win);
+  bindTitleSync(win, title);
+
+  // Optional: set the title ASAP (native tabs show it)
+  try { win.setTitle(title); } catch (_) {}
+
+  win.loadURL(url);
+
+  // When ready, add as a tab to the parent and then show
+  win.once('ready-to-show', () => {
+    try {
+      if (parent && !parent.isDestroyed()) {
+        parent.addTabbedWindow(win);     // <— key line: becomes a native tab
+      }
+      win.show();
+    } catch (_) {
+      // Fallback: just show if for any reason addTabbedWindow fails
+      win.show();
+    }
+  });
+
+  // Standard cleanup (doesn't block tab closing)
+  win.on('close', () => { /* no preventDefault here */ });
+
+  // Keep window.open handler behavior in new tabs too
+  attachOpenHandler(win);
+
+  return win;
+}
+
+function bindMacCloseSafety(win) {
+  if (!win || process.platform !== 'darwin') return;
+
+  // If the page tries to block close (beforeunload), allow closing anyway.
+  win.webContents.on('will-prevent-unload', (event) => {
+    // IMPORTANT: Calling preventDefault() here ALLOWS the unload/close.
+    event.preventDefault();
+  });
+
+  // Never call e.preventDefault() on 'close' for macOS windows/tabs.
+  win.on('close', () => { /* no preventDefault on macOS */ });
+}
+
+function bindTitleSync(win, fallbackTitle = 'Document') {
+  return;
+  if (!win) return;
+  win.webContents.on('page-title-updated', (event, title) => {
+    // Avoid flicker and ensure non-empty titles.
+    event.preventDefault();
+    const safe = (title && title.trim()) ? title.trim() : fallbackTitle;
+    try { win.setTitle(safe); } catch (_) {}
+  });
+}
+
 // ───────────────── window.open handler ─────────────────
 // macOS: create a real BrowserWindow that joins the native tab group.
 // Win/Linux: deny and ask the renderer to create a new <webview> tab.
 function attachOpenHandler(win) {
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isMac) {
-      const childWindow = new BrowserWindow({
-        width: 1200,
-        height: 800,
-        show: true,
-        tabbingIdentifier: 'mainGroup',
-        webPreferences: {
-          nodeIntegration: false,
-          contextIsolation: true,
-          preload: path.join(__dirname, 'preload.js'),
-          // webviewTag stays false on macOS; we rely on native tabs.
-        }
-      });
-      childWindow.loadURL(url);
-      attachOpenHandler(childWindow);
+      // Always open as native tab instead of separate window
+      createMacTab(url, 'New');
       return { action: 'deny' };
     } else {
-      try {
-        win.webContents.send('tabs:create', { title: 'New', url });
-      } catch (_e) {}
+      // Windows / Linux => ask renderer to add a new <webview> tab
+      try { win.webContents.send('tabs:create', { title: 'New', url }); } catch (_) {}
       return { action: 'deny' };
     }
   });
 }
+
 
 // ───────────────── Feature flags ─────────────────
 const ALLOW_UI_IN_CI = process.env.ALLOW_UI_IN_CI === '1' || process.env.ALLOW_UI_IN_CI === 'true';
@@ -355,6 +414,9 @@ function createWindow() {
       },
       show: ALLOW_UI_IN_CI ? true : !IS_E2E,
     });
+    if (isMac) bindMacCloseSafety(mainWindow);
+    bindTitleSync(mainWindow, 'main window');
+
 
     mainWindow.setMenuBarVisibility(isDev);
 
@@ -496,11 +558,15 @@ function createWindow() {
     }
 
     // Force-destroy, ignore any preventDefault in renderers
-    mainWindow.on('close', (e) => {
-      console.log('Window is being forced to close...');
-      e.preventDefault();
-      mainWindow.destroy();
-    });
+    if (!isMac) {
+      // On Windows/Linux we keep the force-close behavior
+      mainWindow.on('close', (e) => {
+        console.log('Window is being forced to close...');
+        e.preventDefault();
+        mainWindow.destroy();
+      });
+    }
+    // On macOS, do NOT preventDefault so native tab close (Cmd+W / tab "x") works.
 
     mainWindow.on('closed', () => { mainWindow = null; });
 
@@ -509,7 +575,7 @@ function createWindow() {
 
     // On macOS, support native new tab button (+) in the title bar
     app.on('new-window-for-tab', () => {
-      openNewDocument(`http://localhost:${customEnv.APP_PORT}`);
+      createMacTab(`http://localhost:${customEnv.APP_PORT}`, 'New');
     });
 
     // App exit hooks
@@ -678,6 +744,9 @@ ipcMain.handle('app:exportToFolder', async (e, { downloadUrl }) => {
 // ───────────────── Hook the window-open handler on any new BrowserWindow ─────────────────
 app.on('browser-window-created', (_event, window) => {
   attachOpenHandler(window);
+  if (isMac) bindMacCloseSafety(window);
+  bindTitleSync(window, 'Document');
+
 });
 
 // ───────────────── Tabs API: openNewDocument ─────────────────
@@ -686,19 +755,8 @@ app.on('browser-window-created', (_event, window) => {
  */
 function openNewDocument(url) {
   if (isMac) {
-    const win = new BrowserWindow({
-      width: 1200,
-      height: 800,
-      show: true,
-      tabbingIdentifier: 'mainGroup',
-      webPreferences: {
-        nodeIntegration: false,
-        contextIsolation: true,
-        preload: path.join(__dirname, 'preload.js'),
-      },
-    });
-    win.loadURL(url);
-    return win;
+    // Always create a real native tab instead of a separate window
+    return createMacTab(url, 'Document');
   } else {
     const target = mainWindow || BrowserWindow.getAllWindows()[0];
     if (target && !target.isDestroyed()) {
@@ -1039,7 +1097,6 @@ function tOrDefault(key, fallback) {
 
 // ───────────────── Menu builder ─────────────────
 function buildAppMenu() {
-  // Build a minimal menu with New Tab and native tab helpers on macOS
   const template = [];
 
   if (isMac) {
@@ -1054,36 +1111,41 @@ function buildAppMenu() {
         { role: 'hideOthers' },
         { role: 'unhide' },
         { type: 'separator' },
-        { role: 'quit' }
-      ]
+        { role: 'quit' },
+      ],
     });
+
     template.push({
       label: 'File',
       submenu: [
         {
           label: 'New Tab',
           accelerator: 'CmdOrCtrl+T',
-          click: () => openNewDocument(`http://localhost:${customEnv.APP_PORT}`)
+          click: () => createMacTab(`http://localhost:${customEnv.APP_PORT}`, 'New'),
         },
         { type: 'separator' },
-        { role: 'close' }
-      ]
+        { role: 'close', label: 'Close Window' }, // native Cmd+W still works per-tab
+      ],
     });
+
+    // 👇 give explicit labels to avoid blank, locale-dependent items
     template.push({
       label: 'Window',
       role: 'windowMenu',
       submenu: [
-        { role: 'minimize' },
-        { role: 'zoom' },
+        { role: 'minimize', label: 'Minimize' },
+        { role: 'zoom', label: 'Zoom' },
         { type: 'separator' },
-        { role: 'toggleTabBar' },
-        { role: 'selectPreviousTab' },
-        { role: 'selectNextTab' },
-        { role: 'mergeAllWindows' },
-        { role: 'moveTabToNewWindow' },
+        { role: 'toggleTabBar', label: 'Show/Hide Tab Bar' },
+        { role: 'selectPreviousTab', label: 'Show Previous Tab' },
+        { role: 'selectNextTab', label: 'Show Next Tab' },
+        { role: 'mergeAllWindows', label: 'Merge All Windows' },
+        { role: 'moveTabToNewWindow', label: 'Move Tab to New Window' },
+        // Electron supports this on recent macOS; harmless if it no-ops
+        { role: 'showAllTabs', label: 'Show All Tabs' },
         { type: 'separator' },
-        { role: 'front' }
-      ]
+        { role: 'front', label: 'Bring All to Front' },
+      ],
     });
   } else {
     template.push({
@@ -1097,15 +1159,14 @@ function buildAppMenu() {
             if (target && !target.isDestroyed()) {
               target.webContents.send('tabs:create', {
                 title: 'New',
-                url: `http://localhost:${customEnv.APP_PORT}/`
+                url: `http://localhost:${customEnv.APP_PORT}/`,
               });
-              target.show();
-              target.focus();
+              target.show(); target.focus();
             }
-          }
+          },
         },
-        { role: 'quit' }
-      ]
+        { role: 'quit' },
+      ],
     });
     template.push({ role: 'editMenu' });
     template.push({ role: 'viewMenu' });
@@ -1115,3 +1176,4 @@ function buildAppMenu() {
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
+

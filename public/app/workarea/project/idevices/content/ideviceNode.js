@@ -54,6 +54,8 @@ export default class IdeviceNode {
                 eXeLearning.mercure.jwtSecretKey
             );
         }
+    // Anti double-click save flag
+    this._saving = false;
     }
 
     /**
@@ -334,7 +336,7 @@ export default class IdeviceNode {
     toogleIdeviceButtonsState(disable) {
         if (!this.ideviceButtons) return;
         this.ideviceButtons
-            .querySelectorAll('.button-action-idevice')
+            .querySelectorAll('.button-action-idevice, .btn-action-menu')
             .forEach((button) => {
                 button.disabled = disable;
             });
@@ -354,16 +356,22 @@ export default class IdeviceNode {
      *
      */
     addBehaviourSaveIdeviceButton() {
-        this.ideviceButtons
-            .querySelector('#saveIdevice' + this.odeIdeviceId)
-            .addEventListener('click', (e) => {
-                if (e.target.disabled) return;
-                this.toogleIdeviceButtonsState(true);
-                // Save and desactivate component flag
-                this.save(true);
-                // Create the "Add Text" button
-                this.createAddTextBtn();
-                // Activate update flag
+        const btn = this.ideviceButtons.querySelector('#saveIdevice' + this.odeIdeviceId);
+        if (!btn) return;
+        btn.addEventListener('click', async (e) => {
+            if (this._saving || btn.disabled) return; // guard
+            this._saving = true;
+            btn.disabled = true;
+            this.toogleIdeviceButtonsState(true);
+            try {
+                const ok = await this.save(true);
+                if (ok) {
+                    this.createAddTextBtn();
+                } else {
+                    // restore buttons for retry on failure
+                    this.toogleIdeviceButtonsState(false);
+                    btn.disabled = false;
+                }
                 eXeLearning.app.project.updateCurrentOdeUsersUpdateFlag(
                     false,
                     null,
@@ -372,7 +380,10 @@ export default class IdeviceNode {
                     'EDIT',
                     null
                 );
-            });
+            } finally {
+                this._saving = false;
+            }
+        });
     }
 
     /**

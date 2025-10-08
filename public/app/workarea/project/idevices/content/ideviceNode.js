@@ -54,10 +54,11 @@ export default class IdeviceNode {
                 eXeLearning.mercure.jwtSecretKey
             );
         }
-    // Anti double-click save flag
-    this._saving = false;
+        // Anti double-click save flag
+        this._saving = false;
         // Anti double-click/open Edition flag
         this._openingEdition = false;
+        this._validationModalShown = false;
     }
 
     /**
@@ -340,9 +341,9 @@ export default class IdeviceNode {
                 // Check links (disabled) this.addBehaviouCheckBrokenLinksIdeviceButton();
                 break;
         }
-    // (Re)aplicar tooltips tras generar botones
-    this.addTooltips();
-    return this.ideviceButtons;
+        // (Re)aplicar tooltips tras generar botones
+        this.addTooltips();
+        return this.ideviceButtons;
     }
 
     /**
@@ -384,7 +385,7 @@ export default class IdeviceNode {
             }
         });
     }
-
+º
     addBehaviourExportIdeviceButton() {
         const btn = this.ideviceButtons.querySelector('#exportIdevice' + this.odeIdeviceId);
         if (!btn) return;
@@ -1363,7 +1364,7 @@ export default class IdeviceNode {
                     response.odePagStructureSync.odePagStructureSyncProperties
                 );
                 // Send box order
-                this.block.apiUpdateOrder(true).then((response) => {});
+                this.block.apiUpdateOrder(true).then((response) => { });
             }
         }
         // Error saving idevice
@@ -1436,6 +1437,7 @@ export default class IdeviceNode {
             // Add class error to idevice
             if (this.htmlView == false) {
                 this.ideviceBody.classList.add('save-error');
+                this._validationModalShown = true;
             }
         }
         // Save idevice
@@ -1463,6 +1465,7 @@ export default class IdeviceNode {
             // Add class error to idevice
             if (this.jsonProperties == false) {
                 this.ideviceBody.classList.add('save-error');
+                this._validationModalShown = true;
             }
         }
         if (this.jsonProperties && this.jsonProperties != 'undefined') {
@@ -2080,14 +2083,14 @@ export default class IdeviceNode {
         // Save data of idevice in database
         let saveOk = await this.saveIdeviceProcess();
         // Desactivate user flags
-        await eXeLearning.app.project.changeUserFlagOnEdit(
-            false,
-            this.odeNavStructureSyncId,
-            this.blockId,
-            this.odeIdeviceId
-        );
+
         if (saveOk) {
-            // this.sendPublishedNotification();
+            await eXeLearning.app.project.changeUserFlagOnEdit(
+                false,
+                this.odeNavStructureSyncId,
+                this.blockId,
+                this.odeIdeviceId
+            );
 
             this.resetWindowHash();
             this.goWindowToIdevice(100);
@@ -2107,18 +2110,22 @@ export default class IdeviceNode {
             this.engine.unsetIdeviceActive();
         } else {
             this.toogleIdeviceButtonsState(false);
-            setTimeout(() => {
-                if (
-                    !eXeLearning.app.modals.alert.modal._isShown &&
-                    !eXeLearning.app.modals.confirm.modal._isShown
-                ) {
-                    eXeLearning.app.modals.alert.show({
-                        title: _('Error saving the iDevice'),
-                        body: _('Failed to save the iDevice to database'),
-                        contentId: 'error',
-                    });
-                }
-            }, 500);
+            if (this._validationModalShown) {
+                this._validationModalShown = false;
+            } else {
+                setTimeout(() => {
+                    if (
+                        !eXeLearning.app.modals.alert.modal._isShown &&
+                        !eXeLearning.app.modals.confirm.modal._isShown
+                    ) {
+                        eXeLearning.app.modals.alert.show({
+                            title: _('Error saving the iDevice'),
+                            body: _('Failed to save the iDevice to database'),
+                            contentId: 'error',
+                        });
+                    }
+                }, 500);
+            }
         }
 
         return saveOk;
@@ -2450,7 +2457,7 @@ export default class IdeviceNode {
             // let buffer = await this.readFile(file);
             // await this.addUploadImage(buffer, file.name, id, type);
             await this.addUploadImage(file, file.name, id, type);
-        } catch (err) {}
+        } catch (err) { }
     }
 
     /**
@@ -2639,7 +2646,7 @@ export default class IdeviceNode {
         eXeLearning.app.api.postActivateCurrentOdeUsersUpdateFlag(params2);
     }
 
-    activateComponentFlag() {}
+    activateComponentFlag() { }
 
     sendPublishedNotification() {
         if (!this.offlineInstallation) {

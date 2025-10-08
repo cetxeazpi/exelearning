@@ -508,7 +508,7 @@ var $exeDevice = {
     },
 
     save: function () {
-        if (!$exeDevice.validateQuestion()) return;
+        if (!$exeDevice.validateQuestion()) return false;
 
         const dataGame = $exeDevice.validateData();
 

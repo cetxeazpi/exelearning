@@ -855,11 +855,11 @@ var $exeDevice = {
     },
 
     save: function () {
-        if (!$exeDevice.validateCard()) return;
+        if (!$exeDevice.validateCard()) return false;
 
         const dataGame = $exeDevice.validateData();
 
-        if (!dataGame) return;
+        if (!dataGame) return false;
 
         const fields = this.ci18n,
             i18n = fields;

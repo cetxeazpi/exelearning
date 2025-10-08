@@ -905,7 +905,7 @@ var $exeDevice = {
     },
 
     save: function () {
-        if (!$exeDevice.validatePhrase()) return;
+        if (!$exeDevice.validatePhrase()) return false
 
         const dataGame = $exeDevice.validateData();
 

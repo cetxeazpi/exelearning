@@ -357,7 +357,9 @@ export default class IdeviceNode {
      * BUTTONS EVENTS (restaurados)
      *********************************/
     addBehaviourSaveIdeviceButton() {
-        const btn = this.ideviceButtons.querySelector('#saveIdevice' + this.odeIdeviceId);
+        const btn = this.ideviceButtons.querySelector(
+            '#saveIdevice' + this.odeIdeviceId
+        );
         if (!btn) return;
         btn.addEventListener('click', async () => {
             if (this._saving || btn.disabled) return;
@@ -385,9 +387,11 @@ export default class IdeviceNode {
             }
         });
     }
-º
+    º;
     addBehaviourExportIdeviceButton() {
-        const btn = this.ideviceButtons.querySelector('#exportIdevice' + this.odeIdeviceId);
+        const btn = this.ideviceButtons.querySelector(
+            '#exportIdevice' + this.odeIdeviceId
+        );
         if (!btn) return;
         btn.addEventListener('click', () => {
             if (eXeLearning.app.project.checkOpenIdevice()) return;
@@ -459,12 +463,13 @@ export default class IdeviceNode {
                 this._openingEdition = true;
                 this.toogleIdeviceButtonsState(true);
                 try {
-                    const response = await eXeLearning.app.project.changeUserFlagOnEdit(
-                        true,
-                        this.odeNavStructureSyncId,
-                        this.blockId,
-                        this.odeIdeviceId
-                    );
+                    const response =
+                        await eXeLearning.app.project.changeUserFlagOnEdit(
+                            true,
+                            this.odeNavStructureSyncId,
+                            this.blockId,
+                            this.odeIdeviceId
+                        );
                     if (response.responseMessage !== 'OK') {
                         eXeLearning.app.modals.alert.show({
                             title: _('iDevice error'),
@@ -500,12 +505,13 @@ export default class IdeviceNode {
                 if (this._openingEdition) return; // guard doble clic sobre contenido
                 this._openingEdition = true;
                 try {
-                    const response = await eXeLearning.app.project.changeUserFlagOnEdit(
-                        true,
-                        this.odeNavStructureSyncId,
-                        this.blockId,
-                        this.odeIdeviceId
-                    );
+                    const response =
+                        await eXeLearning.app.project.changeUserFlagOnEdit(
+                            true,
+                            this.odeNavStructureSyncId,
+                            this.blockId,
+                            this.odeIdeviceId
+                        );
                     if (response.responseMessage !== 'OK') {
                         eXeLearning.app.modals.alert.show({
                             title: _('iDevice error'),
@@ -1364,7 +1370,7 @@ export default class IdeviceNode {
                     response.odePagStructureSync.odePagStructureSyncProperties
                 );
                 // Send box order
-                this.block.apiUpdateOrder(true).then((response) => { });
+                this.block.apiUpdateOrder(true).then((response) => {});
             }
         }
         // Error saving idevice
@@ -2457,7 +2463,7 @@ export default class IdeviceNode {
             // let buffer = await this.readFile(file);
             // await this.addUploadImage(buffer, file.name, id, type);
             await this.addUploadImage(file, file.name, id, type);
-        } catch (err) { }
+        } catch (err) {}
     }
 
     /**
@@ -2646,7 +2652,7 @@ export default class IdeviceNode {
         eXeLearning.app.api.postActivateCurrentOdeUsersUpdateFlag(params2);
     }
 
-    activateComponentFlag() { }
+    activateComponentFlag() {}
 
     sendPublishedNotification() {
         if (!this.offlineInstallation) {

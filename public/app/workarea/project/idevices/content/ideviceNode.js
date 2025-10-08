@@ -56,6 +56,8 @@ export default class IdeviceNode {
         }
     // Anti double-click save flag
     this._saving = false;
+        // Anti double-click/open Edition flag
+        this._openingEdition = false;
     }
 
     /**
@@ -230,6 +232,20 @@ export default class IdeviceNode {
         return this.ideviceBody;
     }
 
+    /**
+     * Toggle enable/disable de todos los botones de acción del iDevice
+     * (se perdió tras refactors). Desactiva también el propio contenedor.
+     * @param {Boolean} disable
+     */
+    toogleIdeviceButtonsState(disable) {
+        if (!this.ideviceButtons) return;
+        this.ideviceButtons
+            .querySelectorAll('.button-action-idevice, .btn-action-menu')
+            .forEach((button) => {
+                button.disabled = !!disable;
+            });
+    }
+
     /*********************************
      * BUTTONS GENERATION FUNCTIONS */
 
@@ -324,42 +340,26 @@ export default class IdeviceNode {
                 // Check links (disabled) this.addBehaviouCheckBrokenLinksIdeviceButton();
                 break;
         }
-        this.addTooltips();
-        return this.ideviceButtons;
+    // (Re)aplicar tooltips tras generar botones
+    this.addTooltips();
+    return this.ideviceButtons;
     }
 
     /**
-     * Toggle the idevice buttons action state
-     *
-     * @returns
-     */
-    toogleIdeviceButtonsState(disable) {
-        if (!this.ideviceButtons) return;
-        this.ideviceButtons
-            .querySelectorAll('.button-action-idevice, .btn-action-menu')
-            .forEach((button) => {
-                button.disabled = disable;
-            });
-    }
-
-    /**
-     * Create a button to add a Text iDevice
+     * Crear botón de añadir texto (legacy compatibility)
      */
     createAddTextBtn() {
         eXeLearning.app.menus.menuStructure.engine.menuStructureBehaviour.createAddTextBtn();
     }
 
     /*********************************
-     * BUTTONS EVENTS */
-
-    /**
-     *
-     */
+     * BUTTONS EVENTS (restaurados)
+     *********************************/
     addBehaviourSaveIdeviceButton() {
         const btn = this.ideviceButtons.querySelector('#saveIdevice' + this.odeIdeviceId);
         if (!btn) return;
-        btn.addEventListener('click', async (e) => {
-            if (this._saving || btn.disabled) return; // guard
+        btn.addEventListener('click', async () => {
+            if (this._saving || btn.disabled) return;
             this._saving = true;
             btn.disabled = true;
             this.toogleIdeviceButtonsState(true);
@@ -368,7 +368,6 @@ export default class IdeviceNode {
                 if (ok) {
                     this.createAddTextBtn();
                 } else {
-                    // restore buttons for retry on failure
                     this.toogleIdeviceButtonsState(false);
                     btn.disabled = false;
                 }
@@ -383,6 +382,30 @@ export default class IdeviceNode {
             } finally {
                 this._saving = false;
             }
+        });
+    }
+
+    addBehaviourExportIdeviceButton() {
+        const btn = this.ideviceButtons.querySelector('#exportIdevice' + this.odeIdeviceId);
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+            if (eXeLearning.app.project.checkOpenIdevice()) return;
+            eXeLearning.app.project
+                .isAvalaibleOdeComponent(this.blockId, this.odeIdeviceId)
+                .then((response) => {
+                    if (response.responseMessage !== 'OK') {
+                        eXeLearning.app.modals.alert.show({
+                            title: _('iDevice error'),
+                            body: _(response.responseMessage),
+                            contentId: 'error',
+                        });
+                    } else {
+                        this.downloadIdeviceSelected(
+                            this.blockId,
+                            this.odeIdeviceId
+                        );
+                    }
+                });
         });
     }
 
@@ -428,39 +451,42 @@ export default class IdeviceNode {
     addBehaviourEditionIdeviceButton() {
         this.ideviceButtons
             .querySelector('#editIdevice' + this.odeIdeviceId)
-            .addEventListener('click', (e) => {
+            .addEventListener('click', async (e) => {
+                if (this._openingEdition) return;
                 if (eXeLearning.app.project.checkOpenIdevice()) return;
                 if (e.target.disabled) return;
+                this._openingEdition = true;
                 this.toogleIdeviceButtonsState(true);
-                eXeLearning.app.project
-                    .changeUserFlagOnEdit(
+                try {
+                    const response = await eXeLearning.app.project.changeUserFlagOnEdit(
                         true,
                         this.odeNavStructureSyncId,
                         this.blockId,
                         this.odeIdeviceId
-                    )
-                    .then((response) => {
-                        if (response.responseMessage !== 'OK') {
-                            eXeLearning.app.modals.alert.show({
-                                title: _('iDevice error'),
-                                body: _(response.responseMessage),
-                                contentId: 'error',
-                            });
-                        } else {
-                            // Send operation log action to bbdd
-                            let additionalData = {
-                                blockId: this.blockId,
-                                odeIdeviceId: this.odeIdeviceId,
-                            };
-                            eXeLearning.app.project.sendOdeOperationLog(
-                                this.block.pageId,
-                                this.block.pageId,
-                                'EDIT_IDEVICE',
-                                additionalData
-                            );
-                            this.edition();
-                        }
-                    });
+                    );
+                    if (response.responseMessage !== 'OK') {
+                        eXeLearning.app.modals.alert.show({
+                            title: _('iDevice error'),
+                            body: _(response.responseMessage),
+                            contentId: 'error',
+                        });
+                        this.toogleIdeviceButtonsState(false);
+                        return;
+                    }
+                    let additionalData = {
+                        blockId: this.blockId,
+                        odeIdeviceId: this.odeIdeviceId,
+                    };
+                    eXeLearning.app.project.sendOdeOperationLog(
+                        this.block.pageId,
+                        this.block.pageId,
+                        'EDIT_IDEVICE',
+                        additionalData
+                    );
+                    await this.edition();
+                } finally {
+                    this._openingEdition = false;
+                }
             });
     }
 
@@ -468,38 +494,41 @@ export default class IdeviceNode {
      *
      */
     addBehaviourEditionIdeviceDoubleClick() {
-        this.ideviceBody.addEventListener('dblclick', (element) => {
+        this.ideviceBody.addEventListener('dblclick', async (element) => {
             if (this.mode == 'export') {
-                eXeLearning.app.project
-                    .changeUserFlagOnEdit(
+                if (this._openingEdition) return; // guard doble clic sobre contenido
+                this._openingEdition = true;
+                try {
+                    const response = await eXeLearning.app.project.changeUserFlagOnEdit(
                         true,
                         this.odeNavStructureSyncId,
                         this.blockId,
                         this.odeIdeviceId
-                    )
-                    .then((response) => {
-                        if (response.responseMessage !== 'OK') {
-                            eXeLearning.app.modals.alert.show({
-                                title: _('iDevice error'),
-                                body: _(response.responseMessage),
-                                contentId: 'error',
-                            });
-                        } else {
-                            // Send operation log action to bbdd
-                            let additionalData = {
-                                blockId: this.blockId,
-                                odeIdeviceId: this.odeIdeviceId,
-                            };
-                            eXeLearning.app.project.sendOdeOperationLog(
-                                this.block.pageId,
-                                this.block.pageId,
-                                'EDIT_IDEVICE',
-                                additionalData
-                            );
-                            this.edition();
-                            this.clearSelection();
-                        }
-                    });
+                    );
+                    if (response.responseMessage !== 'OK') {
+                        eXeLearning.app.modals.alert.show({
+                            title: _('iDevice error'),
+                            body: _(response.responseMessage),
+                            contentId: 'error',
+                        });
+                        return;
+                    }
+                    // Send operation log action to bbdd
+                    let additionalData = {
+                        blockId: this.blockId,
+                        odeIdeviceId: this.odeIdeviceId,
+                    };
+                    eXeLearning.app.project.sendOdeOperationLog(
+                        this.block.pageId,
+                        this.block.pageId,
+                        'EDIT_IDEVICE',
+                        additionalData
+                    );
+                    await this.edition();
+                    this.clearSelection();
+                } finally {
+                    this._openingEdition = false;
+                }
             }
         });
     }
@@ -2098,20 +2127,26 @@ export default class IdeviceNode {
     /**
      * Export -> Edition
      */
-    edition() {
+    // Implementación async de edición
+    async edition() {
         clearInterval(this.checkDeviceLoadInterval);
         if (this.engine.mode == 'view') {
             this.goWindowToIdevice(100);
-            this.loadInitScriptIdevice('edition');
-            this.engine.updateMode();
-        } else {
-            eXeLearning.app.modals.alert.show({
-                title: _('Not allowed'),
-                body: _(
-                    'You cannot edit another idevice until you save the current one'
-                ),
-            });
+            try {
+                await this.loadInitScriptIdevice('edition');
+                this.engine.updateMode();
+                return true;
+            } catch (e) {
+                return false;
+            }
         }
+        eXeLearning.app.modals.alert.show({
+            title: _('Not allowed'),
+            body: _(
+                'You cannot edit another idevice until you save the current one'
+            ),
+        });
+        return false;
     }
 
     /**

@@ -1217,7 +1217,6 @@ export default class NavbarFile {
     }
 
     /**
-<<<<<<< HEAD
      * Export Website to folder (unzipped) — offline Electron only
      */
     async exportHTML5FolderAsEvent() {
@@ -1295,8 +1294,6 @@ export default class NavbarFile {
     }
 
     /**
-=======
->>>>>>> c0ba7aea408904076081df962baf800d79424a91
      * Export the ode as HTML5 and download it
      *
      */
@@ -1824,6 +1821,60 @@ export default class NavbarFile {
             toast.remove();
         }, 1000);
 
+        eXeLearning.app.interface.connectionTime.loadLasUpdatedInInterface();
+    }
+
+    /**
+     * Export ePub3 (Save As...)
+     */
+    async exportEPUB3AsEvent() {
+        let toastData = {
+            title: _('Export'),
+            body: _('Generating export files...'),
+            icon: 'downloading',
+        };
+        let toast = eXeLearning.app.toasts.createToast(toastData);
+        let odeSessionId = eXeLearning.app.project.odeSession;
+        let response = await eXeLearning.app.api.getOdeExportDownload(
+            odeSessionId,
+            'epub3'
+        );
+        if (response['responseMessage'] == 'OK') {
+            const url = response['urlZipFile'];
+            const suggested = this.normalizeSuggestedName(
+                response['exportProjectName'],
+                'export-epub3'
+            );
+            const keyBase = window.__currentProjectId || 'default';
+            if (
+                window.electronAPI &&
+                typeof window.electronAPI.saveAs === 'function'
+            ) {
+                await window.electronAPI.saveAs(
+                    url,
+                    `${keyBase}:export-epub3`,
+                    suggested
+                );
+            } else {
+                this.downloadLink(url, suggested);
+            }
+            toast.toastBody.innerHTML = _('The project has been exported.');
+        } else {
+            toast.toastBody.innerHTML = _(
+                'An error occurred while exporting the project.'
+            );
+            toast.toastBody.classList.add('error');
+            eXeLearning.app.modals.alert.show({
+                title: _('Error'),
+                body: response['responseMessage']
+                    ? response['responseMessage']
+                    : _('Unknown error.'),
+                contentId: 'error',
+            });
+        }
+        setTimeout(() => {
+            toast.remove();
+        }, 1000);
         eXeLearning.app.interface.connectionTime.loadLasUpdatedInInterface();
     }
 

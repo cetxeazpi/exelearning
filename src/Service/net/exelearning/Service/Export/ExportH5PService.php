@@ -58,7 +58,7 @@ class ExportH5PService implements ExportServiceInterface
 
         // Choose layout (env override for tests)
         $layout = getenv('EXE_H5P_LAYOUT') ?: 'column';
-        if ($layout === 'course-presentation') {
+        if ('course-presentation' === $layout) {
             return $this->generateCoursePresentation(
                 $user,
                 $odeSessionId,
@@ -269,7 +269,7 @@ class ExportH5PService implements ExportServiceInterface
             ];
         }
 
-        $content = [ 'presentation' => [ 'slides' => $slides ] ];
+        $content = ['presentation' => ['slides' => $slides]];
         file_put_contents($contentDir.'content.json', json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
         $h5pJson = [

@@ -1,0 +1,78 @@
+# mkdocs.yml
+site_name: eXeLearning Docs
+docs_dir: doc
+repo_url: https://github.com/exelearning/exelearning
+edit_uri: edit/main/doc/
+
+theme:
+  name: material
+  favicon: favicon.ico
+  logo: logo-only.svg  
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Light mode
+  features:
+    - content.code.copy
+    - content.tooltips
+nav:
+  - Home: index.md
+  - Overview: overview.md
+  - Install: install.md
+  - Deployment: deployment.md
+  - Development:
+      - Environment: development/environment.md
+      - Version Control: development/version-control.md
+      - Contributing: development/contributing.md
+      - Testing: development/testing.md
+      - Internationalization: development/internationalization.md
+      - Real Time: development/real-time.md
+      - Customization: development/customization.md
+      - Installers: development/installers.md
+      - REST API: development/rest-api.md
+      - Authentication: development/authentication.md
+      
+
+
+plugins:
+  - search
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      linenums: true
+      linenums_style: pymdownx-inline  
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.emoji
+  - pymdownx.tasklist
+  - pymdownx.snippets:
+      base_path: doc
+      check_paths: true
+  - pymdownx.tabbed:
+      alternate_style: true
+
+
+extra_css:
+  - style.css
+
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/exelearning/exelearning
+  
+  generator: false
+
+
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn

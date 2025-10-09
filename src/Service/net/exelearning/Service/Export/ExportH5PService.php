@@ -90,7 +90,14 @@ class ExportH5PService implements ExportServiceInterface
             'preloadedCss' => [],
         ];
 
-        $folderName = \H5PCore::libraryToFolderName($libraryJson);
+        // Compute H5P library folder name without external dependency
+        // Convention: <machineName>-<major>.<minor>
+        $folderName = sprintf(
+            '%s-%d.%d',
+            $libraryJson['machineName'],
+            $libraryJson['majorVersion'],
+            $libraryJson['minorVersion']
+        );
         $libraryDir = $exportDirPath.$folderName.DIRECTORY_SEPARATOR;
         if (!is_dir($libraryDir)) {
             mkdir($libraryDir, 0775, true);

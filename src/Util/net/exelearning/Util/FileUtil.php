@@ -512,44 +512,25 @@ class FileUtil
     }
 
     /**
-     * Create a ZIP from a directory quickly using ZipArchive.
+     * Create a ZIP from a directory using ZipArchive.
      * - Stores already-compressed assets (CM_STORE).
-     * - Uses ZSTD for compression in the 'test' environment for speed.
-     * - Uses DEFLATE for other environments for better compatibility.
-     * - Adds empty directories only when they are truly empty.
+     * - Uses ZSTD in tests if available, otherwise DEFLATE.
+     * - Optionally adds directory entries.
      *
-<<<<<<< HEAD
-     * @param string $sourcePath
-     * @param string $outZipPath
-     * @param bool   $includeDirs Whether to include directory entries
+     * @param string $sourcePath  Directory to zip
+     * @param string $outZipPath  Destination ZIP path
+     * @param bool   $includeDirs Include directory entries
      *
      * @return bool
      */
     public static function zipDir($sourcePath, $outZipPath, $includeDirs = true)
-=======
-     * @param string $sourcePath   absolute or relative directory to zip
-     * @param string $outZipPath   destination ZIP filename (will be overwritten)
-     * @param int    $deflateLevel Compression level for DEFLATE (0=default, 1..9). Use 1 in tests.
-     */
-    public static function zipDir(string $sourcePath, string $outZipPath, int $deflateLevel = 1): bool
->>>>>>> ab2143338aefd587481b361fe773dba23f2e156c
     {
         $zip = new \ZipArchive();
 
-<<<<<<< HEAD
-        $z = new \ZipArchive();
-        $z->open($outZipPath, \ZipArchive::CREATE);
-        // $z->addEmptyDir($dirName);
-        if ($sourcePath == $dirName) {
-            self::dirToZip($sourcePath, $z, 0, $includeDirs);
-        } else {
-            self::dirToZip($sourcePath, $z, strlen("$sourcePath/"), $includeDirs);
-=======
         // Ensure output directory exists
         $parent = dirname($outZipPath);
         if (!is_dir($parent) && !mkdir($parent, 0755, true) && !is_dir($parent)) {
             return false;
->>>>>>> ab2143338aefd587481b361fe773dba23f2e156c
         }
 
         $flags = \ZipArchive::CREATE | \ZipArchive::OVERWRITE;
@@ -558,7 +539,6 @@ class FileUtil
         }
 
         // Determine compression method based on environment
-        // Use faster ZSTD for tests if available, otherwise default to DEFLATE
         $compressionMethod = (\defined('ZipArchive::CM_ZSTD') && 'test' === ($_ENV['APP_ENV'] ?? ''))
             ? \ZipArchive::CM_ZSTD
             : \ZipArchive::CM_DEFLATE;
@@ -579,13 +559,20 @@ class FileUtil
             \RecursiveIteratorIterator::SELF_FIRST
         );
 
+        $outReal = realpath($outZipPath) ?: $outZipPath;
         foreach ($it as $item) {
             $path = $item->getPathname();
             $local = str_replace('\\', '/', substr($path, $baseLen));
 
+            // Avoid including the output ZIP inside itself
+            $pathReal = realpath($path) ?: $path;
+            if ($pathReal === $outReal) {
+                continue;
+            }
+
             if ($item->isDir()) {
-                // Add only truly empty directories
-                if (!self::dirHasEntries($path)) {
+                // Add only truly empty directories if requested
+                if ($includeDirs && !self::dirHasEntries($path)) {
                     $zip->addEmptyDir($local);
                 }
                 continue;
@@ -605,11 +592,7 @@ class FileUtil
             }
 
             // 2) Use the selected compression method
-            if ($deflateLevel > 0) {
-                @$zip->setCompressionName($local, $compressionMethod, $deflateLevel);
-            } else {
-                @$zip->setCompressionName($local, $compressionMethod);
-            }
+            @$zip->setCompressionName($local, $compressionMethod);
         }
 
         return $zip->close();

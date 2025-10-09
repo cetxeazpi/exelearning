@@ -81,9 +81,7 @@ export default class NavbarFile {
         this.exportEPUB3AsButton = this.menu.navbar.querySelector(
             '#navbar-button-exportas-epub3'
         );
-        this.exportH5PButton = this.menu.navbar.querySelector(
-            '#navbar-button-export-h5p',
-        );
+        this.exportH5PButton = this.menu.navbar.querySelector('#navbar-button-export-h5p');
         this.exportXmlPropertiesButton = this.menu.navbar.querySelector(
             '#navbar-button-export-xml-properties'
         );
@@ -444,6 +442,7 @@ export default class NavbarFile {
     }
 
     setExportH5PEvent() {
+        if (!this.exportH5PButton) return;
         this.exportH5PButton.addEventListener('click', () => {
             if (eXeLearning.app.project.checkOpenIdevice()) return;
             this.exportH5PEvent();

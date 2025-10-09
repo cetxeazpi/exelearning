@@ -55,3 +55,8 @@ require dirname(__DIR__).'/vendor/autoload.php';
 if (method_exists(Dotenv::class, 'bootEnv')) {
     (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
 }
+
+// Load H5P test stubs if the real library is not installed
+if (!class_exists('H5PCore') || !interface_exists('H5PFrameworkInterface') || !class_exists('H5PValidator')) {
+    require_once __DIR__.'/Utils/H5PStubs.php';
+}

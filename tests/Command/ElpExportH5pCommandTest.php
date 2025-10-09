@@ -50,7 +50,15 @@ class ElpExportH5pCommandTest extends KernelTestCase
      */
     public function testExportElpToH5p(string $fixture): void
     {
-        $inputFile = realpath(__DIR__.'/../Fixtures/'.$fixture);
+        $fixturesDir = __DIR__.'/../Fixtures';
+        if (!is_dir($fixturesDir)) {
+            mkdir($fixturesDir, 0777, true);
+        }
+        $inputFile = $fixturesDir.'/'.$fixture;
+        if (!file_exists($inputFile)) {
+            $this->createBasicElpFixture($inputFile);
+        }
+        $inputFile = realpath($inputFile);
         $outputDir = sys_get_temp_dir().'/elp_export_h5p_'.uniqid();
         mkdir($outputDir, 0755, true);
         $this->tempPaths[] = $outputDir;
@@ -88,5 +96,61 @@ class ElpExportH5pCommandTest extends KernelTestCase
                 $this->filesystem->remove($path);
             }
         }
+    }
+
+    private function createBasicElpFixture(string $path): void
+    {
+        $tmp = sys_get_temp_dir().'/elp_fixture_'.uniqid();
+        mkdir($tmp, 0777, true);
+        $xml = <<<XML
+<?xml version="1.0" encoding="utf-8"?>
+<ode>
+  <odeProperties>
+    <odeProperty><key>pp_title</key><value>Basic Example</value></odeProperty>
+    <odeProperty><key>pp_lang</key><value>en</value></odeProperty>
+  </odeProperties>
+  <odeNavStructures>
+    <odeNavStructure>
+      <odePageId>page1</odePageId>
+      <odeParentPageId></odeParentPageId>
+      <pageName>Page 1</pageName>
+      <odeNavStructureOrder>1</odeNavStructureOrder>
+      <odeNavStructureProperties></odeNavStructureProperties>
+      <odePagStructures>
+        <odePagStructure>
+          <odePageId>page1</odePageId>
+          <odeBlockId>block1</odeBlockId>
+          <blockName>Block 1</blockName>
+          <iconName>text_snippet</iconName>
+          <odePagStructureOrder>1</odePagStructureOrder>
+          <odePagStructureProperties></odePagStructureProperties>
+          <odeComponents>
+            <odeComponent>
+              <odePageId>page1</odePageId>
+              <odeBlockId>block1</odeBlockId>
+              <odeIdeviceId>idev1</odeIdeviceId>
+              <odeIdeviceTypeName>text</odeIdeviceTypeName>
+              <htmlView><![CDATA[<p>Hello <strong>H5P</strong>!</p>]]></htmlView>
+              <jsonProperties>{}</jsonProperties>
+              <odeComponentsOrder>1</odeComponentsOrder>
+              <odeComponentsProperties></odeComponentsProperties>
+            </odeComponent>
+          </odeComponents>
+        </odePagStructure>
+      </odePagStructures>
+    </odeNavStructure>
+  </odeNavStructures>
+</ode>
+XML;
+        file_put_contents($tmp.'/content.xml', $xml);
+
+        $zip = new \ZipArchive();
+        $zip->open($path, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip->addFile($tmp.'/content.xml', 'content.xml');
+        $zip->close();
+
+        // Cleanup tmp
+        @unlink($tmp.'/content.xml');
+        @rmdir($tmp);
     }
 }

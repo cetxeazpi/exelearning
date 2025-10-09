@@ -16,6 +16,7 @@ use App\Helper\net\exelearning\Helper\UserHelper;
 use App\Properties;
 use App\Service\net\exelearning\Service\Export\ExportEPUB3Service;
 use App\Service\net\exelearning\Service\Export\ExportHTML5Service;
+use App\Service\net\exelearning\Service\Export\ExportH5PService;
 use App\Service\net\exelearning\Service\Export\ExportHTML5SPService;
 use App\Service\net\exelearning\Service\Export\ExportIMSService;
 use App\Service\net\exelearning\Service\Export\ExportSCORM12Service;
@@ -27,6 +28,7 @@ use App\Util\net\exelearning\Util\FileUtil;
 use App\Util\net\exelearning\Util\OdeXmlUtil;
 use App\Util\net\exelearning\Util\UrlUtil;
 use App\Util\net\exelearning\Util\Util;
+use App\Settings;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -52,6 +54,7 @@ class OdeExportService implements OdeExportServiceInterface
     private ExportIMSService $exportIMSService;
     private ExportEPUB3Service $exportEPUB3Service;
     private SluggerInterface $slugger;
+    private ExportH5PService $exportH5PService;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -70,6 +73,7 @@ class OdeExportService implements OdeExportServiceInterface
         ExportSCORM2004Service $exportSCORM2004Service,
         ExportIMSService $exportIMSService,
         ExportEPUB3Service $exportEPUB3Service,
+        ExportH5PService $exportH5PService,
         SluggerInterface $slugger,
     ) {
         $this->entityManager = $entityManager;
@@ -88,6 +92,7 @@ class OdeExportService implements OdeExportServiceInterface
         $this->exportSCORM2004Service = $exportSCORM2004Service;
         $this->exportIMSService = $exportIMSService;
         $this->exportEPUB3Service = $exportEPUB3Service;
+        $this->exportH5PService = $exportH5PService;
         $this->slugger = $slugger;
     }
 
@@ -301,6 +306,10 @@ class OdeExportService implements OdeExportServiceInterface
                 case Constants::EXPORT_TYPE_EPUB3:
                     $ext = Constants::FILE_EXTENSION_EPUB;
                     break;
+                case Constants::EXPORT_TYPE_H5P:
+                    $ext = Constants::FILE_EXTENSION_H5P;
+                    $typeSuffix = Constants::SUFFIX_TYPE_H5P;
+                    break;
                 case Constants::EXPORT_TYPE_HTML5:
                     $ext = Constants::FILE_EXTENSION_ZIP;
                     $typeSuffix = Constants::SUFFIX_TYPE_HTML5;
@@ -331,6 +340,8 @@ class OdeExportService implements OdeExportServiceInterface
             $response['urlZipFile'] = $urlExportDir.$exportFileName;
             // Add zip file name to response
             $response['zipFileName'] = $exportFileName;
+            // Provide export file name for clients
+            $response['exportProjectName'] = $exportFileName;
 
             // Stores the ode permanently
             $this->odeService->moveElpFileToPerm($saveOdeResultParameters, $dbUser, $isManualSave);
@@ -538,6 +549,51 @@ class OdeExportService implements OdeExportServiceInterface
             $resourcesPrefix = $baseUrl.$apiFilesRoute.'?resource='.$exportUrlPath;
         } else {
             $resourcesPrefix = '';
+        }
+
+        // H5P export: generate a minimal H5P package and return early
+        if (Constants::EXPORT_TYPE_H5P === $exportType) {
+            // Start with a clean directory
+            FileUtil::removeDirContent($exportParentDirPath);
+
+            // Compute pages data without creating extra dirs
+            $odeNavStructureSyncsSorted = self::getOdeNavStructureSyncsSorted($odeNavStructureSyncs);
+            $pagesFileData = self::getPagesData(
+                $exportDirPath,
+                $odeNavStructureSyncsSorted,
+                $userPreferencesDtos,
+                '',
+                $exportType
+            );
+
+            try {
+                $this->exportH5PService->generateExportFiles(
+                    $user,
+                    $odeSessionId,
+                    $odeNavStructureSyncsSorted,
+                    $pagesFileData,
+                    $odeProperties,
+                    [],
+                    [],
+                    [],
+                    [],
+                    [],
+                    $userPreferencesDtos,
+                    $theme,
+                    '',
+                    '',
+                    false,
+                    $this->translator
+                );
+            } catch (\Throwable $e) {
+                $response['responseMessage'] = $this->translator->trans('Export generation error');
+
+                return $response;
+            }
+
+            $response['responseMessage'] = 'OK';
+
+            return $response;
         }
 
         // Check if the ELP should be added to the export

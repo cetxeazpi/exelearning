@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/api/ode-export')]
@@ -42,6 +43,7 @@ class OdeExportApiController extends DefaultApiController
         UserHelper $userHelper,
         CurrentOdeUsersServiceInterface $currentOdeUsersService,
         TranslatorInterface $translator,
+        SerializerInterface $serializer,
     ) {
         $this->fileHelper = $fileHelper;
         $this->odeService = $odeService;
@@ -51,7 +53,7 @@ class OdeExportApiController extends DefaultApiController
         $this->currentOdeUsersService = $currentOdeUsersService;
         $this->translator = $translator;
 
-        parent::__construct($entityManager, $logger);
+        parent::__construct($entityManager, $logger, $serializer);
     }
 
     #[Route('/{odeSessionId}/{exportType}/download', methods: ['GET'], name: 'api_ode_export_download')]
@@ -122,7 +124,7 @@ class OdeExportApiController extends DefaultApiController
 
         $user = $this->getUser();
         $databaseUser = $this->userHelper->getDatabaseUser($user);
-
+        // $tempID= $this->fileHelper->getTempID(4);
         // Generate export file
         $odeExportResult = $this->odeExportService->export(
             $user,
@@ -131,7 +133,8 @@ class OdeExportApiController extends DefaultApiController
             $baseUrl,
             $exportType,
             true,
-            false
+            false,
+            bin2hex(random_bytes(6 / 2)).DIRECTORY_SEPARATOR
         );
 
         $jsonData = $this->getJsonSerialized($odeExportResult);
@@ -147,6 +150,14 @@ class OdeExportApiController extends DefaultApiController
 
         // Build the file path using DIRECTORY_SEPARATOR for cross-platform compatibility
         $filePath = implode(DIRECTORY_SEPARATOR, [$filesDir, $year, $month, $day, $random, $subdir, $file]);
+
+        // Helper: relative path from base
+        $relative = $filePath;
+        // Truncate if too long
+        if (strlen($relative) > 50) {
+            $relative = '…'.substr($relative, -47);
+        }
+
         // Check if the file exists before attempting to serve it
         if (!file_exists($filePath)) {
             // Quick and Dirty hack: if we can't find the file in the folder, sometimes is on tmp folder...
@@ -154,8 +165,13 @@ class OdeExportApiController extends DefaultApiController
             // Check if the file exists before attempting to serve it
             if (!file_exists($filePath)) {
                 // Throw a 404 Not Found exception if the file is not found
-                throw $this->createNotFoundException(sprintf('The file "%s" does not exist at the specified path.', $filePath));
+                throw $this->createNotFoundException(sprintf('The file "%s" does not exist at the specified path.', $relative));
             }
+        }
+
+        // If path is a directory, immediately 404
+        if (is_dir($filePath)) {
+            throw $this->createNotFoundException(sprintf('Attempt to access directory: %s', $relative));
         }
 
         return new Response(file_get_contents($filePath), 200, [

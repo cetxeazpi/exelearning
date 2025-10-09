@@ -1,3 +1,4 @@
+# config/packages/doctrine.yaml
 doctrine:
     dbal:
         driver: '%env(DB_DRIVER)%'
@@ -14,10 +15,11 @@ doctrine:
         # Specific configuration for the database (distinguish between databases)
         mapping_types:
             enum: string
+        use_savepoints: true
     orm:
-        auto_generate_proxy_classes: true
+        enable_native_lazy_objects: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-        quote_strategy: doctrine.orm.quote_strategy.ansi        
+        quote_strategy: doctrine.orm.quote_strategy.ansi
         auto_mapping: false
         mappings:
             App:
@@ -27,3 +29,5 @@ doctrine:
                 prefix: 'App\Entity'
                 alias: App
         report_fields_where_declared: true
+        controller_resolver:
+            auto_mapping: false

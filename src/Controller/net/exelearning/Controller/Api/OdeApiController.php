@@ -30,6 +30,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/api/ode-management/odes')]
@@ -53,6 +54,7 @@ class OdeApiController extends DefaultApiController
         CurrentOdeUsersServiceInterface $currentOdeUsersService,
         CurrentOdeUsersSyncChangesServiceInterface $currentOdeUsersSyncChangesService,
         TranslatorInterface $translator,
+        SerializerInterface $serializer,
     ) {
         $this->fileHelper = $fileHelper;
         $this->odeService = $odeService;
@@ -62,7 +64,7 @@ class OdeApiController extends DefaultApiController
         $this->currentOdeUsersSyncChangesService = $currentOdeUsersSyncChangesService;
         $this->translator = $translator;
 
-        parent::__construct($entityManager, $logger);
+        parent::__construct($entityManager, $logger, $serializer);
     }
 
     #[Route('/{odeId}/last-updated', methods: ['GET'], name: 'api_odes_last_updated')]
@@ -760,6 +762,9 @@ class OdeApiController extends DefaultApiController
         $elpFilePath = $request->get('odeFilePath');
         $forceCloseOdeUserPreviousSession = $request->get('forceCloseOdeUserPreviousSession');
 
+        $themesInstallationEnabled = $this->getParameter('app.online_themes_install');
+        $isOnline = $this->getParameter('app.online_mode');
+
         if (
             $request->request->has('forceCloseOdeUserPreviousSession')
             && (('true' == $forceCloseOdeUserPreviousSession) || ('1' == $forceCloseOdeUserPreviousSession))
@@ -863,10 +868,17 @@ class OdeApiController extends DefaultApiController
         if (!empty($odeValues['themeDir'])) {
             $responseData['themeDir'] = $odeValues['themeDir'];
         }
+        if (!empty($odeValues['themeInstallable'])) {
+            $responseData['authorized'] = $odeValues['themeInstallable'];
+        } else {
+            $responseData['authorized'] = false;
+        }
 
-        $jsonData = $this->getJsonSerialized($responseData);
+        if ($isOnline && !$themesInstallationEnabled) {
+            $responseData['authorized'] = false;
+        }
 
-        return new JsonResponse($jsonData, $this->status, [], true);
+        return $this->json($responseData, $this->status);
     }
 
     #[Route('/ode/local/xml/properties/open', methods: ['POST'], name: 'api_odes_ode_local_xml_properties_open')]
@@ -1183,6 +1195,8 @@ class OdeApiController extends DefaultApiController
     #[Route('/properties/save', methods: ['PUT'], name: 'api_odes_properties_save')]
     public function saveOdePropertiesAction(Request $request)
     {
+        $this->hydrateRequestBody($request);
+
         $responseData = [];
         $propertiesData = [];
 

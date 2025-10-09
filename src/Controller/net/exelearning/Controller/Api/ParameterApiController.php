@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/api/parameter-management/parameters')]
@@ -22,13 +23,19 @@ class ParameterApiController extends DefaultApiController
     private $translator;
     private $userHelper;
 
-    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger, UrlGeneratorInterface $router, TranslatorInterface $translator, UserHelper $userHelper)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger,
+        UrlGeneratorInterface $router,
+        TranslatorInterface $translator,
+        UserHelper $userHelper,
+        SerializerInterface $serializer,
+    ) {
         $this->router = $router;
         $this->translator = $translator;
         $this->userHelper = $userHelper;
 
-        parent::__construct($entityManager, $logger);
+        parent::__construct($entityManager, $logger, $serializer);
     }
 
     #[Route('/data/list', methods: ['GET'], name: 'api_parameters_data_list')]
@@ -65,6 +72,14 @@ class ParameterApiController extends DefaultApiController
         $data['autosaveIntervalTime'] = Settings::PERMANENT_SAVE_AUTOSAVE_TIME_INTERVAL;
         $data['countUserAutosave'] = Settings::COUNT_USER_AUTOSAVE_SPACE_ODE_FILES;
 
+        $themesInstallationEnabled = $this->getParameter('app.online_themes_install');
+        $isOnline = $this->getParameter('app.online_mode');
+
+        if ($isOnline && !$themesInstallationEnabled) {
+            $data['canInstallThemes'] = 0;
+        } else {
+            $data['canInstallThemes'] = 1;
+        }
         // iDevice info
         $data['ideviceInfoFieldsConfig'] = $this->getProcessedPropertiesConfig(
             Properties::IDEVICE_INFO_FIELDS_CONFIG
@@ -252,6 +267,9 @@ class ParameterApiController extends DefaultApiController
         // IDEVICE PROPERTIES
         $this->translator->trans('General');
         $this->translator->trans('Visible in export');
+        $this->translator->trans('Visibility type');
+        $this->translator->trans('Visible to all');
+        $this->translator->trans('Teacher only');
         $this->translator->trans('ID');
         $this->translator->trans('CSS Class');
 
@@ -259,6 +277,8 @@ class ParameterApiController extends DefaultApiController
         // $this->translator->trans('Visible in export');
         $this->translator->trans('Allows to minimize/display content');
         $this->translator->trans('Minimized');
+        $this->translator->trans('Visible in export');
+        $this->translator->trans('Visibility type');
         // $this->translator->trans('ID');
         // $this->translator->trans('CSS Class');
 
@@ -269,7 +289,8 @@ class ParameterApiController extends DefaultApiController
         $this->translator->trans('Different title on the page');
 
         $this->translator->trans('Title in page');
-        // $this->translator->trans('Visible in export');
+        $this->translator->trans('Visible in export');
+        $this->translator->trans('Visibility type');
         // $this->translator->trans('Description');
         // $this->translator->trans('Advanced (SEO)');
 
@@ -288,6 +309,7 @@ class ParameterApiController extends DefaultApiController
         // $this->translator->trans('Description');
 
         // Export options
+        $this->translator->trans('Export options');
         $this->translator->trans('Editable export');
         $this->translator->trans('The exported content will be editable with eXeLearning.');
         $this->translator->trans('"Made with eXeLearning" link');

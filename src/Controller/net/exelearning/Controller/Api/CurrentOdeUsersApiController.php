@@ -19,6 +19,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/current-ode-users-management/current-ode-user')]
 class CurrentOdeUsersApiController extends DefaultApiController
@@ -30,29 +31,19 @@ class CurrentOdeUsersApiController extends DefaultApiController
     private $currentOdeUsersService;
     private $currentOdeUsersSyncChangesService;
 
-    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger, UserHelper $userHelper, CurrentOdeUsersServiceInterface $currentOdeUsersService, CurrentOdeUsersSyncChangesServiceInterface $currentOdeUsersSyncChangesService)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger,
+        UserHelper $userHelper,
+        CurrentOdeUsersServiceInterface $currentOdeUsersService,
+        CurrentOdeUsersSyncChangesServiceInterface $currentOdeUsersSyncChangesService,
+        SerializerInterface $serializer,
+    ) {
         $this->userHelper = $userHelper;
         $this->currentOdeUsersService = $currentOdeUsersService;
         $this->currentOdeUsersSyncChangesService = $currentOdeUsersSyncChangesService;
 
-        parent::__construct($entityManager, $logger);
-    }
-
-    #[Route('/get/user/by/current/component/id', methods: ['GET'], name: 'get_user_by_current_component_id')]
-    public function getUserByCurrentComponentId(Request $request)
-    {
-        $currentComponentId = $request->query->get('current_component_id');
-        $userData = $this->entityManager->createQuery(
-            'SELECT c.user FROM App\Entity\net\exelearning\Entity\CurrentOdeUsers c 
-         WHERE c.currentComponentId = :componentId'
-        )
-            ->setParameter('componentId', $currentComponentId)
-            ->setMaxResults(1)
-            ->getOneOrNullResult(\Doctrine\ORM\Query::HYDRATE_SCALAR); // Solo datos escalares
-        $jsonData = $this->getJsonSerialized($userData);
-
-        return new JsonResponse($jsonData, $this->status, [], true);
+        parent::__construct($entityManager, $logger, $serializer);
     }
 
     #[Route('/user/get', methods: ['GET'], name: 'api_current_ode_users_for_user_get')]
@@ -68,6 +59,8 @@ class CurrentOdeUsersApiController extends DefaultApiController
         $databaseUser = $this->userHelper->getDatabaseUser($user);
 
         $currentOdeUsersRepository = $this->entityManager->getRepository(CurrentOdeUsers::class);
+
+        $this->userHelper->saveUserTheme($user, Constants::THEME_DEFAULT);
 
         // Check if user has already an open session
         $currentOdeUserForUser = $currentOdeUsersRepository->getCurrentSessionForUser($databaseUser->getUserIdentifier());

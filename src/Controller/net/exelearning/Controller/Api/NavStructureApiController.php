@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/api/nav-structure-management/nav-structures')]
@@ -36,12 +37,13 @@ class NavStructureApiController extends DefaultApiController
         TranslatorInterface $translator,
         CurrentOdeUsersServiceInterface $currentOdeUsersService,
         HubInterface $hub,
+        SerializerInterface $serializer,
     ) {
         $this->fileHelper = $fileHelper;
         $this->userHelper = $userHelper;
         $this->translator = $translator;
         $this->currentOdeUsersService = $currentOdeUsersService;
-        parent::__construct($entityManager, $logger, $hub);
+        parent::__construct($entityManager, $logger, $serializer, $hub);
     }
 
     #[Route('/{odeVersionId}/{odeSessionId}/nav/structure/get', methods: ['GET'], name: 'api_nav_structures_nav_structure_get')]
@@ -104,6 +106,8 @@ class NavStructureApiController extends DefaultApiController
     #[Route('/nav/structure/data/save', methods: ['PUT'], name: 'api_nav_structures_nav_structure_data_save')]
     public function saveOdeNavStructureSyncDataAction(Request $request)
     {
+        $this->hydrateRequestBody($request);
+
         $responseData = new OdeNavStructureSyncDataSaveDto();
 
         $odeNavStructureSyncId = $request->get('odeNavStructureSyncId');
@@ -356,6 +360,8 @@ class NavStructureApiController extends DefaultApiController
     #[Route('/reorder/save', methods: ['PUT'], name: 'api_nav_structures_nav_structure_reorder')]
     public function reorderOdeNavStructureSyncAction(Request $request)
     {
+        $this->hydrateRequestBody($request);
+
         $responseData = [];
 
         $responseData['odeNavStructureSyncs'] = [];
@@ -498,6 +504,21 @@ class NavStructureApiController extends DefaultApiController
                 // Get OdeNavStructureSync to delete
                 $odeNavStructureSyncsToDelete = $this->getOdeNavStructureSyncsToDelete($odeNavStructureSync);
 
+                // Collect pageIds to clean cross-references before deletion (keep full string IDs, may be alphanumeric)
+                $deletedPageIds = [];
+                foreach ($odeNavStructureSyncsToDelete as $nodeEntity) {
+                    $pageId = $nodeEntity->getOdePageId();
+                    if (null !== $pageId && '' !== $pageId) {
+                        $deletedPageIds[] = (string) $pageId;
+                    }
+                }
+                // Ensure unique list of IDs
+                $deletedPageIds = array_values(array_unique($deletedPageIds));
+
+                if (!empty($deletedPageIds)) {
+                    $this->cleanCrossReferencesForDeletedNodes($deletedPageIds, $odeNavStructureSync->getOdeSessionId());
+                }
+
                 foreach ($odeNavStructureSyncsToDelete as $odeNavStructureSync) {
                     foreach ($odeNavStructureSync->getOdePagStructureSyncs() as $odePagStructureSync) {
                         foreach ($odePagStructureSync->getOdeComponentsSyncs() as $odeComponentsSync) {
@@ -516,6 +537,10 @@ class NavStructureApiController extends DefaultApiController
                         if (!$anyError) {
                             $this->entityManager->remove($odePagStructureSync);
                         }
+                    }
+
+                    foreach ($odeNavStructureSync->getOdeNavStructureSyncProperties() as $property) {
+                        $this->entityManager->remove($property);
                     }
 
                     if (!$anyError) {
@@ -579,6 +604,8 @@ class NavStructureApiController extends DefaultApiController
     #[Route('/properties/save', methods: ['PUT'], name: 'api_nav_structures_nav_structure_properties_save')]
     public function saveOdeNavStructureSyncPropertiesAction(Request $request)
     {
+        $this->hydrateRequestBody($request);
+
         $responseData = [];
         $responseData['odeNavStructureSync'] = null;
 
@@ -866,18 +893,16 @@ class NavStructureApiController extends DefaultApiController
      */
     private function getOdeNavStructureSyncsToDelete($odeNavStructureSync)
     {
-        $odeNavStructureSyncsToDelete = [];
-        $odeNavStructureSyncsToDelete[] = $odeNavStructureSync;
+        $entities = [];
 
         foreach ($odeNavStructureSync->getOdeNavStructureSyncs() as $childOdeNavStructureSync) {
-            if (!$childOdeNavStructureSync->getOdeNavStructureSyncs()->isEmpty()) {
-                $odeNavStructureSyncsToDelete = array_merge($odeNavStructureSyncsToDelete, $this->getOdeNavStructureSyncsToDelete($childOdeNavStructureSync));
-            } else {
-                $odeNavStructureSyncsToDelete[] = $childOdeNavStructureSync;
-            }
+            // Depth-first traversal: ensure descendants are deleted before the current node.
+            $entities = array_merge($entities, $this->getOdeNavStructureSyncsToDelete($childOdeNavStructureSync));
         }
 
-        return $odeNavStructureSyncsToDelete;
+        $entities[] = $odeNavStructureSync;
+
+        return $entities;
     }
 
     /**
@@ -930,5 +955,126 @@ class NavStructureApiController extends DefaultApiController
         }
 
         return $maxOrder;
+    }
+
+    /**
+     * Processes an HTML string and removes <a> tags whose href exactly matches a target exe-node href,
+     * preserving only the inner text (strips any nested markup inside the link as plain text).
+     */
+    private function processAndCleanHtmlInternalLinks(string $htmlContent, string $targetHref): string
+    {
+        if ('' === $htmlContent || !str_contains($htmlContent, $targetHref)) {
+            return $htmlContent;
+        }
+
+        // Replace anchors whose href equals the target (case-insensitive on attribute/whitespace, exact value match)
+        $pattern = '~<a\b([^>]*?)href\s*=\s*([\"\'])\s*(exe-node:[^\"\']+)\s*\2([^>]*)>(.*?)</a>~is';
+
+        $callback = function (array $m) use ($targetHref): string {
+            if ($m[3] === $targetHref) {
+                return strip_tags($m[5]);
+            }
+
+            return $m[0];
+        };
+
+        return preg_replace_callback($pattern, $callback, $htmlContent) ?? $htmlContent;
+    }
+
+    /**
+     * Recursively traverses a decoded JSON array/object and applies HTML link cleaning to any string value found.
+     */
+    private function recursivelyCleanJsonHtml(array $data, array $targetHrefs, int $componentId, bool &$modifiedGlobalFlag): array
+    {
+        foreach ($data as $key => &$value) {
+            if (is_array($value)) {
+                // If the value is an array (or JSON sub-object), recursively call this function
+                $value = $this->recursivelyCleanJsonHtml($value, $targetHrefs, $componentId, $modifiedGlobalFlag);
+            } elseif (is_string($value)) {
+                // If the value is a string, attempt to clean it as HTML
+                $currentContent = $value;
+                $updatedContentForField = $currentContent;
+
+                // Loop through each targetHref to apply cleaning
+                foreach ($targetHrefs as $singleTargetHref) {
+                    $tempContent = $this->processAndCleanHtmlInternalLinks($updatedContentForField, $singleTargetHref);
+                    if ($tempContent !== $updatedContentForField) {
+                        $updatedContentForField = $tempContent;
+                        $modifiedGlobalFlag = true;
+                    }
+                }
+                // Assign the fully processed content back to the value (even if it's the original because of an error or no changes)
+                if ($updatedContentForField !== $currentContent) {
+                    $value = $updatedContentForField;
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Cleans cross-references of links within session iDevices that point to any of the deleted page IDs.
+     */
+    private function cleanCrossReferencesForDeletedNodes(array $deletedPageIds, string $sessionId): void
+    {
+        // Build a collection of all target href patterns
+        $targetHrefs = array_map(fn ($id) => 'exe-node:'.$id, $deletedPageIds);
+
+        $componentRepo = $this->entityManager->getRepository(\App\Entity\net\exelearning\Entity\OdeComponentsSync::class);
+        $allComponentsInSession = $componentRepo->findBy(['odeSessionId' => $sessionId]);
+
+        foreach ($allComponentsInSession as $component) {
+            $componentId = $component->getId();
+            $anyComponentContentModified = false;
+
+            // Process html_view
+            $currentHtmlView = $component->getHtmlView();
+            if (!empty($currentHtmlView)) {
+                $newHtmlView = $currentHtmlView;
+                $htmlViewModified = false;
+
+                // Loop through each targetHref to apply cleaning
+                foreach ($targetHrefs as $singleTargetHref) {
+                    $tempNewHtmlView = $this->processAndCleanHtmlInternalLinks($newHtmlView, $singleTargetHref);
+                    if ($tempNewHtmlView !== $newHtmlView) {
+                        $newHtmlView = $tempNewHtmlView;
+                        $htmlViewModified = true;
+                    }
+                }
+                if ($htmlViewModified) {
+                    $component->setHtmlView($newHtmlView);
+                    $anyComponentContentModified = true;
+                }
+            }
+
+            // Process json_properties (any string field within)
+            $originalJsonProperties = $component->getJsonProperties();
+            if (!empty($originalJsonProperties)) {
+                try {
+                    $decodedJson = json_decode($originalJsonProperties, true);
+
+                    if (is_array($decodedJson)) {
+                        $jsonModifiedFlag = false;
+                        // Pass ALL targetHrefs to the recursive function
+                        $newDecodedJson = $this->recursivelyCleanJsonHtml($decodedJson, $targetHrefs, $componentId, $jsonModifiedFlag);
+
+                        if ($jsonModifiedFlag) {
+                            $component->setJsonProperties(json_encode($newDecodedJson));
+                            $anyComponentContentModified = true;
+                        }
+                    } else {
+                        // JSON decoding failed or resulted in non-array (e.g., null)
+                    }
+                } catch (\Exception $e) {
+                    // Catching exceptions during JSON processing
+                }
+            }
+
+            // If something in the component (HTML_VIEW or JSON_PROPERTIES) was modified, mark it for persistence
+            if ($anyComponentContentModified) {
+                $this->entityManager->persist($component);
+            }
+        }
     }
 }

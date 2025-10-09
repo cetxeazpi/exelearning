@@ -81,7 +81,9 @@ export default class NavbarFile {
         this.exportEPUB3AsButton = this.menu.navbar.querySelector(
             '#navbar-button-exportas-epub3'
         );
-        this.exportH5PButton = this.menu.navbar.querySelector('#navbar-button-export-h5p');
+        this.exportH5PButton = this.menu.navbar.querySelector(
+            '#navbar-button-export-h5p'
+        );
         this.exportXmlPropertiesButton = this.menu.navbar.querySelector(
             '#navbar-button-export-xml-properties'
         );
@@ -1799,20 +1801,24 @@ export default class NavbarFile {
         let odeSessionId = eXeLearning.app.project.odeSession;
         let response = await eXeLearning.app.api.getOdeExportDownload(
             odeSessionId,
-            'h5p',
+            'h5p'
         );
         if (response['responseMessage'] == 'OK') {
             this.downloadLink(
                 response['urlZipFile'],
-                response['exportProjectName'],
+                response['exportProjectName']
             );
             toast.toastBody.innerHTML = _('The project has been exported.');
         } else {
-            toast.toastBody.innerHTML = _('An error occurred while exporting the project.');
+            toast.toastBody.innerHTML = _(
+                'An error occurred while exporting the project.'
+            );
             toast.toastBody.classList.add('error');
             eXeLearning.app.modals.alert.show({
                 title: _('Error'),
-                body: response['responseMessage'] ? response['responseMessage'] : _('Unknown error.'),
+                body: response['responseMessage']
+                    ? response['responseMessage']
+                    : _('Unknown error.'),
                 contentId: 'error',
             });
         }

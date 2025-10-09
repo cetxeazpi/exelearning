@@ -15,12 +15,13 @@ use App\Helper\net\exelearning\Helper\ThemeHelper;
 use App\Helper\net\exelearning\Helper\UserHelper;
 use App\Properties;
 use App\Service\net\exelearning\Service\Export\ExportEPUB3Service;
-use App\Service\net\exelearning\Service\Export\ExportHTML5Service;
 use App\Service\net\exelearning\Service\Export\ExportH5PService;
+use App\Service\net\exelearning\Service\Export\ExportHTML5Service;
 use App\Service\net\exelearning\Service\Export\ExportHTML5SPService;
 use App\Service\net\exelearning\Service\Export\ExportIMSService;
 use App\Service\net\exelearning\Service\Export\ExportSCORM12Service;
 use App\Service\net\exelearning\Service\Export\ExportSCORM2004Service;
+use App\Settings;
 use App\Util\net\exelearning\Util\Commoni18nUtil;
 use App\Util\net\exelearning\Util\ExportXmlUtil;
 use App\Util\net\exelearning\Util\FilePermissionsUtil;
@@ -28,7 +29,6 @@ use App\Util\net\exelearning\Util\FileUtil;
 use App\Util\net\exelearning\Util\OdeXmlUtil;
 use App\Util\net\exelearning\Util\UrlUtil;
 use App\Util\net\exelearning\Util\Util;
-use App\Settings;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -282,14 +282,11 @@ class OdeExportService implements OdeExportServiceInterface
             return $response;
         }
 
-        // Export dir path
-        // $exportDirPath = $this->fileHelper->getOdeSessionUserTmpExportDir($odeSessionId, $dbUser);
+        // Export dir path (already includes $tempPath if provided)
         $exportDirPath = $this->fileHelper->getOdeSessionUserTmpExportDir($odeSessionId, $dbUser, $tempPath);
-        $exportDirPath = $exportDirPath.$tempPath;
 
-        // Get url to export dir
-        $urlExportDir = UrlUtil::getOdeSessionExportUrl($odeSessionId, $dbUser);
-        $urlExportDir = $urlExportDir.$tempPath;
+        // Get url to export dir (append tempPath once for preview)
+        $urlExportDir = UrlUtil::getOdeSessionExportUrl($odeSessionId, $dbUser).$tempPath;
 
         // Index filename
         $indexFileName = self::generateIndexFileName();

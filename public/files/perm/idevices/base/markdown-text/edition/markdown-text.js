@@ -296,7 +296,7 @@ var $exeDevice = {
         if (converter) {
             return converter.makeHtml(content);
         }
-        return content;
+        return this.escapeHtml(content);
     },
 
     /**
@@ -314,6 +314,21 @@ var $exeDevice = {
             return this.markdownConverter;
         }
         return null;
+    },
+
+    /**
+     * Escape HTML special characters in a string.
+     *
+     * @param {string} str
+     * @returns {string}
+     */
+    escapeHtml: function(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     },
 
     /**

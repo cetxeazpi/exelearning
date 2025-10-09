@@ -909,27 +909,62 @@ export default class MenuStructureBehaviour {
             return;
         }
         // Create the button in the right place
-        let txt = _('Add Text');
-        let bgImage = $('#list_menu_idevices #text .idevice_icon').css(
+        const markdownNode = $('#list_menu_idevices #markdown-text');
+        const markdownAvailable = markdownNode.length > 0;
+
+        const addTextLabel = _('Add Text');
+        const addMarkdownLabel = _('Add Markdown');
+
+        const textBgImage = $('#list_menu_idevices #text .idevice_icon').css(
             'background-image'
         );
-        var addTextBtn = `
+        const markdownBgImage = markdownAvailable
+            ? markdownNode.find('.idevice_icon').css('background-image')
+            : null;
+
+        let buttonsHtml = `
+            <button class="exe-add-text">${addTextLabel}</button>
+        `;
+        if (markdownAvailable) {
+            buttonsHtml += `
+                <button class="exe-add-markdown">${addMarkdownLabel}</button>
+            `;
+        }
+
+        const addButtonsWrapper = `
             <div class="text-center" id="eXeAddContentBtnWrapper">
-                <button>${txt}</button>
+                ${buttonsHtml}
             </div>
         `;
-        $('#node-content').append(addTextBtn);
-        // Click the button to add a Text iDevice
-        $('#eXeAddContentBtnWrapper button')
-            .off('click')
-            .on('click', function (event) {
+
+        $('#node-content').append(addButtonsWrapper);
+
+        const wrapper = $('#eXeAddContentBtnWrapper');
+        const textButton = wrapper.find('button.exe-add-text');
+        textButton.off('click').on('click', function (event) {
+            if ($('#properties-node-content-form').is(':visible')) {
+                return;
+            }
+            $('#list_menu_idevices #text').trigger('click');
+            $('#eXeAddContentBtnWrapper').remove();
+        });
+        if (textBgImage) {
+            textButton.css('background-image', textBgImage);
+        }
+
+        if (markdownAvailable) {
+            const markdownButton = wrapper.find('button.exe-add-markdown');
+            markdownButton.off('click').on('click', function (event) {
                 if ($('#properties-node-content-form').is(':visible')) {
                     return;
                 }
-                $('#list_menu_idevices #text').trigger('click');
+                $('#list_menu_idevices #markdown-text').trigger('click');
                 $('#eXeAddContentBtnWrapper').remove();
-            })
-            .css('background-image', bgImage);
+            });
+            if (markdownBgImage) {
+                markdownButton.css('background-image', markdownBgImage);
+            }
+        }
     }
 
     /**

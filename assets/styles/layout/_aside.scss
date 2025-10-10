@@ -148,3 +148,29 @@
         }
     }
 }
+
+@media (max-width: 991.98px) {
+    .asideleft {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        max-width: min(85vw, 360px);
+        width: min(85vw, 360px);
+        min-width: 0;
+        padding: 24px 0 32px 0;
+        overflow-y: auto;
+        transform: translateX(0);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+        z-index: 1050;
+
+        .content-info {
+            padding-inline: 24px;
+        }
+    }
+
+    body.left-column-hidden .asideleft {
+        transform: translateX(-100%);
+        box-shadow: none;
+    }
+}

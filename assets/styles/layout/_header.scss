@@ -23,7 +23,9 @@
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
+                align-items: center;
                 width: 100%;
+                column-gap: 12px;
                 [aria-labelledby="exeUserMenuToggler"] {
                     left: -120px;
                 }
@@ -35,6 +37,22 @@
                     display: flex;
                     align-items: center;
                     gap: 8px;
+                }
+                .main-menu-left {
+                    flex: 1 1 auto;
+                }
+                .main-menu-right {
+                    flex: 0 0 auto;
+                    justify-content: flex-end;
+                }
+                .main-menu-left > .navbar {
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: nowrap;
+                    gap: 8px;
+                }
+                .main-menu-left > .navbar .navbar-collapse {
+                    flex: 1 1 auto;
                 }
                 .main-menu-left .navbar-nav {
                     gap: 4px;
@@ -285,6 +303,57 @@
         position: relative;
         top: 2px;
         left: -2px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    #head {
+        margin: 12px;
+        height: auto;
+
+        .navbar {
+            padding: 8px 12px;
+
+            .top {
+                .main-menu {
+                    flex-wrap: nowrap;
+                    column-gap: 8px;
+
+                    .main-menu-left,
+                    .main-menu-right {
+                        width: auto;
+                        flex-wrap: nowrap;
+                    }
+
+                    .main-menu-left {
+                        flex: 1 1 auto;
+                    }
+
+                    .main-menu-right {
+                        flex: 0 0 auto;
+                        gap: 6px;
+                    }
+
+                    .main-menu-left > .navbar {
+                        width: 100%;
+                        flex-wrap: wrap;
+                    }
+
+                    .main-menu-left > .navbar .navbar-collapse {
+                        flex-basis: 100%;
+                        width: 100%;
+                        order: 2;
+                    }
+
+                    .main-menu-left > .navbar .navbar-collapse.show {
+                        margin-top: 12px;
+                        padding-top: 12px;
+                        padding-bottom: 8px;
+                        border-top: 1px solid var(--head-bottom-bg-color-light);
+                    }
+                }
+            }
+        }
     }
 }
 

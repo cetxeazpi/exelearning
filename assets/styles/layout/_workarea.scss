@@ -9,3 +9,23 @@
         pointer-events: auto;
     }
 }
+
+@media (max-width: 991.98px) {
+    #workarea {
+        &:before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--sidebar);
+            z-index: 1040;
+        }
+    }
+
+    body:not(.left-column-hidden) #workarea:before {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}

@@ -484,14 +484,82 @@ export default class NavbarFile {
      *
      */
     setLeftPanelsTogglerEvents() {
+        if (!this.leftPanelsTogglerButton) return;
+
+        const button = this.leftPanelsTogglerButton;
+        const toggleLeftColumn = (event) => {
+            event.preventDefault();
+            $(button).tooltip('hide');
+            document.body.classList.toggle('left-column-hidden');
+            this.updateLeftPanelTogglerState();
+        };
+
         // See eXeLearning.app.common.initTooltips
-        $(this.leftPanelsTogglerButton)
+        $(button)
             .attr('data-bs-placement', 'bottom')
             .tooltip()
-            .on('click', function () {
-                $(this).tooltip('hide');
-                $('body').toggleClass('left-column-hidden');
-            });
+            .on('click', toggleLeftColumn);
+
+        this.applyResponsiveLeftColumnBehaviour();
+        this.updateLeftPanelTogglerState();
+    }
+
+    updateLeftPanelTogglerState() {
+        if (!this.leftPanelsTogglerButton) return;
+
+        const isExpanded =
+            !document.body.classList.contains('left-column-hidden');
+        this.leftPanelsTogglerButton.setAttribute(
+            'aria-expanded',
+            isExpanded.toString()
+        );
+    }
+
+    applyResponsiveLeftColumnBehaviour() {
+        if (!this.leftPanelsTogglerButton) return;
+
+        const bodyElement = document.body;
+        const asideElement = document.querySelector('.asideleft');
+        const mobileQuery = window.matchMedia('(max-width: 991.98px)');
+        const ensureCollapsedOnMobile = (matches) => {
+            if (matches) {
+                bodyElement.classList.add('left-column-hidden');
+            } else {
+                bodyElement.classList.remove('left-column-hidden');
+            }
+            this.updateLeftPanelTogglerState();
+        };
+
+        ensureCollapsedOnMobile(mobileQuery.matches);
+
+        const handleQueryChange = (event) => {
+            ensureCollapsedOnMobile(event.matches);
+        };
+
+        if (mobileQuery.addEventListener) {
+            mobileQuery.addEventListener('change', handleQueryChange);
+        } else if (mobileQuery.addListener) {
+            mobileQuery.addListener(handleQueryChange);
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!mobileQuery.matches) return;
+            if (bodyElement.classList.contains('left-column-hidden')) return;
+            if (event.target.closest('#exe-panels-toggler')) return;
+            if (asideElement && asideElement.contains(event.target)) return;
+
+            bodyElement.classList.add('left-column-hidden');
+            this.updateLeftPanelTogglerState();
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (!mobileQuery.matches) return;
+            if (event.key !== 'Escape') return;
+            if (bodyElement.classList.contains('left-column-hidden')) return;
+
+            bodyElement.classList.add('left-column-hidden');
+            this.updateLeftPanelTogglerState();
+        });
     }
 
     /**************************************************************************************

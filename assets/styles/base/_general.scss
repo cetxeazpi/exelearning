@@ -43,6 +43,10 @@ body {
         min-width: 67%;
         width: calc(100% - 400px);
         position: relative;
+        @media (max-width: 991.98px) {
+            width: 100%;
+            min-width: 100%;
+        }
         #node-content-container {
             transition:
                     left var(--sidebar),
@@ -53,6 +57,9 @@ body {
             overflow: auto;
             scroll-behavior: smooth;
             height: calc(100% - var(--head-height) - 40px);
+            @media (max-width: 991.98px) {
+                width: 100% !important;
+            }
             #node-content {
                 width: 100%;
                 padding: 0 !important;
@@ -97,6 +104,9 @@ body {
             width: calc(100% - 20px) !important;
             margin-left: 0;
             margin-right: 0;
+            @media (max-width: 991.98px) {
+                width: 100% !important;
+            }
         }
         #workarea:before {
             transition: opacity var(--sidebar) width var(--sidebar);

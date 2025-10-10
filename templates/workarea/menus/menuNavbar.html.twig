@@ -1,8 +1,9 @@
-<nav class="navbar navbar-expand-md navbar-light">
-    <div class="collapse navbar-collapse">
-        <button id="exe-panels-toggler" class="btn me-2 nav-link" title="{{ "Toggle panels" | trans }}">
-            <div class="medium-icon menu-icon"></div>
-        </button>
+<nav class="navbar navbar-expand-lg navbar-light">
+    <button id="exe-panels-toggler" class="btn me-2 nav-link" type="button" title="{{ "Toggle panels" | trans }}" aria-expanded="false">
+        <div class="medium-icon menu-icon"></div>
+        <span class="visually-hidden">{{ "Toggle panels" | trans }}</span>
+    </button>
+    <div class="collapse navbar-collapse" id="workarea-navbar-menu">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item btn button-tertiary button-dropdown dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdownFile" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

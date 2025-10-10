@@ -16,6 +16,7 @@ export default class MenuNavbar {
         this.disableLinks();
         this.loadJsNavbarClasses();
         this.addNavbarEvents();
+        this.setupMobileShortcuts();
     }
 
     /**
@@ -50,5 +51,110 @@ export default class MenuNavbar {
         this.utilities.setEvents();
         this.styles.setStyleManagerEvent();
         this.help.setEvents();
+    }
+
+    setupMobileShortcuts() {
+        if (!this.navbar) {
+            return;
+        }
+
+        const closeParentDropdown = (trigger) => {
+            const menu = trigger.closest('.dropdown-menu');
+            if (!menu) {
+                return;
+            }
+            const toggleId = menu.getAttribute('aria-labelledby');
+            if (!toggleId) {
+                return;
+            }
+            const toggle = document.getElementById(toggleId);
+            if (!toggle) {
+                return;
+            }
+            const Dropdown = window.bootstrap?.Dropdown;
+            if (Dropdown) {
+                Dropdown.getOrCreateInstance(toggle).hide();
+            } else {
+                menu.classList.remove('show');
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+        };
+
+        this.navbar
+            .querySelectorAll('[data-mobile-forward]')
+            .forEach((trigger) => {
+                trigger.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const selector = trigger.getAttribute(
+                        'data-mobile-forward'
+                    );
+                    if (!selector) {
+                        closeParentDropdown(trigger);
+                        return;
+                    }
+                    const target = document.querySelector(selector);
+                    if (!target) {
+                        closeParentDropdown(trigger);
+                        return;
+                    }
+                    target.click();
+                    closeParentDropdown(trigger);
+                });
+            });
+
+        this.navbar
+            .querySelectorAll('[data-mobile-collapse]')
+            .forEach((trigger) => {
+                trigger.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const selector = trigger.getAttribute(
+                        'data-mobile-collapse'
+                    );
+                    if (!selector) {
+                        closeParentDropdown(trigger);
+                        return;
+                    }
+                    const target = document.querySelector(selector);
+                    if (!target) {
+                        closeParentDropdown(trigger);
+                        return;
+                    }
+                    const Collapse = window.bootstrap?.Collapse;
+                    const action =
+                        trigger.getAttribute('data-mobile-action') || 'toggle';
+                    if (Collapse) {
+                        const instance = Collapse.getOrCreateInstance(target, {
+                            toggle: false,
+                        });
+                        if (action === 'show') {
+                            instance.show();
+                        } else if (action === 'hide') {
+                            instance.hide();
+                        } else {
+                            instance.toggle();
+                        }
+                    } else {
+                        const shouldShow =
+                            action === 'show'
+                                ? true
+                                : action === 'hide'
+                                  ? false
+                                  : !target.classList.contains('show');
+                        target.classList.toggle('show', shouldShow);
+                    }
+
+                    const focusSelector =
+                        trigger.getAttribute('data-mobile-focus');
+                    if (focusSelector) {
+                        window.setTimeout(() => {
+                            const focusTarget =
+                                document.querySelector(focusSelector);
+                            focusTarget?.focus();
+                        }, 150);
+                    }
+
+                    closeParentDropdown(trigger);
+                });
+            });
     }
 }

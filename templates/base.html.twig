@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale }}">
     <head>
         <meta charset="UTF-8">
         <meta name="robots" content="noindex">
         <title>{% block title %}{% endblock %}</title>
-        <link rel="icon" href="{{ sys_pref('theme.favicon_path') ?: asset('favicon.ico') }}">
+        <link rel="icon" href="{{ asset("favicon.ico") }}">
         {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
         {# include own css #}
@@ -21,17 +21,16 @@
         {% endblock %}
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
-    <body>
+    <body class="{% block class %}{% endblock %}" id="{% block id %}{% endblock %}">
         {# Inject additional HTML right after <body> for workarea only #}
         {% if sys_pref('additional_html.top') %}
             {{ sys_pref('additional_html.top')|raw }}
-        {% endif %}
+        {% endif %}        
         {% block body %}{% endblock %}
         <script src="{{ asset('app/workarea/custom.js') }}"></script>
         {# Inject additional HTML before </body> for workarea only #}
         {% if sys_pref('additional_html.footer') %}
             {{ sys_pref('additional_html.footer')|raw }}
-        {% endif %}
-
+        {% endif %}        
     </body>
 </html>

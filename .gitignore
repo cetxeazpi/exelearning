@@ -7,6 +7,8 @@
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /public/system_prefs/
+/public/system_prefs
+
 /var/*
 /src/var/
 

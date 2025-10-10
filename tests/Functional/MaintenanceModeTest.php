@@ -87,7 +87,7 @@ class MaintenanceModeTest extends WebTestCase
 
         $client->request('GET', '/');
         $this->assertSame(503, $client->getResponse()->getStatusCode());
-        $this->assertStringContainsString('Maintenance', $client->getResponse()->getContent());
+        $this->assertStringContainsString('Planned maintenance', $client->getResponse()->getContent());
     }
 
     public function test_admin_bypasses_maintenance(): void

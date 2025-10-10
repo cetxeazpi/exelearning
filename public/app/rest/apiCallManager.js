@@ -1330,5 +1330,4 @@ export default class ApiCallManager {
         let url = this.endpoints.api_resource_lock_timeout.path;
         return await this.func.get(url);
     }
-
 }

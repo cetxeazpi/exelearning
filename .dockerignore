@@ -23,6 +23,9 @@ vendor/
 dist/
 src/var/
 
+/public/bundles/
+/public/system_prefs/
+
 package.json
 
 # Ignore lock files

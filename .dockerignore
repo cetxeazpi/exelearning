@@ -25,6 +25,8 @@ src/var/
 
 /public/bundles/
 /public/system_prefs/
+/public/system_prefs
+
 
 package.json
 

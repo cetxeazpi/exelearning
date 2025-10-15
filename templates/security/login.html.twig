@@ -11,10 +11,20 @@
     <link class="exe" rel="stylesheet" href="{{ asset('style/workarea/main.css') }}">
 {% endblock %}
 
+{% set max_images = 5 %}
+{% set img_number = random(1, max_images) %}
+
 {% block class %}login-page{% endblock %}
 {% block title %}eXeLearning{% endblock %}
 
 {% block body %}
+<style>
+    @media (min-width: 992px) {
+        body.login-page #login-tpl .login-right {
+            background-image: url('style/workarea/images/exe-login-image{{ img_number }}.webp');
+        }
+    }
+</style>
 <section id="login-tpl" role="main">
     <div class="login-left">
         <div class="card-body text-black">

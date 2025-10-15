@@ -6460,7 +6460,7 @@ body.login-page #login-tpl .login-left .other-methods {
 body.login-page #login-tpl .login-left .other-methods p {
   margin: 24px 0;
 }
-body.login-page #login-tpl .login-left .other-methods .other-methods-buttons a {
+body.login-page #login-tpl .login-left .other-methods .other-methods-buttons .btn {
   width: 100%;
   border-color: hsl(217, 16%, 84%) !important;
   background-color: var(--white) !important;
@@ -6468,10 +6468,10 @@ body.login-page #login-tpl .login-left .other-methods .other-methods-buttons a {
   font-weight: 500;
   color: #132032;
 }
-body.login-page #login-tpl .login-left .other-methods .other-methods-buttons a:hover {
+body.login-page #login-tpl .login-left .other-methods .other-methods-buttons .btn:hover {
   background-color: var(--gray-100) !important;
 }
-body.login-page #login-tpl .login-left .other-methods .other-methods-buttons a:active {
+body.login-page #login-tpl .login-left .other-methods .other-methods-buttons .btn:active {
   background-color: var(--gray-200) !important;
 }
 body.login-page #login-tpl .login-left .lead {

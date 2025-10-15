@@ -56,8 +56,15 @@ if (method_exists(Dotenv::class, 'bootEnv')) {
     (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
 }
 
-
 // Load H5P test stubs if the real library is not installed
 if (!class_exists('H5PCore') || !interface_exists('H5PFrameworkInterface') || !class_exists('H5PValidator')) {
     require_once __DIR__.'/Utils/H5PStubs.php';
+}
+
+// Ensure TMP_CLEANUP_KEY is available in test runs even if .env provides an empty value.
+// Priority: keep any non-empty value coming from phpunit.xml or environment; otherwise set a sane test default.
+if (('test' === ($_SERVER['APP_ENV'] ?? getenv('APP_ENV') ?? '')) && '' === trim((string) (getenv('TMP_CLEANUP_KEY') ?: ($_ENV['TMP_CLEANUP_KEY'] ?? '') ?: ($_SERVER['TMP_CLEANUP_KEY'] ?? '')))) {
+    $_ENV['TMP_CLEANUP_KEY'] = 'test-cleanup-key';
+    $_SERVER['TMP_CLEANUP_KEY'] = 'test-cleanup-key';
+    putenv('TMP_CLEANUP_KEY=test-cleanup-key');
 }

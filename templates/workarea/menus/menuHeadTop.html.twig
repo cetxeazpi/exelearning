@@ -12,30 +12,30 @@
             </button>
             #}
             {# Download button can't be deleted, hidden instead #}
-            <button id="head-top-download-button" class="btn d-none d-lg-inline-flex align-items-center" title="{{ "Download" | trans }}">
+            <button id="head-top-download-button" class="btn" title="{{ "Download" | trans }}"  data-testid="download-button">
                 <span class="auto-icon" aria-hidden="true">download</span>
                 <span class="btn-label">{{ "Download" | trans }}</span>
             </button>
-            <button id="head-top-save-button" class="btn button-display d-flex justify-content-center align-items-center exe-online" title="{{ "Save" | trans }}">
+            <button id="head-top-save-button" class="btn button-display d-flex justify-content-center align-items-center" title="{{ "Save" | trans }}" data-testid="save-button">
                 <div class="small-icon save-icon-white"></div>
                 <span>{{ "Save" | trans }}</span>
             </button>
             <button id="head-bottom-preview" class="btn button-display display-outline button-square d-flex justify-content-center align-items-center" title="{{ "Preview" | trans }}">
                 <div class="small-icon preview-icon-green"></div>
             </button>
-            <button id="dropdownStyles" class="btn button-tertiary button-square d-none d-lg-inline-flex justify-content-center align-items-center" title="{{ "Styles" | trans }}">
+            <button id="dropdownStyles" class="btn button-tertiary button-square d-flex justify-content-center align-items-center" title="{{ "Styles" | trans }}">
                 <span class="medium-icon styles-icon"></span>
             </button>
-            <button id="head-top-settings-button" class="btn button-tertiary button-square d-none d-lg-inline-flex justify-content-center align-items-center" title="{{ "Settings" | trans }}">
+            <button id="head-top-settings-button" class="btn button-tertiary button-square d-flex justify-content-center align-items-center" title="{{ "Settings" | trans }}" data-testid="settings-button">
                 <span class="medium-icon settings-icon"></span>
             </button>
-            <button id="head-top-share-button" class="btn button-tertiary button-square d-none d-lg-inline-flex justify-content-center align-items-center exe-online" title="{{ "Share" | trans }}">
+            <button id="head-top-share-button" class="btn button-tertiary button-square d-flex justify-content-center align-items-center exe-online" title="{{ "Share" | trans }}">
                 <span class="medium-icon share-icon"></span>
             </button>
-            <div id="exe-last-edition" class="btn d-none d-lg-inline-flex">
+            <div id="exe-last-edition" class="btn">
                 <span class="content"></span>
             </div>
-            <div id="exe-concurrent-users" class="exe-online d-none d-lg-inline-flex">
+            <div id="exe-concurrent-users" class="exe-online">
                 <button id="button-more-exe-concurrent-users" class="btn button-tertiary button-square d-flex justify-content-center align-items-center" title="{{ "Users online" | trans }}">
                     <span class="medium-icon concurrent-users-icon"></span>
                 </button>
@@ -51,35 +51,17 @@
             </button>
             #}
             {# User menu #}
-            <div id="head-bottom-user-logged" class="dropdown" title="{{ user.username }}">
+            <div id="head-bottom-user-logged" class="dropdown" title="{{ user.username }}" data-testid="user-menu" data-user-email="{{ user.username }}">
                 <button class="btn btn-link" type="button" id="exeUserMenuToggler" data-bs-toggle="dropdown" aria-expanded="false" title="{{ "User menu" | trans }}">
                     {% if user.gravatarUrl %}
-                    <img class="exe-gravatar" src="{{ user.gravatarUrl }}" alt="{{ user.username }}" width="50" height="50">
+                    <img class="exe-gravatar" src="{{ user.gravatarUrl }}" alt="{{ user.username }}" width="50" height="50" data-testid="user-avatar">
                     {% else %}
-                    <span class="exe-avatar" title="{{ user.username }}">{{ user.usernameFirsLetter }}</span>
+                    <span class="exe-avatar" title="{{ user.username }}" data-testid="user-avatar-initial">{{ user.usernameFirsLetter }}</span>
                     {% endif %}
                 </button>
+
                 <ul class="dropdown-menu" aria-labelledby="exeUserMenuToggler">
                     <li><a class="dropdown-item" id="navbar-button-preferences" href="#">{{ "Preferences" | trans }}</a></li>
-                    <li class="dropdown-divider d-lg-none"></li>
-                    <li class="d-lg-none">
-                        <button class="dropdown-item" type="button" data-mobile-collapse="#workarea-navbar-menu" data-mobile-action="toggle" data-mobile-focus="#dropdownFile">{{ "Menu" | trans }}</button>
-                    </li>
-                    <li class="d-lg-none">
-                        <button class="dropdown-item" type="button" data-mobile-forward="#head-top-download-button">{{ "Download" | trans }}</button>
-                    </li>
-                    <li class="d-lg-none">
-                        <button class="dropdown-item" type="button" data-mobile-forward="#dropdownStyles">{{ "Styles" | trans }}</button>
-                    </li>
-                    <li class="d-lg-none">
-                        <button class="dropdown-item" type="button" data-mobile-forward="#head-top-settings-button">{{ "Settings" | trans }}</button>
-                    </li>
-                    <li class="d-lg-none">
-                        <button class="dropdown-item exe-online" type="button" data-mobile-forward="#head-top-share-button">{{ "Share" | trans }}</button>
-                    </li>
-                    <li class="d-lg-none">
-                        <button class="dropdown-item" type="button" data-mobile-forward="#button-more-exe-concurrent-users">{{ "Users online" | trans }}</button>
-                    </li>
                     <li class="dropdown-divider"></li>
                     {% if config.isOfflineInstallation %}
                     <li><a class="dropdown-item" id="head-bottom-logout-button" href="#">{{ "Exit" | trans }}</a></li>

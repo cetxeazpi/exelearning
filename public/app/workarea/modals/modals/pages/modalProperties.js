@@ -431,7 +431,7 @@ export default class ModalProperties extends Modal {
                 valueElement.setAttribute('type', 'text');
                 valueElement.value = property.value;
                 break;
-            case 'checkbox':               
+            case 'checkbox':
                 const item = document.createElement('span');
                 item.classList.add('toggle-item');
 

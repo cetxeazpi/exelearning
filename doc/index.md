@@ -15,6 +15,7 @@ Use the sections below to jump to what you need.
 ## For End Users
 - [Install](install.md)
 - [Preferences](preferences.md)
+- [Profile pictures](profile-avatars.md)
 
 ## For System Administrators
 - [Deployment](deployment.md)

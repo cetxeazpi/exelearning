@@ -62,9 +62,16 @@ body {
             }
             #node-content {
                 width: 100%;
-                padding: 0 !important;
+                padding: 0;
+            }
+            #node-content[node-selected="root"],
+            #eXeBetaWarning + #node-content {
+                padding-top: 0 !important;
             }
         }
+    }
+    &:has(#node-content[node-selected=root]) #eXeBetaWarning {
+        margin-bottom: 0 !important;
     }
     &.left-column-hidden {
         main {

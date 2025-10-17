@@ -82,6 +82,7 @@ yarn.lock
 /dist
 
 public/style/workarea/main.css
+public/style/workarea/main.css.map
 
 # Ignore SQLite database
 exelearning.db

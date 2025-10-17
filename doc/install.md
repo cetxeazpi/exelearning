@@ -42,7 +42,7 @@ choco install exelearning
 
 #### Option 1 — Homebrew
 
-```bash title="brew (coming soon)"
+```bash title="brew"
 brew install --cask exelearning
 ```
 

@@ -363,6 +363,7 @@
     margin: 0 .3em;
     width: 100%;
     text-align: center;
+    max-width: 350px;
 }
 
 /* Inicio juego */
@@ -691,48 +692,48 @@
 }
 
 .SLCMP-MainContainer .exeQuextIcons-Minimize {
-    background-image: url(exequextmin.png);
+    background-image: url(exequextmin.svg);
     background-size: 100% 100%;
 }
 
 .SLCMP-MainContainer .exeQuextIcons-Hit {
-    background-image: url(exequexthits.png);
+    background-image: url(exequexthits.svg);
     background-size: 100% 100%;
 }
 
 .SLCMP-MainContainer .exeQuextIcons-FullScreen {
-    background-image: url(exequextfull.png);
+    background-image: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
 .SLCMP-MainContainer .exeQuextIcons-Error {
-    background-image: url(exequextrerrors.png);
+    background-image: url(exequextrerrors.svg);
     background-size: 100% 100%;
 }
 
 .SLCMP-MainContainer .exeQuextIcons-Score {
-    background-image: url(exequextscore.png);
+    background-image: url(exequextscore.svg);
     background-size: 100% 100%;
 }
 
 .SLCMP-MainContainer .exeQuextIcons-Time {
-    background-image: url(exequexttime.png);
+    background-image: url(exequexttime.svg);
     background-size: 100% 100%;
 }
 
 .SLCMP-MainContainer .exeQuextIcons-Number {
-    background-image: url(exequextnumber.png);
+    background-image: url(exequextnumber.svg);
     background-size: 100% 100%;
 }
 
 /* Full Screen */
 div:fullscreen .exeQuextIcons-FullScreen {
-    background-image: url(exequextnormal.png);
+    background-image: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
 div:fullscreen .exeQuextIcons-FullScreen {
-    background: url(exequextnormal.png);
+    background: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
@@ -880,27 +881,6 @@ div:fullscreen .SLCMP-LinkMinimize {
     .SLCMP-MainContainer .exeQuextIcons-Submit {
         height: 2em;
         width: 2em;
-    }
-
-    .SLCMP-MainContainer input[type="text"],
-    input.SLCMP-CodeAccessE {
-        background: #fdfdfd;
-        border: 1px solid #828282;
-        border-radius: 4px;
-        box-sizing: border-box;
-        display: inline-block;
-        line-height: 1.5em;
-        margin: 0 0.3em;
-        padding: 0.4em 0.25em;
-    }
-
-    .SLCMP-MainContainer input[type="text"]:active,
-    .SLCMP-MainContainer input[type="text"]:focus,
-    input.SLCMP-CodeAccessE:focus,
-    input.SLCMP-CodeAccessE:active {
-        background: #fdfdfd;
-        border: 1px solid #398ee7;
-        border-radius: 4px;
     }
 
     .SLCMP-GameOverExt {

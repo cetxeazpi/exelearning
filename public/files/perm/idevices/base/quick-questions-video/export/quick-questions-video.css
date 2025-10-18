@@ -408,7 +408,7 @@ a.VQXTP-ModeBoardShow {
     height: 100%;
     position: absolute;
     z-index: 20;
-    background-color: rgb(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
 
 }
 
@@ -455,7 +455,7 @@ a.VQXTP-ModeBoardShow {
     -moz-user-select: none;
     -ms-user-select: none;
     -webkit-user-select: none;
-    margin: 1em auto 0 auto;
+    margin: 0 auto;
     text-align: center;
     user-select: none;
     width: 100%;
@@ -994,37 +994,37 @@ a.VQXTP-ModeBoardShow {
 }
 
 .VQXTP-GameContainer .exeQuextIcons-Minimize {
-    background-image: url(exequextmin.png);
+    background-image: url(exequextmin.svg);
     background-size: 100% 100%;
 }
 
 .VQXTP-GameContainer .exeQuextIcons-Hit {
-    background-image: url(exequexthits.png);
+    background-image: url(exequexthits.svg);
     background-size: 100% 100%;
 }
 
 .VQXTP-GameContainer .exeQuextIcons-FullScreen {
-    background-image: url(exequextfull.png);
+    background-image: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
 .VQXTP-GameContainer .exeQuextIcons-Error {
-    background-image: url(exequextrerrors.png);
+    background-image: url(exequextrerrors.svg);
     background-size: 100% 100%;
 }
 
 .VQXTP-GameContainer .exeQuextIcons-Score {
-    background-image: url(exequextscore.png);
+    background-image: url(exequextscore.svg);
     background-size: 100% 100%;
 }
 
 .VQXTP-GameContainer .exeQuextIcons-Time {
-    background-image: url(exequexttime.png);
+    background-image: url(exequexttime.svg);
     background-size: 100% 100%;
 }
 
 .VQXTP-GameContainer .exeQuextIcons-Number {
-    background-image: url(exequextnumber.png);
+    background-image: url(exequextnumber.svg);
     background-size: 100% 100%;
 }
 
@@ -1040,17 +1040,17 @@ a.VQXTP-ModeBoardShow {
 
 /* Full Screen */
 div:fullscreen .exeQuextIcons-FullScreen {
-    background-image: url(exequextnormal.png);
+    background-image: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
 div:-webkit-full-screen .exeQuextIcons-FullScreen {
-    background: url(exequextnormal.png);
+    background: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
 div:-moz-full-screen .exeQuextIcons-FullScreen {
-    background: url(exequextnormal.png);
+    background: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
@@ -1286,30 +1286,7 @@ div:fullscreen .VQXTP-LinkMinimize {
         width: 2em;
     }
 
-    .VQXTP-GameContainer input[type="text"],
-    input.VQXTP-EdReply,
-    input.VQXTP-CodeAccessE {
-        background: #fdfdfd;
-        border: 1px solid #828282;
-        border-radius: 4px;
-        box-sizing: border-box;
-        display: inline-block;
-        line-height: 1.5em;
-        margin: 0 0.3em;
-        padding: 0.4em 0.25em;
-    }
-
-    .VQXTP-GameContainer input[type="text"]:active,
-    .VQXTP-GameContainer input[type="text"]:focus,
-    input.VQXTP-EdReply:focus,
-    input.VQXTP-EdReply:active,
-    input.VQXTP-CodeAccessE:focus,
-    input.VQXTP-CodeAccessE:active {
-        background: #fdfdfd;
-        border: 1px solid #398ee7;
-        border-radius: 4px;
-    }
-}
+ }
 
 @media screen and (max-width:340px) {
     .VQXTP-MainContainer {

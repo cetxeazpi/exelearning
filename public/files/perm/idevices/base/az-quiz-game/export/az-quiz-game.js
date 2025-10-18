@@ -191,13 +191,13 @@ var $azquizgame = {
                                     <p class="rosco-PTime" id="roscoPTime-${instance}">${sTime}</p>
                                     <div class="exeQuextIcons exeQuextIcons-OneRound" id="roscoNumberRounds-${instance}" title="${msgs.msgOneRound}"></div>
                                     <strong class="sr-av" id="roscoNumberRoundsSpan-${instance}">${msgs.msgOneRound}:</strong>
-                                    <a href="#" class="rosco-LinkArrowMinimize" id="roscoLinkArrowMinimize-${instance}" title="${msgs.msgMinimize}">
-                                        <strong class="sr-av">${msgs.msgMinimize}:</strong>
-                                        <div class="exeQuextIcons exeQuextIcons-Minimize"></div>
-                                    </a>
                                     <a href="#" class="rosco-LinkTypeGame" id="roscoLinkTypeGame-${instance}" title="${msgs.msgHideRoulette}">
                                         <strong class="sr-av">${msgs.msgHideRoulette}:</strong>
                                         <div class="exeQuextIcons exeQuextIcons-RoscoRows" id="roscoTypeGame-${instance}"></div>
+                                    </a>
+                                    <a href="#" class="rosco-LinkArrowMinimize" id="roscoLinkArrowMinimize-${instance}" title="${msgs.msgMinimize}">
+                                        <strong class="sr-av">${msgs.msgMinimize}:</strong>
+                                        <div class="exeQuextIcons exeQuextIcons-Minimize"></div>
                                     </a>
                                     <a href="#" class="rosco-LinkFullScreen" id="roscoLinkFullScreen-${instance}" title="${msgs.msgFullScreen}">
                                         <strong class="sr-av">${msgs.msgFullScreen}:</strong>
@@ -244,7 +244,8 @@ var $azquizgame = {
                                         <strong class="sr-av">${msgs.msgMoveOne}</strong>
                                         <div class="exeQuextIcons-MoveOne"></div>
                                     </a>
-                                    <input type="text" value="" class="rosco-EdReply" id="roscoEdReply-${instance}" autocomplete="off">
+                                    <label for="roscoEdReply-${instance}" class="sr-av">${msgs.msgReply}</label>
+                                    <input type="text" value="" class="rosco-EdReply form-control" id="roscoEdReply-${instance}" autocomplete="off">
                                     <a href="#" id="roscoBtnReply-${instance}" title="${msgs.msgReply}">
                                         <strong class="sr-av">${msgs.msgReply}</strong>
                                         <div class="exeQuextIcons-Submit"></div>
@@ -267,7 +268,8 @@ var $azquizgame = {
                             <div class="rosco-CodeAccessDiv" id="roscoCodeAccessDiv-${instance}">
                                 <div class="rosco-MessageCodeAccessE" id="roscoMesajeAccesCodeE-${instance}"></div>
                                 <div class="rosco-DataCodeAccessE">
-                                    <label for="roscoEdCodeAccess-${instance}" class="sr-av">${msgs.msgCodeAccess}:</label><input type="text" class="rosco-CodeAccessE" id="roscoEdCodeAccess-${instance}" placeholder="${msgs.msgCodeAccess}">
+                                    <label for="roscoEdCodeAccess-${instance}" class="sr-av">${msgs.msgCodeAccess}:</label>
+                                    <input type="text" class="rosco-CodeAccessE form-control" id="roscoEdCodeAccess-${instance}" placeholder="${msgs.msgCodeAccess}">
                                     <a href="#" id="roscoCodeAccessButton-${instance}" title="${msgs.msgReply}">
                                     <strong class="sr-av">${msgs.msgReply}</strong>
                                     <div class="exeQuextIcons-Submit"></div>

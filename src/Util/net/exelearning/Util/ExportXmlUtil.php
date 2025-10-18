@@ -1333,7 +1333,7 @@ class ExportXmlUtil
         $styleCssFiles = [];
 
         // Theme js
-        foreach ($theme->getJsFiles() as $jsFile) {
+        foreach ((array) $theme->getJsFiles() as $jsFile) {
             $themeJsPath = Constants::EXPORT_DIR_THEME.Constants::SLASH.$jsFile;
             $styleJsFiles[] = $resourcesPrefix.$themeJsPath;
         }
@@ -1345,7 +1345,7 @@ class ExportXmlUtil
         }
 
         // Theme css
-        foreach ($theme->getCssFiles() as $cssFile) {
+        foreach ((array) $theme->getCssFiles() as $cssFile) {
             $themeCssPath = Constants::EXPORT_DIR_THEME.Constants::SLASH.$cssFile;
             $styleCssFiles[] = $resourcesPrefix.$themeCssPath;
         }
@@ -2542,13 +2542,14 @@ class ExportXmlUtil
                 foreach ($odePagStructureSync->getOdeComponentsSyncs() as $odeComponentsSync) {
                     $htmlView = $odeComponentsSync->getHtmlView(); // ? $odeComponentsSync->getHtmlView() : $odeComponentsSync->getJsonProperties();
 
-                    // Detect specific drag/sort/classify iDevices and include jquery-ui when present
+                    // Detect specific drag/sort/classify/relate/completa iDevices and include jquery-ui when present
                     if ((null != $htmlView) && ('' !== trim($htmlView))) {
                         $sortableClasses = [
                             'ordena-IDevice',
                             'clasifica-IDevice',
                             'relaciona-IDevice',
                             'dragdrop-IDevice',
+                            'completa-IDevice',
                         ];
                         foreach ($sortableClasses as $sc) {
                             if (preg_match("~<div[^>]*class=[\"']?[^\"']*".preg_quote($sc, '~')."[^\"']*[\"']?[^>]*>~i", $htmlView)) {

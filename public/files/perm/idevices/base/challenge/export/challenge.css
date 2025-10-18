@@ -144,12 +144,12 @@
 }
 
 .desafio-GameScoreBoard .exeQuextIcons34-Time {
-	background-image: url(exequexttime.png);
+	background-image: url(exequexttime.svg);
 	background-size: 100% 100%;
 }
 
 .desafio-GameScoreBoard .exeQuextIcons34-Minimize {
-	background-image: url(exequextmin.png);
+	background-image: url(exequextmin.svg);
 	background-size: 100% 100%;
 }
 
@@ -289,7 +289,6 @@
 .desafio-Solution {
 	margin: 0 .3em;
 	max-width: 350px;
-	padding: 0.4em 0.25em;
 	width: 60%;
 	text-align: center;
 }

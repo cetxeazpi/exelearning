@@ -62,6 +62,7 @@
             "*": "dist"
         },
         "sort-packages": true,
+        "process-timeout": 600,
         "allow-plugins": {
             "symfony/flex": true,
             "symfony/runtime": true

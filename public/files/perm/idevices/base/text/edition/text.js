@@ -239,10 +239,10 @@ var $exeDevice = {
         let newFeedback = this.createFieldsetHTML(this.feedbackId, this.feedbackTitle, '', feedbackContent);
 
         let content = ``;
+        content += this.createTextareaHTML(this.textareaId, this.textareaTitle);
         content += `<div class="exe-parent">`;
         content += newInfo;
         content += `</div>`;
-        content += this.createTextareaHTML(this.textareaId, this.textareaTitle);
         content += `<div class="exe-parent">`;
         content += newFeedback;
         content += `</div>`;

@@ -58,6 +58,8 @@ parameters:
     app.logs.dir:  '%env(default:logs_default_dir:LOG_DIR)%'
     app.cache.dir: '%env(default:cache_default_dir:CACHE_DIR)%'
 
+    app.tmp_cleanup_key: '%env(string:TMP_CLEANUP_KEY)%'
+
     # Allow users to import/install styles
     app.online_themes_install: '%env(bool:ONLINE_THEMES_INSTALL)%'
 
@@ -72,12 +74,18 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     Symfony\Component\Security\Core\Security: '@security.helper'
 
+    App\Controller\:
+        resource: '../src/Controller/'
+        public: true
+        tags: ['controller.service_arguments']
+
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
         exclude:
+            - '../src/Controller/'
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/ApiResource/'
@@ -191,6 +199,8 @@ services:
         tags:
             - { name: 'api_platform.doctrine.orm.query_extension.collection', priority: -999999 }
 
+    App\Doctrine\Middleware\SqlitePragmaMiddleware:
+        tags: ['doctrine.middleware']
 
     decorating_translator:
         class:     App\Translation\net\exelearning\Translation\Translator

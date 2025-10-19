@@ -17,6 +17,7 @@ import ThemesManager from './workarea/themes/themesManager.js';
 import UserManager from './workarea/user/userManager.js';
 import Actions from './common/app_actions.js';
 import Shortcuts from './common/shortcuts.js';
+import SessionMonitor from './common/sessionMonitor.js';
 
 class App {
     constructor(eXeLearning) {
@@ -35,6 +36,12 @@ class App {
         this.user = new UserManager(this);
         this.actions = new Actions(this);
         this.shortcuts = new Shortcuts(this);
+        this.sessionMonitor = null;
+        this.sessionExpirationHandled = false;
+
+        if (!this.eXeLearning.config.isOfflineInstallation) {
+            this.setupSessionMonitor();
+        }
     }
 
     /**
@@ -59,8 +66,10 @@ class App {
         await this.showModalLopd();
         // "Not for production use" warning
         await this.showProvisionalDemoWarning();
-        // To do warning (remove this as soon as possible)
-        await this.showProvisionalToDoWarning();
+        // To review (showProvisionalToDoWarning might be useful for future beta releases)
+        // await this.showProvisionalToDoWarning();
+        // Missing strings (not extracted). See #428 (to do)
+        await this.tmpStringList();
         // Add the notranslate class to some elements
         await this.addNoTranslateForGoogle();
         // Execute the custom JavaScript code
@@ -123,6 +132,135 @@ class App {
                     );
             }
         }
+
+        // Test-env override: when running E2E with Panther, the page origin
+        // is the internal PHP server (exelearning:908X), which doesn't host Mercure.
+        // Force the hub to the Nginx/Caddy endpoint in the exelearning container.
+        if (window.eXeLearning?.symfony?.environment === 'test') {
+            // Only override if not already explicitly set to a non-908X host
+            try {
+                const current = window.eXeLearning.mercure?.url || '';
+                const url = new URL(current || 'http://exelearning');
+                const isPantherPort = /^90\d{2}$/.test(
+                    String(urlRequest.port || '')
+                );
+                const isCurrentOk = current.includes('exelearning:8080');
+                if (!isCurrentOk && isPantherPort) {
+                    window.eXeLearning.mercure = {
+                        ...(window.eXeLearning.mercure || {}),
+                        url: 'http://exelearning:8080/.well-known/mercure',
+                    };
+                }
+            } catch (e) {
+                // Fallback: set directly
+                window.eXeLearning.mercure = {
+                    ...(window.eXeLearning.mercure || {}),
+                    url: 'http://exelearning:8080/.well-known/mercure',
+                };
+            }
+        }
+    }
+
+    setupSessionMonitor() {
+        const baseInterval = Number(
+            this.eXeLearning.config.sessionCheckIntervalMs ||
+                this.eXeLearning.config.sessionCheckInterval ||
+                0
+        );
+
+        const interval = baseInterval > 0 ? baseInterval : 60000;
+
+        const checkUrl = this.composeUrl('/api/session/check');
+        const loginUrl = this.composeUrl('/login');
+
+        this.sessionMonitor = new SessionMonitor({
+            checkUrl,
+            loginUrl,
+            interval,
+            closeMercureConnections: (reason) =>
+                this.closeMercureConnections(reason),
+            onSessionInvalid: (reason) => this.handleSessionExpiration(reason),
+            onNetworkError: (error, reason) => {
+                console.debug(
+                    'SessionMonitor: temporary issue while checking the session',
+                    reason,
+                    error
+                );
+            },
+        });
+
+        window.eXeSessionMonitor = this.sessionMonitor;
+        this.sessionMonitor.start();
+    }
+
+    getBasePath() {
+        const basePath = this.eXeLearning.symfony?.basePath ?? '';
+        if (!basePath || basePath === '/') {
+            return '';
+        }
+
+        return basePath.replace(/\/+$/, '');
+    }
+
+    composeUrl(path = '') {
+        const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+        const basePath = this.getBasePath();
+
+        if (!basePath) {
+            return normalizedPath;
+        }
+
+        return `${basePath}${normalizedPath}`;
+    }
+
+    closeMercureConnections() {
+        if (this.project?.eventSource) {
+            try {
+                this.project.eventSource.close();
+            } catch (error) {
+                console.debug(
+                    'SessionMonitor: error while closing the project EventSource',
+                    error
+                );
+            }
+            this.project.eventSource = null;
+        }
+
+        const notifier = this.project?.realTimeEventNotifier;
+        if (notifier) {
+            if (typeof notifier.closeConnection === 'function') {
+                notifier.closeConnection();
+            } else if (notifier.eventSource) {
+                try {
+                    notifier.eventSource.close();
+                } catch (error) {
+                    console.debug(
+                        'SessionMonitor: error while closing the notifier EventSource',
+                        error
+                    );
+                }
+                notifier.eventSource = null;
+            }
+        }
+    }
+
+    handleSessionExpiration(reason) {
+        if (this.sessionExpirationHandled) {
+            return;
+        }
+
+        this.sessionExpirationHandled = true;
+
+        try {
+            this.project?.cleanupCurrentIdeviceTimer?.();
+        } catch (error) {
+            console.debug(
+                'SessionMonitor: error while cleaning up timers during logout',
+                error
+            );
+        }
+
+        console.info('Session expired, redirecting to login.', reason);
     }
 
     /**
@@ -246,6 +384,54 @@ class App {
             // Check for errors
             this.check();
         }
+    }
+
+    /**
+     * To do. Some strings are not extracted (see #428)
+     *
+     */
+    async tmpStringList() {
+        const requiredStrins = [
+            _(
+                'Create image maps: Images with interactive hotspots to reveal images, videos, sounds, texts...'
+            ),
+            _('Show questionnaire'),
+            _('Show active areas'),
+            _('Click here to do this activity'),
+            _('Select the correct options and click on the "Reply" button.'),
+            _(
+                'Mark all the options in the correct order and click on the "Reply" button.'
+            ),
+            _(
+                'Write the correct word o phrase and click on the "Reply" button.'
+            ),
+            _('Click on'),
+            _('Everything is perfect! Do you want to repeat this activity?'),
+            _(
+                'Great! You have passed the test, but you can improve it surely. Do you want to repeat this activity?'
+            ),
+            _(
+                'Almost perfect! You can still do it better. Do you want to repeat this activity?'
+            ),
+            _('It is not correct! You have clicked on'),
+            _('and the correct answer is'),
+            _('Great! You have visited the required dots.'),
+            _('You can do the test.'),
+            _('Select a subtitle file. Supported formats:'),
+            _('Map'),
+            _('Return'),
+            _('Questionnarie'),
+            _('Arrow'),
+            _('Map marker'),
+            _('Do you want to save the changes of this presentation?'),
+            _('Do you want to save the changes of this quiz?'),
+            _('Do you want to save the changes of this map?'),
+            _('Provide a slide title.'),
+            _('Hide score bar'),
+            _('Play the sound when scrolling the mouse over the points.'),
+            _('Show when the mouse is over the icon or active area.'),
+            _('Hide areas'),
+        ];
     }
 
     /**
@@ -429,8 +615,8 @@ class App {
             return;
         }
 
-        $('#eXeLearningNavbar > ul').append(
-            '<li class="nav-item"><a class="nav-link text-danger" href="#" id="eXeToDoWarning" hreflang="es"><i class="auto-icon" aria-hidden="true">warning</i>' +
+        $('#eXeLearningNavbar nav div > ul').append(
+            '<li class="nav-item"><a class="nav-link text-danger" href="#" id="eXeToDoWarning" hreflang="es"><span class="auto-icon" aria-hidden="true">warning</span>' +
                 _('Warning') +
                 '</a></li>'
         );
@@ -444,7 +630,7 @@ class App {
                         <li>Falta Archivo - Imprimir.</li>
                         <li>No se puede exportar o importar una página.</li>
                         <li>Si estás editando un iDevice no puedes cambiar su título.</li>
-                        <li>La exportación SCORM 2004 no funciona bien.</li>
+                        <li>No hay opción para exportar en formato SCORM 2004.</li>
                     </ul>
                     <p><strong>Si encuentras algo más:</strong> Ayuda → Informar de un fallo</p>
                     <p>Muchas gracias.</p>
@@ -461,12 +647,35 @@ class App {
 /**
  * Prevent unexpected close
  *
+ * Install the `beforeunload` handler only after the first real user gesture.
+ * If we install it eagerly on page load, Chrome (especially in headless/E2E
+ * contexts) blocks the confirmation panel and logs a SEVERE console warning:
+ *   "Blocked attempt to show a 'beforeunload' confirmation panel for a frame
+ *    that never had a user gesture since its load."
+ * Deferring the installation avoids noisy warnings during automated navigations
+ * while preserving the safety prompt for real users after they interact.
  */
-window.onbeforeunload = function (event) {
-    event.preventDefault();
-    // Kept for legacy.
-    event.returnValue = false;
-};
+let __exeBeforeUnloadInstalled = false;
+function __exeInstallBeforeUnloadOnce() {
+    if (__exeBeforeUnloadInstalled) return;
+    __exeBeforeUnloadInstalled = true;
+
+    window.onbeforeunload = function (event) {
+        event.preventDefault();
+        // Modern browsers ignore custom text; a non-empty value is still
+        // required to trigger the confirmation dialog.
+        event.returnValue = '';
+    };
+}
+
+// Listen for the first trusted user interaction and install then.
+['pointerdown', 'touchstart', 'keydown', 'input'].forEach((type) => {
+    window.addEventListener(type, __exeInstallBeforeUnloadOnce, {
+        once: true,
+        passive: true,
+        capture: true,
+    });
+});
 
 /**
  * Catch ctrl+z action

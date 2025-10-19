@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/exelearning/exelearning">
-    <img src="public/exelearning.png" alt="eXeLearning Logo" height="120">
+    <img src="public/images/logo_readme.png" alt="eXeLearning Logo" height="225">
   </a>
 
   <h1 align="center">eXeLearning</h1>
@@ -69,7 +69,7 @@ Offline installers for Linux, Windows and macOS are also available on the [Relea
 
 To deploy eXeLearning in a production environment, see:
 
-- Overview: [doc/deploy/overview.md](./doc/deploy/overview.md)
+- Overview: [doc/deployment.md](./doc/deployment.md)
 - Sample Compose files: [doc/deploy/README.md](./doc/deploy/README.md)
 
 ## Development Environment
@@ -87,6 +87,8 @@ make up
 This will start all services and make the app available at `http://localhost:8080`.
 
 More development tools, options, and real-time collaboration info are documented in the `doc/` folder.
+
+A SCSS watcher is implemented which compiles any style automatically, without the need to launch any command. SCSS can be laid out directly in the same way as CSS.
 
 ## Project Structure
 

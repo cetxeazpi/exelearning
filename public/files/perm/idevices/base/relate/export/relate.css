@@ -419,6 +419,7 @@
 .RLCP-CodeAccessE {
     margin: 0 .3em;
     width: 100%;
+    max-width: 350px;
     text-align: center;
 }
 
@@ -797,33 +798,30 @@
 }
 
 .RLCP-GameContainer .exeQuextIcons-Time {
-    background-image: url(exequexttime.png);
+    background-image: url(exequexttime.svg);
     background-size: 100% 100%;
 }
 
-.RLCP-GameContainer .exeQuextIcons-IconReboot {
-    background-image: url(exequextreload.png);
-    background-size: 100% 100%;
-}
+
 
 
 .RLCP-GameContainer .exeQuextIcons-Minimize {
-    background-image: url(exequextmin.png);
+    background-image: url(exequextmin.svg);
     background-size: 100% 100%;
 }
 
 .RLCP-GameContainer .exeQuextIcons-Hit {
-    background-image: url(exequexthits.png);
+    background-image: url(exequexthits.svg);
     background-size: 100% 100%;
 }
 
 .RLCP-GameContainer .exeQuextIcons-Error {
-    background-image: url(exequextrerrors.png);
+    background-image: url(exequextrerrors.svg);
     background-size: 100% 100%;
 }
 
 .RLCP-GameContainer .exeQuextIcons-Score {
-    background-image: url(exequextscore.png);
+    background-image: url(exequextscore.svg);
     background-size: 100% 100%;
 }
 
@@ -838,13 +836,13 @@
 }
 
 .RLCP-GameContainer .exeQuextIcons-FullScreen {
-    background-image: url(exequextfull.png);
+    background-image: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
 
 .RLCP-GameContainer .exeQuextIcons-Number {
-    background-image: url(exequextnumber.png);
+    background-image: url(exequextnumber.svg);
     background-size: 100% 100%;
 }
 
@@ -857,7 +855,7 @@
 
 
 div:fullscreen .exeQuextIcons-FullScreen {
-    background-image: url(exequextnormal.png);
+    background-image: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
@@ -1235,41 +1233,18 @@ div:fullscreen .RLCP-LinkMinimize {
         display: none;
     }
 
-    .RLCP-GameContainer .exeQuextIcons-MoveOne,
-    .RLCP-GameContainer .exeQuextIcons-Submit,
+       .RLCP-GameContainer .exeQuextIcons-Submit,
     .RLCP-GameContainer .exeQuextIcons-Video {
         height: 2em;
         width: 2em;
     }
 
-    .RLCP-GameContainer input[type="text"],
-    input.RLCP-CodeAccessE {
-        background: #fdfdfd;
-        border: 1px solid #828282;
-        border-radius: 4px;
-        box-sizing: border-box;
-        display: inline-block;
-        line-height: 1.5em;
-        margin: 0 0.3em;
-        padding: 0.4em 0.25em;
-    }
 
-    .RLCP-GameContainer input[type="text"]:active,
-    .RLCP-GameContainer input[type="text"]:focus,
-    input.RLCP-EdReply:focus,
-    input.RLCP-EdReply:active,
-    input.RLCP-CodeAccessE:focus,
-    input.RLCP-CodeAccessE:active {
-        background: #fdfdfd;
-        border: 1px solid #398ee7;
-        border-radius: 4px;
-    }
 
     .RLCP-CodeAccessDiv,
     .RLCP-ShowClue {
         width: 90%;
     }
-
     div:fullscreen .RLCP-Message {
         font-size: 1em;
     }

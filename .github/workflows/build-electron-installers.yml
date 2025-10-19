@@ -27,7 +27,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '22'  # Use the version you need
+          node-version: '24'  # Use the version you need
           package-manager-cache: false 
 
       - name: Setup PHP
@@ -97,7 +97,8 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: |
           rm -f vendor/nativephp/php-bin/bin/mac/arm64/php-8.3.zip
-          rm -f vendor/nativephp/php-bin/bin/mac/x86/php-8.3.zip
+          rm -f vendor/nativephp/php-bin/bin/mac/x64/php-8.3.zip
+          rm -rf vendor/nativephp/php-bin/bin/mac/x86
           rm -rf vendor/nativephp/php-bin/bin/linux
           rm -rf vendor/nativephp/php-bin/bin/win
 
@@ -112,7 +113,11 @@ jobs:
       - name: Decode Windows certificate
         if: matrix.os == 'windows-latest'
         run: |
-          echo "${{ secrets.CERT_P12 }}" | base64 --decode > windows-cert.pfx
+          if [ -n "${{ secrets.CERT_P12 }}" ]; then
+            echo "${{ secrets.CERT_P12 }}" | base64 --decode > windows-cert.pfx
+          else
+            echo "No CERT_P12 secret set, skipping certificate decode"
+          fi
         shell: bash
 
       - name: Build Symfony assets into public
@@ -125,31 +130,20 @@ jobs:
         env:
           # GitHub Releases API token for electron-builder
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WIN_CSC_LINK: ./windows-cert.pfx
+          CSC_LINK: ${{ secrets.MAC_CERT_P12 }}
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+          # Only set signing secrets if they exist
+          WIN_CSC_LINK: ${{ secrets.CERT_P12 != '' && './windows-cert.pfx' || '' }}
           WIN_CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           # choose publish mode depending on trigger:
           # - when triggered by a release.prereleased -> publish (PUBLISH=always)
           # - when triggered by push/merged PR -> do not publish (PUBLISH=never)
-          PUBLISH: ${{ github.event_name == 'release' && 'always' || 'never' }}
+          # - skip publishing on forks
+          PUBLISH: ${{ github.event_name == 'release' && github.repository_owner == 'exelearning' && 'always' || 'never' }}
         run: |
           # Run the package command with the version
           make package VERSION=${{ steps.get_version.outputs.version }}  PUBLISH=${{ env.PUBLISH }}
         shell: bash
-
-      - name: VirusTotal Scan
-        uses: crazy-max/ghaction-virustotal@v4
-        continue-on-error: true
-        with:
-          vt_api_key: ${{ secrets.VT_API_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          update_release_body: true
-          files: |
-            .msi$
-            .exe$
-            .dmg$
-            .deb$
-            .rpm$
-            .zip$
 
       # Always upload installers as workflow artifacts so test job can use them.
       # If the trigger was a release and electron-builder already published, this
@@ -170,13 +164,14 @@ jobs:
       APP_BOOT_TIMEOUT: 300   # increase if needed
       APP_PORT: 41309         # the one used in Electron
       SCREENSHOT_DELAY: 20    # seconds before screenshots
+      INSTALL_POLL_TIMEOUT: 240   # seconds to wait for install
+      INSTALL_POLL_INTERVAL: 2    # seconds between checks
 
     needs: package
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-
     steps:
       - name: Download installers
         uses: actions/download-artifact@v5
@@ -185,26 +180,13 @@ jobs:
           path: installers
 
       # ---------- Ubuntu test ----------
-      - name: Set up Node.js (for CDP)
-        if: matrix.os == 'ubuntu-latest'
-
-        uses: actions/setup-node@v5
-        with:
-          node-version: '24'
-          package-manager-cache: false
-
-      - name: Install CDP helper
-        if: matrix.os == 'ubuntu-latest'
-        run: npm i chrome-remote-interface
-        shell: bash
-
       - name: Test install on Linux (.deb only)
         if: matrix.os == 'ubuntu-latest'
         run: |
           set -euo pipefail
 
           sudo apt-get update
-          sudo apt-get install -y xvfb xdotool imagemagick curl openbox || true
+          sudo apt-get install -y xvfb xdotool imagemagick curl openbox dbus-x11 || true
           sudo apt-get install -y --no-install-recommends \
             libgtk-3-0 libnss3 libxss1 libgbm1 libxshmfence1 libdrm2 \
             libatk-bridge2.0-0 libatspi2.0-0 libx11-xcb1 libxtst6 || true
@@ -212,7 +194,7 @@ jobs:
 
           installer=$(ls installers/*.deb 2>/dev/null || true)
           if [ -z "$installer" ]; then echo "No .deb installer found" >&2; exit 1; fi
-          sudo dpkg -i "$installer" || sudo apt-get -f install -y
+          sudo apt-get install -y "./$installer" || { sudo apt-get -f install -y && sudo apt-get install -y "./$installer"; }
 
           # X virtual
           Xvfb :99 -screen 0 1280x800x24 >/tmp/xvfb.log 2>&1 &
@@ -222,16 +204,17 @@ jobs:
           openbox >/tmp/openbox.log 2>&1 &
           sleep 1
 
-          export ALLOW_UI_IN_CI=1
           export ELECTRON_DISABLE_SANDBOX=1
           export ELECTRON_DISABLE_GPU=1
 
+          echo "Opening eXeLearning app..."
           app_cmd="/opt/eXeLearning/exelearning"
           command -v exelearning >/dev/null 2>&1 && app_cmd="$(command -v exelearning)" || true
-          "$app_cmd" --remote-debugging-port=9222 > ubuntu-app.log 2>&1 &
+          dbus-run-session -- "$app_cmd" > ubuntu-app.log 2>&1 &
           APP_PID=$!
           echo "App pid: $APP_PID"
 
+          echo "Waiting until eXeLearning is opened..."
           # Wait until the server responds or the window appears
           end=$((SECONDS + ${APP_BOOT_TIMEOUT:-120}))
           until curl -sf "http://localhost:${APP_PORT:-41309}/" >/dev/null 2>&1 || \
@@ -240,38 +223,14 @@ jobs:
             sleep 1
           done
 
-          # Activate window / screenshot 1
-          WID=$(xdotool search --name "eXeLearning" | head -n1 || true)
-          [ -n "$WID" ] && xdotool windowactivate "$WID" || true
+          echo "eXeLearning is already opened, taking first screenshot..."
           sleep ${SCREENSHOT_DELAY:-4}
           import -display :99 -window root ubuntu-screenshot-1.png || true
 
-          # --- CDP: click "Preview" without keys ---
-          node - <<'NODE'
-          const CDP = require('chrome-remote-interface');
-          (async () => {
-            const targets = await CDP.List();
-            // el renderer principal suele tener la URL de tu servidor embebido
-            const target =
-              targets.find(t => (t.url||'').includes('http://localhost:41309')) ||
-              targets.find(t => (t.title||'').includes('eXeLearning')) ||
-              targets[0];
-            const client = await CDP({ target });
-            const { Runtime } = client;
-            await Runtime.evaluate({ expression: `
-              (function(){
-                const btn = document.getElementById('navbar-button-preview');
-                if (btn) btn.click();
-                else if (window.eXeLearning?.app?.menu?.navbarFile?.previewEvent) {
-                  window.eXeLearning.app.menu.navbarFile.previewEvent();
-                }
-                'ok';
-              })();
-            `});
-            await client.close();
-          })();
-          NODE
+          echo "Sending Ctrl+P to the current focused window..."          
+          xdotool key ctrl+p
 
+          echo "Taking second screenshot..."
           sleep ${SCREENSHOT_DELAY:-4}
           import -display :99 -window root ubuntu-screenshot-2.png || true
 
@@ -296,7 +255,6 @@ jobs:
           cp -R "$APP_PATH" /Applications/
           hdiutil detach "$VOL" || true
 
-          export ALLOW_UI_IN_CI=1
           export ELECTRON_DISABLE_GPU=1
 
           # Open app and wait for readiness
@@ -334,15 +292,23 @@ jobs:
           if (-not $exe) { Write-Error "No NSIS .exe installer found"; exit 1 }
           Start-Process $exe.FullName -ArgumentList "/S" -Wait -NoNewWindow
 
-          # Add wait to the NSIS installer to be finished
-          Start-Sleep -Seconds ($env:SCREENSHOT_DELAY ?? 10)
+          # Actively poll for installed eXeLearning.exe until timeout
+          $timeoutSec = [int]($env:INSTALL_POLL_TIMEOUT ?? 240)
+          $intervalSec = [int]($env:INSTALL_POLL_INTERVAL ?? 2)
+          $deadline = (Get-Date).AddSeconds($timeoutSec)
+          do {
+            $found = $false
+            if (Test-Path "C:\Program Files\eXeLearning\eXeLearning.exe") { $found = $true }
+            elseif (Test-Path "C:\Program Files (x86)\eXeLearning\eXeLearning.exe") { $found = $true }
+            elseif (Test-Path (Join-Path $env:LOCALAPPDATA "Programs\eXeLearning\eXeLearning.exe")) { $found = $true }
+            if (-not $found) { Start-Sleep -Seconds $intervalSec }
+          } until ($found -or (Get-Date) -ge $deadline)
 
           $exePath = "C:\Program Files\eXeLearning\eXeLearning.exe"
           if (-not (Test-Path $exePath)) { $exePath = "C:\Program Files (x86)\eXeLearning\eXeLearning.exe" }
           if (-not (Test-Path $exePath)) { $exePath = Join-Path $env:LOCALAPPDATA "Programs\eXeLearning\eXeLearning.exe" }
           if (-not (Test-Path $exePath)) { Write-Error "eXeLearning.exe not found after install"; exit 1 }
-
-          $env:ALLOW_UI_IN_CI = "1"
+          Write-Host "Found eXeLearning.exe at: $exePath"
 
           # Load assemblies and launch
           Add-Type -AssemblyName System.Windows.Forms

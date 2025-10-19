@@ -1,21 +1,15 @@
-#hiQEIdeviceForm input[type=number] {
-    width: 4em;
-}
-
 #hiQEIdeviceForm input[type="radio"],
 #hiQEIdeviceForm input[type="checkbox"],
 #hiQEIdeviceForm input[type=button] {
     cursor: pointer;
 }
 
-#hiQEIdeviceForm .exe-form-tab label {
-    margin-right: 0.15em !important;
+#hiQEIdeviceForm #hiEPercentajeQuestions,
+#hiQEIdeviceForm #hiEAttempts,
+#hiQEIdeviceForm #hiETimeQuestion {
+    width: 9.5ch !important;
+    max-width: 9.5ch !important;
 }
-
-#hiQEIdeviceForm input:is([type="checkbox"], [type="radio"], [type="number"]) {
-    margin-right: 0.15em !important;
-}
-
 /*Panel preguntas */
 .HIE-Panel {
     margin: 0.7em auto;
@@ -30,7 +24,6 @@
     justify-content: space-between;
     margin-bottom: 1em;
     width: 100%;
-
 }
 
 /* Medias */
@@ -40,7 +33,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .HIE-Media {
@@ -74,26 +66,20 @@
     width: 50%;
 }
 
-.HIE-OptionsGame div {
-    margin-bottom: 0.7em;
-}
-
-.HIE-OptionsGame input[type=text] {
-    margin-right: .2em;
-    width: 5em;
-}
-
 .HIE-inlineOption,
 .HIE-TypeGame,
 .HIE-TypeOrder {
     margin-left: .5em
 }
 
-/* Ayuda */
 #hiQEIdeviceForm .HIE-TypeGameHelp {
     display: none;
     margin-bottom: 2em;
     font-size: .95em
+}
+
+#hiQEIdeviceForm .HIE-OptionsMedia .exe-pick-any-file {
+    margin-right: 0;
 }
 
 .Games-Reportdiv {
@@ -118,68 +104,6 @@
     margin-right: 0.2em;
     min-width: 100px;
     width: 100%;
-}
-
-.uextE-EInputImage input[type=button] {
-    flex-shrink: 0;
-}
-
-.HIE-AuthorAlt {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 5px
-}
-
-.HIE-AuthorAlt label {
-    display: block;
-}
-
-.HIE-AuthorAlt input[type=text] {
-    margin-right: 0.2em;
-    width: 100%;
-}
-
-.HIE-AuthorAlt>div {
-    width: 49.3%;
-}
-
-/* Opciones video */
-.HIE-AuthorVideo input[type=text] {
-    width: 85%;
-    max-width: 400px;
-}
-
-.HIE-InputVideo input[type=text] {
-    width: 85%;
-}
-
-.HIE-InputOptionsVideo>div {
-    margin-top: 0.6em;
-}
-
-.HIE-InputOptionsVideo button {
-    font-size: 1em;
-    height: 1.6em;
-}
-
-/* Opciones audio */
-.HIE-InputAudio {
-    align-items: center;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.HIE-InputAudio input[type=text] {
-    flex-flow: 1;
-    margin-right: 0.2em;
-    min-width: 100px;
-    width: 100%;
-}
-
-.HIE-InputAudio input[type=button] {
-    flex-shrink: 0;
 }
 
 .HIE-ButtonLink {
@@ -256,8 +180,6 @@
     white-space: nowrap;
 }
 
-
-
 /*Numero Preguntas */
 .HIE-NumQuestionDiv {
     align-items: center;
@@ -314,10 +236,9 @@
 }
 
 .HIE-NavigationButton {
-    height: 1.5em;
-    margin: 0 .3em;
-    min-width: 1.5em;
-    width: 1.5em;
+    height: 1.7em;
+    min-width: 1.7em;
+    width: 1.7em;
 }
 
 .HIE-ButtonImage {
@@ -332,12 +253,9 @@
 }
 
 .HIE-NumberQuestion {
-    font-weight: bold;
-    height: 1.5em;
-    line-height: 1.5em;
     text-align: center;
     vertical-align: middle;
-    width: 2em;
+    width: 3em;
 }
 
 /* Video introdución */
@@ -422,19 +340,13 @@
     margin-right: .2em;
 }
 
-.HIE-VIOptionsVQ #vquextEVIURL {
-    width: 15em;
-}
-
 /* Ocutar elementos */
 .HIE-InputOptionsVideo,
 .HIE-DP,
-.HIE-InputImage,
 .HIE-VIDiv,
 .HIE-ScoreQuestionDiv,
 .HIE-Coord,
 .HIE-FeedbackP,
-.HIE-TitleImage,
 .HIE-TitleVideo,
 .HIE-InputVideo {
     display: none;
@@ -460,12 +372,10 @@
     margin-right: 0.2em;
 }
 
-
 label[for=gameQEScoreQuestion],
 input#gameQEScoreQuestion {
     display: none;
 }
-
 
 /* To review */
 #hiQEIdeviceForm .exe-block-info img {
@@ -478,7 +388,6 @@ input#gameQEScoreQuestion {
     top: 6px;
     right: 5px;
 }
-
 
 #hiQEIdeviceFormTab3 p:first-child {
     margin-top: 0;
@@ -503,7 +412,7 @@ input#gameQEScoreQuestion {
 #hiQEIdeviceForm #hiQEIdeviceFormTab3 label {
     display: block;
     margin-bottom: .2em;
-    color: #5b810b;
+    color: #0BA1A1;
     font-weight: 500;
 }
 
@@ -598,102 +507,6 @@ label[for=gameQEActivitySCORM] {
     vertical-align: middle;
 }
 
-
 .GameModeLabel {
     font-weight: normal
-}
-
-.eXeE-LightboxWindow {
-    background-color: #fff;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #ccc;
-    width: 100%;
-    max-width: 1200px;
-    position: relative;
-}
-
-.eXeE-LightboxTabs {
-    display: flex;
-    border-bottom: 1px solid #ccc;
-    align-items: center;
-    position: relative;
-}
-
-#hiQEIdeviceForm a.eXeE-TabButton,
-.eXeE-TabButton {
-    padding: 10px 15px;
-    cursor: pointer;
-    background: #f0f0f0;
-    border: none;
-    border-right: 1px solid #ccc;
-    font-size: 16px;
-    position: relative;
-    text-decoration: none !important;
-    color: black;
-}
-
-a.eXeE-TabButton:last-child {
-    border-right: none;
-}
-
-#hiQEIdeviceForm .eXeE-Active,
-.eXeE-Active {
-    background: #fff !important;
-    border-bottom: 2px solid #007BFF !important;
-    color: #5b810b !important;
-}
-
-.eXeE-LightboxContent {
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-}
-
-.eXeE-LightboxTextarea {
-    width: 100%;
-    height: 250px;
-    font-family: monospace;
-    font-size: 14px;
-}
-
-.eXeE-LightboxFooter {
-    display: flex;
-    justify-content: flex-end;
-    border-top: 1px solid #ccc;
-    padding: 10px;
-}
-
-.eXeE-LightboxFooter button {
-    margin-left: 10px;
-}
-
-.eXeE-InfoTooltip {
-    display: inline-block;
-    margin-left: 5px;
-    cursor: help;
-    border-radius: 50%;
-    background: #ccc;
-    width: 16px;
-    height: 16px;
-    text-align: center;
-    line-height: 16px;
-    font-size: 12px;
-    font-weight: bold;
-    position: relative;
-}
-
-.eXeE-InfoTooltip:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    top: 20px;
-    left: 0;
-    background: #333;
-    color: #fff;
-    padding: 5px 8px;
-    border-radius: 3px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 999;
 }

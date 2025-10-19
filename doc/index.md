@@ -14,10 +14,10 @@ Use the sections below to jump to what you need.
 
 ## For End Users
 - [Install](install.md)
+- [Profile pictures](profile-avatars.md)
 
 ## For System Administrators
-- Deployment Overview: [Options and Compose files](deploy/overview.md)
-- Deployment Guides: [Sample Compose files and notes](deploy/README.md)
+- [Deployment](deployment.md)
 
 ## For Developers
 - Development Environment: [Setup and tooling](development/environment.md)

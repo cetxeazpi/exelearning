@@ -1093,37 +1093,37 @@ a.SLCNP-ModeBoardShow {
 }
 
 .SLCNP-GameContainer .exeQuextIcons-Minimize {
-    background-image: url(exequextmin.png);
+    background-image: url(exequextmin.svg);
     background-size: 100% 100%;
 }
 
 .SLCNP-GameContainer .exeQuextIcons-Hit {
-    background-image: url(exequexthits.png);
+    background-image: url(exequexthits.svg);
     background-size: 100% 100%;
 }
 
 .SLCNP-GameContainer .exeQuextIcons-FullScreen {
-    background-image: url(exequextfull.png);
+    background-image: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
 .SLCNP-GameContainer .exeQuextIcons-Error {
-    background-image: url(exequextrerrors.png);
+    background-image: url(exequextrerrors.svg);
     background-size: 100% 100%;
 }
 
 .SLCNP-GameContainer .exeQuextIcons-Score {
-    background-image: url(exequextscore.png);
+    background-image: url(exequextscore.svg);
     background-size: 100% 100%;
 }
 
 .SLCNP-GameContainer .exeQuextIcons-Time {
-    background-image: url(exequexttime.png);
+    background-image: url(exequexttime.svg);
     background-size: 100% 100%;
 }
 
 .SLCNP-GameContainer .exeQuextIcons-Number {
-    background-image: url(exequextnumber.png);
+    background-image: url(exequextnumber.svg);
     background-size: 100% 100%;
 }
 
@@ -1139,17 +1139,17 @@ a.SLCNP-ModeBoardShow {
 
 /* Full Screen */
 div:fullscreen .exeQuextIcons-FullScreen {
-    background-image: url(exequextnormal.png);
+    background-image: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
 div:-webkit-full-screen .exeQuextIcons-FullScreen {
-    background: url(exequextnormal.png);
+    background: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
 div:-moz-full-screen .exeQuextIcons-FullScreen {
-    background: url(exequextnormal.png);
+    background: url(exequextfull.svg);
     background-size: 100% 100%;
 }
 
@@ -1371,29 +1371,7 @@ div:fullscreen .SLCNP-LinkMinimize {
         width: 2em;
     }
 
-    .SLCNP-GameContainer input[type="text"],
-    input.SLCNP-EdReply,
-    input.SLCNP-CodeAccessE {
-        background: #fdfdfd;
-        border: 1px solid #828282;
-        border-radius: 4px;
-        box-sizing: border-box;
-        display: inline-block;
-        line-height: 1.5em;
-        margin: 0 0.3em;
-        padding: 0.4em 0.25em;
-    }
 
-    .SLCNP-GameContainer input[type="text"]:active,
-    .SLCNP-GameContainer input[type="text"]:focus,
-    input.SLCNP-EdReply:focus,
-    input.SLCNP-EdReply:active,
-    input.SLCNP-CodeAccessE:focus,
-    input.SLCNP-CodeAccessE:active {
-        background: #fdfdfd;
-        border: 1px solid #398ee7;
-        border-radius: 4px;
-    }
 }
 
 @media screen and (max-width:340px) {

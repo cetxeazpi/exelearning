@@ -10,12 +10,15 @@ use App\Service\net\exelearning\Service\Api\CurrentOdeUsersServiceInterface;
 use App\Service\net\exelearning\Service\Api\OdeComponentsSyncServiceInterface;
 use App\Service\net\exelearning\Service\Api\OdeExportServiceInterface;
 use App\Service\net\exelearning\Service\Api\OdeServiceInterface;
+use App\Util\net\exelearning\Util\FileUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/api/ode-export')]
@@ -42,6 +45,7 @@ class OdeExportApiController extends DefaultApiController
         UserHelper $userHelper,
         CurrentOdeUsersServiceInterface $currentOdeUsersService,
         TranslatorInterface $translator,
+        SerializerInterface $serializer,
     ) {
         $this->fileHelper = $fileHelper;
         $this->odeService = $odeService;
@@ -51,7 +55,7 @@ class OdeExportApiController extends DefaultApiController
         $this->currentOdeUsersService = $currentOdeUsersService;
         $this->translator = $translator;
 
-        parent::__construct($entityManager, $logger);
+        parent::__construct($entityManager, $logger, $serializer);
     }
 
     #[Route('/{odeSessionId}/{exportType}/download', methods: ['GET'], name: 'api_ode_export_download')]
@@ -172,8 +176,10 @@ class OdeExportApiController extends DefaultApiController
             throw $this->createNotFoundException(sprintf('Attempt to access directory: %s', $relative));
         }
 
-        return new Response(file_get_contents($filePath), 200, [
-            'Content-Type' => 'text/html',
-        ]);
+        $response = new BinaryFileResponse($filePath);
+        $mimeType = FileUtil::getFileMimeType($filePath) ?: 'application/octet-stream';
+        $response->headers->set('Content-Type', $mimeType);
+
+        return $response;
     }
 }

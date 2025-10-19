@@ -20,6 +20,9 @@ export default class NavbarFile {
         this.previewButton = this.menu.navbar.querySelector(
             '#navbar-button-preview'
         );
+        this.projectPreferencesButton = document.querySelector(
+            '#head-top-settings-button'
+        );
     }
 
     /**
@@ -33,6 +36,7 @@ export default class NavbarFile {
         this.setOdeBrokenLinksEvent();
         this.setOdeUsedFilesEvent();
         this.setPreviewEvent();
+        this.setProjectPreferencesEvent();
     }
 
     /**************************************************************************************
@@ -45,7 +49,8 @@ export default class NavbarFile {
      */
     setTooltips() {
         // See eXeLearning.app.common.initTooltips
-        $('.main-menu-right button')
+        // Avoid binding tooltips to dropdown toggles to prevent Bootstrap instance conflicts
+        $('.main-menu-right button:not([data-bs-toggle="dropdown"])')
             .attr('data-bs-placement', 'bottom')
             .tooltip();
         $('#exeUserMenuToggler').on('click mouseleave', function () {
@@ -122,6 +127,15 @@ export default class NavbarFile {
         this.previewButton.addEventListener('click', () => {
             if (eXeLearning.app.project.checkOpenIdevice()) return;
             this.previewEvent();
+        });
+    }
+
+    setProjectPreferencesEvent() {
+        this.projectPreferencesButton.addEventListener('click', () => {
+            document
+                .querySelector('[nav-id="root"]')
+                ?.querySelectorAll('.nav-element-text')[0]
+                ?.click();
         });
     }
 

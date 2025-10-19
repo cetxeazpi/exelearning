@@ -1,5 +1,135 @@
 # CHANGELOG
 
+## v3.0.0-rc1 – 2025-10-19
+
+### Added
+
+- New print functionality in the "File" menu
+- New E2E tests
+- Full translation: Spanish (es)
+- Updated translations (automated): Catalan (ca), Basque (eu), Galician (gl), Valencian (va), Esperanto (eo)
+- New score bar icons in the Games
+- Improved installation logic in the Electron installers
+- Session expiration detection and automatic login redirect
+- Automatic CSS generation from SCSS
+- Allow Electron version auto-updates
+- New `make test-playwright` command to run local Playwright collaborative tests
+
+### Fixed
+
+- Improvements to the Chocolatey packaging workflow
+- Issues in Windows and macOS versions (control PHP INI settings via environment variables)
+- Application icons and logos across all versions
+- Form iDevice presentation (partial revision)
+
+### Upgraded
+
+- Deploy documentation
+- Node.js: 20 → 24
+
+### Removed
+
+- Unused strings in translation files
+- "API Reference" link
+- Provisional warning for beta versions
+- Main CSS file (now generated automatically from SCSS files)
+
+## v3.0.0-beta8 – 2025-10-16
+
+### Added
+
+- Improved collaborative editing mode in the new interface
+- New temporary files cleanup feature and related documentation
+- Configurable system for rendering user profile avatars
+- Added a `data-testid` attribute to various UI components to facilitate automated testing
+- Refactored E2E tests with factories, real-time improvements, and cleaner output
+- Restricted guest login endpoint to authorized sources to prevent abuse
+- New `make css` and `make css-dev` commands for building production and development CSS
+- New "Base" style colors
+- iDevices:
+  - New icons and styling
+  - Checklist & Progress Report: Enabled PDF report download (with PNG fallback)
+  - New tab for AI-based question generation in some iDevices
+  - Identify: New button to play the help audio
+
+### Fixed
+
+- SQLite PRAGMA handling
+- Reduced Mercure and app log output
+- Changed the default shell to `/bin/ash` for Alpine compatibility and enabled error handling
+- Added active polling for eXeLearning.exe after NSIS installation to avoid race conditions
+- Chocolatey publishing process
+- Packaging and version management (improved application upgrade process)
+- Presentation and usability issues in the new UI
+- iDevices:
+  - Complete: Fixed jQuery UI loading issue
+  - AZ Quiz Game: Added support for accent marks and special characters
+
+### Upgraded
+
+- dama/doctrine-test-bundle: 8.3.1 → 8.4.0
+- github/codeql-action: 3 → 4
+- liip/imagine-bundle: 2.14.0 → 2.15.0
+- node: 20-alpine → 24-alpine
+- phpunit/phpunit: 12.4.0 → 12.4.1
+- rector/rector: 2.1.7 → 2.2.3
+- symfony/mailer: 7.3.3 → 7.3.4
+
+### Removed
+
+- SCORM 2004 export (temporarily)
+
+---
+
+## v3.0.0-beta7 – 2025-10-12
+
+### Added
+
+- New user interface
+- New iDevice icons
+- Updated Spanish (es) translation
+- Build and test automation for Electron desktop installers
+- Secure code signing for macOS installers
+- Improved Electron build workflow and documentation
+- New jobs to build and publish the application to Chocolatey and Winget
+- Doctrine middleware to improve SQLite connection performance under concurrent load
+- iDevice HTML revision
+
+### Fixed
+
+- Moodle publish process
+- CAS authentication compatibility with different `BASE_PATH` values
+- Incorrect iDevice order on pages
+- Handling of orphaned iDevices in `content.xml`
+- Prevent “invalid data” error when saving iDevices
+- Standardized serialization across all controllers
+- `make create-user` command on Windows
+
+### Upgraded
+
+- actions/checkout: 4 → 5
+- actions/download-artifact: 4 → 5
+- actions/setup-python: 5 → 6
+- actions/upload-pages-artifact: 3 → 4
+- api-platform/core: 4.2.0 → 4.2.1
+- brianium/paratest: 7.13.0 → 7.14.1
+- friendsofphp/php-cs-fixer: 3.87.2 → 3.88.2
+- peter-evans/dockerhub-description: 4 → 5
+- phpunit/phpunit: 12.3.14 → 12.3.15
+- postgres: 17-alpine → 18-alpine in /doc/deploy
+- symfony/debug-bundle: 7.3.0 → 7.3.4
+- symfony/framework-bundle: 7.3.3 → 7.3.4
+- symfony/intl: 7.3.3 → 7.3.4
+- symfony/serializer: 7.3.3 → 7.3.4
+- symfony/translation: 7.3.3 → 7.3.4
+- symfony/twig-bundle: 7.3.2 → 7.3.4
+
+### Removed
+
+- VirusTotal scanning step from the Electron installer build workflow
+
+---
+
 ## v3.0.0-beta6 – 2025-09-27
 
 ### Added

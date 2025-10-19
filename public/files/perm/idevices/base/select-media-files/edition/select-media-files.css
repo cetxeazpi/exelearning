@@ -2,16 +2,23 @@
     width: 100%;
 }
 
-#gameQEIdeviceForm input[type=number] {
-    width: 4em;
+#gameQEIdeviceForm input[type="color"],
+#gameQEIdeviceForm input[type="button"] {
+    margin-right: 0 !important;
 }
 
-#gameQEIdeviceForm label {
-    margin-right: 0.1em !important;
+#gameQEIdeviceForm input[type="color"] {
+    padding: .2rem !important;
+    height: 2em !important;
+    width: 3.5rem !important;
 }
 
-#gameQEIdeviceForm input:is([type="checkbox"], [type="radio"], [type="number"]) {
-    margin-right: 0.1em !important;
+
+
+#gameQEIdeviceForm #slcmEPercentajeQuestions,
+#gameQEIdeviceForm #slcmEPercentajeFB {
+    width: 9.5ch !important;
+    max-width: 9.5ch !important;
 }
 
 #gameQEIdeviceForm input[type="radio"],
@@ -82,8 +89,6 @@
 }
 
 .SLCME-ECard {
-    top: 4px;
-    left: 4px;
     width: 232px;
     height: 232px;
     min-width: 232px;
@@ -98,8 +103,8 @@
 }
 
 .SLCME-EDatosCarta {
-    width: 45%;
-    max-width: 500px;
+    width: 48%;
+    max-width: 600px;
     min-width: 450px;
     border-radius: 0.3em;
     padding: 0.7em;
@@ -279,10 +284,9 @@
 }
 
 .SLCME-ENumPhrases {
-    font-weight: bold;
-    height: 1.5em;
     text-align: center;
-    width: 2em;
+    vertical-align: middle;
+    width: 3em;
 }
 
 /* barra edición */
@@ -295,10 +299,9 @@
 }
 
 .SLCME-ENavigationButton {
-    height: 1.5em;
-    margin: 0 .3em;
-    min-width: 1.5em;
-    width: 1.5em;
+    height: 1.7em;
+    min-width: 1.7em;
+    width: 1.7em;
 }
 
 .SLCME-EButtonImage {
@@ -362,7 +365,7 @@
 #gameQEIdeviceForm #gameQEIdeviceFormTab3 label {
     display: block;
     margin-bottom: .2em;
-    color: #5b810b;
+    color: #0BA1A1;
     font-weight: 500;
 }
 
@@ -463,7 +466,6 @@ label[for=gameQEActivitySCORM] {
 
 .SLCME-TypeGameHelp {
     display: none;
-    margin-bottom: 2em;
     font-size: .95em
 }
 

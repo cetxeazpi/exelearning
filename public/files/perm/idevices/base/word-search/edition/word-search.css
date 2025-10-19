@@ -2,14 +2,20 @@
     width: 4em;
 }
 
-#sopaQEIdeviceForm label {
-    margin-right: 0.1em;
+#sopaQEIdeviceForm input[type=button] {
+    margin: 0;
 }
 
 #sopaQEIdeviceForm input[type="radio"],
 #sopaQEIdeviceForm input[type="checkbox"],
 #sopaQEIdeviceForm input[type=button] {
     cursor: pointer;
+}
+
+#sopaQEIdeviceForm #sopaEPercentajeFB,
+#sopaQEIdeviceForm #sopaEPercentajeQuestions {
+    width: 9.5ch !important;
+    max-width: 9.5ch !important;
 }
 
 /*Panel preguntas */
@@ -115,7 +121,6 @@
 /* Ayuda */
 .SPE-TypeGameHelp {
     display: none;
-    margin-bottom: 2em;
     font-size: .95em
 }
 
@@ -152,17 +157,6 @@
     display: block;
 }
 
-#sopaQEIdeviceForm label {
-    margin-right: 0.1em !important;
-}
-
-#sopaQEIdeviceForm input:is([type="checkbox"], [type="radio"]) {
-    margin-right: 0.1em !important;
-}
-
-.SPE-EAuthorAlt input[type=text] {
-    width: 97%;
-}
 
 /* Opciones video */
 .SPE-EAuthorVideo input[type=text] {
@@ -192,7 +186,6 @@
 
 .SPE-EInputAudio input[type=text] {
     flex-flow: 1;
-    margin-right: 0.2em;
     min-width: 100px;
     width: 100%;
 }
@@ -358,7 +351,6 @@
 
 .SPE-ECustomMessage input[type=text] {
     width: 100%;
-    margin-right: 0.1em;
 }
 
 .SPE-ECustomMessage label {
@@ -375,10 +367,9 @@
 }
 
 .SPE-ENavigationButton {
-    height: 1.5em;
-    margin: 0 .3em;
-    min-width: 1.5em;
-    width: 1.5em;
+    height: 1.7em;
+    min-width: 1.7em;
+    width: 1.7em;
 }
 
 .SPE-EButtonImage {
@@ -393,12 +384,9 @@
 }
 
 .SPE-NumberQuestion {
-    font-weight: bold;
-    height: 1.5em;
-    line-height: 1.5em;
     text-align: center;
     vertical-align: middle;
-    width: 2em;
+    width: 3em;
 }
 
 /* Video introdución */
@@ -483,9 +471,7 @@
     margin-right: .2em;
 }
 
-.SPE-EVIOptionsVQ #vquextEVIURL {
-    width: 15em;
-}
+
 
 /* Ocutar elementos */
 .SPE-ECoord,
@@ -573,7 +559,7 @@ input#gameQEScoreQuestion {
 #sopaQEIdeviceForm #sopaQEIdeviceFormTab3 label {
     display: block;
     margin-bottom: .2em;
-    color: #5b810b;
+    color: #0BA1A1;
     font-weight: 500;
 }
 
@@ -671,99 +657,4 @@ label[for=gameQEActivitySCORM] {
 
 .GameModeLabel {
     font-weight: normal
-}
-
-.eXeE-LightboxWindow {
-    background-color: #fff;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #ccc;
-    width: 100%;
-    max-width: 1200px;
-    position: relative;
-}
-
-.eXeE-LightboxTabs {
-    display: flex;
-    border-bottom: 1px solid #ccc;
-    align-items: center;
-    position: relative;
-}
-
-#sopaQEIdeviceForm a.eXeE-TabButton,
-.eXeE-TabButton {
-    padding: 10px 15px;
-    cursor: pointer;
-    background: #f0f0f0;
-    border: none;
-    border-right: 1px solid #ccc;
-    font-size: 14px;
-    position: relative;
-    text-decoration: none !important;
-    color: black;
-}
-
-a.eXeE-TabButton:last-child {
-    border-right: none;
-}
-
-#sopaQEIdeviceForm .eXeE-Active,
-.eXeE-Active {
-    background: #fff !important;
-    border-bottom: 2px solid #007BFF !important;
-    color: #5b810b !important;
-}
-
-.eXeE-LightboxContent {
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-}
-
-.eXeE-LightboxTextarea {
-    width: 100%;
-    height: 250px;
-    font-family: monospace;
-    font-size: 14px;
-}
-
-.eXeE-LightboxFooter {
-    display: flex;
-    justify-content: flex-end;
-    border-top: 1px solid #ccc;
-    padding: 10px;
-}
-
-.eXeE-LightboxFooter button {
-    margin-left: 10px;
-}
-
-.eXeE-InfoTooltip {
-    display: inline-block;
-    margin-left: 5px;
-    cursor: help;
-    border-radius: 50%;
-    background: #ccc;
-    width: 16px;
-    height: 16px;
-    text-align: center;
-    line-height: 16px;
-    font-size: 12px;
-    font-weight: bold;
-    position: relative;
-}
-
-.eXeE-InfoTooltip:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    top: 20px;
-    left: 0;
-    background: #333;
-    color: #fff;
-    padding: 5px 8px;
-    border-radius: 3px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 999;
 }

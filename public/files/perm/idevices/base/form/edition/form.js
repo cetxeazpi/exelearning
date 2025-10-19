@@ -192,7 +192,7 @@ var $exeDevice = {
                             </div>
                             <div id="QuestionElement_${newId}" class="FormViewContainer_selection FormViewContainer">`;
                 }
-                let texclear = '';
+
                 switch (question.activityType) {
                     case $exeDevice.questionsIds[0]: // dropdown.
                         htmlForm += form.getProcessTextDropdownQuestion(question.baseText, question.wrongAnswersValue);
@@ -868,7 +868,7 @@ var $exeDevice = {
             this.strings.msgStrictQualification = _("Strict qualification");
             this.strings.msgInstructionsQuestion = _("The question should be clear and unambiguous. Avoid negative premises as they tend to be ambiguous.");
             this.strings.msgInstructionsSelection = _(`Click the toggle button to switch between questions with one correct answer and questions with many possible correct answers.`) + ' ' + this.strings.msgInstructionsQuestion;
-            this.strings.msgInstructionsDropdown = _(`Enter the text for the drop-down activity in the drop-down field either by pasting the text from another source or by typing it directly into the field. To select which words to choose, double-click on a word to select it and click on the "Show/Hide" button below.`);
+            this.strings.msgInstructionsDropdown = _(`Enter the text for the drop-down activity in the drop-down field either by pasting the text from another source or by typing it directly into the field. To select which words to choose, double-click on a word to select it and click on the button below.`);
             this.strings.msgInstructionsDropdownOtherWords = _("Optional: You can type other words to complete the drop-down activity. Use the vertical bar to separate the words. This field can be left blank.");
             this.strings.msgInstructionsFill = _(`Type or paste the text for the fill-in-the-blank activity into the field. Select the words and use the button below to hide them. You can define more than one possible answer using vertical bars to surround and separate them. E.g.: |dog|cat|bird|`);
             this.strings.msgInstructionsFillCapitalization = _("If this option is checked, submitted answers with different capitalization will be marked as incorrect");
@@ -934,41 +934,66 @@ var $exeDevice = {
                     <fieldset class="exe-fieldset exe-fieldset-closed">
                         <legend><a href="#">${_("Options")}</a></legend>
                         <div>
-                            <p>
-                                <label for="frmEShowSlider"><input type="checkbox" name="frmEShowSlider" id="frmEShowSlider"/>${_('Slides list')}</label>
-                            </p>
-                            <p>
-                                <label for="frmEQuestionsRandom"><input type="checkbox" id="frmEQuestionsRandom">${_("Random questions")}.</label>
-                            </p>
-                            <p id="frmETimeDiv">
-                                    <label for="frmETime">${_("Time (minutes)")}: <input type="number" name="frmETime" id="frmETime" value="0" min="0" max="59" /></label>
-                            </p>                     
-                            <p>
-                                <label for="frmEPercentageQuestions">%${_("Questions")}:<input type="number" name="frmEPercentageQuestions" id="frmEPercentageQuestions" value="100" min="1" max="100" /></label><span id="frmENumeroPercentaje">1/1</span>.
-                            </p>
+                            <div class="mb-3">
+                                <span class="toggle-item" role="switch" aria-checked="false">
+                                    <span class="toggle-control">
+                                        <input type="checkbox" name="frmEShowSlider" id="frmEShowSlider" class="toggle-input" />
+                                        <span class="toggle-visual" aria-hidden="true"></span>
+                                    </span>
+                                    <label class="toggle-label" for="frmEShowSlider">${_('Slides list')}</label>
+                                </span>
+                            </div>
+                            <div class="mb-3">
+                                <span class="toggle-item" role="switch" aria-checked="false">
+                                    <span class="toggle-control">
+                                        <input type="checkbox" id="frmEQuestionsRandom" class="toggle-input" />
+                                        <span class="toggle-visual" aria-hidden="true"></span>
+                                    </span>
+                                    <label class="toggle-label" for="frmEQuestionsRandom">${_("Random questions")}.</label>
+                                </span>
+                            </div>
+                            <div id="frmETimeDiv" class="d-flex align-items-center gap-2 flex-nowrap mb-3">
+                                <label for="frmETime" class="mb-0">${_("Time (minutes)")}: </label>
+                                <input type="number" name="frmETime" id="frmETime" value="0" min="0" max="59" class="form-control" style="width:6ch" />
+                            </div>
+                            <div class="d-flex align-items-center gap-2 flex-nowrap mb-3">
+                                <label for="frmEPercentageQuestions" class="mb-0">%${_("Questions")}: </label>
+                                <input type="number" name="frmEPercentageQuestions" id="frmEPercentageQuestions" value="100" min="1" max="100" class="form-control" style="width:6ch" />
+                                <span id="frmENumeroPercentaje">1/1</span>
+                            </div>
                             <!-- Pass Rate Dropdown -->
-                            <p class="question-button inline" style="display:none;">
+                            <div class="question-button inline mb-3" style="display:none;">
                                 <span id="${$exeDevice.passRateId}">${this.strings.msgPassRate}</span>
                                 ${this.createPassRateDropdown('formIdevice')}
-                            </p>            
-                                <!-- Show Answers Checkbox -->
-                            <p id="${$exeDevice.checkAddBtnAnswersId}_container" class="question-button inline">
-                                <label for="${$exeDevice.checkAddBtnAnswersId}">
-                                    <input type="checkbox" name="checkShowAnswers" id="${$exeDevice.checkAddBtnAnswersId}" checked>
-                                    ${this.strings.msgAddBtnAnswers}
-                                </label>
-                            </p>
-                                <!-- Evaluation -->
-                            <div>
-                                <div class="Games-Reportdiv">
-                                    <strong class="GameModeLabel"><a href="" id="helpLinkButton" class="GameModeHelpLink" title="${_("Help")}"><img src="${$exeDevice.idevicePath}quextIEHelp.gif" width="16" height="16" alt="${_("Help")}"/></a></strong>
-                                    <label for="evaluationCheckBox"><input type="checkbox" id="evaluationCheckBox">${_("Progress report")}. </label>
-                                    <label for="evaluationIDInput">${_("Identifier")}: </label><input type="text" id="evaluationIDInput" disabled value="${eXeLearning.app.project.odeId || ''}"/>
-                                </div>
-                                <div id="evaluationHelp" style="display:none">
-                                     <p class="exe-block-info exe-block-dismissible">${_("You must indicate the ID. It can be a word, a phrase or a number of more than four characters. You will use this ID to mark the activities covered by this progress report. It must be the same in all iDevices of a report and different in each report.")}</p>
-                                </div>
-                            </div> 
+                            </div>            
+                            <!-- Show Answers Checkbox -->
+                            <div id="${$exeDevice.checkAddBtnAnswersId}_container" class="mb-3">
+                                <span class="toggle-item" role="switch" aria-checked="true">
+                                    <span class="toggle-control">
+                                        <input type="checkbox" name="checkShowAnswers" id="${$exeDevice.checkAddBtnAnswersId}" class="toggle-input" checked />
+                                        <span class="toggle-visual" aria-hidden="true"></span>
+                                    </span>
+                                    <label class="toggle-label" for="${$exeDevice.checkAddBtnAnswersId}">${this.strings.msgAddBtnAnswers}</label>
+                                </span>
+                            </div>
+                            <!-- Evaluation -->
+                            <div class="Games-Reportdiv d-flex align-items-center gap-2 flex-nowrap mb-3">
+                                <span class="toggle-item" role="switch" aria-checked="false">
+                                    <span class="toggle-control">
+                                        <input type="checkbox" id="evaluationCheckBox" class="toggle-input" data-target="#formEvaluationIDWrapper" />
+                                        <span class="toggle-visual" aria-hidden="true"></span>
+                                    </span>
+                                    <label class="toggle-label" for="evaluationCheckBox">${_("Progress report")}. </label>
+                                </span>
+                                <span id="formEvaluationIDWrapper" class="d-flex align-items-center gap-2 flex-nowrap" style="display:none;">
+                                    <label for="evaluationIDInput" class="mb-0">${_("Identifier")}: </label>
+                                    <input type="text" id="evaluationIDInput" disabled value="${eXeLearning.app.project.odeId || ''}" class="form-control" />
+                                </span>
+                                <strong class="GameModeLabel"><a href="" id="helpLinkButton" class="GameModeHelpLink" title="${_("Help")}"><img src="${$exeDevice.idevicePath}quextIEHelp.png" width="18" height="18" alt="${_("Help")}"/></a></strong>
+                            </div>
+                            <div id="evaluationHelp" style="display:none">
+                                <p class="exe-block-info exe-block-dismissible">${_("You must indicate the ID. It can be a word, a phrase or a number of more than four characters. You will use this ID to mark the activities covered by this progress report. It must be the same in all iDevices of a report and different in each report.")}</p>
+                            </div>
                         </div>
                     </fieldset>
                     <fieldset class="exe-fieldset">
@@ -1007,6 +1032,7 @@ var $exeDevice = {
                 ${$exeDevicesEdition.iDevice.gamification.scorm.getTab(true)}
                 ${$exeDevicesEdition.iDevice.gamification.common.getLanguageTab($exeDevice.ci18n)}
                 ${$exeDevicesEdition.iDevice.gamification.share.getTab(true, 7, false)}
+                ${$exeDevicesEdition.iDevice.gamification.share.getTabIA(7)}
             </div>            
             `;
             ideviceBody.innerHTML = html;
@@ -1032,6 +1058,22 @@ var $exeDevice = {
             this.behaviourButtonAddDropdownQuestion($exeDevice.btnAddDropdownBottom, "beforeend");
             this.behaviourButtonAddSelectionQuestion($exeDevice.btnAddSelectionBottom, "beforeend");
             this.behaviourEvaluation();
+            // Inicialización de toggles (accesibilidad + mostrar/ocultar targets)
+            const initToggle = function($input){
+                const checked = $input.is(':checked');
+                $input.closest('.toggle-item[role="switch"]').attr('aria-checked', checked);
+                const targetSel = $input.data('target');
+                if(targetSel){
+                    const $target = $(targetSel);
+                    if(checked){
+                        $target.css('display','flex');
+                    }else{
+                        $target.hide();
+                    }
+                }
+            };
+            $('.toggle-input').each(function(){ initToggle($(this)); });
+            $(document).on('change','.toggle-input',function(){ initToggle($(this)); });
             $exeDevicesEdition.iDevice.gamification.share.addEvents(7, $exeDevice.insertQuestions);
             if (window.File && window.FileReader && window.FileList && window.Blob) {
                 $('#eXeGameExportImport .exe-field-instructions').eq(0).text(`${_("Supported formats")}: txt, xml(Moodle)`);
@@ -1595,7 +1637,7 @@ var $exeDevice = {
             return `<div id="removeQuestionContainer" class="formAddQuestionsContainer">
                     <input type="button" id="removeQuestion" 
                         value="${this.strings.msgERemoveQuestion}" 
-                        class="question-button"/>
+                        class="btn btn-outline-light">
                 </div>`;
         }
 
@@ -1609,7 +1651,7 @@ var $exeDevice = {
                 <div id="cancelQuestionContainer" class="formAddQuestionsContainer">
                     <input type="button" id="cancelQuestion" 
                         value="${this.strings.msgECancelQuestion}" 
-                        class="question-button"/>
+                        class="btn btn-outline-secondary">
                 </div>
                 `;
         }
@@ -1624,7 +1666,7 @@ var $exeDevice = {
             return `<div id="saveQuestionContainer" class="formAddQuestionsContainer">
                     <input type="button" id="saveQuestion" 
                         value="${this.strings.msgESaveQuestion}" 
-                        class="question-button"/>
+                        class="btn btn-primary">
                 </div>`;
         }
 
@@ -1759,6 +1801,7 @@ var $exeDevice = {
 
             // Create label for the question
             const labelElementQuestion = document.createElement("label");
+            labelElementQuestion.className = "activity-title";
             labelElementQuestion.innerHTML = `${this.strings.msgEActivity} ${selectionType || ""} ${questionType}`;
 
             // Create buttons for question actions
@@ -2708,7 +2751,7 @@ var $exeDevice = {
         createPassRateDropdown(id) {
             let options = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
             let selectDropdown = ``;
-            selectDropdown += `<select id="${$exeDevice.dropdownPassRateId}_${id}" class="dropdownPassRate" aria-labelledby="${$exeDevice.passRateId}" data-id="${id}">`;
+            selectDropdown += `<select id="${$exeDevice.dropdownPassRateId}_${id}" class="dropdownPassRate form-control" aria-labelledby="${$exeDevice.passRateId}" data-id="${id}">`;
             selectDropdown += `<option value="" selected></option>`;
             options.forEach(option => {
                 selectDropdown += `<option value="${option}">${option}%</option>`;

@@ -382,7 +382,6 @@ class App {
         }
     }
 
- 
     /**
      * Add the notranslate class to some elements (see #43)
      *

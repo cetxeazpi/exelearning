@@ -521,7 +521,7 @@ var $exeDevice = {
                         </select>
                         <button type="button" id="mapaEditPointsMap" class="MQE-EditPointsMap btn btn-primary btn-sm" title="${_('Edit map points')}">${_('Edit')}</button>
                         <button type="button" id="mapaEditSlide" class="MQE-EditPointsMap btn btn-primary btn-sm" title="${_('Edit presentation points')}">${_('Edit')}</button>
-                        <button type="button" id="mapaEditPointTest" class="MQE-EditPointsMap btn btn-primary btn-sm" title="${_('Editar cuestionario')}">${_('Edit')}</button>
+                        <button type="button" id="mapaEditPointTest" class="MQE-EditPointsMap btn btn-primary btn-sm" title="${_('Edit')}">${_('Edit')}</button>
                     </div>
                 </div>
             </div>`;

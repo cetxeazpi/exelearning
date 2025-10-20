@@ -261,13 +261,26 @@ export default class FormProperties {
             actionsContainer.setAttribute('original', false);
 
         if (property.type == 'checkbox') {
-            const wrapper = document.createElement('div');
-            wrapper.classList.add('form-check');
-            propertyValue.classList.add('form-check-input', 'me-2');
-            propertyTitle.classList.add('form-check-label');
-            wrapper.append(propertyValue);
-            wrapper.append(propertyTitle);
-            propertyRow.append(wrapper);
+            // Render como switch (toggle)
+            const item = document.createElement('span');
+            item.classList.add('toggle-item');
+
+            const control = document.createElement('span');
+            control.classList.add('toggle-control');
+
+            const visual = document.createElement('span');
+            visual.classList.add('toggle-visual');
+            visual.setAttribute('aria-hidden', 'true');
+
+            propertyValue.classList.add('toggle-input');
+
+            control.append(propertyValue, visual);
+
+            propertyTitle.classList.add('toggle-label', 'mb-0');
+
+            item.append(control, propertyTitle);
+            propertyRow.append(item);
+
             if (helpContainer) {
                 helpContainer.classList.add('ms-2');
                 propertyRow.append(helpContainer);
@@ -329,6 +342,7 @@ export default class FormProperties {
             case 'checkbox':
                 valueElement = document.createElement('input');
                 valueElement.checked = property.value == 'true' ? true : false;
+                valueElement.classList.add('toggle-input');
                 break;
             case 'date':
                 valueElement = document.createElement('input');

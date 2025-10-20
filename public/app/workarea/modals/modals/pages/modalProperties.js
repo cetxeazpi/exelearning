@@ -431,9 +431,38 @@ export default class ModalProperties extends Modal {
                 valueElement.value = property.value;
                 break;
             case 'checkbox':
-                valueElement = document.createElement('input');
-                valueElement.setAttribute('type', 'checkbox');
-                valueElement.checked = property.value == 'true' ? true : false;
+                const item = document.createElement('span');
+                item.classList.add('toggle-item');
+
+                const control = document.createElement('span');
+                control.classList.add('toggle-control');
+
+                const input = document.createElement('input');
+                input.setAttribute('type', 'checkbox');
+                input.id = id;
+                input.setAttribute('name', id);
+                input.setAttribute('property', name);
+                input.setAttribute('data-type', 'checkbox');
+                input.classList.add('property-value', 'toggle-input');
+                input.checked = property.value == 'true' ? true : false;
+
+                const visual = document.createElement('span');
+                visual.classList.add('toggle-visual');
+                visual.setAttribute('aria-hidden', 'true');
+
+                control.append(input, visual);
+                item.append(control);
+
+                if (property.required) {
+                    input.setAttribute('required', '');
+                    input.classList.add('required');
+                }
+
+                input.addEventListener('focus', () => {
+                    this.hideHelpContentAll();
+                });
+
+                valueElement = item;
                 break;
             case 'date':
                 valueElement = document.createElement('input');
@@ -460,23 +489,27 @@ export default class ModalProperties extends Modal {
                 valueElement = document.createElement('div');
                 break;
         }
+
         // Value element id
-        valueElement.id = id;
-        // Value element attributes
-        valueElement.setAttribute('name', id);
-        valueElement.setAttribute('property', name);
-        valueElement.setAttribute('data-type', property.type);
-        // Value element class
-        valueElement.classList.add('property-value');
-        // Value element event click
-        valueElement.addEventListener('focus', (event) => {
-            // Hide help texts
-            this.hideHelpContentAll();
-        });
-        // Required property
-        if (property.required) {
-            valueElement.setAttribute('required', '');
-            valueElement.classList.add('required');
+        if (property.type !== 'checkbox') {
+            // Value element id
+            valueElement.id = id;
+            // Value element attributes
+            valueElement.setAttribute('name', id);
+            valueElement.setAttribute('property', name);
+            valueElement.setAttribute('data-type', property.type);
+            // Value element class
+            valueElement.classList.add('property-value');
+            // Value element event click
+            valueElement.addEventListener('focus', (event) => {
+                // Hide help texts
+                this.hideHelpContentAll();
+            });
+            // Required property
+            if (property.required) {
+                valueElement.setAttribute('required', '');
+                valueElement.classList.add('required');
+            }
         }
         return valueElement;
     }

@@ -1821,6 +1821,17 @@
                 }
             }
         }
+        .property-row.is-toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;        
+            .toggle-item,
+            .toggle-label {
+                cursor: pointer;
+                user-select: none;
+            }
+        }
     }
 
     .form-properties[modal-content-id="block-properties"] {
@@ -1837,6 +1848,32 @@
 
     #versionControl {
         display: none;
+    }
+    .property-row.is-toggle-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .property-row.is-toggle-row > .toggle-item {
+        width: auto !important;
+        margin-right: 10px;
+        text-align: left;
+    }
+
+    .property-row.is-toggle-row > .toggle-label {
+        max-width: none !important;
+        text-align: left !important;
+        margin: 0 !important;
+        white-space: nowrap;
+    }
+
+
+    .toggle-input:focus-visible + .toggle-visual {
+        outline: 2px solid var(--brand-primary, #0BA1A1);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
     }
 }
 

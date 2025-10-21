@@ -384,8 +384,29 @@ export default class ModalProperties extends Modal {
         );
         let helpContainer = this.makeRowElementHelp(property);
         if (property.type === 'checkbox') {
+            propertyRow.classList.add('is-toggle-row');
+            propertyTitle.classList.add('toggle-label');
+
+            const item = propertyValue; 
+            item.style.cursor = 'pointer';
+
+            const toggleInput = item.querySelector('.toggle-input');
+            item.addEventListener('click', (e) => {
+                if (e.target !== toggleInput) {
+                    e.preventDefault();
+                    toggleInput.checked = !toggleInput.checked;
+                    toggleInput.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
             propertyRow.append(propertyValue);
             propertyRow.append(propertyTitle);
+
+            propertyTitle.style.cursor = 'pointer';
+            propertyTitle.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleInput.checked = !toggleInput.checked;
+                toggleInput.dispatchEvent(new Event('change', { bubbles: true }));
+            });
         } else {
             propertyRow.append(propertyTitle);
             propertyRow.append(propertyValue);

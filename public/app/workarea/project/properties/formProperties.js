@@ -261,9 +261,9 @@ export default class FormProperties {
             actionsContainer.setAttribute('original', false);
 
         if (property.type == 'checkbox') {
-            // Render como switch (toggle)
             const item = document.createElement('span');
             item.classList.add('toggle-item');
+            item.style.cursor = 'pointer';
 
             const control = document.createElement('span');
             control.classList.add('toggle-control');
@@ -277,6 +277,21 @@ export default class FormProperties {
             control.append(propertyValue, visual);
 
             propertyTitle.classList.add('toggle-label', 'mb-0');
+            propertyTitle.style.cursor = 'pointer';
+            item.addEventListener('click', (e) => {
+                if (e.target !== propertyValue) {
+                    e.preventDefault();
+                    propertyValue.checked = !propertyValue.checked;
+                    propertyValue.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+
+            // Hacer el label también clickeable
+            propertyTitle.addEventListener('click', (e) => {
+                e.preventDefault();
+                propertyValue.checked = !propertyValue.checked;
+                propertyValue.dispatchEvent(new Event('change', { bubbles: true }));
+            });
 
             item.append(control, propertyTitle);
             propertyRow.append(item);

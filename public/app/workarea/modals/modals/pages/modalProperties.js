@@ -387,7 +387,7 @@ export default class ModalProperties extends Modal {
             propertyRow.classList.add('is-toggle-row');
             propertyTitle.classList.add('toggle-label');
 
-            const item = propertyValue; 
+            const item = propertyValue;
             item.style.cursor = 'pointer';
 
             const toggleInput = item.querySelector('.toggle-input');
@@ -395,7 +395,9 @@ export default class ModalProperties extends Modal {
                 if (e.target !== toggleInput) {
                     e.preventDefault();
                     toggleInput.checked = !toggleInput.checked;
-                    toggleInput.dispatchEvent(new Event('change', { bubbles: true }));
+                    toggleInput.dispatchEvent(
+                        new Event('change', { bubbles: true })
+                    );
                 }
             });
             propertyRow.append(propertyValue);
@@ -405,7 +407,9 @@ export default class ModalProperties extends Modal {
             propertyTitle.addEventListener('click', (e) => {
                 e.preventDefault();
                 toggleInput.checked = !toggleInput.checked;
-                toggleInput.dispatchEvent(new Event('change', { bubbles: true }));
+                toggleInput.dispatchEvent(
+                    new Event('change', { bubbles: true })
+                );
             });
         } else {
             propertyRow.append(propertyTitle);

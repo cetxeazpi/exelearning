@@ -12809,6 +12809,10 @@
         <source>You must provide the time to view the solution</source>
         <target></target>
       </trans-unit>
+      <trans-unit id="_MltP1k" resname="Provide a word and its definition. May toggle between: 'Word starts' or 'Word contains', by clicking on %s">
+        <source>Provide a word and its definition. May toggle between: 'Word starts' or 'Word contains', by clicking on %s</source>
+        <target></target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

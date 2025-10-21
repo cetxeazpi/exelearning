@@ -5127,7 +5127,7 @@
       </trans-unit>
       <trans-unit id=".gar845" resname="Provide a word and its definition. May toggle between: &quot;Word starts&quot; or &quot;Word contains&quot;, by clicking on %s">
         <source>Provide a word and its definition. May toggle between: "Word starts" or "Word contains", by clicking on %s</source>
-        <target>Proporciona una palabra y su definición. Puedes alternar entre: "La palabra empieza con" o "La palabra contiene", haciendo clic en %s</target>
+        <target>Proporciona una palabra y su definición. Puedes alternar entre: "La palabra empieza" o "La palabra contiene", haciendo clic en %s</target>
       </trans-unit>
       <trans-unit id="gsp4x4D" resname="Starts with/Contains">
         <source>Starts with/Contains</source>
@@ -12801,13 +12801,13 @@
         <source>Percentage of questionnaire questions</source>
         <target>Porcentaje de preguntas del cuestionario</target>
       </trans-unit>
-      <trans-unit id="0pJGj8A" resname="Provide a word and its definition. May toggle between: &quot;Word starts&quot; or &quot;Word contains&quot;, by clicking on %s">
-        <source>Provide a word and its definition. May toggle between: \"Word starts\" or \"Word contains\", by clicking on %s</source>
-        <target>Proporciona una palabra y su definición. Puedes alternar entre: "La palabra empieza" o "La palabra contiene", haciendo clic en %s</target>
-      </trans-unit>
       <trans-unit id="HNvXfDK" resname="You must provide the time to view the solution">
         <source>You must provide the time to view the solution</source>
         <target>Debes indicar el tiempo para mostrar la solución</target>
+      </trans-unit>
+      <trans-unit id="_MltP1k" resname="Provide a word and its definition. May toggle between: 'Word starts' or 'Word contains', by clicking on %s">
+        <source>Provide a word and its definition. May toggle between: 'Word starts' or 'Word contains', by clicking on %s</source>
+        <target>Proporciona una palabra y su definición. Puedes alternar entre: 'La palabra empieza' o 'La palabra contiene', haciendo clic en %s</target>
       </trans-unit>
     </body>
   </file>

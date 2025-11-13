@@ -147,7 +147,7 @@
       </trans-unit>
       <trans-unit id="PH37mHg" resname="eXeLearning %s has expired! Please download the latest version.">
         <source>eXeLearning %s has expired! Please download the latest version.</source>
-        <target>eXeLearning %s iraungi da! Mesedez, deskarga ezazu azken bertsioa.</target>
+        <target>eXeLearning %a iraungi da! Mesedez, deskarga ezazu azken bertsioa.</target>
       </trans-unit>
       <trans-unit id="0z54hWm" resname="This is just a demo version. Not for real projects. Days before it expires: %s">
         <source>This is just a demo version. Not for real projects. Days before it expires: %s</source>
@@ -167,7 +167,7 @@
       </trans-unit>
       <trans-unit id="5ieXOaE" resname="Report an Issue">
         <source>Report an Issue</source>
-        <target>Argitaratu gaia</target>
+        <target>Argitaratu intzidentzia</target>
       </trans-unit>
       <trans-unit id="U9GQ_br" resname="Hide">
         <source>Hide</source>

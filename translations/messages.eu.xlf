@@ -411,7 +411,7 @@
       </trans-unit>
       <trans-unit id="ZLhutDM" resname="Send to AI">
         <source>Send to AI</source>
-        <target>~Bidali AI-ra</target>
+        <target>AA-ra bidali</target>
       </trans-unit>
       <trans-unit id="bOxwr9C" resname="Specialty">
         <source>Specialty</source>
@@ -823,7 +823,7 @@
       </trans-unit>
       <trans-unit id="HAl2U3v" resname="There is no query to send to the assistant.">
         <source>There is no query to send to the assistant.</source>
-        <target>~Ez dago laguntzaileari biditzeko galderarik.</target>
+        <target>Ez dago laguntzaileari bidaltzeko galderarik.</target>
       </trans-unit>
       <trans-unit id="jLcojpH" resname="Generating questions. Please wait...">
         <source>Generating questions. Please wait...</source>
@@ -11787,11 +11787,11 @@
       </trans-unit>
       <trans-unit id="bBHJSiQ" resname="Export as...">
         <source>Export as...</source>
-        <target>~Esportatu bezala...</target>
+        <target>Esportatu bezala...</target>
       </trans-unit>
       <trans-unit id="hoh2x39" resname="Export to Folder (Unzipped Website)">
         <source>Export to Folder (Unzipped Website)</source>
-        <target>~Esportatu karpetara (Webgune deszipatuan)</target>
+        <target>Esportatu karpetara (Webgune deszipatuan)</target>
       </trans-unit>
       <trans-unit id="pkPMDRH" resname="Metadata (XML)">
         <source>Metadata (XML)</source>

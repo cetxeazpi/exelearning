@@ -951,23 +951,23 @@
       </trans-unit>
       <trans-unit id="yISxAqv" resname="Instruction copied to clipboard!">
         <source>Instruction copied to clipboard!</source>
-        <target>~Irakaskuntza arbeletik kopiatu da!</target>
+        <target>Jarraibidea arbeletik kopiatu da!</target>
       </trans-unit>
       <trans-unit id="GyXTAnB" resname="Syntax error">
         <source>Syntax error</source>
-        <target>~Sintaxi errorea</target>
+        <target>Sintaxi errorea</target>
       </trans-unit>
       <trans-unit id="QriYn5V" resname="No formula to capture.">
         <source>No formula to capture.</source>
-        <target>~Ez dago formula bat harrapatzeko.</target>
+        <target>Ez dago harrapatzeko formularik.</target>
       </trans-unit>
       <trans-unit id="UDuhSdh" resname="Understood">
         <source>Understood</source>
-        <target>~Ulertuta</target>
+        <target>Ulertuta</target>
       </trans-unit>
       <trans-unit id="deMwCrv" resname="Right-click on the image to save or copy it.">
         <source>Right-click on the image to save or copy it.</source>
-        <target>~Egin klik eskuineko botoiarekin irudian gordetzeko edo kopiatzeko.</target>
+        <target>Gordetzeko edo kopiatzeko, egin klik eskuineko botoiarekin irudian.</target>
       </trans-unit>
       <trans-unit id="qNghuqo" resname="Close">
         <source>Close</source>
@@ -975,67 +975,67 @@
       </trans-unit>
       <trans-unit id="dGGvksN" resname="Matrix">
         <source>Matrix</source>
-        <target>~Matrix</target>
+        <target>Matrix</target>
       </trans-unit>
       <trans-unit id="dZ9tZ_N" resname="Rows:">
         <source>Rows:</source>
-        <target>~Errenkadak:</target>
+        <target>Errenkadak:</target>
       </trans-unit>
       <trans-unit id="SQExvxB" resname="Columns:">
         <source>Columns:</source>
-        <target>~Zutabeak:</target>
+        <target>Zutabeak:</target>
       </trans-unit>
       <trans-unit id="jVQDWug" resname="Fill:">
         <source>Fill:</source>
-        <target>~Betea:</target>
+        <target>Betegarria:</target>
       </trans-unit>
       <trans-unit id="4hCqAe1" resname="Subscripts (a, b...)">
         <source>Subscripts (a, b...)</source>
-        <target>~Azpimarratuak (a, b...)</target>
+        <target>Azpiindizeak (a, b...)</target>
       </trans-unit>
       <trans-unit id="QlFX6Ax" resname="Zeros (0)">
         <source>Zeros (0)</source>
-        <target>~Zeroak (0)</target>
+        <target>Zeroak (0)</target>
       </trans-unit>
       <trans-unit id="E2ebkdm" resname="Ones (1)">
         <source>Ones (1)</source>
-        <target>~Batak (1)</target>
+        <target>Batak (1)</target>
       </trans-unit>
       <trans-unit id="PCJDjjs" resname="Variables (a, b, c...)">
         <source>Variables (a, b, c...)</source>
-        <target>~Aldagaiak (a, b, c...)</target>
+        <target>Aldagaiak (a, b, c...)</target>
       </trans-unit>
       <trans-unit id="Nt4kRU_" resname="Numbers (1, 2, 3...)">
         <source>Numbers (1, 2, 3...)</source>
-        <target>~Zenbakiak (1, 2, 3...)</target>
+        <target>Zenbakiak (1, 2, 3...)</target>
       </trans-unit>
       <trans-unit id="GOOaLG1" resname="Empty ({})">
         <source>Empty ({})</source>
-        <target>~Hutsik ({})</target>
+        <target>Hutsik ({})</target>
       </trans-unit>
       <trans-unit id="u6GaqYo" resname="No recent symbols yet.">
         <source>No recent symbols yet.</source>
-        <target>~Oraindik ez dago ikur azkenik.</target>
+        <target>Oraindik ez dago ikur berririk.</target>
       </trans-unit>
       <trans-unit id="MXDrDSY" resname="Clear recent">
         <source>Clear recent</source>
-        <target>~Garbitu azkena</target>
+        <target>Garbitu azkena</target>
       </trans-unit>
       <trans-unit id="8K208zw" resname="Code copied!">
         <source>Code copied!</source>
-        <target>~Kodea kopiatu da!</target>
+        <target>Kodea kopiatu da!</target>
       </trans-unit>
       <trans-unit id="AMjB8_c" resname="Please enter a URL.">
         <source>Please enter a URL.</source>
-        <target>~Mesedez, sartu URL bat.</target>
+        <target>Mesedez, sartu URL bat.</target>
       </trans-unit>
       <trans-unit id="LeiwOch" resname="Menu loaded successfully.">
         <source>Menu loaded successfully.</source>
-        <target>~Menua ondo kargatu da.</target>
+        <target>Menua ondo kargatu da.</target>
       </trans-unit>
       <trans-unit id="Mkowaaq" resname="Error parsing local JSON:">
         <source>Error parsing local JSON:</source>
-        <target>~Errorea tokiko JSON-a analizatzean:</target>
+        <target>Errorea tokiko JSON-a analizatzean:</target>
       </trans-unit>
       <trans-unit id="GzoPdJq" resname="The file is not a valid JSON">
         <source>The file is not a valid JSON</source>
@@ -1047,7 +1047,7 @@
       </trans-unit>
       <trans-unit id="IRuda2t" resname="Menus">
         <source>Menus</source>
-        <target>~Menuak</target>
+        <target>Menuak</target>
       </trans-unit>
       <trans-unit id="jblMiRZ" resname="Search by description or code (e.g.: fraction, \\int)...">
         <source>Search by description or code (e.g.: fraction, \\int)...</source>
@@ -1059,15 +1059,15 @@
       </trans-unit>
       <trans-unit id="uiShOBA" resname="Customize menu">
         <source>Customize menu</source>
-        <target>~Pertsonalizatu menua</target>
+        <target>Pertsonalizatu menua</target>
       </trans-unit>
       <trans-unit id="3cWWP_q" resname="Fullscreen">
         <source>Fullscreen</source>
-        <target>~Pantaila osoa</target>
+        <target>Pantaila osoa</target>
       </trans-unit>
       <trans-unit id="weTJGRH" resname="LaTeX Code">
         <source>LaTeX Code</source>
-        <target>~LaTeX Code</target>
+        <target>LaTeX Code</target>
       </trans-unit>
       <trans-unit id="AYvg4zT" resname="Ask AI for formula">
         <source>Ask AI for formula</source>
@@ -1079,7 +1079,7 @@
       </trans-unit>
       <trans-unit id="U8JrXZY" resname="Write your code here... \\frac{a}{b}">
         <source>Write your code here... \\frac{a}{b}</source>
-        <target>~Idatzi zure kodea hemen... \\frac{a}{b}</target>
+        <target>Idatzi zure kodea hemen... \\frac{a}{b}</target>
       </trans-unit>
       <trans-unit id="bz.sjt6" resname="Formula delimiters:">
         <source>Formula delimiters:</source>
@@ -1103,35 +1103,35 @@
       </trans-unit>
       <trans-unit id="mwu5n4u" resname="View image">
         <source>View image</source>
-        <target>~Irudia ikusi</target>
+        <target>Irudia ikusi</target>
       </trans-unit>
       <trans-unit id="sYw60iz" resname="Manage menus">
         <source>Manage menus</source>
-        <target>~Menuak kudeatu</target>
+        <target>Menuak kudeatu</target>
       </trans-unit>
       <trans-unit id="YVdoHba" resname="You can edit your own menus with the">
         <source>You can edit your own menus with the</source>
-        <target>~Zure menu propioak editatu ditzakezu</target>
+        <target>Zure menu propioak editatu ditzakezu</target>
       </trans-unit>
       <trans-unit id="DN1N6fV" resname="Menu Editor">
         <source>Menu Editor</source>
-        <target>~Menu Editorea</target>
+        <target>Menu Editorea</target>
       </trans-unit>
       <trans-unit id="E8uiMCP" resname="Available menus">
         <source>Available menus</source>
-        <target>~Menuak daude</target>
+        <target>Menuak badaude</target>
       </trans-unit>
       <trans-unit id="gzEusjk" resname="Loading...">
         <source>Loading...</source>
-        <target>~Kargatzen...</target>
+        <target>Kargatzen...</target>
       </trans-unit>
       <trans-unit id="H75dm_N" resname="Reload list">
         <source>Reload list</source>
-        <target>~Zerrenda berriro kargatu</target>
+        <target>Zerrenda berriro kargatu</target>
       </trans-unit>
       <trans-unit id="GD9uOOs" resname="Custom load">
         <source>Custom load</source>
-        <target>~Kargatu pertsonalizatua</target>
+        <target>Kargatu pertsonalizazioa</target>
       </trans-unit>
       <trans-unit id="aB0Gjed" resname="Load menu from external URL">
         <source>Load menu from external URL</source>
@@ -1159,7 +1159,7 @@
       </trans-unit>
       <trans-unit id="RR5AZBI" resname="1. Describe your formula:">
         <source>1. Describe your formula:</source>
-        <target>~1. Deskribatu zure formula:</target>
+        <target>1. Deskribatu zure formula:</target>
       </trans-unit>
       <trans-unit id="0qrTpGz" resname="E.g.: Quadratic equation with a=1, b=14 and c=-4">
         <source>E.g.: Quadratic equation with a=1, b=14 and c=-4</source>
@@ -1171,7 +1171,7 @@
       </trans-unit>
       <trans-unit id="EaRuhiD" resname="3. Generated instruction:">
         <source>3. Generated instruction:</source>
-        <target>~3. Instrukzioa sortua:</target>
+        <target>3. Jarraibidea sortua:</target>
       </trans-unit>
       <trans-unit id="P2JV64B" resname="The AI instruction will appear here...">
         <source>The AI instruction will appear here...</source>
@@ -1179,7 +1179,7 @@
       </trans-unit>
       <trans-unit id="X8KDLs5" resname="Open in ChatGPT">
         <source>Open in ChatGPT</source>
-        <target>~Open in ChatGPT</target>
+        <target>Zabaldu ChatGPT-n</target>
       </trans-unit>
       <trans-unit id="LL0goME" resname="Copy for another AI">
         <source>Copy for another AI</source>
@@ -1187,19 +1187,19 @@
       </trans-unit>
       <trans-unit id="dvAM.ko" resname="Vars (a, b, c...)">
         <source>Vars (a, b, c...)</source>
-        <target>~Aldagaiak (a, b, c...)</target>
+        <target>Aldagaiak (a, b, c...)</target>
       </trans-unit>
       <trans-unit id="rWM97hF" resname="Basic">
         <source>Basic</source>
-        <target>~Oinarrizkoa</target>
+        <target>Oinarrizkoa</target>
       </trans-unit>
       <trans-unit id="p6sV2wl" resname="Fraction">
         <source>Fraction</source>
-        <target>~Fracazioa</target>
+        <target>Frakzioa</target>
       </trans-unit>
       <trans-unit id="Yt5TsU4" resname="Small fraction">
         <source>Small fraction</source>
-        <target>~Fracazio txikia</target>
+        <target>Frakzio txikia</target>
       </trans-unit>
       <trans-unit id="ZIt9uEE" resname="Large fraction">
         <source>Large fraction</source>
@@ -1231,7 +1231,7 @@
       </trans-unit>
       <trans-unit id="8.bnJvh" resname="Parentheses">
         <source>Parentheses</source>
-        <target>~Hautespenak</target>
+        <target>Parentesiak</target>
       </trans-unit>
       <trans-unit id=".yEIhdI" resname="Root">
         <source>Root</source>
@@ -1263,7 +1263,7 @@
       </trans-unit>
       <trans-unit id="0zze4jf" resname="Norm">
         <source>Norm</source>
-        <target>~Norma</target>
+        <target>Araua</target>
       </trans-unit>
       <trans-unit id="iYn1Wmo" resname="Floor function">
         <source>Floor function</source>
@@ -1307,7 +1307,7 @@
       </trans-unit>
       <trans-unit id="2t8SD_O" resname="Approximate">
         <source>Approximate</source>
-        <target>~Hurbildua</target>
+        <target>Hurbilketa</target>
       </trans-unit>
       <trans-unit id="JJHU27u" resname="Asymptotically equal">
         <source>Asymptotically equal</source>
@@ -1315,7 +1315,7 @@
       </trans-unit>
       <trans-unit id="0t4ArND" resname="Asterisk">
         <source>Asterisk</source>
-        <target>~Asterisko</target>
+        <target>Asteriskoa</target>
       </trans-unit>
       <trans-unit id="OzYR6vO" resname="Bowtie">
         <source>Bowtie</source>
@@ -1327,7 +1327,7 @@
       </trans-unit>
       <trans-unit id="64_DmYX" resname="Composition">
         <source>Composition</source>
-        <target>~Konposizioa</target>
+        <target>Konposizioa</target>
       </trans-unit>
       <trans-unit id="gpAROnt" resname="Congruent">
         <source>Congruent</source>
@@ -1343,11 +1343,11 @@
       </trans-unit>
       <trans-unit id="9DoIqgi" resname="Large circle">
         <source>Large circle</source>
-        <target>~Zirkulu handi bat</target>
+        <target>Zirkulu handia</target>
       </trans-unit>
       <trans-unit id="BRiw3dy" resname="Difference">
         <source>Difference</source>
-        <target>~Diferentzia</target>
+        <target>Diferentzia</target>
       </trans-unit>
       <trans-unit id="BBgv1KF" resname="Not equal">
         <source>Not equal</source>
@@ -1359,7 +1359,7 @@
       </trans-unit>
       <trans-unit id="CpA2lkU" resname="Equivalent">
         <source>Equivalent</source>
-        <target>~Bikotea</target>
+        <target>Baliokidea</target>
       </trans-unit>
       <trans-unit id="uFvEWvW" resname="Dotless i">
         <source>Dotless i</source>
@@ -1587,7 +1587,7 @@
       </trans-unit>
       <trans-unit id="4G_kgk9" resname="Natural numbers">
         <source>Natural numbers</source>
-        <target>~Zenbaki naturala</target>
+        <target>Zenbaki naturalakk</target>
       </trans-unit>
       <trans-unit id="8TmClYf" resname="Rational numbers">
         <source>Rational numbers</source>
@@ -1595,11 +1595,11 @@
       </trans-unit>
       <trans-unit id="sszl1rE" resname="Real numbers">
         <source>Real numbers</source>
-        <target>~Zenbaki errealak</target>
+        <target>Zenbaki errealak</target>
       </trans-unit>
       <trans-unit id="H_iI8sY" resname="Logic">
         <source>Logic</source>
-        <target>~Logika</target>
+        <target>Logika</target>
       </trans-unit>
       <trans-unit id="6mRFOJi" resname="Conjunction">
         <source>Conjunction</source>
@@ -1615,31 +1615,31 @@
       </trans-unit>
       <trans-unit id="bmCTC9Z" resname="Exists">
         <source>Exists</source>
-        <target>~Existitzen da</target>
+        <target>Existitzen da</target>
       </trans-unit>
       <trans-unit id="VcIN6G5" resname="Implication">
         <source>Implication</source>
-        <target>~Inplikazioa</target>
+        <target>Inplikazioa</target>
       </trans-unit>
       <trans-unit id="tQNbhAe" resname="Negation">
         <source>Negation</source>
-        <target>~Negazioa</target>
+        <target>Negazioa</target>
       </trans-unit>
       <trans-unit id="0Bi3hvk" resname="Does not exist">
         <source>Does not exist</source>
-        <target>~Ez da existitzen</target>
+        <target>Ez da existitzen</target>
       </trans-unit>
       <trans-unit id="rkU3C7A" resname="Not for all">
         <source>Not for all</source>
-        <target>~Ez da guztientzat</target>
+        <target>Ez da guztientzat</target>
       </trans-unit>
       <trans-unit id="08Axn.g" resname="For all">
         <source>For all</source>
-        <target>~Guztientzat</target>
+        <target>Guztientzat</target>
       </trans-unit>
       <trans-unit id="QBRfNKG" resname="Functions">
         <source>Functions</source>
-        <target>~Funtzioak</target>
+        <target>Funtzioak</target>
       </trans-unit>
       <trans-unit id="4qXw4iO" resname="Cosecant">
         <source>Cosecant</source>
@@ -1659,11 +1659,11 @@
       </trans-unit>
       <trans-unit id="3bArSP6" resname="Logarithm">
         <source>Logarithm</source>
-        <target>~Logaritmoa</target>
+        <target>Logaritmoa</target>
       </trans-unit>
       <trans-unit id="2aZGSBw" resname="Natural logarithm">
         <source>Natural logarithm</source>
-        <target>~Logaritmo naturala</target>
+        <target>Logaritmo naturala</target>
       </trans-unit>
       <trans-unit id="v5ycRIL" resname="Square root">
         <source>Square root</source>
@@ -1671,7 +1671,7 @@
       </trans-unit>
       <trans-unit id="4ghVVNO" resname="Nth root">
         <source>Nth root</source>
-        <target>~N. atzeko erroa</target>
+        <target>N. erroa</target>
       </trans-unit>
       <trans-unit id="7w4Di5j" resname="Secant">
         <source>Secant</source>
@@ -1707,7 +1707,7 @@
       </trans-unit>
       <trans-unit id="3Ax0IO6" resname="Double integral">
         <source>Double integral</source>
-        <target>~Integral bikoitza</target>
+        <target>Integral bikoitza</target>
       </trans-unit>
       <trans-unit id="Jr4TBzV" resname="Indefinite integral">
         <source>Indefinite integral</source>
@@ -1719,7 +1719,7 @@
       </trans-unit>
       <trans-unit id="mP2oqw0" resname="Limit">
         <source>Limit</source>
-        <target>~Muga</target>
+        <target>Muga</target>
       </trans-unit>
       <trans-unit id="jjkUyDB" resname="Large logical product">
         <source>Large logical product</source>
@@ -1731,7 +1731,7 @@
       </trans-unit>
       <trans-unit id="SKPq7WJ" resname="Product">
         <source>Product</source>
-        <target>~Produktu</target>
+        <target>Produktua</target>
       </trans-unit>
       <trans-unit id="yTyeCqe" resname="Large direct sum">
         <source>Large direct sum</source>
@@ -3867,11 +3867,11 @@
       </trans-unit>
       <trans-unit id="bLQntlo" resname="Project properties">
         <source>Project properties</source>
-        <target>Proiektuaren propietateak</target>
+        <target>Proiektuaren ezarpenak</target>
       </trans-unit>
       <trans-unit id="76AHLsl" resname="Project properties saved.">
         <source>Project properties saved.</source>
-        <target>Proiektuaren propietateak gorde egin dira.</target>
+        <target>Proiektuaren ezarpenak gorde egin dira.</target>
       </trans-unit>
       <trans-unit id="W7h4Kea" resname="Share link">
         <source>Share link</source>
@@ -4079,7 +4079,7 @@
       </trans-unit>
       <trans-unit id="k8.XhRG" resname="The project properties have been exported.">
         <source>The project properties have been exported.</source>
-        <target>~Proiektuaren propietateak esportatu dira.  </target>
+        <target>~Proiektuaren ezarpenak esportatu dira.  </target>
       </trans-unit>
       <trans-unit id="YZXIGpx" resname="Other users are connected.">
         <source>Other users are connected.</source>
@@ -4087,7 +4087,7 @@
       </trans-unit>
       <trans-unit id="LMgooqs" resname="Properties">
         <source>Properties</source>
-        <target>Propietateak</target>
+        <target>Ezarpenak</target>
       </trans-unit>
       <trans-unit id="dmcRfIp" resname="There are no imported styles yet">
         <source>There are no imported styles yet</source>
@@ -4211,7 +4211,7 @@
       </trans-unit>
       <trans-unit id="TmkliwU" resname="Content properties">
         <source>Content properties</source>
-        <target>Edukiaren propietateak</target>
+        <target>Edukiaren ezarpenak</target>
       </trans-unit>
       <trans-unit id="1tMjRQx" resname="Drag an iDevice in and start building">
         <source>Drag an iDevice in and start building</source>
@@ -4227,7 +4227,7 @@
       </trans-unit>
       <trans-unit id="nq5kuRF" resname="Page properties">
         <source>Page properties</source>
-        <target>Orrialdearen propietateak</target>
+        <target>Orrialdearen ezarpenak</target>
       </trans-unit>
       <trans-unit id="3RtH4TB" resname="Alert">
         <source>Alert</source>
@@ -4459,7 +4459,7 @@
       </trans-unit>
       <trans-unit id="1mUW5e_" resname="Style properties">
         <source>Style properties</source>
-        <target>Estiloaren propietateak</target>
+        <target>Estiloaren ezarpenak</target>
       </trans-unit>
       <trans-unit id="RFZSvQG" resname="Style">
         <source>Style</source>
@@ -4491,7 +4491,7 @@
       </trans-unit>
       <trans-unit id="9Mm2eRT" resname="An error occurred while saving block's properties in database">
         <source>An error occurred while saving block's properties in database</source>
-        <target>~Errore bat gertatu da blokea propietateak datu-basean gordetzean</target>
+        <target>Errorea blokea ezarpenak datu-basean gordetzean</target>
       </trans-unit>
       <trans-unit id="cIEcUOY" resname="Select an icon">
         <source>Select an icon</source>
@@ -4535,7 +4535,7 @@
       </trans-unit>
       <trans-unit id="_YseMvk" resname="Box properties">
         <source>Box properties</source>
-        <target>Blokearen propietateak</target>
+        <target>Blokearen ezarpenak</target>
       </trans-unit>
       <trans-unit id="pOLfvIx" resname="Move Block to page">
         <source>Move Block to page</source>
@@ -4587,7 +4587,7 @@
       </trans-unit>
       <trans-unit id="1QWTr7I" resname="iDevice properties">
         <source>iDevice properties</source>
-        <target>iDevicearen propietateak</target>
+        <target>iDevicearen ezarpenak</target>
       </trans-unit>
       <trans-unit id="U7kZ6Nk" resname="Delete iDevice? This cannot be undone.">
         <source>Delete iDevice? This cannot be undone.</source>
@@ -4611,7 +4611,7 @@
       </trans-unit>
       <trans-unit id="78RKJPa" resname="An error occurred while saving the iDevice’s properties to the database.">
         <source>An error occurred while saving the iDevice’s properties to the database.</source>
-        <target>~Errore bat gertatu da iDevice-ren propietateak datu-basean gordetzean.</target>
+        <target>Errorea iDevice-aren ezarpenak datu-basean gordetzean.</target>
       </trans-unit>
       <trans-unit id="8g6a9xW" resname="File is too large">
         <source>File is too large</source>
@@ -4631,7 +4631,7 @@
       </trans-unit>
       <trans-unit id="b0l3acH" resname="You cannot edit another iDevice until you save the current one">
         <source>You cannot edit another iDevice until you save the current one</source>
-        <target>~Ez duzu beste iDevice bat editatu dezakezu une honetan gorde arte</target>
+        <target>Beste iDevice bat editatzeko, egungoa gorde arte</target>
       </trans-unit>
       <trans-unit id="6b66eDm" resname="Remove Block">
         <source>Remove Block</source>
@@ -4659,7 +4659,7 @@
       </trans-unit>
       <trans-unit id="fPQsnoO" resname="You are currently editing another iDevice. Please close it before continuing">
         <source>You are currently editing another iDevice. Please close it before continuing</source>
-        <target>~Une honetan beste iDevice bat editatzen ari zara. Mesedez, itxi hori jarraitu aurretik</target>
+        <target>Une honetan beste iDevice bat editatzen ari zara. Mesedez, itxi hori jarraitu aurretik</target>
       </trans-unit>
       <trans-unit id="38SLSPC" resname="An error occurred while loading the iDevice.">
         <source>An error occurred while loading the iDevice.</source>
@@ -4667,7 +4667,7 @@
       </trans-unit>
       <trans-unit id="_qN9nCf" resname="The box is empty. Do you want to delete it?">
         <source>The box is empty. Do you want to delete it?</source>
-        <target>~Kutxa hutsik dago. Ezabatu nahi duzu?</target>
+        <target>Kutxa hutsik dago. Ezabatu nahi duzu?</target>
       </trans-unit>
       <trans-unit id="V5xJrEH" resname="This page is being edited by:">
         <source>This page is being edited by:</source>
@@ -4691,7 +4691,7 @@
       </trans-unit>
       <trans-unit id="YLhWBv4" resname="Error while saving: ${response.responseMessage}">
         <source>Error while saving: ${response.responseMessage}</source>
-        <target>~Errorea gordetzean: ${response.responseMessage}</target>
+        <target>Errorea gordetzean: ${response.responseMessage}</target>
       </trans-unit>
       <trans-unit id="E4vyID5" resname="Style changed">
         <source>Style changed</source>
@@ -4699,7 +4699,7 @@
       </trans-unit>
       <trans-unit id="Wq0rrM1" resname="Your style has changed. Reload the page to apply changes?">
         <source>Your style has changed. Reload the page to apply changes?</source>
-        <target>~Zure estiloa aldatu da. Orria berriro kargatu aldaketak aplikatzeko?</target>
+        <target>Zure estiloa aldatu da. Orria berriro kargatu aldaketak aplikatzeko?</target>
       </trans-unit>
       <trans-unit id="PlBZGgy" resname="Undo the last action?">
         <source>Undo the last action?</source>
@@ -4711,7 +4711,7 @@
       </trans-unit>
       <trans-unit id="gysLwdg" resname="An error occurred while saving the component.">
         <source>An error occurred while saving the component.</source>
-        <target>~Errorea gertatu da osagaiaren gordetzean.</target>
+        <target>Errorea osagaiaren gordetzean.</target>
       </trans-unit>
       <trans-unit id="A3_STN3" resname="You are editing an iDevice. Please close it before continuing">
         <source>You are editing an iDevice. Please close it before continuing</source>
@@ -4727,19 +4727,19 @@
       </trans-unit>
       <trans-unit id="Hrss0sI" resname="Save metadata and properties">
         <source>Save metadata and properties</source>
-        <target>Metadatuak eta propietateak gorde</target>
+        <target>Metadatuak eta ezarpenak gorde</target>
       </trans-unit>
       <trans-unit id="Nxwp61M" resname="Properties error">
         <source>Properties error</source>
-        <target>Errorea propietateetan</target>
+        <target>Errorea ezarpenetan</target>
       </trans-unit>
       <trans-unit id="jiaDQDT" resname="An error occurred while saving properties">
         <source>An error occurred while saving properties</source>
-        <target>Errorea propietateak gordetzerakoan</target>
+        <target>Errorea ezarpenak gordetzerakoan</target>
       </trans-unit>
       <trans-unit id="Ww.bpx3" resname="An error occurred while saving node's properties in database">
         <source>An error occurred while saving node's properties in database</source>
-        <target>~Errorea gertatu da node-ren propietateak datu-basean gordetzean</target>
+        <target>Errorea nodoaren ezarpenak datu-basean gordetzean</target>
       </trans-unit>
       <trans-unit id="7pvhS6V" resname="Structure node error">
         <source>Structure node error</source>
@@ -4755,7 +4755,7 @@
       </trans-unit>
       <trans-unit id="zr.mdKw" resname="An error occurred while updating the node in database">
         <source>An error occurred while updating the node in database</source>
-        <target>~Errorea gertatu da node datu-basean eguneratzean</target>
+        <target>Errorea orria datu-basean gordetzean</target>
       </trans-unit>
       <trans-unit id=".govyiK" resname="An error occurred while remove the node in database">
         <source>An error occurred while remove the node in database</source>
@@ -5307,7 +5307,7 @@
       </trans-unit>
       <trans-unit id="7yUZmtN" resname="Add activity">
         <source>Add activity</source>
-        <target>~Gehitu jarduera</target>
+        <target>Gehitu jarduera</target>
       </trans-unit>
       <trans-unit id="llFOVuR" resname="Delete activity">
         <source>Delete activity</source>
@@ -5323,7 +5323,7 @@
       </trans-unit>
       <trans-unit id="YXVgwWH" resname="Case study">
         <source>Case study</source>
-        <target>~Azterketa kasua</target>
+        <target>Kasu praktikoa</target>
       </trans-unit>
       <trans-unit id="VKh8TSL" resname="00:00">
         <source>00:00</source>
@@ -5347,19 +5347,19 @@
       </trans-unit>
       <trans-unit id="mgtLDuZ" resname="Do you want to delete this activity?">
         <source>Do you want to delete this activity?</source>
-        <target>~Goratu activitya ezabatu nahi duzu?</target>
+        <target>Jarduera hau ezabatu nahi duzu?</target>
       </trans-unit>
       <trans-unit id="DDWnIrv" resname="The case study must have at least one activity">
         <source>The case study must have at least one activity</source>
-        <target>~Egoeraren azterketa gutxienez activitya bat izan behar du</target>
+        <target>Kasu praktikoak gutxienez jarduera bat izan behar du</target>
       </trans-unit>
       <trans-unit id="mFlaair" resname="Please complete the history">
         <source>Please complete the history</source>
-        <target>~Mesedez, osatu historia</target>
+        <target>Mesedez, osatu historia</target>
       </trans-unit>
       <trans-unit id="ofUWEOP" resname="You must provide the text for each activity">
         <source>You must provide the text for each activity</source>
-        <target>~Baietsi behar duzu jarduera bakoitzerako testua</target>
+        <target>Jarduera bakoitzeko testua eman behar duzu</target>
       </trans-unit>
       <trans-unit id="7bi6iI4" resname="Read the instructions and click on a trial when you're ready to play.">
         <source>Read the instructions and click on a trial when you're ready to play.</source>
@@ -5651,7 +5651,7 @@
       </trans-unit>
       <trans-unit id="3EmhqPa" resname="You need at least %s&amp;percnt; of correct answers to get the information. Please try again.">
         <source>You need at least %s&amp;percnt; of correct answers to get the information. Please try again.</source>
-        <target>~Gutxienez %s&percnt; erantzun zuzena eman behar duzu informazioa lortzeko. Saiatu berriro.</target>
+        <target>Gutxienez %s&percnt; erantzun zuzen eman behar duzu informazioa lortzeko. Saiatu berriro.</target>
       </trans-unit>
       <trans-unit id="p_aCAey" resname="Time is up. Please try again">
         <source>Time is up. Please try again</source>
@@ -5771,7 +5771,7 @@
       </trans-unit>
       <trans-unit id="I4MH_aK" resname="&amp;percnt; right to see the feedback">
         <source>&amp;percnt; right to see the feedback</source>
-        <target>~&percnt; eskubidea iruzkinak ikusteko</target>
+        <target>&percnt; atzeraelikadura ikusteko behar dena</target>
       </trans-unit>
       <trans-unit id="a_DSSKc" resname="Image back">
         <source>Image back</source>
@@ -5887,11 +5887,11 @@
       </trans-unit>
       <trans-unit id="TShkuG." resname="Allow errors in typed words">
         <source>Allow errors in typed words</source>
-        <target>Onartu erroreak sartutako hitzetan</target>
+        <target>Onartu erroreak idatzitako hitzetan</target>
       </trans-unit>
       <trans-unit id="jhOcP6n" resname="Incorrect letters allowed (&amp;percnt;)">
         <source>Incorrect letters allowed (&amp;percnt;)</source>
-        <target>~Lerro okerrak onartzen dira (&percnt;)</target>
+        <target>Lertra okerrak onartzen dira (&percnt;)</target>
       </trans-unit>
       <trans-unit id="XV5EOaM" resname="Field width proportional to the words length">
         <source>Field width proportional to the words length</source>
@@ -7327,7 +7327,7 @@
       </trans-unit>
       <trans-unit id="cIWhj7d" resname="Your changes won't be saved until you click on \&quot;Save\&quot;.">
         <source>Your changes won't be saved until you click on \"Save\".</source>
-        <target>~Aldaketak ez dira gorde "Gorde" sakatu arte.</target>
+        <target>Aldaketak ez dira gordeko "Gorde" sakatu arte.</target>
       </trans-unit>
       <trans-unit id="dEPpFWQ" resname="Do not show this message again">
         <source>Do not show this message again</source>
@@ -7371,7 +7371,7 @@
       </trans-unit>
       <trans-unit id="719B6M_" resname="Click on \&quot;Exit\&quot; to finish.">
         <source>Click on \"Exit\" to finish.</source>
-        <target>~Klikatu "Irten" bukatzeko.</target>
+        <target>Amaitzeko sakatu "Irten".</target>
       </trans-unit>
       <trans-unit id="yLx_WEs" resname="Stop the playing video">
         <source>Stop the playing video</source>
@@ -7411,11 +7411,11 @@
       </trans-unit>
       <trans-unit id="RLB6gEc" resname="Please check the \&quot;Start\&quot; time">
         <source>Please check the \"Start\" time</source>
-        <target>~Mesedez, egiaztatu "Hasi" denbora</target>
+        <target>Mesedez, egiaztatu \"Hasi"\ denbora</target>
       </trans-unit>
       <trans-unit id="FSmyc.T" resname="Please check the \&quot;End\&quot; time">
         <source>Please check the \"End\" time</source>
-        <target>~Mesedez, egiaztatu \"Amaiera\" denbora</target>
+        <target>Mesedez, egiaztatu \"Amaiera\" denbora</target>
       </trans-unit>
       <trans-unit id="DmOBCiE" resname="Set the time for the slide to be shown">
         <source>Set the time for the slide to be shown</source>
@@ -7531,27 +7531,27 @@
       </trans-unit>
       <trans-unit id="D_G.38F" resname="Choose the zoom and the magnifier's size. Then move your mouse over the image to see it enlarged.">
         <source>Choose the zoom and the magnifier's size. Then move your mouse over the image to see it enlarged.</source>
-        <target>~Aukeratu zooma eta handigarriaren tamaina. Ondoren, mausea irudian gora eraman handituta ikusteko.</target>
+        <target>Aukeratu handitze-maila eta luparen tamaina. Irudia handiagotu egingo da saguarekin gainetik igarotzean.</target>
       </trans-unit>
       <trans-unit id="LhPK3m6" resname="Magnifier">
         <source>Magnifier</source>
-        <target>~Handigarria</target>
+        <target>Lupa</target>
       </trans-unit>
       <trans-unit id="ToPhWpx" resname="Full screen">
         <source>Full screen</source>
-        <target>~Pantaila osoa</target>
+        <target>Pantaila osoa</target>
       </trans-unit>
       <trans-unit id="750yEWZ" resname="The image is not available.">
         <source>The image is not available.</source>
-        <target>~Irudia ez dago erabilgarri.</target>
+        <target>Irudia ez dago erabilgarri.</target>
       </trans-unit>
       <trans-unit id="u2oxdiJ" resname="Image width">
         <source>Image width</source>
-        <target>~Irudiaren zabalera</target>
+        <target>Irudiaren zabalera</target>
       </trans-unit>
       <trans-unit id="lfDRlEO" resname="Align">
         <source>Align</source>
-        <target>~Lerratu</target>
+        <target>Lerrokatzea</target>
       </trans-unit>
       <trans-unit id="y.xG0GC" resname="Left">
         <source>Left</source>
@@ -7563,11 +7563,11 @@
       </trans-unit>
       <trans-unit id="kpC3CUG" resname="Initial Zoom">
         <source>Initial Zoom</source>
-        <target>~Hasierako Zooma</target>
+        <target>Hasierako handitzea</target>
       </trans-unit>
       <trans-unit id="nzCIWGK" resname="Magnifier Size">
         <source>Magnifier Size</source>
-        <target>~Handigarriaren Tamaina</target>
+        <target>Luparen tamaina</target>
       </trans-unit>
       <trans-unit id="K9sgpC1" resname="Math operations">
         <source>Math operations</source>
@@ -8435,43 +8435,43 @@
       </trans-unit>
       <trans-unit id="1piunaK" resname="Alkali metals">
         <source>Alkali metals</source>
-        <target>~Alkali metalak</target>
+        <target>Metal alkalinoak</target>
       </trans-unit>
       <trans-unit id="B_3nlZS" resname="Alkaline earth metals">
         <source>Alkaline earth metals</source>
-        <target>~Lurrun alkalinoak</target>
+        <target>Metal lurralkalinoak</target>
       </trans-unit>
       <trans-unit id="j3Itwu3" resname="Transition metals">
         <source>Transition metals</source>
-        <target>~Metalo trantsizioak</target>
+        <target>Trantsizio-metalak</target>
       </trans-unit>
       <trans-unit id="8_ejxKp" resname="Post-Transition metals">
         <source>Post-Transition metals</source>
-        <target>~Metalo trantsizioen ondokoak</target>
+        <target>Trantsizio osteko metalak</target>
       </trans-unit>
       <trans-unit id="jPZCkB4" resname="Metalloids">
         <source>Metalloids</source>
-        <target>~Metaloideak</target>
+        <target>Metaloideak</target>
       </trans-unit>
       <trans-unit id="x7hstnQ" resname="Non-metals">
         <source>Non-metals</source>
-        <target>~Ez-metaloak</target>
+        <target>Ez-metalak</target>
       </trans-unit>
       <trans-unit id="l2FPPLx" resname="Halogens">
         <source>Halogens</source>
-        <target>~Halogenoak</target>
+        <target>Halogenoak</target>
       </trans-unit>
       <trans-unit id="f4MBuUC" resname="Noble gases">
         <source>Noble gases</source>
-        <target>~Gas nobleak</target>
+        <target>Gas nobleak</target>
       </trans-unit>
       <trans-unit id="1Bo32t3" resname="Lanthanides">
         <source>Lanthanides</source>
-        <target>~Lantanoideak</target>
+        <target>Lantanidoak</target>
       </trans-unit>
       <trans-unit id="qzg7BFl" resname="Actinides">
         <source>Actinides</source>
-        <target>~Aktinideak</target>
+        <target>Aktinidoak</target>
       </trans-unit>
       <trans-unit id="OWXF.o4" resname="Element Groups">
         <source>Element Groups</source>
@@ -11247,15 +11247,15 @@
       </trans-unit>
       <trans-unit id="fE2HH6r" resname="Visibility type">
         <source>Visibility type</source>
-        <target>~Bistaratze mota</target>
+        <target>Bistaratze mota</target>
       </trans-unit>
       <trans-unit id="RWxaLMk" resname="Visible to all">
         <source>Visible to all</source>
-        <target>~Ikusgai guztientzat</target>
+        <target>Ikusgai guztientzat</target>
       </trans-unit>
       <trans-unit id="ZT.NQle" resname="Teacher only">
         <source>Teacher only</source>
-        <target>~Irakasle bakarrik</target>
+        <target>Irakaslea bakarrik</target>
       </trans-unit>
       <trans-unit id="37wivZ3" resname="ID">
         <source>ID</source>
@@ -12267,7 +12267,7 @@
       </trans-unit>
       <trans-unit id="ekwfxIh" resname="Please select a text file (.txt), a JSON file (.json), or an XML(Moodle) file (.xml) ">
         <source>Please select a text file (.txt), a JSON file (.json), or an XML(Moodle) file (.xml) </source>
-        <target>~> Goiburu finkedekin, karta kopurua zutabe kopuruaren handiagoa izan behar du</target>
+        <target>Hautatu testu-fitxategi bat (.txt), JSON fitxategi bat (.json) edo Moodleko XML fitxategi bat (.xml)</target>
       </trans-unit>
       <trans-unit id="L41w01C" resname="The question text and the formula should have the same variables">
         <source>The question text and the formula should have the same variables</source>
@@ -12483,7 +12483,7 @@
       </trans-unit>
       <trans-unit id="NXe.m.c" resname="Value">
         <source>Value</source>
-        <target>~alioa</target>
+        <target>Balioa</target>
       </trans-unit>
       <trans-unit id="gaxVlAk" resname="Class added to the &quot;CSS class&quot; field.">
         <source>Class added to the "CSS class" field.</source>
@@ -12575,7 +12575,7 @@
       </trans-unit>
       <trans-unit id="NqzcwcS" resname="Failed to save properties">
         <source>Failed to save properties</source>
-        <target>Ezin izan da propietateak gorde\nMesedez, idatzi laburdura eta haren esanahia.\nEz dago ACRONYM etiketa onartuta HTML5n.\n\nErabili ABBR etiketa ordez?\nNodo\nLeiho pop-up\nEstekatu elp fitxatera (kanporatuko da)\nMesedez, gaitzetsi JavaScript joko hau jokatzeko.\nHautatzeko alphabet-a\nJoko hauek JavaScript behar dute.\nHau da JavaScript gabe dauden erabiltzaileek ikusi beharko luketen mezua:</target>
+        <target>Ezin izan da ezarpenak gorde\nMesedez, idatzi laburdura eta haren esanahia.\nEz dago ACRONYM etiketa onartuta HTML5n.\n\nErabili ABBR etiketa ordez?\nNodo\nLeiho pop-up\nEstekatu elp fitxatera (kanporatuko da)\nMesedez, gaitzetsi JavaScript joko hau jokatzeko.\nHautatzeko alphabet-a\nJoko hauek JavaScript behar dute.\nHau da JavaScript gabe dauden erabiltzaileek ikusi beharko luketen mezua:</target>
       </trans-unit>
       <trans-unit id="bHbHhew" resname="Please write the abbreviation and its meaning.">
         <source>Please write the abbreviation and its meaning.</source>
@@ -12879,7 +12879,7 @@
       </trans-unit>
       <trans-unit id="BeLvQEU" resname="Error while uploading the file.">
         <source>Error while uploading the file.</source>
-        <target>Errorea fitxeroa igotzean.</target>
+        <target>Errorea fitxategia igotzean.</target>
       </trans-unit>
       <trans-unit id="ZVCy6PA" resname="Completed successfully">
         <source>Completed successfully</source>
@@ -12887,7 +12887,7 @@
       </trans-unit>
       <trans-unit id="CEZIpnQ" resname="An unexpected error occurred while processing the file.">
         <source>An unexpected error occurred while processing the file.</source>
-        <target>Errore ezezagun bat gertatu da fitxeroa prozesatzean.</target>
+        <target>Errore ezezagun bat gertatu da fitxategia prozesatzean.</target>
       </trans-unit>
       <trans-unit id="vGlqvyV" resname="Unexpected error during upload">
         <source>Unexpected error during upload</source>
@@ -12895,7 +12895,7 @@
       </trans-unit>
       <trans-unit id="DlutuO4" resname="New from Template">
         <source>New from Template</source>
-        <target>~Txantiloitik berria</target>
+        <target>Berria txantiloitik</target>
       </trans-unit>
       <trans-unit id="M_Llf6E" resname="Failed to load template. Please try again.">
         <source>Failed to load template. Please try again.</source>
@@ -12903,7 +12903,7 @@
       </trans-unit>
       <trans-unit id="xCsb28x" resname="Processing file">
         <source>Processing file</source>
-        <target>Fitxeroa prozesatzen</target>
+        <target>fitxategia prozesatzen</target>
       </trans-unit>
       <trans-unit id="ywaQ_Vp" resname="Preparing upload...">
         <source>Preparing upload...</source>
@@ -12911,7 +12911,7 @@
       </trans-unit>
       <trans-unit id="AVv4iei" resname="This may take a few moments for large files...">
         <source>This may take a few moments for large files...</source>
-        <target>Honek minutu batzuk hartuko ditu fitxero handietarako...</target>
+        <target>Honek minutu batzuk hartuko ditu fitxategi handietarako...</target>
       </trans-unit>
       <trans-unit id="oPy4NMk" resname="Uploading">
         <source>Uploading</source>
@@ -12919,23 +12919,23 @@
       </trans-unit>
       <trans-unit id="uSZfo5R" resname="Uploading file...">
         <source>Uploading file...</source>
-        <target>Fitxeroa igotzen...</target>
+        <target>fitxategia igotzen...</target>
       </trans-unit>
       <trans-unit id="Pjnplq6" resname="Extracting files...">
         <source>Extracting files...</source>
-        <target>~Fitxeroak ateratzen...</target>
+        <target>fitxategiak ateratzen...</target>
       </trans-unit>
       <trans-unit id="UU1fb0X" resname="Extracting ZIP file contents. This may take several minutes for large files.">
         <source>Extracting ZIP file contents. This may take several minutes for large files.</source>
-        <target>~ZIP fitxeroaren edukia ateratzen. Honek minutu batzuk har ditzake fitxero handientzat.</target>
+        <target>ZIP fitxategiaren edukia ateratzen. Honek minutu batzuk har ditzake fitxategi handientzat.</target>
       </trans-unit>
       <trans-unit id="qmGls_W" resname="Processing content...">
         <source>Processing content...</source>
-        <target>~Edukia prozesatzen...</target>
+        <target>Edukia prozesatzen...</target>
       </trans-unit>
       <trans-unit id="a0ZvaE4" resname="Reading and validating file structure. Almost done!">
         <source>Reading and validating file structure. Almost done!</source>
-        <target>~Fitxeroaren egitura irakurtzen eta balidatzen. Ia prest!</target>
+        <target>Fitxategiaren egitura irakurtzen eta balidatzen. Ia prest!</target>
       </trans-unit>
       <trans-unit id="msb5FOD" resname="Finalizing...">
         <source>Finalizing...</source>

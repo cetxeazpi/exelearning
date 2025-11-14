@@ -1903,195 +1903,195 @@
       </trans-unit>
       <trans-unit id="yjheIGP" resname="Long implies">
         <source>Long implies</source>
-        <target>Implika luzea</target>
+        <target>Inplika luzea</target>
       </trans-unit>
       <trans-unit id="P0qDWYI" resname="Injection">
         <source>Injection</source>
-        <target>~Injekzioa</target>
+        <target>Injekzioa</target>
       </trans-unit>
       <trans-unit id="_JShhBV" resname="Long mapping">
         <source>Long mapping</source>
-        <target>~Mapa luzea</target>
+        <target>Mapaketa luzea</target>
       </trans-unit>
       <trans-unit id="HAJ4vVG" resname="Mapsto">
         <source>Mapsto</source>
-        <target>~Mapsto</target>
+        <target>Mapsto</target>
       </trans-unit>
       <trans-unit id="ShJlzWG" resname="Not implies right">
         <source>Not implies right</source>
-        <target>~Ez du eskubidea implyatzen</target>
+        <target>Ez du eskuina ondorioz ekartzen</target>
       </trans-unit>
       <trans-unit id="VFADSQc" resname="Not implies left">
         <source>Not implies left</source>
-        <target>~Ez du esan nahi ezkerra dela</target>
+        <target>Ez du ezkerra ondorioz ekartzen</target>
       </trans-unit>
       <trans-unit id="8wTneYj" resname="Vector">
         <source>Vector</source>
-        <target>~Bektorea</target>
+        <target>Bektorea</target>
       </trans-unit>
       <trans-unit id="FYKYcbP" resname="Matrices">
         <source>Matrices</source>
-        <target>~Matricak</target>
+        <target>Matrizeak</target>
       </trans-unit>
       <trans-unit id="3GgwCo9" resname="2x2 determinant">
         <source>2x2 determinant</source>
-        <target>~2x2 determinantzia</target>
+        <target>2x2 determinantea</target>
       </trans-unit>
       <trans-unit id="Dxi8FII" resname="2x2 matrix">
         <source>2x2 matrix</source>
-        <target>~2x2 matrizea</target>
+        <target>2x2 matrizea</target>
       </trans-unit>
       <trans-unit id="mZlwn9N" resname="2x2 matrix with brackets">
         <source>2x2 matrix with brackets</source>
-        <target>~2x2 matrizea parentesisekin</target>
+        <target>2x2 matrizea parentesiekin</target>
       </trans-unit>
       <trans-unit id="v6_miUM" resname="3x3 matrix">
         <source>3x3 matrix</source>
-        <target>~3x3 matrizea</target>
+        <target>3x3 matrizea</target>
       </trans-unit>
       <trans-unit id="ReICqF0" resname="Systems">
         <source>Systems</source>
-        <target>~Sistema</target>
+        <target>Sistemak</target>
       </trans-unit>
       <trans-unit id="JA0wraK" resname="System of 3 equations with array">
         <source>System of 3 equations with array</source>
-        <target>~3 ekuazioetako sistema array-rekin</target>
+        <target>3 ekuazioko sistema array-arekin</target>
       </trans-unit>
       <trans-unit id="xfdx9Ua" resname="System with array">
         <source>System with array</source>
-        <target>~Sistema array-rekin</target>
+        <target>Sistema array-rekin</target>
       </trans-unit>
       <trans-unit id="MkSc4Hv" resname="Decorations">
         <source>Decorations</source>
-        <target>~Decorazioak</target>
+        <target>Dekorazioak</target>
       </trans-unit>
       <trans-unit id="Jvv1d6U" resname="Bar">
         <source>Bar</source>
-        <target>~Barra</target>
+        <target>Barra</target>
       </trans-unit>
       <trans-unit id="YTg6AgY" resname="Double dot">
         <source>Double dot</source>
-        <target>~Doble puntua</target>
+        <target>puntu bikoitza</target>
       </trans-unit>
       <trans-unit id="U98wkKb" resname="Dot">
         <source>Dot</source>
-        <target>~Puntua</target>
+        <target>Puntua</target>
       </trans-unit>
       <trans-unit id="Gsf3ntf" resname="Overline">
         <source>Overline</source>
-        <target>~Luzea</target>
+        <target>barra tresnaren gainean</target>
       </trans-unit>
       <trans-unit id="6wJb8b6" resname="Hat">
         <source>Hat</source>
-        <target>~Txapela</target>
+        <target>Txapela</target>
       </trans-unit>
       <trans-unit id="pXdkmeH" resname="Wide hat">
         <source>Wide hat</source>
-        <target>~Txapela zabaldua</target>
+        <target>Txapela zabala</target>
       </trans-unit>
       <trans-unit id="waOdF6U" resname="Tilde">
         <source>Tilde</source>
-        <target>~Tildea</target>
+        <target>Tildea</target>
       </trans-unit>
       <trans-unit id="cPxBcId" resname="Annotations">
         <source>Annotations</source>
-        <target>~Azpimarratzearen</target>
+        <target>oharrak</target>
       </trans-unit>
       <trans-unit id="O_DHQ3p" resname="Insert text">
         <source>Insert text</source>
-        <target>~Idatzi testua sartu</target>
+        <target>testua txertatu</target>
       </trans-unit>
       <trans-unit id="2OG93.D" resname="Cross out with X">
         <source>Cross out with X</source>
-        <target>~Markatu X batez</target>
+        <target>ezabatu X batez</target>
       </trans-unit>
       <trans-unit id="S6xrJt." resname="Cross out">
         <source>Cross out</source>
-        <target>~Markatu</target>
+        <target>Markatu</target>
       </trans-unit>
       <trans-unit id="n4.QYz1" resname="Cancel term">
         <source>Cancel term</source>
-        <target>~Utzi epea</target>
+        <target>Ezabatu terminoa</target>
       </trans-unit>
       <trans-unit id="7sZuzMj" resname="Cancel and annotate">
         <source>Cancel and annotate</source>
-        <target>~Utzi eta anotatu</target>
+        <target>Utzi eta idatzi</target>
       </trans-unit>
       <trans-unit id="nLp5oym" resname="Text below">
         <source>Text below</source>
-        <target>~Testu behean</target>
+        <target>Testua behean</target>
       </trans-unit>
       <trans-unit id="ivFn3H2" resname="Text above">
         <source>Text above</source>
-        <target>~Testu goian</target>
+        <target>Testua goian</target>
       </trans-unit>
       <trans-unit id="ZKgEbfK" resname="Text formatting">
         <source>Text formatting</source>
-        <target>~Testu formateaketa</target>
+        <target>Testu formateatzea</target>
       </trans-unit>
       <trans-unit id="knVPcTG" resname="Tiny text">
         <source>Tiny text</source>
-        <target>~Testu txikia</target>
+        <target>Testu oso txikia</target>
       </trans-unit>
       <trans-unit id="u4Mz8gs" resname="Script size text">
         <source>Script size text</source>
-        <target>~Script tamaina testua</target>
+        <target>Script tamaina testua</target>
       </trans-unit>
       <trans-unit id="KPMHiIf" resname="Small text">
         <source>Small text</source>
-        <target>~Testu txikia</target>
+        <target>Testu txikia</target>
       </trans-unit>
       <trans-unit id="6WOADdb" resname="Normal size text">
         <source>Normal size text</source>
-        <target>~Testu tamaina normala</target>
+        <target>Testu tamaina normala</target>
       </trans-unit>
       <trans-unit id="A4PW2eq" resname="Large text">
         <source>Large text</source>
-        <target>~Testu handiagoa</target>
+        <target>Testu handia</target>
       </trans-unit>
       <trans-unit id="B3vnaJp" resname="Larger text">
         <source>Larger text</source>
-        <target>~Testu handiagoagoa</target>
+        <target>Testu handiagoagoa</target>
       </trans-unit>
       <trans-unit id="f5RgnTP" resname="Very large text">
         <source>Very large text</source>
-        <target>~Testu oso handiagoa</target>
+        <target>Testu oso handiagoa</target>
       </trans-unit>
       <trans-unit id="U33cqMv" resname="Huge text">
         <source>Huge text</source>
-        <target>~Testu handiegia</target>
+        <target>Testu oso handia</target>
       </trans-unit>
       <trans-unit id="TRj6FQx" resname="Huger text">
         <source>Huger text</source>
-        <target>~Testu handiegia (Huger)</target>
+        <target>Testu handiegia (Huger)</target>
       </trans-unit>
       <trans-unit id="cn6n9qo" resname="Blackboard bold">
         <source>Blackboard bold</source>
-        <target>~Eskola taula beltza</target>
+        <target>Arbela negrita</target>
       </trans-unit>
       <trans-unit id="_jCqQRd" resname="Math bold">
         <source>Math bold</source>
-        <target>~Matematika lodia</target>
+        <target>Matematika nabarmendua</target>
       </trans-unit>
       <trans-unit id="D3SztgJ" resname="Calligraphic">
         <source>Calligraphic</source>
-        <target>~Kaligrafikoa</target>
+        <target>Kaligrafikoa</target>
       </trans-unit>
       <trans-unit id="WoeHzkK" resname="Gothic">
         <source>Gothic</source>
-        <target>~Gotikoa</target>
+        <target>Gotikoa</target>
       </trans-unit>
       <trans-unit id="aNBK_Ip" resname="Math italic">
         <source>Math italic</source>
-        <target>~Matematika italikoa</target>
+        <target>Matematika italikoa</target>
       </trans-unit>
       <trans-unit id="fXrbOjv" resname="Upright (math roman)">
         <source>Upright (math roman)</source>
-        <target>~Matematika erromanikoa</target>
+        <target>Matematika erromanikoa</target>
       </trans-unit>
       <trans-unit id="O_wl2LD" resname="Typographic bold">
         <source>Typographic bold</source>
-        <target>~Tipografiko loditua</target>
+        <target>Tipografia nabarmendua/target>
       </trans-unit>
       <trans-unit id="UZGwG.U" resname="Italic">
         <source>Italic</source>
@@ -2099,11 +2099,11 @@
       </trans-unit>
       <trans-unit id="tPzgyNe" resname="Monospace">
         <source>Monospace</source>
-        <target>~Monospace</target>
+        <target>Monoespazioadoa</target>
       </trans-unit>
       <trans-unit id="anN2Yt5" resname="Plain text">
         <source>Plain text</source>
-        <target>~Testu arrunta</target>
+        <target>Testu arrunta</target>
       </trans-unit>
       <trans-unit id="VjYOput" resname="Color">
         <source>Color</source>
@@ -2115,303 +2115,303 @@
       </trans-unit>
       <trans-unit id="rPtyjFe" resname="Lowercase alpha">
         <source>Lowercase alpha</source>
-        <target>~alpha minuskula</target>
+        <target>alpha minuskula</target>
       </trans-unit>
       <trans-unit id="T03I8.Y" resname="Lowercase beta">
         <source>Lowercase beta</source>
-        <target>~beta minuskula</target>
+        <target>beta minuskula</target>
       </trans-unit>
       <trans-unit id="JR9q_Sr" resname="Lowercase chi">
         <source>Lowercase chi</source>
-        <target>~chi minuskula</target>
+        <target>chi minuskula</target>
       </trans-unit>
       <trans-unit id="a5xbnpw" resname="Uppercase Delta">
         <source>Uppercase Delta</source>
-        <target>~Deltaren maiuskula</target>
+        <target>Delta maiuskula</target>
       </trans-unit>
       <trans-unit id="DwY.vMs" resname="Lowercase delta">
         <source>Lowercase delta</source>
-        <target>~delta minuskula</target>
+        <target>delta minuskula</target>
       </trans-unit>
       <trans-unit id="ai.cpc_" resname="Lowercase eta">
         <source>Lowercase eta</source>
-        <target>~eta minuskula</target>
+        <target>eta minuskula</target>
       </trans-unit>
       <trans-unit id="n6gJpFO" resname="Uppercase Gamma">
         <source>Uppercase Gamma</source>
-        <target>~Gamma maiuskula</target>
+        <target>Gamma maiuskula</target>
       </trans-unit>
       <trans-unit id="D8xfSDt" resname="Lowercase gamma">
         <source>Lowercase gamma</source>
-        <target>~gamma minuskula</target>
+        <target>gamma minuskula</target>
       </trans-unit>
       <trans-unit id="EConhKv" resname="Lowercase iota">
         <source>Lowercase iota</source>
-        <target>~iota minuskula</target>
+        <target>iota minuskula</target>
       </trans-unit>
       <trans-unit id="QmCZd5i" resname="Lowercase kappa">
         <source>Lowercase kappa</source>
-        <target>~kappa minuskula</target>
+        <target>kappa minuskula</target>
       </trans-unit>
       <trans-unit id="Tq470p5" resname="Uppercase Lambda">
         <source>Uppercase Lambda</source>
-        <target>~Lambda maiuskula</target>
+        <target>Lambda maiuskula</target>
       </trans-unit>
       <trans-unit id="Fb4T8Tx" resname="Lowercase lambda">
         <source>Lowercase lambda</source>
-        <target>~lambda minuskula</target>
+        <target>lambda minuskula</target>
       </trans-unit>
       <trans-unit id="30TPgv3" resname="Lowercase mu">
         <source>Lowercase mu</source>
-        <target>~mu minuskula</target>
+        <target>mu minuskula</target>
       </trans-unit>
       <trans-unit id="qw6NKUy" resname="Lowercase nu">
         <source>Lowercase nu</source>
-        <target>~nu minuskula</target>
+        <target>nu minuskula</target>
       </trans-unit>
       <trans-unit id="7CsTeI2" resname="Uppercase Omega">
         <source>Uppercase Omega</source>
-        <target>~Omega maiuskula</target>
+        <target>Omega maiuskula</target>
       </trans-unit>
       <trans-unit id="OCcCD4i" resname="Lowercase omega">
         <source>Lowercase omega</source>
-        <target>~omegasuaia</target>
+        <target>omegasuaia</target>
       </trans-unit>
       <trans-unit id="AN4cJ2_" resname="Uppercase Phi">
         <source>Uppercase Phi</source>
-        <target>~Phi maiuskula</target>
+        <target>Phi maiuskula</target>
       </trans-unit>
       <trans-unit id="1zgfmrp" resname="Lowercase phi">
         <source>Lowercase phi</source>
-        <target>~phi minuskula</target>
+        <target>phi minuskula</target>
       </trans-unit>
       <trans-unit id=".NH5UNB" resname="Phi variant">
         <source>Phi variant</source>
-        <target>~Aldagaia Phi</target>
+        <target>Aldagaia Phi</target>
       </trans-unit>
       <trans-unit id="iLmP1Xv" resname="Uppercase Pi">
         <source>Uppercase Pi</source>
-        <target>~Pi maiuskula</target>
+        <target>Pi maiuskula</target>
       </trans-unit>
       <trans-unit id="t72hhYR" resname="Pi variant">
         <source>Pi variant</source>
-        <target>~Aldagaia Pi</target>
+        <target>Aldagaia Pi</target>
       </trans-unit>
       <trans-unit id="tuLP8.v" resname="Uppercase Psi">
         <source>Uppercase Psi</source>
-        <target>~Psi maiuskula</target>
+        <target>Psi maiuskula</target>
       </trans-unit>
       <trans-unit id="6eb0cLP" resname="Lowercase psi">
         <source>Lowercase psi</source>
-        <target>~psi minuskula</target>
+        <target>psi minuskula</target>
       </trans-unit>
       <trans-unit id="OV8JEXY" resname="Lowercase rho">
         <source>Lowercase rho</source>
-        <target>~rho minuskula</target>
+        <target>rho minuskula</target>
       </trans-unit>
       <trans-unit id="4EotDdl" resname="Rho variant">
         <source>Rho variant</source>
-        <target>~Aldagaia Rho</target>
+        <target>Rho aldagaia</target>
       </trans-unit>
       <trans-unit id="D6RKpIP" resname="Final sigma">
         <source>Final sigma</source>
-        <target>~Sigma azkena</target>
+        <target>Sigma azkena</target>
       </trans-unit>
       <trans-unit id="pXdGI_9" resname="Uppercase Sigma">
         <source>Uppercase Sigma</source>
-        <target>~Sigma maiuskula</target>
+        <target>Sigma maiuskula</target>
       </trans-unit>
       <trans-unit id="z_YrGeR" resname="Lowercase sigma">
         <source>Lowercase sigma</source>
-        <target>~sigma minuskula</target>
+        <target>sigma minuskula</target>
       </trans-unit>
       <trans-unit id="QP5TX.p" resname="Lowercase tau">
         <source>Lowercase tau</source>
-        <target>~tau minuskula</target>
+        <target>tau minuskula</target>
       </trans-unit>
       <trans-unit id="roX4Mmz" resname="Uppercase Theta">
         <source>Uppercase Theta</source>
-        <target>~Theta maiuskula</target>
+        <target>Theta maiuskula</target>
       </trans-unit>
       <trans-unit id="WViWY8L" resname="Lowercase theta">
         <source>Lowercase theta</source>
-        <target>~theta minuskula</target>
+        <target>theta minuskula</target>
       </trans-unit>
       <trans-unit id="XCHYVHl" resname="Theta variant">
         <source>Theta variant</source>
-        <target>~Theta aldaera</target>
+        <target>Theta aldaera</target>
       </trans-unit>
       <trans-unit id="N790Gax" resname="Uppercase Upsilon">
         <source>Uppercase Upsilon</source>
-        <target>~Upsilon maiuskula</target>
+        <target>Upsilon maiuskula</target>
       </trans-unit>
       <trans-unit id="g6oVkE0" resname="Lowercase upsilon">
         <source>Lowercase upsilon</source>
-        <target>~upsilon minuskula</target>
+        <target>upsilon minuskula</target>
       </trans-unit>
       <trans-unit id="7H4oilT" resname="Uppercase Xi">
         <source>Uppercase Xi</source>
-        <target>~Xi maiuskula</target>
+        <target>Xi maiuskula</target>
       </trans-unit>
       <trans-unit id="Ix2KPDp" resname="Lowercase xi">
         <source>Lowercase xi</source>
-        <target>~xi minuskula</target>
+        <target>xi minuskula</target>
       </trans-unit>
       <trans-unit id="LjdB4QT" resname="Lowercase zeta">
         <source>Lowercase zeta</source>
-        <target>~zeta minuskula</target>
+        <target>zeta minuskula</target>
       </trans-unit>
       <trans-unit id="wHATkt6" resname="Lowercase epsilon">
         <source>Lowercase epsilon</source>
-        <target>~epsilon minuskula</target>
+        <target>epsilon minuskula</target>
       </trans-unit>
       <trans-unit id="_jaEeiL" resname="Epsilon variant">
         <source>Epsilon variant</source>
-        <target>~Epsilon aldaera</target>
+        <target>Epsilon aldaera</target>
       </trans-unit>
       <trans-unit id="Olp1Qyu" resname="pH and acid-base balance">
         <source>pH and acid-base balance</source>
-        <target>~pH eta azido-alkalino oreka</target>
+        <target>pH eta azido-alkalino oreka</target>
       </trans-unit>
       <trans-unit id="65agbBi" resname="pH">
         <source>pH</source>
-        <target>~pH</target>
+        <target>pH</target>
       </trans-unit>
       <trans-unit id="gVOLhjP" resname="Henderson–Hasselbalch">
         <source>Henderson–Hasselbalch</source>
-        <target>~Henderson–Hasselbalch</target>
+        <target>Henderson–Hasselbalch</target>
       </trans-unit>
       <trans-unit id="vT5jmcB" resname="Enzyme kinetics">
         <source>Enzyme kinetics</source>
-        <target>~Enzima kinetika</target>
+        <target>Enzima kinetika</target>
       </trans-unit>
       <trans-unit id="Xgaz.T." resname="Michaelis–Menten">
         <source>Michaelis–Menten</source>
-        <target>~Michaelis–Menten</target>
+        <target>Michaelis–Menten</target>
       </trans-unit>
       <trans-unit id="jMJl01Y" resname="Lineweaver–Burk">
         <source>Lineweaver–Burk</source>
-        <target>~Lineweaver–Burk</target>
+        <target>Lineweaver–Burk</target>
       </trans-unit>
       <trans-unit id="ftw9jxc" resname="Population genetics">
         <source>Population genetics</source>
-        <target>~Genealogia populazioa</target>
+        <target>Genetika populazioa</target>
       </trans-unit>
       <trans-unit id="n8HPDdj" resname="Allele frequency">
         <source>Allele frequency</source>
-        <target>~Aléle maiztasuna</target>
+        <target>Allele maiztasuna</target>
       </trans-unit>
       <trans-unit id="p21gufE" resname="Hardy–Weinberg">
         <source>Hardy–Weinberg</source>
-        <target>~Hardy–Weinberg</target>
+        <target>Hardy–Weinberg</target>
       </trans-unit>
       <trans-unit id="DaZC4V8" resname="Population dynamics">
         <source>Population dynamics</source>
-        <target>~Populazioaren dinamika</target>
+        <target>Populazioaren dinamikak</target>
       </trans-unit>
       <trans-unit id="QTccM29" resname="Exponential growth">
         <source>Exponential growth</source>
-        <target>~Hazkunde erlatiboa</target>
+        <target>Hazkunde erlatiboa</target>
       </trans-unit>
       <trans-unit id="IcXrBUh" resname="Logistic growth">
         <source>Logistic growth</source>
-        <target>~Hazkunde logistikoa</target>
+        <target>Hazkunde logistikoa</target>
       </trans-unit>
       <trans-unit id="MXTlMS." resname="Transport and diffusion">
         <source>Transport and diffusion</source>
-        <target>~Transportea eta difusioa</target>
+        <target>Garraioa eta difusioak</target>
       </trans-unit>
       <trans-unit id="GUc3XmL" resname="Fick\'s Law">
         <source>Fick\'s Law</source>
-        <target>~Fick-en legea</target>
+        <target>Fick-en legea</target>
       </trans-unit>
       <trans-unit id="dGkKELF" resname="Nernst equation">
         <source>Nernst equation</source>
-        <target>~Nernst-en ekuazioa</target>
+        <target>Nernst-en ekuazioa</target>
       </trans-unit>
       <trans-unit id="dMDqJKm" resname="Osmotic pressure">
         <source>Osmotic pressure</source>
-        <target>~Osmosi-presioa</target>
+        <target>Osmosi-presioa</target>
       </trans-unit>
       <trans-unit id="WEoCJ32" resname="Central tendency measures">
         <source>Central tendency measures</source>
-        <target>~Ereduen tendentzia neurriak</target>
+        <target>Ereduen tendentzia neurriak</target>
       </trans-unit>
       <trans-unit id="mjXLrrj" resname="Arithmetic mean">
         <source>Arithmetic mean</source>
-        <target>~Batezbesteko aritmetikoa</target>
+        <target>Batezbesteko aritmetikoa</target>
       </trans-unit>
       <trans-unit id="1qcvN9E" resname="Weighted mean">
         <source>Weighted mean</source>
-        <target>~Batezbesteko pisuduna</target>
+        <target>Batezbesteko pisuduna</target>
       </trans-unit>
       <trans-unit id="K5U9CjB" resname="Geometric mean">
         <source>Geometric mean</source>
-        <target>~Batezbesteko geometrikoa</target>
+        <target>Batezbesteko geometrikoa</target>
       </trans-unit>
       <trans-unit id="SzGRWfn" resname="Harmonic mean">
         <source>Harmonic mean</source>
-        <target>~Batezbesteko harmonikoa</target>
+        <target>Batezbesteko harmonikoa</target>
       </trans-unit>
       <trans-unit id="xRSa1OT" resname="Quadratic mean">
         <source>Quadratic mean</source>
-        <target>~Batezbesteko kuadratikoa</target>
+        <target>Batezbesteko kuadratikoa</target>
       </trans-unit>
       <trans-unit id="GS4nryp" resname="Median">
         <source>Median</source>
-        <target>~Mediana</target>
+        <target>Mediana</target>
       </trans-unit>
       <trans-unit id="X3g9CS_" resname="k-th percentile">
         <source>k-th percentile</source>
-        <target>~k-aren percentila</target>
+        <target>k-aren pertzentila</target>
       </trans-unit>
       <trans-unit id="L6Stj0U" resname="Dispersion measures">
         <source>Dispersion measures</source>
-        <target>~Dibertsitatea neurriak</target>
+        <target>sakabanatze neurriak</target>
       </trans-unit>
       <trans-unit id="Bqh7l0G" resname="Range">
         <source>Range</source>
-        <target>~Eremua</target>
+        <target>Eremua</target>
       </trans-unit>
       <trans-unit id="bOZKd9O" resname="Interquartile range">
         <source>Interquartile range</source>
-        <target>~Tarteka erdikoaren tartea</target>
+        <target>Tarte interkualitoa</target>
       </trans-unit>
       <trans-unit id="9NfNc4_" resname="Coefficient of variation">
         <source>Coefficient of variation</source>
-        <target>~Aldagaien koefizientea</target>
+        <target>Aldagaien koefizientea</target>
       </trans-unit>
       <trans-unit id="HkEgavk" resname="Population variance">
         <source>Population variance</source>
-        <target>~Populazioaren variance</target>
+        <target>Populazioaren bariantza</target>
       </trans-unit>
       <trans-unit id="7tYWWLJ" resname="Sample variance">
         <source>Sample variance</source>
-        <target>~Aldearen variance</target>
+        <target>Lagin bariantza</target>
       </trans-unit>
       <trans-unit id="8uWRpVt" resname="Population standard deviation">
         <source>Population standard deviation</source>
-        <target>~Populazioaren deribazioa</target>
+        <target>Populazioaren desbideratze tipikoa</target>
       </trans-unit>
       <trans-unit id="diAKso2" resname="Sample standard deviation">
         <source>Sample standard deviation</source>
-        <target>~Aldearen deribazioa</target>
+        <target>Laginaren desbideratze tipikoa</target>
       </trans-unit>
       <trans-unit id="llRGJLb" resname="Mean absolute deviation">
         <source>Mean absolute deviation</source>
-        <target>~Batez besteko desbideraketa absolutua</target>
+        <target>Batez besteko desbideratze absolutua</target>
       </trans-unit>
       <trans-unit id="no1gXa2" resname="Semi-interquartile range">
         <source>Semi-interquartile range</source>
-        <target>~Erdi-tarteko tartea</target>
+        <target>Erdi-tarteko tartea</target>
       </trans-unit>
       <trans-unit id="DmF3vIJ" resname="Standard score (population z-score)">
         <source>Standard score (population z-score)</source>
-        <target>~Estatistika-zenbakia (populazio z-zenbakia)</target>
+        <target>Estatistika puntuazioa (populazio z-zenbakia)</target>
       </trans-unit>
       <trans-unit id="CJQRsMA" resname="Standard score (sample z-score)">
         <source>Standard score (sample z-score)</source>
-        <target>~Estatistika-zenbakia (ereduko z-zenbakia)</target>
+        <target>Estatistika puntuazioa (ereduko z-zenbakia)</target>
       </trans-unit>
       <trans-unit id="IbP1f.z" resname="Population kurtosis">
         <source>Population kurtosis</source>

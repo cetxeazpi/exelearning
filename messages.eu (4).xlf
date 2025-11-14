@@ -927,15 +927,15 @@
       </trans-unit>
       <trans-unit id="vMqqN1e" resname="Error loading menu">
         <source>Error loading menu</source>
-        <target>~Errorea menuak kargatzean</target>
+        <target>Errorea menua kargatzean</target>
       </trans-unit>
       <trans-unit id="24mHwai" resname="Could not load">
         <source>Could not load</source>
-        <target>~Ezin izan da kargatu</target>
+        <target>Ezin izan da kargatu</target>
       </trans-unit>
       <trans-unit id="GdRFNpn" resname="No menus found.">
         <source>No menus found.</source>
-        <target>~Ez da menuik aurkitu.</target>
+        <target>Ez da menurik aurkitu.</target>
       </trans-unit>
       <trans-unit id=".jhcwBR" resname="File">
         <source>File</source>
@@ -943,11 +943,11 @@
       </trans-unit>
       <trans-unit id="uKMbnxc" resname="Please describe the formula you need.">
         <source>Please describe the formula you need.</source>
-        <target>~Mesedez, deskribatu behar duzun formula.</target>
+        <target>Mesedez, deskribatu behar duzun formula.</target>
       </trans-unit>
       <trans-unit id="qe79.N0" resname="Instruction generated. You can now use the buttons.">
         <source>Instruction generated. You can now use the buttons.</source>
-        <target>~Irakaskuntza sortu da. Orain botoiak erabil ditzakezu.</target>
+        <target>Jarraibidea sortuta. Orain botoiak erabil ditzakezu.</target>
       </trans-unit>
       <trans-unit id="yISxAqv" resname="Instruction copied to clipboard!">
         <source>Instruction copied to clipboard!</source>
@@ -12887,11 +12887,11 @@
       </trans-unit>
       <trans-unit id="CEZIpnQ" resname="An unexpected error occurred while processing the file.">
         <source>An unexpected error occurred while processing the file.</source>
-        <target>~Errore ezezagun bat gertatu da fitxeroa prozesatzen.</target>
+        <target>Errore ezezagun bat gertatu da fitxeroa prozesatzean.</target>
       </trans-unit>
       <trans-unit id="vGlqvyV" resname="Unexpected error during upload">
         <source>Unexpected error during upload</source>
-        <target>~Errore ezezagun bat igotzean</target>
+        <target>Errore ezezagun bat igotzean</target>
       </trans-unit>
       <trans-unit id="DlutuO4" resname="New from Template">
         <source>New from Template</source>
@@ -12899,27 +12899,27 @@
       </trans-unit>
       <trans-unit id="M_Llf6E" resname="Failed to load template. Please try again.">
         <source>Failed to load template. Please try again.</source>
-        <target>~Ezin izan da txantiloa kargatu. Mesedez, saiatu berriro.</target>
+        <target>Ezin izan da txantiloia kargatu. Mesedez, saiatu berriro.</target>
       </trans-unit>
       <trans-unit id="xCsb28x" resname="Processing file">
         <source>Processing file</source>
-        <target>~Fitxeroa prozesatzen</target>
+        <target>Fitxeroa prozesatzen</target>
       </trans-unit>
       <trans-unit id="ywaQ_Vp" resname="Preparing upload...">
         <source>Preparing upload...</source>
-        <target>~Igoera prestatzen...</target>
+        <target>Igoera prestatzen...</target>
       </trans-unit>
       <trans-unit id="AVv4iei" resname="This may take a few moments for large files...">
         <source>This may take a few moments for large files...</source>
-        <target>~Honek momentu batzuk har ditzake fitxero handientzat...</target>
+        <target>Honek minutu batzuk hartuko ditu fitxero handietarako...</target>
       </trans-unit>
       <trans-unit id="oPy4NMk" resname="Uploading">
         <source>Uploading</source>
-        <target>~Igotzen</target>
+        <target>Igotzen</target>
       </trans-unit>
       <trans-unit id="uSZfo5R" resname="Uploading file...">
         <source>Uploading file...</source>
-        <target>~Fitxeroa igotzen...</target>
+        <target>Fitxeroa igotzen...</target>
       </trans-unit>
       <trans-unit id="Pjnplq6" resname="Extracting files...">
         <source>Extracting files...</source>
@@ -12939,59 +12939,59 @@
       </trans-unit>
       <trans-unit id="msb5FOD" resname="Finalizing...">
         <source>Finalizing...</source>
-        <target>~Bukatzen...</target>
+        <target>Bukatzen...</target>
       </trans-unit>
       <trans-unit id="z9fMpq3" resname="Completing the process...">
         <source>Completing the process...</source>
-        <target>~Prozesua amaitzen...</target>
+        <target>Prozesua amaitzen...</target>
       </trans-unit>
       <trans-unit id="641t3eO" resname="Processing...">
         <source>Processing...</source>
-        <target>~Prozesatzen...</target>
+        <target>Prozesatzen...</target>
       </trans-unit>
       <trans-unit id="WrPqN4D" resname="Please wait...">
         <source>Please wait...</source>
-        <target>~Mesedez, itxaron...</target>
+        <target>Mesedez, itxaron...</target>
       </trans-unit>
       <trans-unit id="4.iC7Dw" resname="Error processing file">
         <source>Error processing file</source>
-        <target>~Errorea fitxeroa prozesatzen</target>
+        <target>Errorea fitxategia prozesatzean</target>
       </trans-unit>
       <trans-unit id="SDFoFKb" resname="Quick edit">
         <source>Quick edit</source>
-        <target>~Aldaketa azkarra</target>
+        <target>Editatze-azkarra</target>
       </trans-unit>
       <trans-unit id="VLYpTCb" resname="Another user is editing an iDevice on this block.">
         <source>Another user is editing an iDevice on this block.</source>
-        <target>~Beste erabiltzaile bat iDevice bat editatzen ari da bloke honetan.</target>
+        <target>Beste erabiltzaile bat iDevice bat editatzen ari da bloke honetan.</target>
       </trans-unit>
       <trans-unit id="qSRqFDl" resname="Missing file name or path">
         <source>Missing file name or path</source>
-        <target>~Fitxeroaren izena edo bidea falta da</target>
+        <target>Fitxategiaren izena edo ibilbidea falta da</target>
       </trans-unit>
       <trans-unit id="T7Qvhcc" resname="Invalid request data">
         <source>Invalid request data</source>
-        <target>~Eskaera-datuak baliogabeak dira</target>
+        <target>Eskaera-datuak baliogabeak dira</target>
       </trans-unit>
       <trans-unit id="dsSqvHh" resname="Uploaded file not found">
         <source>Uploaded file not found</source>
-        <target>~Igota dagoen fitxeroa ez da aurkitu</target>
+        <target>Igotako fitxategia ez da aurkitu</target>
       </trans-unit>
       <trans-unit id="ORp5XHR" resname="Invalid file type">
         <source>Invalid file type</source>
-        <target>~Fitxero-mota baliogabea</target>
+        <target>Fitxategi-mota baliogabea</target>
       </trans-unit>
       <trans-unit id="Jyiz9H6" resname="Highlight this page in the website navigation menu">
         <source>Highlight this page in the website navigation menu</source>
-        <target>~Nabigazio-menuan orrialde hau nabarmentzea</target>
+        <target>Nabarmendu orrialde hau nabigazio-menuan</target>
       </trans-unit>
       <trans-unit id="dBXXN24" resname="Subtitle">
         <source>Subtitle</source>
-        <target>~Azpititulua</target>
+        <target>Azpititulua</target>
       </trans-unit>
       <trans-unit id="DQPL3WX" resname="Adds additional information to the main title.">
         <source>Adds additional information to the main title.</source>
-        <target>~Informazio gehigarria gehitzen du izenburu nagusian.</target>
+        <target>Informazio gehigarria gehitu izenburu nagusian.</target>
       </trans-unit>
     </body>
   </file>

@@ -1507,7 +1507,7 @@
       </trans-unit>
       <trans-unit id="5b434BV" resname="Circled minus">
         <source>Circled minus</source>
-        <target>~Minus zirkulatu</target>
+        <target>Biribileko kenketa</target>
       </trans-unit>
       <trans-unit id=".dFeNVT" resname="Satisfies (models)">
         <source>Satisfies (models)</source>
@@ -2415,255 +2415,255 @@
       </trans-unit>
       <trans-unit id="IbP1f.z" resname="Population kurtosis">
         <source>Population kurtosis</source>
-        <target>~Populazioaren kurtosia</target>
+        <target>Populazioaren kurtosia</target>
       </trans-unit>
       <trans-unit id="KVdJyzv" resname="Sample kurtosis">
         <source>Sample kurtosis</source>
-        <target>~Lantzeko kurtosia</target>
+        <target>Langin kurtosia</target>
       </trans-unit>
       <trans-unit id="M2qx70T" resname="Frequencies">
         <source>Frequencies</source>
-        <target>~Frekzientziak</target>
+        <target>Maiztasunak</target>
       </trans-unit>
       <trans-unit id="wsy3AnY" resname="Relative frequency">
         <source>Relative frequency</source>
-        <target>~Frekzientzia erlaziona</target>
+        <target>Maiztasun erlatiboa</target>
       </trans-unit>
       <trans-unit id="926tIW3" resname="Cumulative frequency">
         <source>Cumulative frequency</source>
-        <target>~Frekzientzia metatua</target>
+        <target>Maiztasun metatua</target>
       </trans-unit>
       <trans-unit id="dmx74.T" resname="Cumulative absolute frequency">
         <source>Cumulative absolute frequency</source>
-        <target>~Frekzientzia absolutu metatua</target>
+        <target>Maiztasun absolutu metatua</target>
       </trans-unit>
       <trans-unit id="0SbijM8" resname="Intervals">
         <source>Intervals</source>
-        <target>~Interbaloak</target>
+        <target>Tarteak</target>
       </trans-unit>
       <trans-unit id="FG1WYkC" resname="Class mark">
         <source>Class mark</source>
-        <target>~Klase-markoa</target>
+        <target>Klase-marka</target>
       </trans-unit>
       <trans-unit id="oXm.58e" resname="Class width">
         <source>Class width</source>
-        <target>~Klase-zabalera</target>
+        <target>Klase-zabalera</target>
       </trans-unit>
       <trans-unit id="yVihj0k" resname="Median in intervals">
         <source>Median in intervals</source>
-        <target>~Mediana intervaluetan</target>
+        <target>Tartekako mediana</target>
       </trans-unit>
       <trans-unit id="V1zKl96" resname="Mode in intervals">
         <source>Mode in intervals</source>
-        <target>~Modu in tarteletan</target>
+        <target>Tartekako moda</target>
       </trans-unit>
       <trans-unit id="Zg1Jdth" resname="Moments and generating functions">
         <source>Moments and generating functions</source>
-        <target>~Une momentuak eta funtzioak sortzen</target>
+        <target>Momentuak eta funtzio sortzaileak</target>
       </trans-unit>
       <trans-unit id="68ac37M" resname="Discrete expectation">
         <source>Discrete expectation</source>
-        <target>~Expectativa diskretua</target>
+        <target>Itxaropen diskretua</target>
       </trans-unit>
       <trans-unit id="ZqkFc.g" resname="Continuous expectation">
         <source>Continuous expectation</source>
-        <target>~Expectativa jarraituak</target>
+        <target>Itxaropen jarraitua</target>
       </trans-unit>
       <trans-unit id="RuVUK4R" resname="Variance (moments)">
         <source>Variance (moments)</source>
-        <target>~Bariantzia (momentuak)</target>
+        <target>Bariantza (momentuak)</target>
       </trans-unit>
       <trans-unit id="HeZKxW6" resname="Moment-generating function">
         <source>Moment-generating function</source>
-        <target>~Momentu sortzaile funtzioa</target>
+        <target>Momentu sortzaile funtzioa</target>
       </trans-unit>
       <trans-unit id="LW6su3S" resname="Probability distributions">
         <source>Probability distributions</source>
-        <target>~Banaketa probabilistikoak</target>
+        <target>Banaketa probabilistikoak</target>
       </trans-unit>
       <trans-unit id="pvv5WDL" resname="Binomial">
         <source>Binomial</source>
-        <target>~Binomiala</target>
+        <target>Binomiala</target>
       </trans-unit>
       <trans-unit id="7U9NoKL" resname="Poisson">
         <source>Poisson</source>
-        <target>~Poisson</target>
+        <target>Poisson</target>
       </trans-unit>
       <trans-unit id="qpzJnCs" resname="Standard normal distribution">
         <source>Standard normal distribution</source>
-        <target>~Banaketa normal estandarra</target>
+        <target>Banaketa normal estandarra</target>
       </trans-unit>
       <trans-unit id="m1Ztwtv" resname="Student\'s t-distribution">
         <source>Student\'s t-distribution</source>
-        <target>~Student's t-distribuzioa</target>
+        <target>T-Student banaketa</target>
       </trans-unit>
       <trans-unit id="wVMC9z_" resname="Chi-squared distribution">
         <source>Chi-squared distribution</source>
-        <target>~Chi-karratuko distribuzioa</target>
+        <target>Chi-karratuko banaketa</target>
       </trans-unit>
       <trans-unit id="5cXp7Wy" resname="Fisher\'s F-distribution">
         <source>Fisher\'s F-distribution</source>
-        <target>~Fisherren F-distribuzioa</target>
+        <target>Fish F banaketa</target>
       </trans-unit>
       <trans-unit id="MRreuZs" resname="Correlation coefficients">
         <source>Correlation coefficients</source>
-        <target>~Korrelationeko koefizienteak</target>
+        <target>Koerlazio-koefizienteak</target>
       </trans-unit>
       <trans-unit id="Aqmrx8N" resname="Population covariance">
         <source>Population covariance</source>
-        <target>~Populazioaren covariantza</target>
+        <target>Populazioaren kobariantza</target>
       </trans-unit>
       <trans-unit id="03wKnJ7" resname="Sample covariance">
         <source>Sample covariance</source>
-        <target>~Aldizkako covariantza</target>
+        <target>Aldizkako kobariantza</target>
       </trans-unit>
       <trans-unit id="veaUocs" resname="Pearson">
         <source>Pearson</source>
-        <target>~Pearson</target>
+        <target>Pearson</target>
       </trans-unit>
       <trans-unit id="uEvZPs_" resname="Pearson\'s t-test">
         <source>Pearson\'s t-test</source>
-        <target>~Pearsonen t-testa</target>
+        <target>Pearsonen t-testa</target>
       </trans-unit>
       <trans-unit id="yGn1Vxe" resname="Spearman">
         <source>Spearman</source>
-        <target>~Spearman</target>
+        <target>Spearman</target>
       </trans-unit>
       <trans-unit id="OnstoaE" resname="Kendall\'s Tau">
         <source>Kendall\'s Tau</source>
-        <target>~Kendallen Tau</target>
+        <target>Kendallen Tau</target>
       </trans-unit>
       <trans-unit id="ofsPM_X" resname="Phi coefficient">
         <source>Phi coefficient</source>
-        <target>~Koefiziente Phi</target>
+        <target>Phi koefizientea</target>
       </trans-unit>
       <trans-unit id="jNt7j4q" resname="Regression">
         <source>Regression</source>
-        <target>~Anbide</target>
+        <target>Erregresioa</target>
       </trans-unit>
       <trans-unit id="4fnZlYp" resname="Regression line">
         <source>Regression line</source>
-        <target>~Anbide lerroa</target>
+        <target>Erregresio zuzena</target>
       </trans-unit>
       <trans-unit id="HTyInDr" resname="Slope">
         <source>Slope</source>
-        <target>~Malda</target>
+        <target>Malda</target>
       </trans-unit>
       <trans-unit id="ZbtERgq" resname="Intercept">
         <source>Intercept</source>
-        <target>~Baimena</target>
+        <target>Ordenatua</target>
       </trans-unit>
       <trans-unit id=".O6TrQt" resname="Correlation coefficient">
         <source>Correlation coefficient</source>
-        <target>~Korrelazio koefizientea</target>
+        <target>Koerlazio koefizientea</target>
       </trans-unit>
       <trans-unit id="6BM_YaI" resname="Coefficient of determination">
         <source>Coefficient of determination</source>
-        <target>~Emaitza koefizientea</target>
+        <target>Determinazio koefizientea</target>
       </trans-unit>
       <trans-unit id="IP_vB9R" resname="Adjusted R^2">
         <source>Adjusted R^2</source>
-        <target>~R^2 egokitua</target>
+        <target>R^2 egokitua</target>
       </trans-unit>
       <trans-unit id="ZCpj9F1" resname="Standard error of the estimate">
         <source>Standard error of the estimate</source>
-        <target>~Estimazioaren erro estandarra</target>
+        <target>Estimazioaren errore estandarra</target>
       </trans-unit>
       <trans-unit id="0oBLMH4" resname="Prediction interval">
         <source>Prediction interval</source>
-        <target>~Aurreikuspen tartea</target>
+        <target>Aurreikuspen tartea</target>
       </trans-unit>
       <trans-unit id="aOiihng" resname="Statistical inference">
         <source>Statistical inference</source>
-        <target>~Inbentazio estatistikoa</target>
+        <target>Inferentzia estatistikoa</target>
       </trans-unit>
       <trans-unit id="Cs0ewQN" resname="z-statistic">
         <source>z-statistic</source>
-        <target>~z-estatistika</target>
+        <target>z-estatistika</target>
       </trans-unit>
       <trans-unit id="DLbn2YL" resname="t-statistic">
         <source>t-statistic</source>
-        <target>~t-estatistika</target>
+        <target>t-estatistika</target>
       </trans-unit>
       <trans-unit id="qq6De8u" resname="Standard error with z">
         <source>Standard error with z</source>
-        <target>~Errore estandarra z-rekin</target>
+        <target>Errore estandarra z-rekin</target>
       </trans-unit>
       <trans-unit id="7L9KTKK" resname="Standard error with t">
         <source>Standard error with t</source>
-        <target>~Errore estandarra t-rekin</target>
+        <target>Errore estandarra t-rekin</target>
       </trans-unit>
       <trans-unit id="hDM3Y.8" resname="Interval with population standard deviation">
         <source>Interval with population standard deviation</source>
-        <target>~Indizea populazioaren ezaugarria estandarraren bidez</target>
+        <target>Populazio tartea duen desbideratze estandarra</target>
       </trans-unit>
       <trans-unit id="DvgFGH3" resname="Interval with sample deviation">
         <source>Interval with sample deviation</source>
-        <target>~Indizea laginaren ezaugarria estandarraren bidez</target>
+        <target>Lagin desbiderapen tartea</target>
       </trans-unit>
       <trans-unit id="1yuaqgS" resname="Sample size (mean)">
         <source>Sample size (mean)</source>
-        <target>~Laginaren tamaina (batez bestekoa)</target>
+        <target>Laginaren tamaina (batez bestekoa)</target>
       </trans-unit>
       <trans-unit id="uGSbpdt" resname="Sample size (proportion)">
         <source>Sample size (proportion)</source>
-        <target>~Laginaren tamaina (portzentajea)</target>
+        <target>Laginaren tamaina (portzentajea)</target>
       </trans-unit>
       <trans-unit id="JlwYM8z" resname="Proportion estimation">
         <source>Proportion estimation</source>
-        <target>~Portzentajearen estimazioa</target>
+        <target>Ehunekoaren estimazioa</target>
       </trans-unit>
       <trans-unit id=".__sE54" resname="Standard error of proportion">
         <source>Standard error of proportion</source>
-        <target>~Portzentajearen errore estandarra</target>
+        <target>Ehunekoaren errore estandarra</target>
       </trans-unit>
       <trans-unit id="GGNm9hl" resname="CI for proportion">
         <source>CI for proportion</source>
-        <target>~Portzentajearako CI</target>
+        <target>Ehunekorako CI</target>
       </trans-unit>
       <trans-unit id="QPXKzOy" resname="Hypothesis testing">
         <source>Hypothesis testing</source>
-        <target>~Hipotesiaren proba</target>
+        <target>Hipotesiaren proba</target>
       </trans-unit>
       <trans-unit id="MCQD5MW" resname="z for proportions">
         <source>z for proportions</source>
-        <target>~z portzentajeentzat</target>
+        <target>ehunekoentzat z</target>
       </trans-unit>
       <trans-unit id="pxfnTD." resname="z for difference of proportions">
         <source>z for difference of proportions</source>
-        <target>~z portzentajeen arteko aldea</target>
+        <target>ehunekoen desberdintasunerako z</target>
       </trans-unit>
       <trans-unit id="la4Hqia" resname="One-sample t-test">
         <source>One-sample t-test</source>
-        <target>~Laguntza-t-test bat</target>
+        <target>Laginaren t</target>
       </trans-unit>
       <trans-unit id="L6dl5WM" resname="Independent two-sample t-test">
         <source>Independent two-sample t-test</source>
-        <target>~Bi laguntza-t-test independente</target>
+        <target>Bi batezbeskoren independenteren t</target>
       </trans-unit>
       <trans-unit id="VN88VGF" resname="Pooled variance">
         <source>Pooled variance</source>
-        <target>~Baliokidetasunaren aldaera bateratua</target>
+        <target>Bariantza taldekatua</target>
       </trans-unit>
       <trans-unit id="ltrApOj" resname="Paired t-test">
         <source>Paired t-test</source>
-        <target>~Elkarrekiko t-test</target>
+        <target>t parekatua</target>
       </trans-unit>
       <trans-unit id="9BLu.Fk" resname="Chi-squared">
         <source>Chi-squared</source>
-        <target>~Chi-karratu</target>
+        <target>Chi-karratua</target>
       </trans-unit>
       <trans-unit id="ISm6UE." resname="ANOVA">
         <source>ANOVA</source>
-        <target>~ANOVA</target>
+        <target>ANOVA</target>
       </trans-unit>
       <trans-unit id="XYXz9Tl" resname="SS between groups">
         <source>SS between groups</source>
-        <target>~Taldeen arteko SS</target>
+        <target>Taldeen arteko SS</target>
       </trans-unit>
       <trans-unit id="EbDuDA0" resname="SS within groups">
         <source>SS within groups</source>
-        <target>~Taldeen barneko SS</target>
+        <target>Taldeen barneko SS</target>
       </trans-unit>
       <trans-unit id="kMsi1zL" resname="F-statistic (ANOVA)">
         <source>F-statistic (ANOVA)</source>

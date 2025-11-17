@@ -163,7 +163,7 @@
       </trans-unit>
       <trans-unit id="zhlMs3D" resname="iDevice error">
         <source>iDevice error</source>
-        <target>iDevicearen errorea</target>
+        <target>iDevice-aren errorea</target>
       </trans-unit>
       <trans-unit id="5ieXOaE" resname="Report an Issue">
         <source>Report an Issue</source>
@@ -2667,575 +2667,575 @@
       </trans-unit>
       <trans-unit id="kMsi1zL" resname="F-statistic (ANOVA)">
         <source>F-statistic (ANOVA)</source>
-        <target>~F-estatistika (ANOVA)</target>
+        <target>F-estatistika (ANOVA)</target>
       </trans-unit>
       <trans-unit id="4Dzj951" resname="Association and contingency">
         <source>Association and contingency</source>
-        <target>~Elkarketaren eta kontingentziaren arteko erlazioa</target>
+        <target>Asosiazio eta kontingentziaren arteko erlazioa</target>
       </trans-unit>
       <trans-unit id="3Ic92qD" resname="Contingency coef">
         <source>Contingency coef</source>
-        <target>~Kontingentzia koefizientea</target>
+        <target>Kontingentzia koefizientea</target>
       </trans-unit>
       <trans-unit id="uXYBtiH" resname="Cramer\'s V">
         <source>Cramer\'s V</source>
-        <target>~Cramérren V</target>
+        <target>Cramerren V</target>
       </trans-unit>
       <trans-unit id="mpVp63_" resname="Inequalities">
         <source>Inequalities</source>
-        <target>~Eraldiak</target>
+        <target>Desberdintzak</target>
       </trans-unit>
       <trans-unit id="SSI5U.g" resname="Chebyshev">
         <source>Chebyshev</source>
-        <target>~Chebyshev</target>
+        <target>Chebyshev</target>
       </trans-unit>
       <trans-unit id="rLWISmN" resname="Kinematics">
         <source>Kinematics</source>
-        <target>~Kinematika</target>
+        <target>Kinematika</target>
       </trans-unit>
       <trans-unit id="BHRD.GQ" resname="Average velocity">
         <source>Average velocity</source>
-        <target>~Batez bestekoa</target>
+        <target>Batez besteko abiadura</target>
       </trans-unit>
       <trans-unit id="3bFq872" resname="Average acceleration">
         <source>Average acceleration</source>
-        <target>~Batez batezkoa</target>
+        <target>Batez besteko azelerazioa</target>
       </trans-unit>
       <trans-unit id="HuOQm.E" resname="Uniform motion">
         <source>Uniform motion</source>
-        <target>~Jarduera uniformea</target>
+        <target>Jarduera uniformea</target>
       </trans-unit>
       <trans-unit id="teRz3k6" resname="Position with constant acceleration">
         <source>Position with constant acceleration</source>
-        <target>~Posizioa azelerazio konstantearekin</target>
+        <target>Azelerazio konstanteko posizioa</target>
       </trans-unit>
       <trans-unit id="aFSsbYZ" resname="Velocity with constant acceleration">
         <source>Velocity with constant acceleration</source>
-        <target>~Abiadura azelerazio konstantearekin</target>
+        <target>Azelerazio konstanteko abiadura</target>
       </trans-unit>
       <trans-unit id="NopKOHk" resname="Velocity without time">
         <source>Velocity without time</source>
-        <target>~Abiadura denborarik gabe</target>
+        <target>Denborarik gabeko abiadura</target>
       </trans-unit>
       <trans-unit id="Ezxekfn" resname="Dynamics">
         <source>Dynamics</source>
-        <target>~Dinamikak</target>
+        <target>Dinamika</target>
       </trans-unit>
       <trans-unit id="0e4VnHD" resname="Newton\'s second law">
         <source>Newton\'s second law</source>
-        <target>~Newtonen bigarren legea</target>
+        <target>Newtonen bigarren legea</target>
       </trans-unit>
       <trans-unit id="nOSecV3" resname="Linear momentum">
         <source>Linear momentum</source>
-        <target>~Lineako momentua</target>
+        <target>Momentu lineala</target>
       </trans-unit>
       <trans-unit id="4ra6VKT" resname="Force and impulse">
         <source>Force and impulse</source>
-        <target>~Indar eta inpultsa</target>
+        <target>Indarra eta bulkada</target>
       </trans-unit>
       <trans-unit id="MyOWufX" resname="Work">
         <source>Work</source>
-        <target>~Lan egin</target>
+        <target>Lan egin</target>
       </trans-unit>
       <trans-unit id="nssc6Ar" resname="Power">
         <source>Power</source>
-        <target>~Indar</target>
+        <target>Indarra</target>
       </trans-unit>
       <trans-unit id="XHgfNbG" resname="Energy and Work">
         <source>Energy and Work</source>
-        <target>~Energia eta lana</target>
+        <target>Energia eta lana</target>
       </trans-unit>
       <trans-unit id="NqB0xjJ" resname="Kinetic energy">
         <source>Kinetic energy</source>
-        <target>~Energia zinetikoa</target>
+        <target>Energia zinetikoa</target>
       </trans-unit>
       <trans-unit id="eFKEvy_" resname="Gravitational potential energy">
         <source>Gravitational potential energy</source>
-        <target>~Energia grabitazionala</target>
+        <target>Energia grabitatorio potentziala</target>
       </trans-unit>
       <trans-unit id="OydQpv8" resname="Mechanical energy">
         <source>Mechanical energy</source>
-        <target>~Energia mekanikoa</target>
+        <target>Energia mekanikoa</target>
       </trans-unit>
       <trans-unit id="TEwhpOT" resname="Work-energy theorem">
         <source>Work-energy theorem</source>
-        <target>~Lan-energia teorema</target>
+        <target>Lan-energia teorema</target>
       </trans-unit>
       <trans-unit id="Ku5M5V9" resname="Electric power">
         <source>Electric power</source>
-        <target>~Indar elektrikoa</target>
+        <target>Indar elektrikoa</target>
       </trans-unit>
       <trans-unit id="auacBe." resname="Gravitation">
         <source>Gravitation</source>
-        <target>~Grabitazioa</target>
+        <target>Grabitazioa</target>
       </trans-unit>
       <trans-unit id="dZjdSLz" resname="Law of universal gravitation">
         <source>Law of universal gravitation</source>
-        <target>~Grabitazio unibertsalaren legea</target>
+        <target>Grabitazio unibertsalaren legea</target>
       </trans-unit>
       <trans-unit id="xk0jrSA" resname="Gravitational field">
         <source>Gravitational field</source>
-        <target>~Eremu grabitazionala</target>
+        <target>Eremu grabitazionala</target>
       </trans-unit>
       <trans-unit id="L9Mydsa" resname="Orbital velocity">
         <source>Orbital velocity</source>
-        <target>~Orbitako abiadura</target>
+        <target>Orbita-abiadura</target>
       </trans-unit>
       <trans-unit id="O5.Pd0L" resname="Waves and Oscillations">
         <source>Waves and Oscillations</source>
-        <target>~Mekanika eta Oskulazioak</target>
+        <target>Uhinak eta oszilazioak</target>
       </trans-unit>
       <trans-unit id="fGhHSFh" resname="Wave speed">
         <source>Wave speed</source>
-        <target>~Uhinen abiadura</target>
+        <target>Uhinen abiadura</target>
       </trans-unit>
       <trans-unit id=".JfJF1w" resname="Period">
         <source>Period</source>
-        <target>~Denbora</target>
+        <target>Periodo</target>
       </trans-unit>
       <trans-unit id="hmTgQuL" resname="Frequency">
         <source>Frequency</source>
-        <target>~Frekuentzia</target>
+        <target>Frekuentzia</target>
       </trans-unit>
       <trans-unit id="S_bsq80" resname="Hooke\'s law">
         <source>Hooke\'s law</source>
-        <target>~Hooke-ren legea</target>
+        <target>Hooke-ren legea</target>
       </trans-unit>
       <trans-unit id="bPEXqWV" resname="SHM Period">
         <source>SHM Period</source>
-        <target>~SHM Denbora</target>
+        <target>SHM periodoa</target>
       </trans-unit>
       <trans-unit id="CY42PFV" resname="Simple harmonic motion">
         <source>Simple harmonic motion</source>
-        <target>~Harmonikoki sinplea</target>
+        <target>Mugimendu harmoniko sinplea</target>
       </trans-unit>
       <trans-unit id="hWbOeHF" resname="Electricity and Magnetism">
         <source>Electricity and Magnetism</source>
-        <target>~Elektrizitatea eta Magnetismoa</target>
+        <target>Elektrizitatea eta Magnetismoa</target>
       </trans-unit>
       <trans-unit id="NEfWVxU" resname="Ohm\'s law">
         <source>Ohm\'s law</source>
-        <target>~Ohm\'s law</target>
+        <target>Ohm-ren legea</target>
       </trans-unit>
       <trans-unit id="krzPnaF" resname="Resistors in series">
         <source>Resistors in series</source>
-        <target>~Serieko erresistentziak</target>
+        <target>Serieko erresistentziak</target>
       </trans-unit>
       <trans-unit id="pP0d2zi" resname="Resistors in parallel">
         <source>Resistors in parallel</source>
-        <target>~Paralleleko erresistentziak</target>
+        <target>Paraleloko erresistentziak</target>
       </trans-unit>
       <trans-unit id="SZQWXTO" resname="Capacitance">
         <source>Capacitance</source>
-        <target>~Kapazitatea</target>
+        <target>Kapazitantzia</target>
       </trans-unit>
       <trans-unit id="IMAe1IQ" resname="Energy in capacitor">
         <source>Energy in capacitor</source>
-        <target>~Kapasitantzian dagoen energia</target>
+        <target>Kapasitantzian dagoen energia</target>
       </trans-unit>
       <trans-unit id="NPe3GJJ" resname="Lorentz force">
         <source>Lorentz force</source>
-        <target>~Lorentz indarra</target>
+        <target>Lorentz indarra</target>
       </trans-unit>
       <trans-unit id="bX0KY3r" resname="Magnetic flux">
         <source>Magnetic flux</source>
-        <target>~Magnetismo fluxua</target>
+        <target>Magnetismo fluxua</target>
       </trans-unit>
       <trans-unit id="nXmzmVw" resname="Faraday\'s law">
         <source>Faraday\'s law</source>
-        <target>~Faraday-ren legea</target>
+        <target>Faraday-ren legea</target>
       </trans-unit>
       <trans-unit id="6zh8ZQi" resname="Optics">
         <source>Optics</source>
-        <target>~Optika</target>
+        <target>Optika</target>
       </trans-unit>
       <trans-unit id="5eLIb5E" resname="Snell\'s law">
         <source>Snell\'s law</source>
-        <target>~Snell-en legea</target>
+        <target>Snell-en legea</target>
       </trans-unit>
       <trans-unit id="zJO50eb" resname="Thin lens equation">
         <source>Thin lens equation</source>
-        <target>~Lentze mehatikokoaren ekuazioa</target>
+        <target>Lente mehearen ekuazioa</target>
       </trans-unit>
       <trans-unit id="0C0Dgfq" resname="Lateral magnification">
         <source>Lateral magnification</source>
-        <target>~Lateralizazio handitzea</target>
+        <target>Alboko handitzea</target>
       </trans-unit>
       <trans-unit id="E7aIzqe" resname="Law of reflection">
         <source>Law of reflection</source>
-        <target>~Islatzearen legea</target>
+        <target>Reflexioaren legea</target>
       </trans-unit>
       <trans-unit id="K8GR5PI" resname="Fluids">
         <source>Fluids</source>
-        <target>~Likidoak</target>
+        <target>Likidoak</target>
       </trans-unit>
       <trans-unit id="uYqYMdn" resname="Pressure">
         <source>Pressure</source>
-        <target>~Presioa</target>
+        <target>Presioa</target>
       </trans-unit>
       <trans-unit id="n9r_fFv" resname="Hydrostatic pressure">
         <source>Hydrostatic pressure</source>
-        <target>~Presio hidrostatikoa</target>
+        <target>Presio hidrostatikoa</target>
       </trans-unit>
       <trans-unit id="fguek3O" resname="Continuity equation">
         <source>Continuity equation</source>
-        <target>~Jarraitutasun ekuazioa</target>
+        <target>Jarraitasun-ekuazioa</target>
       </trans-unit>
       <trans-unit id="YXkma8N" resname="Bernoulli\'s equation">
         <source>Bernoulli\'s equation</source>
-        <target>~Bernoulli ekuazioa</target>
+        <target>Bernoulli-ren ekuazioa</target>
       </trans-unit>
       <trans-unit id="rhuOmDb" resname="P + \\tfrac12 \\rho v^2 + \\rho g h = \\text{constant}">
         <source>P + \\tfrac12 \\rho v^2 + \\rho g h = \\text{constant}</source>
-        <target>~P + \\tfrac12 \\rho v^2 + \\rho g h = \\constant</target>
+        <target>P + \\tfrac12 \\rho v^2 + \\rho g h = \\text{konstantea}</target>
       </trans-unit>
       <trans-unit id="CUfw.JS" resname="Thermodynamics">
         <source>Thermodynamics</source>
-        <target>~Termo-dinamika</target>
+        <target>Termodinamika</target>
       </trans-unit>
       <trans-unit id="Xq2fpcN" resname="Ideal gas law">
         <source>Ideal gas law</source>
-        <target>~Gas idealaren legea</target>
+        <target>Gas idealaren legea</target>
       </trans-unit>
       <trans-unit id="P6E_sIA" resname="Sensible heat">
         <source>Sensible heat</source>
-        <target>~ bero sentikorra</target>
+        <target>Bero sentikorra</target>
       </trans-unit>
       <trans-unit id="qDHjVoA" resname="Latent heat">
         <source>Latent heat</source>
-        <target>~ bero latentua</target>
+        <target>Bero sor</target>
       </trans-unit>
       <trans-unit id="Xg4liL9" resname="First law of thermodynamics">
         <source>First law of thermodynamics</source>
-        <target>~Termodinamikaren lehen legea</target>
+        <target>Termodinamikaren lehen legea</target>
       </trans-unit>
       <trans-unit id="L7GsYd2" resname="Entropy">
         <source>Entropy</source>
-        <target>~Entropia</target>
+        <target>Entropia</target>
       </trans-unit>
       <trans-unit id="AqCmD31" resname="Perimeters and lengths">
         <source>Perimeters and lengths</source>
-        <target>~Perimetroak eta luzerak</target>
+        <target>Perimetroak eta luzerak</target>
       </trans-unit>
       <trans-unit id="OqiINW0" resname="Perimeter of a square">
         <source>Perimeter of a square</source>
-        <target>~Karratuko perimetroa</target>
+        <target>Karratuaren perimetroa</target>
       </trans-unit>
       <trans-unit id="8_9QNW3" resname="Perimeter of a rectangle">
         <source>Perimeter of a rectangle</source>
-        <target>~Errenklaje baten perimetroa</target>
+        <target>Laukizuzenaren perimetroa</target>
       </trans-unit>
       <trans-unit id="Aho8Rv_" resname="Perimeter of a triangle">
         <source>Perimeter of a triangle</source>
-        <target>~Triangelu baten perimetroa</target>
+        <target>Triangeluaren perimetroa</target>
       </trans-unit>
       <trans-unit id="pZHLMNt" resname="Perimeter of a regular polygon">
         <source>Perimeter of a regular polygon</source>
-        <target>~Poligono regular baten perimetroa</target>
+        <target>Poligono erregularraren perimetroa</target>
       </trans-unit>
       <trans-unit id="f.iebdH" resname="Circumference perimeter">
         <source>Circumference perimeter</source>
-        <target>~Perimetroaren ingurunea</target>
+        <target>Zirkunferentziaren perimetroa</target>
       </trans-unit>
       <trans-unit id="GNGVtLs" resname="Arc length (radians)">
         <source>Arc length (radians)</source>
-        <target>~Arku luzera (radianetan)</target>
+        <target>Arku-luzera (radianak)</target>
       </trans-unit>
       <trans-unit id="UqsZi2z" resname="Arc length (degrees)">
         <source>Arc length (degrees)</source>
-        <target>~Arku luzera (gradutan)</target>
+        <target>Arku-luzera (graduak)</target>
       </trans-unit>
       <trans-unit id="g27YRiB" resname="Right triangle perimeter">
         <source>Right triangle perimeter</source>
-        <target>~Eskuin triangeluaren perimetroa</target>
+        <target>Triangelu angeluzuzenaren perimetroa</target>
       </trans-unit>
       <trans-unit id="A85Ag8r" resname="Areas of plane figures">
         <source>Areas of plane figures</source>
-        <target>~Planoen irudiak</target>
+        <target>Irudi lauen azalera</target>
       </trans-unit>
       <trans-unit id="bXKIzez" resname="Area of a rectangle">
         <source>Area of a rectangle</source>
-        <target>~ Laukizuzena</target>
+        <target>Laukizuzenaren azalera</target>
       </trans-unit>
       <trans-unit id="6niW289" resname="Area of a triangle">
         <source>Area of a triangle</source>
-        <target>~Triangeluaren azalera</target>
+        <target>Triangeluaren azalera</target>
       </trans-unit>
       <trans-unit id="BH6Jydc" resname="Area of a square">
         <source>Area of a square</source>
-        <target>~Karratuaren azalera</target>
+        <target>Karratuaren azalera</target>
       </trans-unit>
       <trans-unit id="VUaGjfi" resname="Area of a circle">
         <source>Area of a circle</source>
-        <target>~Zirkuluaren azalera</target>
+        <target>Zirkuluaren azalera</target>
       </trans-unit>
       <trans-unit id="DA.G6FW" resname="Area of a trapezoid">
         <source>Area of a trapezoid</source>
-        <target>~Trapezioaren azalera</target>
+        <target>Trapezioaren azalera</target>
       </trans-unit>
       <trans-unit id="MbrcwpW" resname="Area of a parallelogram">
         <source>Area of a parallelogram</source>
-        <target>~Paralelogramo baten azalerak</target>
+        <target>Paralelogramoaren azalera</target>
       </trans-unit>
       <trans-unit id="Qfu9E1d" resname="Area of a rhombus">
         <source>Area of a rhombus</source>
-        <target>~Diamante baten azalerak</target>
+        <target>Erronboaren azalera</target>
       </trans-unit>
       <trans-unit id="smrH1Nk" resname="Area of an ellipse">
         <source>Area of an ellipse</source>
-        <target>~Elipse baten azalerak</target>
+        <target>Elipsearen azalera</target>
       </trans-unit>
       <trans-unit id="0FiE8xW" resname="Area of a triangle (with trigonometry)">
         <source>Area of a triangle (with trigonometry)</source>
-        <target>~ Triangelu baten azalerak (trigonometriarekin)</target>
+        <target>Triangeluaren azalera (trigonometriarekin)</target>
       </trans-unit>
       <trans-unit id="kEdw8OF" resname="Area of a circular sector">
         <source>Area of a circular sector</source>
-        <target>~Zirkulu sektore baten azalerak</target>
+        <target>Zirkulu sektorearen azalera</target>
       </trans-unit>
       <trans-unit id="E9G_Nsz" resname="Volumes of solids">
         <source>Volumes of solids</source>
-        <target>~Gurutzatutako bolumenak</target>
+        <target>Gorputzen bolumenak</target>
       </trans-unit>
       <trans-unit id="lHgIzC_" resname="Volume of a cube">
         <source>Volume of a cube</source>
-        <target>~Kuboko bolumenak</target>
+        <target>Kuboaren bolumena</target>
       </trans-unit>
       <trans-unit id="9HROMKE" resname="Volume of a prism">
         <source>Volume of a prism</source>
-        <target>~Prismako bolumenak</target>
+        <target>Prismaren bolumena</target>
       </trans-unit>
       <trans-unit id="KTwAnxL" resname="Volume of a cylinder">
         <source>Volume of a cylinder</source>
-        <target>~Zirkulua bolumenak</target>
+        <target>Zilindroaren bolumena</target>
       </trans-unit>
       <trans-unit id="65xboUs" resname="Volume of a cone">
         <source>Volume of a cone</source>
-        <target>~Kono baten bolumenak</target>
+        <target>Konoaren bolumena</target>
       </trans-unit>
       <trans-unit id="aS0F2_p" resname="Volume of a sphere">
         <source>Volume of a sphere</source>
-        <target>~Esferaren bolumena</target>
+        <target>Esferaren bolumena</target>
       </trans-unit>
       <trans-unit id="m.TmDGp" resname="Volume of a pyramid">
         <source>Volume of a pyramid</source>
-        <target>~Piramidearen bolumena</target>
+        <target>Piramidearen bolumena</target>
       </trans-unit>
       <trans-unit id="AbIvIj_" resname="Surface areas of solids">
         <source>Surface areas of solids</source>
-        <target>~Gurutzatutako solidoen azalera eremua</target>
+        <target>Gorputz solidoen azalera-eremuak</target>
       </trans-unit>
       <trans-unit id="6iSZp5k" resname="Lateral area of a cylinder">
         <source>Lateral area of a cylinder</source>
-        <target>~Zirkuluaren aldeko azalera</target>
+        <target>Zilindroaren alboko azalera</target>
       </trans-unit>
       <trans-unit id="AwODqeZ" resname="Total area of a cylinder">
         <source>Total area of a cylinder</source>
-        <target>~Zirkuluaren azalera osoa</target>
+        <target>Zilindroarenn azalera osoa</target>
       </trans-unit>
       <trans-unit id="BB06wQ." resname="Lateral area of a cone">
         <source>Lateral area of a cone</source>
-        <target>~Konoaren aldeko azalera</target>
+        <target>Konoaren alboko azalera</target>
       </trans-unit>
       <trans-unit id="IHEcT83" resname="Total area of a cone">
         <source>Total area of a cone</source>
-        <target>~Konoaren azalera osoa</target>
+        <target>Konoaren azalera osoa</target>
       </trans-unit>
       <trans-unit id="5M4wkou" resname="Surface area of a sphere">
         <source>Surface area of a sphere</source>
-        <target>~Esferaren azalera</target>
+        <target>Esferaren azalera</target>
       </trans-unit>
       <trans-unit id="ZDaHwWJ" resname="Total area of a cube">
         <source>Total area of a cube</source>
-        <target>~Kuboko azalera osoa</target>
+        <target>Kuboaren azalera osoa</target>
       </trans-unit>
       <trans-unit id="XE.aqQ1" resname="Trigonometry and Coordinates">
         <source>Trigonometry and Coordinates</source>
-        <target>~Trigonometria eta Koordenatuak</target>
+        <target>Trigonometria eta Koordenatuak</target>
       </trans-unit>
       <trans-unit id="OY6lLyX" resname="Pythagorean theorem">
         <source>Pythagorean theorem</source>
-        <target>~Teorema Pitagoras</target>
+        <target>Pitagoras-en teorema</target>
       </trans-unit>
       <trans-unit id="Boz9iqG" resname="Law of sines">
         <source>Law of sines</source>
-        <target>~Lege sinusak</target>
+        <target>Sinuen legea</target>
       </trans-unit>
       <trans-unit id="pav9WDc" resname="Law of cosines">
         <source>Law of cosines</source>
-        <target>~Lege kosinusak</target>
+        <target>Kosinuen legea</target>
       </trans-unit>
       <trans-unit id="K8KgOgu" resname="Equation of a line">
         <source>Equation of a line</source>
-        <target>~Linearen ekuazioa</target>
+        <target>Zuzenaren ekuazioa</target>
       </trans-unit>
       <trans-unit id="A4b5Zw0" resname="Distance between two points">
         <source>Distance between two points</source>
-        <target>~Bi puntu arteko distantzia</target>
+        <target>Bi puntuen arteko distantzia</target>
       </trans-unit>
       <trans-unit id="ovudQLv" resname="Midpoint">
         <source>Midpoint</source>
-        <target>~Erpin erdikoa</target>
+        <target>Erdi puntua</target>
       </trans-unit>
       <trans-unit id="ibzTMV7" resname="Equation of a circle">
         <source>Equation of a circle</source>
-        <target>~Zirkulu baten ekuazioa</target>
+        <target>Zirkuluaren ekuazioa</target>
       </trans-unit>
       <trans-unit id="pDe6ra8" resname="Chemical symbolic notation">
         <source>Chemical symbolic notation</source>
-        <target>~Kimiko sinbolismo notazioa</target>
+        <target>Notazio sinboliko kimikoa</target>
       </trans-unit>
       <trans-unit id="tU5KVc7" resname="Element with atomic and mass number">
         <source>Element with atomic and mass number</source>
-        <target>~Elementua zenbaki atomiko eta masa zenbakiarekin</target>
+        <target>Zenbaki atomikoa eta masikoa duen elementua</target>
       </trans-unit>
       <trans-unit id="7YJolaq" resname="Chemical formula (mhchem package)">
         <source>Chemical formula (mhchem package)</source>
-        <target>~Kimiko formula (mhchem paketea)</target>
+        <target>Formula kimikoa (mhchem paketea)</target>
       </trans-unit>
       <trans-unit id="JH9NPDB" resname="Reaction arrow">
         <source>Reaction arrow</source>
-        <target>~Alderre ekintza</target>
+        <target>Erreakzio-gezia</target>
       </trans-unit>
       <trans-unit id="9NFsJLa" resname="Reverse reaction arrow">
         <source>Reverse reaction arrow</source>
-        <target>~Alderre ekintza alderantzizkoa</target>
+        <target>Alderantzizko erreakzio-gezia</target>
       </trans-unit>
       <trans-unit id="mtCq69k" resname="Reversible reaction">
         <source>Reversible reaction</source>
-        <target>~Alderre alderantzizkoa</target>
+        <target>Erreakzio itzulgarria</target>
       </trans-unit>
       <trans-unit id="aiAsp20" resname="Example of chemical reaction">
         <source>Example of chemical reaction</source>
-        <target>~Adibide kimikoaren erreakzioa</target>
+        <target>Erreakzio kimikoaren adibidea</target>
       </trans-unit>
       <trans-unit id="WSyxOA6" resname="Positive ion">
         <source>Positive ion</source>
-        <target>~Ion positiboa</target>
+        <target>Ion positiboa</target>
       </trans-unit>
       <trans-unit id="Zwfmq1M" resname="Negative ion">
         <source>Negative ion</source>
-        <target>~Ion negatiboa</target>
+        <target>Ion negatiboa</target>
       </trans-unit>
       <trans-unit id="IwqXK5c" resname="Solid state">
         <source>Solid state</source>
-        <target>~Estatu solidoa</target>
+        <target>Egoera solidoa</target>
       </trans-unit>
       <trans-unit id="k6I5uRB" resname="Liquid state">
         <source>Liquid state</source>
-        <target>~Estatu likidoa</target>
+        <target>Egoera likidoa</target>
       </trans-unit>
       <trans-unit id="EtljPQi" resname="Gaseous state">
         <source>Gaseous state</source>
-        <target>~Estatu gasosoa</target>
+        <target>Gas-egoera</target>
       </trans-unit>
       <trans-unit id="PuN5Xnh" resname="Aqueous state">
         <source>Aqueous state</source>
-        <target>~Estatu urtarrizkoa</target>
+        <target>Egoera urtsua</target>
       </trans-unit>
       <trans-unit id="XP87f.X" resname="Balanced reaction">
         <source>Balanced reaction</source>
-        <target>~Erreakzio orekatua</target>
+        <target>Erreakzio orekatua</target>
       </trans-unit>
       <trans-unit id="HiPuTCX" resname="Ideal gases">
         <source>Ideal gases</source>
-        <target>~Gases idealak</target>
+        <target>Gas idealak</target>
       </trans-unit>
       <trans-unit id="k2Jr3ux" resname="Ideal gas law equation">
         <source>Ideal gas law equation</source>
-        <target>~Gas idealaren lege ekuazioa</target>
+        <target>Gas idealen legearen ekuazioa</target>
       </trans-unit>
       <trans-unit id="ZMRDPfD" resname="Density of an ideal gas">
         <source>Density of an ideal gas</source>
-        <target>~Gas idealaren dentsitatea</target>
+        <target>Gas idealaren dentsitatea</target>
       </trans-unit>
       <trans-unit id="1VOgvRI" resname="Partial pressure">
         <source>Partial pressure</source>
-        <target>~Presio partziala</target>
+        <target>Presio partziala</target>
       </trans-unit>
       <trans-unit id="34KtaK8" resname="Stoichiometry">
         <source>Stoichiometry</source>
-        <target>~Stoikiometria</target>
+        <target>Estekiometria</target>
       </trans-unit>
       <trans-unit id="Oyqjwit" resname="Amount of substance">
         <source>Amount of substance</source>
-        <target>~Substantzia kantitatea</target>
+        <target>Substantzia-kantitatea</target>
       </trans-unit>
       <trans-unit id="RebpMvz" resname="Mass of substance">
         <source>Mass of substance</source>
-        <target>~Substantzia masa</target>
+        <target>Substantzia-masa</target>
       </trans-unit>
       <trans-unit id="k9UNtub" resname="Molar concentration">
         <source>Molar concentration</source>
-        <target>~Kontsentrazio molarra</target>
+        <target>Kontsentrazio molarra</target>
       </trans-unit>
       <trans-unit id="RhCv1CF" resname="Dilution">
         <source>Dilution</source>
-        <target>~Diluzioa</target>
+        <target>Diluzioa</target>
       </trans-unit>
       <trans-unit id="Xxjp7g." resname="Chemical equilibrium">
         <source>Chemical equilibrium</source>
-        <target>~Equilibrio químico</target>
+        <target>Oreka kimikoa</target>
       </trans-unit>
       <trans-unit id="iJKSRuS" resname="Equilibrium constant (Kc)">
         <source>Equilibrium constant (Kc)</source>
-        <target>~Ekuilibrio konstantea (Kc)</target>
+        <target>Oreka-konstantea (Kc)</target>
       </trans-unit>
       <trans-unit id="LILvXqv" resname="Equilibrium constant (Kp)">
         <source>Equilibrium constant (Kp)</source>
-        <target>~Ekuilibrio konstantea (Kp)</target>
+        <target>Oreka-konstantea (Kp)</target>
       </trans-unit>
       <trans-unit id="PBF0CMi" resname="Reaction quotient">
         <source>Reaction quotient</source>
-        <target>~Erreakzio kuotazioa</target>
+        <target>Erreakzio-koefizientea</target>
       </trans-unit>
       <trans-unit id="uEWZs4q" resname="Acid-base">
         <source>Acid-base</source>
-        <target>~Azido-basea</target>
+        <target>Azido-basea</target>
       </trans-unit>
       <trans-unit id="tNpAVOo" resname="pOH">
         <source>pOH</source>
-        <target>~pOH</target>
+        <target>pOH</target>
       </trans-unit>
       <trans-unit id="amjrth0" resname="pH-pOH relationship">
         <source>pH-pOH relationship</source>
-        <target>~pH-pOH erlazioa</target>
+        <target>pH-pOH erlazioa</target>
       </trans-unit>
       <trans-unit id="_8k5v1_" resname="Acidity constant">
         <source>Acidity constant</source>
-        <target>~Azido-oinarritasun konstantea</target>
+        <target>Azidotasun-konstantea</target>
       </trans-unit>
       <trans-unit id="Mi1fT1Q" resname="pKa">
         <source>pKa</source>
-        <target>~pKa</target>
+        <target>pKa</target>
       </trans-unit>
       <trans-unit id="jeaBPag" resname="Thermochemistry">
         <source>Thermochemistry</source>
-        <target>~Termo-kimika</target>
+        <target>Termokimika</target>
       </trans-unit>
       <trans-unit id="oYWOJB8" resname="Heat of reaction">
         <source>Heat of reaction</source>
-        <target>~Erreakzioaren beroa</target>
+        <target>Erreakzioaren beroa</target>
       </trans-unit>
       <trans-unit id="CdiWBSC" resname="Gibbs free energy">
         <source>Gibbs free energy</source>
-        <target>~Gibbs askatasun energia</target>
+        <target>Gibbs-ik gabeko energia</target>
       </trans-unit>
       <trans-unit id="bzYL2EB" resname="Constants">
         <source>Constants</source>
-        <target>~Constantzak</target>
+        <target>Konstanteak</target>
       </trans-unit>
       <trans-unit id="jCRXf_X" resname="Avogadro\'s number">
         <source>Avogadro\'s number</source>
-        <target>~Avogadro zenbakia</target>
+        <target>Avogadro-ren zenbakia</target>
       </trans-unit>
       <trans-unit id="mGez35A" resname="Gas constant">
         <source>Gas constant</source>
-        <target>~Gasaren konstantea</target>
+        <target>Gas konstantea</target>
       </trans-unit>
       <trans-unit id="uf_UAIq" resname="Boltzmann constant">
         <source>Boltzmann constant</source>
-        <target>~Boltzmann konstantea</target>
+        <target>Boltzmann-en konstantea</target>
       </trans-unit>
       <trans-unit id="NMmVjl0" resname="Description">
         <source>Description</source>
@@ -3243,31 +3243,31 @@
       </trans-unit>
       <trans-unit id="UsAUFIg" resname="Basic symbols">
         <source>Basic symbols</source>
-        <target>~Ikur oinarrizkoak</target>
+        <target>Oinarrizko ikurrak</target>
       </trans-unit>
       <trans-unit id="VDu2g6x" resname="Statistics">
         <source>Statistics</source>
-        <target>~Estatistika</target>
+        <target>Estatistika</target>
       </trans-unit>
       <trans-unit id="DS9SmDT" resname="Physics">
         <source>Physics</source>
-        <target>~Fisika</target>
+        <target>Fisika</target>
       </trans-unit>
       <trans-unit id="qN4_Ce0" resname="Geometry">
         <source>Geometry</source>
-        <target>~Geometria</target>
+        <target>Geometria</target>
       </trans-unit>
       <trans-unit id="kEux0ZS" resname="LaTeX Formula Visual Editor">
         <source>LaTeX Formula Visual Editor</source>
-        <target>~LaTeX Formula Visual Editor</target>
+        <target>LaTeX formulen ikusizko editorea</target>
       </trans-unit>
       <trans-unit id="6Y5EmRo" resname="LaTeX Formula Editor">
         <source>LaTeX Formula Editor</source>
-        <target>~LaTeX Formula Editor</target>
+        <target>LaTeX Formula editorea</target>
       </trans-unit>
       <trans-unit id="Jbx224G" resname="✨ Create with AI">
         <source>✨ Create with AI</source>
-        <target>~✨ Sortu AI-rekin</target>
+        <target>✨ AAarekin sortu</target>
       </trans-unit>
       <trans-unit id="IRz2qG_" resname="Paste">
         <source>Paste</source>
@@ -3275,27 +3275,27 @@
       </trans-unit>
       <trans-unit id="5_ETqJi" resname="Copy JSON">
         <source>Copy JSON</source>
-        <target>~Kopiatu JSON</target>
+        <target>JSON-a kopiatu</target>
       </trans-unit>
       <trans-unit id="zhC7KYj" resname="Export JSON">
         <source>Export JSON</source>
-        <target>~Exportatu JSON</target>
+        <target>JSON-a esportatu</target>
       </trans-unit>
       <trans-unit id="YhNZ.Nz" resname="Go to category...">
         <source>Go to category...</source>
-        <target>~Joan kategoriara...</target>
+        <target>Joan kategoriara...</target>
       </trans-unit>
       <trans-unit id="MwHiujQ" resname="Collapse/Expand">
         <source>Collapse/Expand</source>
-        <target>~Collapsa/Zabaldu</target>
+        <target>Tolestu/Zabaldu</target>
       </trans-unit>
       <trans-unit id="m0h23vj" resname="Application by Juan José de Haro">
         <source>Application by Juan José de Haro</source>
-        <target>~Application by Juan José de Haro</target>
+        <target>Juan José de Haro-k egindako aplikazioa</target>
       </trans-unit>
       <trans-unit id="kJw2kGt" resname="Creative Commons BY-SA License">
         <source>Creative Commons BY-SA License</source>
-        <target>~Creative Commons BY-SA License</target>
+        <target>Creative Commons BY-SA lizentzia</target>
       </trans-unit>
       <trans-unit id="EhytB4v" resname="Cancel">
         <source>Cancel</source>
@@ -3303,91 +3303,91 @@
       </trans-unit>
       <trans-unit id="P7N703x" resname="Paste JSON content">
         <source>Paste JSON content</source>
-        <target>~Itsatsi JSON eduki</target>
+        <target>JSON edukia itsasi</target>
       </trans-unit>
       <trans-unit id="pnLNy5q" resname="Paste the JSON code here...">
         <source>Paste the JSON code here...</source>
-        <target>~Itsatsi JSON kodea hemen...</target>
+        <target>JSON kodea hemen itsatsi...</target>
       </trans-unit>
       <trans-unit id="6Aaaywp" resname="Type of content to paste:">
         <source>Type of content to paste:</source>
-        <target>~Pasta motaren edukia:</target>
+        <target>Itsatsi beharreko eduki-mota:</target>
       </trans-unit>
       <trans-unit id="Ej1pm.C" resname="Full JSON (in new tab)">
         <source>Full JSON (in new tab)</source>
-        <target>~JSON osoa (nolabait berria)</target>
+        <target>JSON osoa (fitxa berrian)</target>
       </trans-unit>
       <trans-unit id="eh6TIM4" resname="Category (in current tab)">
         <source>Category (in current tab)</source>
-        <target>~Kategoria (egungo fitxan)</target>
+        <target>Kategoria (egungo fitxan)</target>
       </trans-unit>
       <trans-unit id="GL5YG3U" resname="Element(s) (in current tab)">
         <source>Element(s) (in current tab)</source>
-        <target>~Elementu(a) (egungo fitxan)</target>
+        <target>Elementu(a) (egungo fitxan)</target>
       </trans-unit>
       <trans-unit id="7MOqLbM" resname="Add element(s) to category:">
         <source>Add element(s) to category:</source>
-        <target>~Gehitu elementu(k) kategoria:</target>
+        <target>Gehitu elementua(k) honako kategorian:</target>
       </trans-unit>
       <trans-unit id="CbQ10zo" resname="Add Content">
         <source>Add Content</source>
-        <target>~Gehitu Edukia</target>
+        <target>Edukia gehitu</target>
       </trans-unit>
       <trans-unit id="HZtC59z" resname="AI Creation Wizard">
         <source>AI Creation Wizard</source>
-        <target>~AI Sortze Magia</target>
+        <target>AA sortzeko laguntzailea</target>
       </trans-unit>
       <trans-unit id="LTHBJwJ" resname="1. What do you want to create?">
         <source>1. What do you want to create?</source>
-        <target>~1. Zer sortu nahi duzu?</target>
+        <target>1. Zer sortu nahi duzu?</target>
       </trans-unit>
       <trans-unit id="t6deruw" resname="Full JSON file">
         <source>Full JSON file</source>
-        <target>~JSON fitxategi osoa</target>
+        <target>JSON fitxategi osoa</target>
       </trans-unit>
       <trans-unit id="h1JgnMe" resname="A single category">
         <source>A single category</source>
-        <target>~Kategoria bakarra</target>
+        <target>Kategoria bakarra</target>
       </trans-unit>
       <trans-unit id="V7TO7pz" resname="Multiple elements">
         <source>Multiple elements</source>
-        <target>~Elementu anitzak</target>
+        <target>Elementu anitzak</target>
       </trans-unit>
       <trans-unit id="a0Sms.p" resname="2. Generate and use the prompt">
         <source>2. Generate and use the prompt</source>
-        <target>~2. Sortu eta erabili promtoa</target>
+        <target>2. Sortu eta erabili prompt-a</target>
       </trans-unit>
       <trans-unit id="jKiYAgQ" resname="Follow the steps to generate a prompt and get the JSON code from your preferred AI.">
         <source>Follow the steps to generate a prompt and get the JSON code from your preferred AI.</source>
-        <target>~Jarraitu pausoak prompt bat sortzeko eta zure AI gogokoenean JSON kodea lortzeko.</target>
+        <target>Jarraitu prompt bat sortzeko eta nahi duzun AAren JSON kodea lortzeko urratsak.</target>
       </trans-unit>
       <trans-unit id="HUg4ypV" resname="The generated prompt will appear here...">
         <source>The generated prompt will appear here...</source>
-        <target>~Sortutako promtoa hemen agertuko da...</target>
+        <target>Sortutako prompt-a hemen agertuko da...</target>
       </trans-unit>
       <trans-unit id="ME62tP7" resname="1. Generate Prompt">
         <source>1. Generate Prompt</source>
-        <target>~1. Sortu Prompto</target>
+        <target>1. Sortu Prompt-a</target>
       </trans-unit>
       <trans-unit id="t4Y7vhN" resname="2. Launch in ChatGPT">
         <source>2. Launch in ChatGPT</source>
-        <target>~2. Abiarazi ChatGPTn</target>
+        <target>2. Abiarazi ChatGPT-n</target>
       </trans-unit>
       <trans-unit id="owzhu6J" resname="2a. Copy (other AI)">
         <source>2a. Copy (other AI)</source>
-        <target>~2a. Kopiatu (beste AI)</target>
+        <target>2a. Kopiatu (beste AA)</target>
       </trans-unit>
       <trans-unit id="NrH8O8T" resname="3. Paste the result into the editor">
         <source>3. Paste the result into the editor</source>
-        <target>~3. itsatsi emaitza editorean</target>
+        <target>3. Itsatsi emaitza editorean</target>
       </trans-unit>
       <trans-unit id="4ISToky" resname="Once you have the code, close this window and use the">
         <source>Once you have the code, close this window and use the</source>
-        <target>~Kodea duzunean, itxi leihoa eta erabili the</target>
+        <target>Kodea duzunean, itxi leihoa eta erabili</target>
       </trans-unit>
       <trans-unit id="WzOdU6k" resname="button on the top bar to add your new creation.">
         <source>button on the top bar to add your new creation.</source>
-        <target>~botoia goian dagoen barra batean zure sorkuntza berria gehitzeko.</target>
+        <target>goiko barrako botoia zure sorkuntza berria gehitzeko.</target>
       </trans-unit>
       <trans-unit id="H1Pdq23" resname="Add formula set">
         <source>Add formula set</source>
@@ -3951,7 +3951,7 @@
       </trans-unit>
       <trans-unit id="cmVmfRk" resname="Could not remove the iDevice">
         <source>Could not remove the iDevice</source>
-        <target>Ezin da iDevicea ezabatu</target>
+        <target>Ezin da iDevice-a ezabatu</target>
       </trans-unit>
       <trans-unit id="Jp3BFhF" resname="Export">
         <source>Export</source>
@@ -3959,7 +3959,7 @@
       </trans-unit>
       <trans-unit id="tsxZze5" resname="Delete iDevice">
         <source>Delete iDevice</source>
-        <target>iDevicea ezabatu</target>
+        <target>iDevice-a ezabatu</target>
       </trans-unit>
       <trans-unit id="VBZ1ogU" resname="Delete this iDevice: %s?">
         <source>Delete this iDevice: %s?</source>
@@ -4263,11 +4263,11 @@
       </trans-unit>
       <trans-unit id="32aThvc" resname="iDevice manager">
         <source>iDevice manager</source>
-        <target>iDeviceen kudeatzailea</target>
+        <target>iDevice-en kudeatzailea</target>
       </trans-unit>
       <trans-unit id="fMxz8c4" resname="Search iDevices">
         <source>Search iDevices</source>
-        <target>iDeviceak bilatu</target>
+        <target>iDevice-ak bilatu</target>
       </trans-unit>
       <trans-unit id="wtVkNXt" resname="Default iDevices">
         <source>Default iDevices</source>
@@ -4279,7 +4279,7 @@
       </trans-unit>
       <trans-unit id="yIQeeyS" resname="Import iDevice">
         <source>Import iDevice</source>
-        <target>Inportatu iDevicea</target>
+        <target>Inportatu iDevice-a</target>
       </trans-unit>
       <trans-unit id="dRNHWgg" resname="Activate">
         <source>Activate</source>
@@ -4587,7 +4587,7 @@
       </trans-unit>
       <trans-unit id="1QWTr7I" resname="iDevice properties">
         <source>iDevice properties</source>
-        <target>iDevicearen ezarpenak</target>
+        <target>iDevice-aren ezarpenak</target>
       </trans-unit>
       <trans-unit id="U7kZ6Nk" resname="Delete iDevice? This cannot be undone.">
         <source>Delete iDevice? This cannot be undone.</source>
@@ -4599,7 +4599,7 @@
       </trans-unit>
       <trans-unit id="dOPZCVW" resname="Move iDevice to page">
         <source>Move iDevice to page</source>
-        <target>iDevicea orrira mugitu</target>
+        <target>iDevice-a orrira mugitu</target>
       </trans-unit>
       <trans-unit id="qMGbqBh" resname="Select the page where you want to move the iDevice. It will be placed at the end of the page.">
         <source>Select the page where you want to move the iDevice. It will be placed at the end of the page.</source>
@@ -4619,7 +4619,7 @@
       </trans-unit>
       <trans-unit id="LmWdpVc" resname="Error saving the iDevice">
         <source>Error saving the iDevice</source>
-        <target>Errorea iDevicea gordetzean</target>
+        <target>Errorea iDevice-a gordetzean</target>
       </trans-unit>
       <trans-unit id="iq1Ycbw" resname="Failed to save the iDevice to database">
         <source>Failed to save the iDevice to database</source>
@@ -4643,19 +4643,19 @@
       </trans-unit>
       <trans-unit id="fxYTEKl" resname="Failed to load the iDevice.">
         <source>Failed to load the iDevice.</source>
-        <target>Huts egin du iDevicearen kargak</target>
+        <target>Huts egin du iDevice-aren kargak</target>
       </trans-unit>
       <trans-unit id="uvlDjwW" resname="Failed to load the iDevice view.">
         <source>Failed to load the iDevice view.</source>
-        <target>Huts egin du iDevicearen ikuspegia kargatzerakoan.</target>
+        <target>Huts egin du iDevice-aren ikuspegia kargatzerakoan.</target>
       </trans-unit>
       <trans-unit id="Q_WMYYX" resname="You can't add an iDevice on the root page">
         <source>You can't add an iDevice on the root page</source>
-        <target>Ezin da iDevicea gehitu erroko orrian</target>
+        <target>Ezin da iDevice-a gehitu erroko orrian</target>
       </trans-unit>
       <trans-unit id="2Pq3_Wp" resname="Problem adding iDevice">
         <source>Problem adding iDevice</source>
-        <target>Arazoa iDevicea gehitzerakoan</target>
+        <target>Arazoa iDevice-a gehitzerakoan</target>
       </trans-unit>
       <trans-unit id="fPQsnoO" resname="You are currently editing another iDevice. Please close it before continuing">
         <source>You are currently editing another iDevice. Please close it before continuing</source>
@@ -4663,7 +4663,7 @@
       </trans-unit>
       <trans-unit id="38SLSPC" resname="An error occurred while loading the iDevice.">
         <source>An error occurred while loading the iDevice.</source>
-        <target>Errorea iDevicea kargatzerakoan.</target>
+        <target>Errorea iDevice-a kargatzerakoan.</target>
       </trans-unit>
       <trans-unit id="_qN9nCf" resname="The box is empty. Do you want to delete it?">
         <source>The box is empty. Do you want to delete it?</source>
@@ -11843,7 +11843,7 @@
       </trans-unit>
       <trans-unit id="PTY.ZKR" resname="Import iDevices">
         <source>Import iDevices</source>
-        <target>IDeviceak inportatu</target>
+        <target>IDevice-ak inportatu</target>
       </trans-unit>
       <trans-unit id="EJDvYR8" resname="Save and exit">
         <source>Save and exit</source>
@@ -12703,7 +12703,7 @@
       </trans-unit>
       <trans-unit id="v5ZRdyM" resname="Show the content of the first Free Text iDevice in the specified page.">
         <source>Show the content of the first Free Text iDevice in the specified page.</source>
-        <target>Erakutsi lehenengo Testu Librea iDevice-ren edukia dagokion orrian.</target>
+        <target>Erakutsi lehenengo Testu Librea iDevice-aren edukia dagokion orrian.</target>
       </trans-unit>
       <trans-unit id="k_kZsMw" resname="Term">
         <source>Term</source>

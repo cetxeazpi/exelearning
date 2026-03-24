@@ -407,7 +407,7 @@
       </trans-unit>
       <trans-unit id="ZLhutDM" resname="Send to AI">
         <source>Send to AI</source>
-        <target>~Bidali AI-ra</target>
+        <target>Bidali AAra</target>
       </trans-unit>
       <trans-unit id="bOxwr9C" resname="Specialty">
         <source>Specialty</source>
@@ -939,31 +939,31 @@
       </trans-unit>
       <trans-unit id="uKMbnxc" resname="Please describe the formula you need.">
         <source>Please describe the formula you need.</source>
-        <target>~Mesedez, deskribatu behar duzun formula.</target>
+        <target>Mesedez, deskribatu behar duzun formula.</target>
       </trans-unit>
       <trans-unit id="qe79.N0" resname="Instruction generated. You can now use the buttons.">
         <source>Instruction generated. You can now use the buttons.</source>
-        <target>~Irakaskuntza sortu da. Orain botoiak erabil ditzakezu.</target>
+        <target>Jarraibideak sortuta. Orain botoiak erabil ditzakezu.</target>
       </trans-unit>
       <trans-unit id="yISxAqv" resname="Instruction copied to clipboard!">
         <source>Instruction copied to clipboard!</source>
-        <target>~Irakaskuntza arbeletik kopiatu da!</target>
+        <target>Jarraibideak arbelera kopiatu dira!</target>
       </trans-unit>
       <trans-unit id="GyXTAnB" resname="Syntax error">
         <source>Syntax error</source>
-        <target>~Sintaxi errorea</target>
+        <target>Sintaxi errorea</target>
       </trans-unit>
       <trans-unit id="QriYn5V" resname="No formula to capture.">
         <source>No formula to capture.</source>
-        <target>~Ez dago formula bat harrapatzeko.</target>
+        <target>Ez dago harrapatzeko formularik.</target>
       </trans-unit>
       <trans-unit id="UDuhSdh" resname="Understood">
         <source>Understood</source>
-        <target>~Ulertuta</target>
+        <target>Ulertuta</target>
       </trans-unit>
       <trans-unit id="deMwCrv" resname="Right-click on the image to save or copy it.">
         <source>Right-click on the image to save or copy it.</source>
-        <target>~Egin klik eskuineko botoiarekin irudian gordetzeko edo kopiatzeko.</target>
+        <target>Egin klik eskuineko botoiarekin irudian gordetzeko edo kopiatzeko.</target>
       </trans-unit>
       <trans-unit id="qNghuqo" resname="Close">
         <source>Close</source>
@@ -971,43 +971,43 @@
       </trans-unit>
       <trans-unit id="dGGvksN" resname="Matrix">
         <source>Matrix</source>
-        <target>~Matrix</target>
+        <target>Matrizea</target>
       </trans-unit>
       <trans-unit id="dZ9tZ_N" resname="Rows:">
         <source>Rows:</source>
-        <target>~Errenkadak:</target>
+        <target>Errenkadak:</target>
       </trans-unit>
       <trans-unit id="SQExvxB" resname="Columns:">
         <source>Columns:</source>
-        <target>~Zutabeak:</target>
+        <target>Zutabeak:</target>
       </trans-unit>
       <trans-unit id="jVQDWug" resname="Fill:">
         <source>Fill:</source>
-        <target>~Betea:</target>
+        <target>Betea:</target>
       </trans-unit>
       <trans-unit id="4hCqAe1" resname="Subscripts (a, b...)">
         <source>Subscripts (a, b...)</source>
-        <target>~Azpimarratuak (a, b...)</target>
+        <target>Azpiindizeak (a, b...)</target>
       </trans-unit>
       <trans-unit id="QlFX6Ax" resname="Zeros (0)">
         <source>Zeros (0)</source>
-        <target>~Zeroak (0)</target>
+        <target>Zeroak (0)</target>
       </trans-unit>
       <trans-unit id="E2ebkdm" resname="Ones (1)">
         <source>Ones (1)</source>
-        <target>~Batak (1)</target>
+        <target>Batak (1)</target>
       </trans-unit>
       <trans-unit id="PCJDjjs" resname="Variables (a, b, c...)">
         <source>Variables (a, b, c...)</source>
-        <target>~Aldagaiak (a, b, c...)</target>
+        <target>Aldagaiak (a, b, c...)</target>
       </trans-unit>
       <trans-unit id="Nt4kRU_" resname="Numbers (1, 2, 3...)">
         <source>Numbers (1, 2, 3...)</source>
-        <target>~Zenbakiak (1, 2, 3...)</target>
+        <target>Zenbakiak (1, 2, 3...)</target>
       </trans-unit>
       <trans-unit id="GOOaLG1" resname="Empty ({})">
         <source>Empty ({})</source>
-        <target>~Hutsik ({})</target>
+        <target>Hutsik ({})</target>
       </trans-unit>
       <trans-unit id="u6GaqYo" resname="No recent symbols yet.">
         <source>No recent symbols yet.</source>
